@@ -2,9 +2,11 @@
 
 本次核验日期：2026-10-04（Australia/Sydney）。当前 Codex 云端实例已经运行，工作目录 `/workspace/judicial-ontology-kg`，origin 指向新仓库。复用了用户已建立的仓库和已挂载环境。
 
+后续决定：用户因远程访问费用及流量限制改用本地开发；本页保留已有云端配置记录，当前接续入口改为 [本地开发](local-development.md)。
+
 ## 可重复初始化
 
-环境要求：Linux、Git、Python 3.12（含 venv）。当前实测 Python 3.12.14、uv 0.12.19、Git 2.52.0。
+环境要求：macOS/Linux、Git、uv 或可创建 venv 的 python3。项目 Python 3.12 由 uv 选择或下载。当前云端实测 Python 3.12.14、uv 0.12.19、Git 2.52.0；尚未在 Mac 实测。
 
 ```bash
 bash scripts/setup.sh

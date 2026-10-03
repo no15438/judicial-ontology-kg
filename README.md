@@ -6,7 +6,7 @@
 
 ## 开始工作
 
-使用 Python 3.12；初始化脚本使用 uv 0.12.19 和已提交的依赖锁文件。
+支持 macOS/Linux。初始化脚本使用 uv 0.12.19 和已提交的依赖锁文件，自动选择或下载 Python 3.12，不替换系统 Python。若未安装 uv，需已有可创建 venv 的 python3 来引导安装。
 
 ```bash
 bash scripts/setup.sh
@@ -22,6 +22,7 @@ bash scripts/check.sh
 - [现有标注可用性](docs/gold-data-audit.md)：200 条案件标签、QA 复核和事件抽样的区别。
 - [新架构与迁移范围](docs/architecture.md)：模块边界与尚未实现的部分。
 - [云端环境](docs/cloud-environment.md)：启动方式、网络和 Spark 连接状态。
+- [本地开发](docs/local-development.md)：当前优先方式，Mac 直接通过局域网连接 Spark。
 - [后续任务](docs/roadmap.md)：依赖与下一步。
 - [资料来源](research/README.md)：原字节登记、固定旧提交、Drive 复现入口。
 - [后续会话交接](CODEX_HANDOFF.md)。
