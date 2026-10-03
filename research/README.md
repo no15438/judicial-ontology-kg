@@ -9,6 +9,7 @@
 - `spark-qa-inventory.json`：2026-10-04 本地通过局域网读取指定 Spark QA 目录的文件状态、11 份证据哈希、随附样本计数与开发暴露键。仅核验小文件和 100 条 QA，不认证全量数据、审核者身份、授权或图谱 gold；详见 [标注审计](../docs/gold-data-audit.md)。
 - `development-exposure.json`：从旧本地清单提取的 24 份 AppealCase 已曝光开发文书定位，只传递暴露事实，不采用旧实现或旧评测。
 - `source-development-report.json`：固定干净代码提交的两类来源适配、分组、样本选择与回放结果；只含哈希、定位键和统计，不含文书/QA 正文。复跑见 [来源开发](../docs/source-development.md)。
+- `ontology-contract-report.json`：干净代码 `806664d` 的三次契约 CLI 运行，记录两篇局部候选、36 篇完整分母与负向拒收探针的计数/退出码和输入输出哈希。候选由本会话模型编写，非 Qwen 基线或人工 gold；正文及标签不入库。见 [本体契约](../docs/ontology-contract.md)。
 
 两轮登记分别保留，避免静默覆盖版本差异；“20 项登记”不表示 20 个合格主数据集。当前判定见 [进度](../docs/progress.md)。
 

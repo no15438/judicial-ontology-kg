@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "purpose": "development_contract_probe_not_qwen_baseline_or_gold",
+  "candidate_origin": "session_model_authored_partial_development_examples",
+  "local_model_inference_calls": 0,
+  "probe": {
+    "probe_kind": "session_model_authored_contract_examples_not_semantic_gold_or_qwen_baseline",
+    "script_sha256": "11b4b46a947a863e55f7907d2879658710a37597f0fef372c54e2e04d39d6324",
+    "valid_probe": {
+      "expected_documents": 2,
+      "source_fields_verified": 7,
+      "attempts_total": 2,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 2,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 0,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 4,
+        "mentions": 4,
+        "contexts": 7,
+        "roles": 4,
+        "events": 3,
+        "statements": 4
+      },
+      "accepted_evidence_spans_replayed": 22,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false
+    },
+    "negative_probe": {
+      "expected_documents": 2,
+      "source_fields_verified": 7,
+      "attempts_total": 2,
+      "attempts_rejected": 2,
+      "documents_accepted_candidate": 0,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 2,
+      "documents_missing": 0,
+      "issue_counts": {
+        "event_statement_context_mismatch": 1,
+        "evidence_mismatch": 1,
+        "evidence_outside_context": 1
+      },
+      "accepted_node_counts": {
+        "actors": 0,
+        "mentions": 0,
+        "contexts": 0,
+        "roles": 0,
+        "events": 0,
+        "statements": 0
+      },
+      "accepted_evidence_spans_replayed": 0,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false
+    },
+    "raw_documents_and_candidates_location": "git_ignored_artifacts_only",
+    "model_inference_calls": 0
+  },
+  "runs": {
+    "selected": {
+      "schema_version": 1,
+      "run_kind": "development_contract_validation_not_semantic_evaluation",
+      "observed_at_utc": "2026-10-03T23:30:56.543393+00:00",
+      "ontology_version": "0.1.0",
+      "ontology_sha256": "9cd7869526f39b198be744f2c5155c27cdfaeb6e30d28cce56cd4f88d769eaf6",
+      "schema_sha256": "89ecad0ad208ab01d156d428a4b145a535a00c88e078dd36a80c16a6864084ec",
+      "code_commit": "806664d561b25be70bf637cd0207831cb750811c",
+      "worktree_dirty": false,
+      "code_sha256": {
+        "src/judicial_kg/__init__.py": "6850c172a2800707089289624c0729ab42e7049c43fe5861efbf5a5646df6c9b",
+        "src/judicial_kg/cli.py": "db5b6113a0ece1b4ad8c0f3fde1a731ecc8192b51677691bff191e0dbd568f57",
+        "src/judicial_kg/contracts.py": "188e14f00bdec073c049cd0666710fe453e740de242acb23db9490f47c3be1e4",
+        "src/judicial_kg/provenance.py": "19e1042bfc65aed40ad2c1d1d16162f390f705a0add1b053418a6a2d230f7758",
+        "src/judicial_kg/sources/__init__.py": "df86466f13948cd5f2218cc7a19db1bb4ee63a0105add5671ea669a9b4795951",
+        "src/judicial_kg/sources/appealcase.py": "64111809440239d3d2fe91ba5b1a523fc5a7b3ad4c300886f56bac9179ec0f9b",
+        "src/judicial_kg/sources/development.py": "8242b25ffd292a9a2e3a7bd601db678f7907e3ebdf43714408626c1304fd90e1",
+        "src/judicial_kg/sources/qa_inventory.py": "c66062a895d0118f9bdb72294ee917236c4126546df0e60470ce652be92bb2ec",
+        "src/judicial_kg/sources/records.py": "9d5d82d8606062be927a0627c618c0228f5a83ca8e7f1dba70effdf42fd5e736",
+        "src/judicial_kg/sources/spark.py": "e581af751aaf38d8965121fe2b3bab15fa3c7219096fbcac7ebb5083ad349e74",
+        "src/judicial_kg/sources/spark_replay.py": "23f892cb50b3b27183993c1d78b0503e684284530f495070b375eada1e3f8772",
+        "src/judicial_kg/sources/spark_scan.py": "e39e759068a78d2f11dc5acd5249ab4e2d668d8d0e1498eabf1414754b76994b",
+        "src/judicial_kg/validation.py": "0d9a663eed0a32dc9f30df38b9bf61c6c0a54459752387341a49b87203bd32b0",
+        "src/judicial_kg/validation_run.py": "f668c351da90ebbe656826f3ab10a8e6f6d955cb0b328f0417af0f51754fde0e"
+      },
+      "runtime": {
+        "python": "3.12.2",
+        "jsonschema": "4.26.0",
+        "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9"
+      },
+      "inputs": [
+        {
+          "kind": "documents",
+          "sha256": "3515fd7897aa1a799ee48af6e5e336dc3fd8c29d23098aa5aaf6be0ffa51eb7b",
+          "bytes": 41153
+        },
+        {
+          "kind": "candidates",
+          "sha256": "12f9be6f3f165ca3748940951f5193bb2b5c1e9b894eb247e25ee43844f16db4",
+          "bytes": 15751
+        }
+      ],
+      "outputs": {
+        "accepted.json": "a9bc87da8c450192978de6538542f73f37d07f202925e67f370744bec523e21d",
+        "ledger.json": "56e73662841b36f2532bf47b2ea24c9d7b0af2155632c1fb791701478bf2a969"
+      },
+      "expected_documents": 2,
+      "source_fields_verified": 7,
+      "attempts_total": 2,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 2,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 0,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 4,
+        "mentions": 4,
+        "contexts": 7,
+        "roles": 4,
+        "events": 3,
+        "statements": 4
+      },
+      "accepted_evidence_spans_replayed": 22,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false,
+      "cli_exit_code": 0
+    },
+    "all-expected": {
+      "schema_version": 1,
+      "run_kind": "development_contract_validation_not_semantic_evaluation",
+      "observed_at_utc": "2026-10-03T23:30:56.655052+00:00",
+      "ontology_version": "0.1.0",
+      "ontology_sha256": "9cd7869526f39b198be744f2c5155c27cdfaeb6e30d28cce56cd4f88d769eaf6",
+      "schema_sha256": "89ecad0ad208ab01d156d428a4b145a535a00c88e078dd36a80c16a6864084ec",
+      "code_commit": "806664d561b25be70bf637cd0207831cb750811c",
+      "worktree_dirty": false,
+      "code_sha256": {
+        "src/judicial_kg/__init__.py": "6850c172a2800707089289624c0729ab42e7049c43fe5861efbf5a5646df6c9b",
+        "src/judicial_kg/cli.py": "db5b6113a0ece1b4ad8c0f3fde1a731ecc8192b51677691bff191e0dbd568f57",
+        "src/judicial_kg/contracts.py": "188e14f00bdec073c049cd0666710fe453e740de242acb23db9490f47c3be1e4",
+        "src/judicial_kg/provenance.py": "19e1042bfc65aed40ad2c1d1d16162f390f705a0add1b053418a6a2d230f7758",
+        "src/judicial_kg/sources/__init__.py": "df86466f13948cd5f2218cc7a19db1bb4ee63a0105add5671ea669a9b4795951",
+        "src/judicial_kg/sources/appealcase.py": "64111809440239d3d2fe91ba5b1a523fc5a7b3ad4c300886f56bac9179ec0f9b",
+        "src/judicial_kg/sources/development.py": "8242b25ffd292a9a2e3a7bd601db678f7907e3ebdf43714408626c1304fd90e1",
+        "src/judicial_kg/sources/qa_inventory.py": "c66062a895d0118f9bdb72294ee917236c4126546df0e60470ce652be92bb2ec",
+        "src/judicial_kg/sources/records.py": "9d5d82d8606062be927a0627c618c0228f5a83ca8e7f1dba70effdf42fd5e736",
+        "src/judicial_kg/sources/spark.py": "e581af751aaf38d8965121fe2b3bab15fa3c7219096fbcac7ebb5083ad349e74",
+        "src/judicial_kg/sources/spark_replay.py": "23f892cb50b3b27183993c1d78b0503e684284530f495070b375eada1e3f8772",
+        "src/judicial_kg/sources/spark_scan.py": "e39e759068a78d2f11dc5acd5249ab4e2d668d8d0e1498eabf1414754b76994b",
+        "src/judicial_kg/validation.py": "0d9a663eed0a32dc9f30df38b9bf61c6c0a54459752387341a49b87203bd32b0",
+        "src/judicial_kg/validation_run.py": "f668c351da90ebbe656826f3ab10a8e6f6d955cb0b328f0417af0f51754fde0e"
+      },
+      "runtime": {
+        "python": "3.12.2",
+        "jsonschema": "4.26.0",
+        "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9"
+      },
+      "inputs": [
+        {
+          "kind": "documents",
+          "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+          "bytes": 302755
+        },
+        {
+          "kind": "documents",
+          "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+          "bytes": 428236
+        },
+        {
+          "kind": "candidates",
+          "sha256": "12f9be6f3f165ca3748940951f5193bb2b5c1e9b894eb247e25ee43844f16db4",
+          "bytes": 15751
+        }
+      ],
+      "outputs": {
+        "accepted.json": "a9bc87da8c450192978de6538542f73f37d07f202925e67f370744bec523e21d",
+        "ledger.json": "cb77286679757ae40e785237c17ad3ffc935cceb69de52507affa0a7d6e89936"
+      },
+      "expected_documents": 36,
+      "source_fields_verified": 156,
+      "attempts_total": 2,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 2,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 34,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 4,
+        "mentions": 4,
+        "contexts": 7,
+        "roles": 4,
+        "events": 3,
+        "statements": 4
+      },
+      "accepted_evidence_spans_replayed": 22,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false,
+      "cli_exit_code": 1
+    },
+    "negative": {
+      "schema_version": 1,
+      "run_kind": "development_contract_validation_not_semantic_evaluation",
+      "observed_at_utc": "2026-10-03T23:30:56.764326+00:00",
+      "ontology_version": "0.1.0",
+      "ontology_sha256": "9cd7869526f39b198be744f2c5155c27cdfaeb6e30d28cce56cd4f88d769eaf6",
+      "schema_sha256": "89ecad0ad208ab01d156d428a4b145a535a00c88e078dd36a80c16a6864084ec",
+      "code_commit": "806664d561b25be70bf637cd0207831cb750811c",
+      "worktree_dirty": false,
+      "code_sha256": {
+        "src/judicial_kg/__init__.py": "6850c172a2800707089289624c0729ab42e7049c43fe5861efbf5a5646df6c9b",
+        "src/judicial_kg/cli.py": "db5b6113a0ece1b4ad8c0f3fde1a731ecc8192b51677691bff191e0dbd568f57",
+        "src/judicial_kg/contracts.py": "188e14f00bdec073c049cd0666710fe453e740de242acb23db9490f47c3be1e4",
+        "src/judicial_kg/provenance.py": "19e1042bfc65aed40ad2c1d1d16162f390f705a0add1b053418a6a2d230f7758",
+        "src/judicial_kg/sources/__init__.py": "df86466f13948cd5f2218cc7a19db1bb4ee63a0105add5671ea669a9b4795951",
+        "src/judicial_kg/sources/appealcase.py": "64111809440239d3d2fe91ba5b1a523fc5a7b3ad4c300886f56bac9179ec0f9b",
+        "src/judicial_kg/sources/development.py": "8242b25ffd292a9a2e3a7bd601db678f7907e3ebdf43714408626c1304fd90e1",
+        "src/judicial_kg/sources/qa_inventory.py": "c66062a895d0118f9bdb72294ee917236c4126546df0e60470ce652be92bb2ec",
+        "src/judicial_kg/sources/records.py": "9d5d82d8606062be927a0627c618c0228f5a83ca8e7f1dba70effdf42fd5e736",
+        "src/judicial_kg/sources/spark.py": "e581af751aaf38d8965121fe2b3bab15fa3c7219096fbcac7ebb5083ad349e74",
+        "src/judicial_kg/sources/spark_replay.py": "23f892cb50b3b27183993c1d78b0503e684284530f495070b375eada1e3f8772",
+        "src/judicial_kg/sources/spark_scan.py": "e39e759068a78d2f11dc5acd5249ab4e2d668d8d0e1498eabf1414754b76994b",
+        "src/judicial_kg/validation.py": "0d9a663eed0a32dc9f30df38b9bf61c6c0a54459752387341a49b87203bd32b0",
+        "src/judicial_kg/validation_run.py": "f668c351da90ebbe656826f3ab10a8e6f6d955cb0b328f0417af0f51754fde0e"
+      },
+      "runtime": {
+        "python": "3.12.2",
+        "jsonschema": "4.26.0",
+        "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9"
+      },
+      "inputs": [
+        {
+          "kind": "documents",
+          "sha256": "3515fd7897aa1a799ee48af6e5e336dc3fd8c29d23098aa5aaf6be0ffa51eb7b",
+          "bytes": 41153
+        },
+        {
+          "kind": "candidates",
+          "sha256": "556ce39e00adcda65d466d31f9620baac75963ed196be5f5668f916fb867957f",
+          "bytes": 15759
+        }
+      ],
+      "outputs": {
+        "accepted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "ledger.json": "5dde1d6df79dde6b1ec00d08728d912e07c3682d167339391adfb79738e0fd95"
+      },
+      "expected_documents": 2,
+      "source_fields_verified": 7,
+      "attempts_total": 2,
+      "attempts_rejected": 2,
+      "documents_accepted_candidate": 0,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 2,
+      "documents_missing": 0,
+      "issue_counts": {
+        "event_statement_context_mismatch": 1,
+        "evidence_mismatch": 1,
+        "evidence_outside_context": 1
+      },
+      "accepted_node_counts": {
+        "actors": 0,
+        "mentions": 0,
+        "contexts": 0,
+        "roles": 0,
+        "events": 0,
+        "statements": 0
+      },
+      "accepted_evidence_spans_replayed": 0,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false,
+      "cli_exit_code": 1
+    }
+  }
+}
