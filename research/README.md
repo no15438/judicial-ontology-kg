@@ -1,11 +1,12 @@
 # 研究证据入口
 
-本目录只接续来源登记和历史设计/交接文档，不包含原始案件语料、旧模型产物或完整旧系统。
+本目录保存来源登记、历史设计/交接文档和新增的元数据核验结果，不包含原始案件语料、旧模型产物或完整旧系统。
 
 - `registries/round1_2.json`：Drive 首轮复现包 v1 内的原始 `dataset_registry.json`，13 项；包含第二轮 MUSER 标签复核。
 - `registries/round3.json`：第三轮复现包的原始 `dataset_registry_round3.json`，7 项；包括 AppealCase 等新增候选。
 - `legacy/`：旧仓库固定提交的七份设计、交接与数据获取登记；文字中的旧进度与执行指令属于历史。
 - `sources.json`：导入来源 URL、Git commit、ZIP 原始哈希、成员路径、文件字节数及完整 SHA-256。
+- `spark-qa-inventory.json`：2026-10-04 本地通过局域网读取指定 Spark QA 目录的文件状态、11 份证据哈希、随附样本计数与开发暴露键。仅核验小文件和 100 条 QA，不认证全量数据、审核者身份、授权或图谱 gold；详见 [标注审计](../docs/gold-data-audit.md)。
 
 两轮登记分别保留，避免静默覆盖版本差异；“20 项登记”不表示 20 个合格主数据集。当前判定见 [进度](../docs/progress.md)。
 

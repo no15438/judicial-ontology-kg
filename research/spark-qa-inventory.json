@@ -1,0 +1,540 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-10-03T15:06:46.598681+00:00",
+  "source_root": "/work/dataset_shenbao/legal_qa_expanded_v1_1_b02",
+  "scope": "File stats, small metadata, specification text, and supplied 100-row sample",
+  "files": [
+    {
+      "path": "_preflight/data/standardized_qa_dataset_0001.json",
+      "bytes": 31729843
+    },
+    {
+      "path": "_preflight/docs/法律文书高质量数据集_V1.1_QA展开数据补充规范.docx",
+      "bytes": 37820
+    },
+    {
+      "path": "_preflight/reports/standardized_qa_dataset_10500000_validation.json",
+      "bytes": 202
+    },
+    {
+      "path": "_preflight/sample/standardized_qa_dataset_sample_100.json",
+      "bytes": 2174647
+    },
+    {
+      "path": "data/standardized_qa_dataset_0001.json",
+      "bytes": 5373547215
+    },
+    {
+      "path": "data/standardized_qa_dataset_0002.json",
+      "bytes": 5343137971
+    },
+    {
+      "path": "data/standardized_qa_dataset_0003.json",
+      "bytes": 5042223399
+    },
+    {
+      "path": "data/standardized_qa_dataset_0004.json",
+      "bytes": 5265990718
+    },
+    {
+      "path": "data/standardized_qa_dataset_0005.json",
+      "bytes": 5172800755
+    },
+    {
+      "path": "data/standardized_qa_dataset_0006.json",
+      "bytes": 4976731862
+    },
+    {
+      "path": "data/standardized_qa_dataset_0007.json",
+      "bytes": 4809071960
+    },
+    {
+      "path": "data/standardized_qa_dataset_0008.json",
+      "bytes": 4806144273
+    },
+    {
+      "path": "data/standardized_qa_dataset_0009.json",
+      "bytes": 4884612407
+    },
+    {
+      "path": "data/standardized_qa_dataset_0010.json",
+      "bytes": 5301879595
+    },
+    {
+      "path": "data/standardized_qa_dataset_0011.json",
+      "bytes": 5181046505
+    },
+    {
+      "path": "data/standardized_qa_dataset_0012.json",
+      "bytes": 5102074617
+    },
+    {
+      "path": "data/standardized_qa_dataset_0013.json",
+      "bytes": 4820439209
+    },
+    {
+      "path": "data/standardized_qa_dataset_0014.json",
+      "bytes": 4576283337
+    },
+    {
+      "path": "data/standardized_qa_dataset_0015.json",
+      "bytes": 4732177060
+    },
+    {
+      "path": "data/standardized_qa_dataset_0016.json",
+      "bytes": 5153119846
+    },
+    {
+      "path": "data/standardized_qa_dataset_0017.json",
+      "bytes": 5021807117
+    },
+    {
+      "path": "data/standardized_qa_dataset_0018.json",
+      "bytes": 4812256059
+    },
+    {
+      "path": "data/standardized_qa_dataset_0019.json",
+      "bytes": 4774796445
+    },
+    {
+      "path": "data/standardized_qa_dataset_0020.json",
+      "bytes": 4640152430
+    },
+    {
+      "path": "data/standardized_qa_dataset_0021.json",
+      "bytes": 4423843739
+    },
+    {
+      "path": "data/standardized_qa_dataset_0022.json",
+      "bytes": 4863142820
+    },
+    {
+      "path": "data/standardized_qa_dataset_0023.json",
+      "bytes": 5128467449
+    },
+    {
+      "path": "data/standardized_qa_dataset_0024.json",
+      "bytes": 4927106756
+    },
+    {
+      "path": "data/standardized_qa_dataset_0025.json",
+      "bytes": 4981218489
+    },
+    {
+      "path": "data/standardized_qa_dataset_0026.json",
+      "bytes": 4749106523
+    },
+    {
+      "path": "data/standardized_qa_dataset_0027.json",
+      "bytes": 4733613528
+    },
+    {
+      "path": "data/standardized_qa_dataset_0028.json",
+      "bytes": 4820508091
+    },
+    {
+      "path": "data/standardized_qa_dataset_0029.json",
+      "bytes": 4925626837
+    },
+    {
+      "path": "data/standardized_qa_dataset_0030.json",
+      "bytes": 5097009942
+    },
+    {
+      "path": "data/standardized_qa_dataset_0031.json",
+      "bytes": 4943920962
+    },
+    {
+      "path": "data/standardized_qa_dataset_0032.json",
+      "bytes": 4589035746
+    },
+    {
+      "path": "data/standardized_qa_dataset_0033.json",
+      "bytes": 4586040403
+    },
+    {
+      "path": "data/standardized_qa_dataset_0034.json",
+      "bytes": 4706437923
+    },
+    {
+      "path": "data/standardized_qa_dataset_0035.json",
+      "bytes": 4740408773
+    },
+    {
+      "path": "data/standardized_qa_dataset_0036.json",
+      "bytes": 4766139128
+    },
+    {
+      "path": "data/standardized_qa_dataset_0037.json",
+      "bytes": 4653778931
+    },
+    {
+      "path": "data/standardized_qa_dataset_0038.json",
+      "bytes": 4554062533
+    },
+    {
+      "path": "data/standardized_qa_dataset_0039.json",
+      "bytes": 4548414703
+    },
+    {
+      "path": "data/standardized_qa_dataset_0040.json",
+      "bytes": 4661363279
+    },
+    {
+      "path": "data/standardized_qa_dataset_0041.json",
+      "bytes": 4631985363
+    },
+    {
+      "path": "data/standardized_qa_dataset_0042.json",
+      "bytes": 4650470458
+    },
+    {
+      "path": "data/standardized_qa_dataset_0043.json",
+      "bytes": 4588607930
+    },
+    {
+      "path": "data/standardized_qa_dataset_0044.json",
+      "bytes": 4576049254
+    },
+    {
+      "path": "data/standardized_qa_dataset_0045.json",
+      "bytes": 4714144057
+    },
+    {
+      "path": "data/standardized_qa_dataset_0046.json",
+      "bytes": 4552832617
+    },
+    {
+      "path": "data/standardized_qa_dataset_0047.json",
+      "bytes": 4653518347
+    },
+    {
+      "path": "data/standardized_qa_dataset_0048.json",
+      "bytes": 4666174547
+    },
+    {
+      "path": "data/standardized_qa_dataset_0049.json",
+      "bytes": 4544266605
+    },
+    {
+      "path": "data/standardized_qa_dataset_0050.json",
+      "bytes": 4511828601
+    },
+    {
+      "path": "data/standardized_qa_dataset_0051.json",
+      "bytes": 4733640709
+    },
+    {
+      "path": "data/standardized_qa_dataset_0052.json",
+      "bytes": 4604508611
+    },
+    {
+      "path": "data/standardized_qa_dataset_0053.json",
+      "bytes": 2202320691
+    },
+    {
+      "path": "data.7z",
+      "bytes": 2310320727
+    },
+    {
+      "path": "docs/法律文书高质量数据集_V1.1_QA展开数据补充规范.docx",
+      "bytes": 37820
+    },
+    {
+      "path": "manifests/checksum_manifest.txt",
+      "bytes": 5618
+    },
+    {
+      "path": "manifests/shard_manifest.json",
+      "bytes": 20620
+    },
+    {
+      "path": "reports/audit_checksum_manifest.txt",
+      "bytes": 1485
+    },
+    {
+      "path": "reports/final_acceptance_report.md",
+      "bytes": 2522
+    },
+    {
+      "path": "reports/local_full_audit.json",
+      "bytes": 503
+    },
+    {
+      "path": "reports/remote_audit.json",
+      "bytes": 1361
+    },
+    {
+      "path": "reports/run_summary.json",
+      "bytes": 396
+    },
+    {
+      "path": "reports/standardized_qa_dataset_10500000_validation.json",
+      "bytes": 214
+    },
+    {
+      "path": "sample/standardized_qa_dataset_sample_100.json",
+      "bytes": 2174647
+    },
+    {
+      "path": "state/export_checkpoint.json",
+      "bytes": 20774
+    }
+  ],
+  "observed_shards": {
+    "files": 53,
+    "bytes": 252819887125,
+    "paths_match_manifest": true,
+    "checksum_declarations_match_manifest": true,
+    "fresh_shard_hashes_checked": 0,
+    "fresh_shard_records_parsed": 0
+  },
+  "historical_claims_not_recomputed": {
+    "records": 10500000,
+    "accepted_parents": 750000,
+    "sum_manifest_records": 10500000,
+    "remote_sha256_all_valid": true
+  },
+  "specification_fixed_enum_paragraphs": [
+    "固定为1",
+    "固定为1",
+    "annotation.annotator和label_info.annotator固定为“行业领域专家”，license固定为“公共授权”，generated_data_indicator固定为0。"
+  ],
+  "sample": {
+    "records": 100,
+    "unique_qa_ids": 100,
+    "unique_parent_source_ids": 8,
+    "unique_texts": 8,
+    "qa_rows_per_parent": [
+      2,
+      14,
+      14,
+      14,
+      14,
+      14,
+      14,
+      14
+    ],
+    "private_lending_rows": 0,
+    "observed_fields": [
+      "_id",
+      "acceptance_batch",
+      "annotation",
+      "auth_type",
+      "business_line",
+      "case_type",
+      "content",
+      "data_content",
+      "data_version",
+      "document_type",
+      "generated_data_indicator",
+      "generated_flag",
+      "human_review_status",
+      "id",
+      "label_info",
+      "last_modified_time",
+      "license",
+      "model_consistency_score",
+      "modified_time",
+      "original_time",
+      "privacy_info",
+      "qa_constructed_flag",
+      "qa_pairs",
+      "qa_pairs_raw",
+      "quality_score",
+      "rid",
+      "source",
+      "source_detail",
+      "source_details",
+      "source_type",
+      "task_type",
+      "text",
+      "validation_flags",
+      "version"
+    ],
+    "checks_passing_rows": {
+      "text_sha256_matches": 100,
+      "text_length_matches": 100,
+      "source_standardized_hash_matches": 100,
+      "single_qa": 100,
+      "qa_annotation_mirror_matches": 100,
+      "full_text_mirror_matches": 100,
+      "declared_raw_hash_differs": 100
+    },
+    "distributions": {
+      "human_review_status": {
+        "\"人工已核验\"": 100
+      },
+      "label_method": {
+        "multi_model_prelabel_human_review": 100
+      },
+      "annotator": {
+        "行业领域专家": 100
+      },
+      "license": {
+        "\"公共授权\"": 100
+      },
+      "generated_flag": {
+        "false": 100
+      },
+      "generated_data_indicator": {
+        "0": 100
+      },
+      "qa_constructed_flag": {
+        "true": 100
+      },
+      "case_type": {
+        "\"劳动争议\"": 28,
+        "\"离婚纠纷\"": 28,
+        "\"经济补偿金纠纷\"": 14,
+        "\"网络购物合同纠纷\"": 2,
+        "\"诈骗罪\"": 14,
+        "\"追偿权纠纷\"": 14
+      },
+      "qa_field_key": {
+        "cause_or_charge": 7,
+        "final_judgment_flag": 7,
+        "final_judgment_result": 8,
+        "issue_focus": 7,
+        "judgment_text": 7,
+        "key_amount": 7,
+        "legal_basis": 7,
+        "normalized_fact_summary": 7,
+        "property_obligation_amount": 8,
+        "protest_second_instance": 7,
+        "reasoning_core": 7,
+        "sentencing_or_discretion_factor": 7,
+        "subject_charge_structure": 7,
+        "trial_procedure": 7
+      },
+      "qa_source_basis": {
+        "原始数据规则构造": 49,
+        "标注数据构造": 51
+      },
+      "qa_review_status": {
+        "人工已核验": 100
+      }
+    },
+    "exposed_parent_text_keys": [
+      {
+        "source_id_sha256": "18767126b239a61c4fabf01437ec34c018e6da62ab1e5071004e8f20bc6e6983",
+        "text_sha256": "67b5f47449a00f2c48b12d1825e800ff77553b2841d3faf9ec5043137243d76b",
+        "declared_raw_text_sha256": "9d1710f8beba88c511d16db2cd1e45b90eeb97f35c197b05c144b9e48da5a269"
+      },
+      {
+        "source_id_sha256": "1ea6a9ef4ebf4fd9286958de0da2f09ae1607371b35447cd03dc5e33340d2641",
+        "text_sha256": "e2a876152f46c02204aa139ed02757ac1c8cd8d8ad2ed35551f454890ffde4c9",
+        "declared_raw_text_sha256": "5d4804dd73079e99ed4127a117e503363138f9d3f6de291314e5f23bce1f0da2"
+      },
+      {
+        "source_id_sha256": "3141634327db66db1372baec1df92962149f5901ba0fad355757d8256d22541d",
+        "text_sha256": "ce6efd12c7a1f22141ff7dfdf12ca677194ac04562059884514e6ea937ca0805",
+        "declared_raw_text_sha256": "a02de5a18fbb52f38f12ef49ff72e1902d3903d5119714f7504acfc65db79007"
+      },
+      {
+        "source_id_sha256": "5904b2d99c39a293ef77548c36e0c87ed93684f418a1ffcd4a6b13ea2eec9023",
+        "text_sha256": "d5cf6b155af962b799108df38566ade8860286d1c56f832e62835a786d2e6be4",
+        "declared_raw_text_sha256": "a3076cace5ce22697dbc661733a974c6dd4b3be88282ee72ae75a0b31c3dafdd"
+      },
+      {
+        "source_id_sha256": "689408c27dc5274c0ed73838564830770ef63ba0e09592b88456331b489fcefd",
+        "text_sha256": "0d3b94d5c90f6d1e52fa7c59ed46c2e07f7b522312e44d70ffed0c65cef051fa",
+        "declared_raw_text_sha256": "3e36883a5b27100da8ef3384c10b188abcb4f56e4b28d08cf6bb2459e8f94e5b"
+      },
+      {
+        "source_id_sha256": "924cd9bfae28685742f7de625259a48877291ae9776db3dd3e59bf48ca029684",
+        "text_sha256": "78b54a32a5e3b84054936b2fe8ee83d438d09d9b763eca43b096a617bd2a5aef",
+        "declared_raw_text_sha256": "52b200f840f06d022b27ed8aba4d86fac784e4fe6e8052ff51edfdf09ebd3b41"
+      },
+      {
+        "source_id_sha256": "a4cf579064abb4ae6018ad73fc782587858f96a69bbfe4193c2366a5e101ad7a",
+        "text_sha256": "8cef8f92a86ecb3663d5453e430a87bbdac8fd5d5962bfc677cc1fd5b7cbe9ea",
+        "declared_raw_text_sha256": "dd251c42b309c49dba69722dd31eee2460c74542bcaab83d627f7ffccc4547ec"
+      },
+      {
+        "source_id_sha256": "c9c6f1b51e16d47b915fc846ec236e4f41d2955cb244d9fce6b8c66f6252fe4a",
+        "text_sha256": "15e28cd8571f521719b393011e1565009dff6d231d21bf59ed6719d71ed733b1",
+        "declared_raw_text_sha256": "956192ccc870c4e621a71679a8b51d183810cbf2b8df7332b6a69b5e01106e78"
+      }
+    ],
+    "exposure_policy": "All inspected parents are development-exposed; no blind test use",
+    "human_review_independently_verified": false,
+    "gold_admitted": false
+  },
+  "evidence_files": [
+    {
+      "path": "sample/standardized_qa_dataset_sample_100.json",
+      "bytes": 2174647,
+      "sha256": "5dfe5bf18d0618dcab0b84c7d526b3b2689865643909792260aa10dd73b5cbe0"
+    },
+    {
+      "path": "manifests/shard_manifest.json",
+      "bytes": 20620,
+      "sha256": "e1e2182b63225ba6edabc79272cff41de8b49b9b4a85e69f5835e471b8d95bfa"
+    },
+    {
+      "path": "reports/run_summary.json",
+      "bytes": 396,
+      "sha256": "5303716db058f7e2359dbaeb6e1676f53ad2332671f243b69dd4f91b6b8cf835"
+    },
+    {
+      "path": "reports/remote_audit.json",
+      "bytes": 1361,
+      "sha256": "3c2009f6a72554f7a8e13caa412f5171dbde36040453f4cfacff4976b438a74c"
+    },
+    {
+      "path": "manifests/checksum_manifest.txt",
+      "bytes": 5618,
+      "sha256": "d4c33b22bb78527ae54b64e4202ae3660cbb643d8d6f0816248ed9d054e70eb1"
+    },
+    {
+      "path": "reports/final_acceptance_report.md",
+      "bytes": 2522,
+      "sha256": "7662be9e5feb04c92d083e8d277d6c6063c9c1c1bc3298be77b693f8318ae73d"
+    },
+    {
+      "path": "reports/local_full_audit.json",
+      "bytes": 503,
+      "sha256": "22455c2f2982741ee0b248169cdabdb81b14632fb3cb36ac51deeb3f00408c24"
+    },
+    {
+      "path": "reports/standardized_qa_dataset_10500000_validation.json",
+      "bytes": 214,
+      "sha256": "2df757a2e45cd9b1b37ed31e27535dc7b5bcbd7e7c004b504218102f97148388"
+    },
+    {
+      "path": "reports/audit_checksum_manifest.txt",
+      "bytes": 1485,
+      "sha256": "f362716a2a2bcd9d49e83c8fb6517a28560eba1a2e7467fd859cc4d6df88816a"
+    },
+    {
+      "path": "state/export_checkpoint.json",
+      "bytes": 20774,
+      "sha256": "2f781c5db4404129ea892aa86f2213ec28c91a23b55df50c7fdc2c5695bdffd9"
+    },
+    {
+      "path": "docs/法律文书高质量数据集_V1.1_QA展开数据补充规范.docx",
+      "bytes": 37820,
+      "sha256": "7f73ccb42063edc5dc64fb2a086f86d6faf4b79912d6e940321953971063beb9"
+    }
+  ],
+  "not_verified": [
+    "Full corpus hashes, row counts, private-lending population, or representativeness",
+    "Court originals, collection/usage authorization, or masking offset maps",
+    "Individual reviewer identity, dated audit trail, or annotation adjudication",
+    "Semantic QA correctness or exhaustive entity/relation/event coverage"
+  ],
+  "supplemental_archive_listing": {
+    "command": "7z l -slt /work/dataset_shenbao/legal_qa_expanded_v1_1_b02/data.7z",
+    "listing_sha256": "5c4e8457b2cbbde7212a51d127a0444a372dbb0b41ae007743cbec1a96bf4cc8",
+    "file_members": 53,
+    "member_paths_and_sizes_match_observed_shards": true,
+    "archive_content_hashes_checked": false,
+    "scope": "Separate read-only listing; no extraction or CRC verification"
+  },
+  "audit_code": {
+    "path": "src/judicial_kg/sources/qa_inventory.py",
+    "sha256": "c66062a895d0118f9bdb72294ee917236c4126546df0e60470ce652be92bb2ec",
+    "base_commit": "bec2b6a8ac2ab323c34bb6a56bb6145231d6ed67"
+  }
+}
