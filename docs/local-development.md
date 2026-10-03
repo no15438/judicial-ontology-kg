@@ -6,6 +6,8 @@
 
 本机项目“知识图谱研究”的父目录是 `/Users/no15438/Documents/Codex/2026-10-02/new-chat-5`，它本身不是 Git 仓库。2026-10-04 实查发现 `judicial-ontology-kg` 子目录仍是 `2eb9811` 旧历史，与远端 `bec2b6a` 没有共同祖先。本次保留该目录及其忽略数据，通过 Git worktree 在 `judicial-ontology-kg-current` 接续远端，分支为 `codex/spark-data-audit`。不要把这两套历史直接合并。
 
+后续来源适配开发使用同一工作树中的 `codex/source-adapters` 分支，继承 `32ea863`。运行入口改为 `bash scripts/run.sh`，会显式使用当前 checkout 的源码，避免本机 editable `.pth` hidden 标记影响导入。
+
 本机接续执行：
 
 ```bash
@@ -21,7 +23,7 @@ bash scripts/check.sh
 
 接续提示：
 
-> 阅读 AGENTS.md、CODEX_HANDOFF.md、docs/progress.md 和 docs/gold-data-audit.md。继续使用当前远端历史及本机 -current 工作树，不重新创建仓库或导入旧系统。Mac 初始化和 Spark QA 首轮盘点已完成；先读取已保存的核验结果，继续 AppealCase 严格借贷案对原文准入。不把 Spark QA 声明的人工审核和固定标注者字段当图谱 gold；不配置收费远程连接或修改 Spark 服务。
+> 阅读 AGENTS.md、CODEX_HANDOFF.md、docs/progress.md 和 docs/source-development.md。继续使用本机 -current 工作树和 codex/source-adapters 分支，不重新创建仓库或导入旧系统。两类来源适配、开发小样与证据回放已完成，接续最小本体与抽取契约。用户无法提供法律人工 gold，不以用户补标为前提；固定审核字段不能当 gold。不配置收费远程连接，不上传案件正文，不修改 Spark 服务。8K/16K 测速请求已撤回。
 
 ## Spark 与模型选择
 
@@ -34,3 +36,5 @@ bash scripts/check.sh
 ## 本次 Mac 导入故障记录
 
 初次检查通过后，Python 曾在后续检查中报告 `ModuleNotFoundError: judicial_kg`。`python -v` 显示跳过带 macOS hidden 标记的 `.pth` 文件，而安装记录及路径正常。对项目 `.venv/lib/python3.12/site-packages/` 内 `_editable_impl_judicial_ontology_kg.pth` 和 `_virtualenv.pth` 执行 `chflags nohidden` 后，13 项测试及 doctor 均通过。标记的产生原因未确定；若复发，先检查 `ls -lO` 与 Python 启动日志，不把它误判为源码丢失或另装全局依赖。
+
+该问题后来复发；新增 `scripts/run.sh` 和检查脚本显式设置本次进程的 `PYTHONPATH` 到当前仓库 `src/`，不改全局环境。此入口下 41 项测试、doctor 和真实来源准备均已通过，不需要反复依靠清除隐藏标记。

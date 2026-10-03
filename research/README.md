@@ -7,11 +7,13 @@
 - `legacy/`：旧仓库固定提交的七份设计、交接与数据获取登记；文字中的旧进度与执行指令属于历史。
 - `sources.json`：导入来源 URL、Git commit、ZIP 原始哈希、成员路径、文件字节数及完整 SHA-256。
 - `spark-qa-inventory.json`：2026-10-04 本地通过局域网读取指定 Spark QA 目录的文件状态、11 份证据哈希、随附样本计数与开发暴露键。仅核验小文件和 100 条 QA，不认证全量数据、审核者身份、授权或图谱 gold；详见 [标注审计](../docs/gold-data-audit.md)。
+- `development-exposure.json`：从旧本地清单提取的 24 份 AppealCase 已曝光开发文书定位，只传递暴露事实，不采用旧实现或旧评测。
+- `source-development-report.json`：固定干净代码提交的两类来源适配、分组、样本选择与回放结果；只含哈希、定位键和统计，不含文书/QA 正文。复跑见 [来源开发](../docs/source-development.md)。
 
 两轮登记分别保留，避免静默覆盖版本差异；“20 项登记”不表示 20 个合格主数据集。当前判定见 [进度](../docs/progress.md)。
 
 ```bash
-.venv/bin/judicial-kg verify-sources
+bash scripts/run.sh verify-sources
 ```
 
 该命令只校验九份迁入参考的字节完整性。它不重新下载语料、不执行 ZIP 中脚本、不证明源站原文或人工标签正确。
