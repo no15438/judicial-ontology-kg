@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "source_file": "legacy-local/p0/datasets/development_manifest.json",
+  "source_file_sha256": "e6a40f372e2ceefc0c869cbf4b828fc3e969b986197e93edf0ae9fa0130adc3b",
+  "purpose": "Inherited development exposure only; not a frozen split or adopted old pipeline",
+  "records": [
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/803/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/803/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/845/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/845/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1022/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1022/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1175/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1175/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1225/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1225/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1249/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1249/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1436/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1436/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1520/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1520/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1695/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1695/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1753/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1753/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1791/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/1791/second-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/2058/first-instance",
+      "allocation": "development_exposed"
+    },
+    {
+      "file_sha256": "eb98f0ef85d36fde0304dbeff1e6f10c33741d945933071827bcb0b790130c67",
+      "record_pointer": "/2058/second-instance",
+      "allocation": "development_exposed"
+    }
+  ]
+}

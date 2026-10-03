@@ -1,4 +1,4 @@
-"""Offline environment and imported-source checks, not a graph extraction command."""
+"""Source preparation and environment checks, not semantic graph evaluation."""
 
 import argparse
 import json
@@ -11,11 +11,36 @@ from judicial_kg.provenance import verify_manifest
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["doctor", "verify-sources"])
+    parser.add_argument("command", choices=["doctor", "verify-sources", "prepare-development"])
     parser.add_argument("--root", type=Path, default=Path.cwd())
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--spark-capture", type=Path)
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command == "prepare-development":
+            from judicial_kg.sources.development import prepare
+
+            output = args.output or args.root / "artifacts/source-development"
+            result = prepare(args.root, output, args.spark_capture)
+            print(
+                json.dumps(
+                    {
+                        "output": str(output.resolve()),
+                        "appealcase_development_documents": result["appealcase"]["development"][
+                            "propagated_documents"
+                        ],
+                        "spark_development_documents": (
+                            result["spark"]["normalized_documents"] if result["spark"] else None
+                        ),
+                        "gold_available": False,
+                        "requires_user_legal_annotation": False,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            )
+            return 0
     except (OSError, ValueError, KeyError, TypeError) as error:
         print(f"Source check failed: {error}", file=sys.stderr)
         return 1

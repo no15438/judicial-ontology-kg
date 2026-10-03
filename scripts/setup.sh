@@ -16,4 +16,4 @@ export UV_SYSTEM_CERTS=true
 # uv downloads Python 3.12 if no compatible interpreter is available locally.
 "$JUDICIAL_UV" sync --frozen --python 3.12
 mkdir -p data/raw data/derived artifacts local
-.venv/bin/judicial-kg doctor
+bash scripts/run.sh doctor
