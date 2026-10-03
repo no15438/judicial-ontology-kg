@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-10-03",
+  "timezone": "Australia/Sydney",
+  "issue": "https://github.com/no15438/judicial-graphrag/issues/14",
+  "status": "structural_audit_complete; final_admission_blocked",
+  "audit_code": "p0/datasets/audit_public_datasets.py",
+  "metrics": "p0/reports/audit_metrics.json",
+  "raw_archive_policy": "Local ignored files only; data redistribution terms unresolved",
+  "datasets": [
+    {
+      "id": "lae",
+      "official_repository": "https://github.com/thunlp/LAE",
+      "source_commit": "886a6fbb5e66502167149a8eb98ba3ce5ce78007",
+      "paper": "https://aclanthology.org/2024.lrec-main.644/",
+      "download_url": "https://thunlp-public.oss-cn-hongkong.aliyuncs.com/legal/LegalArgumentPairExtraction/data.zip",
+      "download_version_note": "External URL is not immutable; SHA-256 pins audited bytes",
+      "local_archive": "p0/data/external/lae/data.zip",
+      "bytes": 81379301,
+      "sha256": "53c744b5dac2a9b3b68b3b0ad8b070c87cd0f283210d13e738d660321e11e315",
+      "record_counts": {
+        "finetune/contract/test": 4798,
+        "finetune/contract/train": 11294,
+        "finetune/contract/valid": 4542,
+        "finetune/loan/test": 4758,
+        "finetune/loan/train": 11930,
+        "finetune/loan/valid": 4420,
+        "pre_training/contract": 93600,
+        "pre_training/loan": 21300
+      },
+      "grain": "pretraining: released title and text slices; finetune: query with five candidates, not court case",
+      "source_id_policy": "archive SHA + member + JSON array index; original case identity unresolved",
+      "graph_gold_available": false,
+      "license": {
+        "code": "Apache-2.0 file in source repo",
+        "data": "unresolved; no license-like member in external archive",
+        "redistribution": "blocked_pending_explicit_terms"
+      },
+      "open_questions": [
+        "Original annotation agreement with the implicit first-candidate scoring convention",
+        "pretraining auxiliary array meaning",
+        "original case identity and split leakage",
+        "text speaker attribution",
+        "data license scope"
+      ],
+      "semantic_spotcheck_locators": [
+        "data/pre_training/loan/0.json#/0"
+      ],
+      "verified_semantics": {
+        "eval_target": "Normally index 0, but upstream derives it from first logit == 1000; not independent gold",
+        "auxiliary_id_status": "Not a unique case ID: 52 distinct values across 21,300 loan pretraining rows",
+        "evaluation_code_risks": [
+          "prediction-dependent targets",
+          "token types passed as attention mask"
+        ]
+      }
+    },
+    {
+      "id": "ljp_msjudge",
+      "official_repository": "https://github.com/mly-nlp/LJP-MSJudge",
+      "source_commit": "87f038e714f3bac4e8bee461983715f8893261db",
+      "download_url": "https://raw.githubusercontent.com/mly-nlp/LJP-MSJudge/87f038e714f3bac4e8bee461983715f8893261db/judgment_prediction_dataset.zip",
+      "local_archive": "p0/data/external/ljp-msjudge/judgment_prediction_dataset.zip",
+      "bytes": 91167278,
+      "sha256": "c27aa1f2a0ee7c5cb9573b7b83c4915c29a3bff1bc8d3637d8916b9ff1133782",
+      "data_member": "judgment_prediction_dataset.json",
+      "data_member_sha256": "20971d21b24e81de31595486265f472dab8d4d7463513c6eb34726665334442b",
+      "records": 70487,
+      "total_claims": 133214,
+      "fields": [
+        "court_debate",
+        "fact_description",
+        "claims",
+        "claims_labels",
+        "roles",
+        "fact_labels"
+      ],
+      "source_id_policy": "archive SHA + member + top-level JSON key + field; original court ID absent",
+      "graph_gold_available": false,
+      "provided_split_files": false,
+      "license": {
+        "code": "no LICENSE in inspected pinned tree",
+        "data": "unresolved",
+        "redistribution": "blocked_pending_explicit_terms"
+      },
+      "open_questions": [
+        "-1 fact label semantics",
+        "repayment vs limitation identical on all rows",
+        "README count discrepancy",
+        "PER identity loss",
+        "duplicate groups before split",
+        "data license scope"
+      ],
+      "semantic_spotcheck_locators": [
+        "judgment_prediction_dataset.json#/0"
+      ],
+      "paper": "https://arxiv.org/abs/2107.05192",
+      "label_origin": "Paper sections 5.1–5.2 describe trained legal experts annotating from judgment sections; numeric -1 encoding unresolved",
+      "missing_claim_text": {
+        "blank_claims": 3586,
+        "records_with_blank_claim": 3586,
+        "empty_claim_lists": 2,
+        "all_claim_text_missing_nonempty_list": 3581
+      }
+    }
+  ],
+  "label_followup_report": "p0/reports/label_semantics_followup.md",
+  "label_followup_metrics": "p0/reports/label_semantics_metrics.json",
+  "pinned_source_evidence": "p0/reports/label_source_evidence.json"
+}

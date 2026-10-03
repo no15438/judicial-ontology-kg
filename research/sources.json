@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "imported_at": "2026-10-04",
+  "timezone": "Australia/Sydney",
+  "legacy_repository": "https://github.com/no15438/judicial-graphrag",
+  "legacy_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+  "files": [
+    {
+      "path": "research/registries/round3.json",
+      "bytes": 56173,
+      "sha256": "b30def8c23f57909e32dc1bbd4236e28199d7f4b38920fb15f0417b13e5c62b0",
+      "source_url": "https://drive.google.com/file/d/117nzt6Q2xgDHjODoo5FNIThQLxp5EV4j/view",
+      "archive_member": "dataset_registry_round3.json",
+      "archive_bytes": 226564,
+      "archive_sha256": "09e7778c2c6c82c33a21b6b89a28f3442a309cb8f84459066a08e62b24eb35aa",
+      "transfer": "original bytes extracted from authenticated Drive download",
+      "scope": "reported historical audit metadata, not a fresh raw-corpus audit"
+    },
+    {
+      "path": "research/registries/round1_2.json",
+      "bytes": 107457,
+      "sha256": "b23077e565fde616a0b909598f293b4807fad51d90ecb1d3bb19abd81391efd9",
+      "source_url": "https://drive.google.com/file/d/1xvijcmNaOVg4liATxnppfkIkrGmQ48Mm/view",
+      "archive_member": "dataset_registry.json",
+      "archive_bytes": 895714,
+      "archive_sha256": "08057c73808870bb87ebf0109d4610b0cf7b3fb5e08fd613c431a2a52e7bd41a",
+      "transfer": "original bytes extracted from authenticated Drive download",
+      "scope": "reported historical audit metadata, not a fresh raw-corpus audit"
+    },
+    {
+      "path": "research/legacy/CODEX_HANDOFF.md",
+      "bytes": 17860,
+      "sha256": "5f2f3e39201a4fc57329d337e9a11ef83a2701a5bb22beef7c6980058ae5e590",
+      "source_url": "https://github.com/no15438/judicial-graphrag/blob/d4614083e72e8d4f4d6543b818e1f8935634fec7/CODEX_HANDOFF.md",
+      "git_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+      "git_path": "CODEX_HANDOFF.md",
+      "scope": "historical snapshot; current status is in docs/progress.md"
+    },
+    {
+      "path": "research/legacy/docs/design/p0-architecture.md",
+      "bytes": 2914,
+      "sha256": "991582223057afc39813da48ba40bb3825cbb4e64651cd7ebd4bb8cb0a2ba292",
+      "source_url": "https://github.com/no15438/judicial-graphrag/blob/d4614083e72e8d4f4d6543b818e1f8935634fec7/docs/design/p0-architecture.md",
+      "git_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+      "git_path": "docs/design/p0-architecture.md",
+      "scope": "historical snapshot; current status is in docs/progress.md"
+    },
+    {
+      "path": "research/legacy/docs/design/p0-plan-v0.2.md",
+      "bytes": 15815,
+      "sha256": "a9961cd0e9ed0d6e12afcd370586b08bb19c0796fd252887d6998dc8c3d97569",
+      "source_url": "https://github.com/no15438/judicial-graphrag/blob/d4614083e72e8d4f4d6543b818e1f8935634fec7/docs/design/p0-plan-v0.2.md",
+      "git_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+      "git_path": "docs/design/p0-plan-v0.2.md",
+      "scope": "historical snapshot; current status is in docs/progress.md"
+    },
+    {
+      "path": "research/legacy/docs/evaluation/protocol.md",
+      "bytes": 2041,
+      "sha256": "736a032ab2af9d70e38b4d2bd877ca788683e6a624c32a38f8daf856d7f97ee5",
+      "source_url": "https://github.com/no15438/judicial-graphrag/blob/d4614083e72e8d4f4d6543b818e1f8935634fec7/docs/evaluation/protocol.md",
+      "git_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+      "git_path": "docs/evaluation/protocol.md",
+      "scope": "historical snapshot; current status is in docs/progress.md"
+    },
+    {
+      "path": "research/legacy/p0/datasets/dataset_registry.json",
+      "bytes": 4835,
+      "sha256": "f0383d6853c89343ead83bd169f9122d9cf6d381a61f0676e954cfd3add01a0c",
+      "source_url": "https://github.com/no15438/judicial-graphrag/blob/d4614083e72e8d4f4d6543b818e1f8935634fec7/p0/datasets/dataset_registry.json",
+      "git_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+      "git_path": "p0/datasets/dataset_registry.json",
+      "scope": "historical snapshot; current status is in docs/progress.md"
+    },
+    {
+      "path": "research/legacy/p0/datasets/additional_candidate_registry.json",
+      "bytes": 4419,
+      "sha256": "5c13006be3c36319b207391624bdb03fe098f6bc325b7f6d8de813c396563794",
+      "source_url": "https://github.com/no15438/judicial-graphrag/blob/d4614083e72e8d4f4d6543b818e1f8935634fec7/p0/datasets/additional_candidate_registry.json",
+      "git_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+      "git_path": "p0/datasets/additional_candidate_registry.json",
+      "scope": "historical snapshot; current status is in docs/progress.md"
+    },
+    {
+      "path": "research/legacy/p0/datasets/search_candidate_files.json",
+      "bytes": 3598,
+      "sha256": "9e23c0447027630e3f900f1e72e480e40c791fb1b33c06d52db0b39ef07cdc3e",
+      "source_url": "https://github.com/no15438/judicial-graphrag/blob/d4614083e72e8d4f4d6543b818e1f8935634fec7/p0/datasets/search_candidate_files.json",
+      "git_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+      "git_path": "p0/datasets/search_candidate_files.json",
+      "scope": "historical snapshot; current status is in docs/progress.md"
+    }
+  ],
+  "external_references": [
+    {
+      "title": "Drive 总目录",
+      "url": "https://docs.google.com/document/d/1BgeETwtLn58vJNLghsh-80Ou3sLi4gA2XZjxsejKb2o/edit",
+      "status": "read"
+    },
+    {
+      "title": "原始任务书副本",
+      "url": "https://docs.google.com/document/d/1txsryclcY0E3h1-a74MCp-z3W1J79YsHjDEy3DUP25M/edit",
+      "status": "read; older candidate priority superseded by later reports"
+    },
+    {
+      "title": "首轮报告 v1，含第二轮复核",
+      "url": "https://drive.google.com/file/d/18MfkuF46nid9831GQfVw_42JDRN8_ODw/view",
+      "status": "read"
+    },
+    {
+      "title": "第三轮补充",
+      "url": "https://drive.google.com/file/d/1b_va875IOXQHVzAE1Qsq6ixEZ8B2Ije_/view",
+      "status": "read"
+    },
+    {
+      "title": "01 开发进度与复现入口｜Codex",
+      "url": "https://docs.google.com/document/d/1XTgwWemA-ajnaWbhqZZZ45_8sUHOag6W8BXObvU8Q4s/edit",
+      "status": "verified empty via native document tabs; not a progress source"
+    }
+  ]
+}

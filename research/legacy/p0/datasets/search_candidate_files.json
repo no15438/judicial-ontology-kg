@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-10-03",
+  "timezone": "Australia/Sydney",
+  "files": [
+    {
+      "id": "muser",
+      "path": "src/experiments/label_pred/all_test_sent_data.json",
+      "url": "https://raw.githubusercontent.com/THUlawtech/MUSER/040ce978da48014980cd3c5935391a5e0c52c737/src/experiments/label_pred/all_test_sent_data.json",
+      "local": "p0/data/external/muser/all_test_sent_data.json",
+      "git_blob_sha1": "a99de8b8a81024ec56d97b3175971f94ff79c80e",
+      "bytes": 4772934,
+      "sha256": "d478981f659b0e649f43a5284ea9e7020c97458bd134064cdb41409aa4990a04"
+    },
+    {
+      "id": "muser",
+      "path": "src/experiments/label_pred/all_test_sent_data_zy.json",
+      "url": "https://raw.githubusercontent.com/THUlawtech/MUSER/040ce978da48014980cd3c5935391a5e0c52c737/src/experiments/label_pred/all_test_sent_data_zy.json",
+      "local": "p0/data/external/muser/all_test_sent_data_zy.json",
+      "git_blob_sha1": "76f01551c7c9327abfd02f252deb321a274b1425",
+      "bytes": 3982970,
+      "sha256": "3abfb7ddfa71aec7e77d4b0cbbe4210463ee2c969b9c5e74b07d8dee7340876b"
+    },
+    {
+      "id": "muser",
+      "path": "src/experiments/label_pred/all_train_sent_data.json",
+      "url": "https://raw.githubusercontent.com/THUlawtech/MUSER/040ce978da48014980cd3c5935391a5e0c52c737/src/experiments/label_pred/all_train_sent_data.json",
+      "local": "p0/data/external/muser/all_train_sent_data.json",
+      "git_blob_sha1": "2812a4556f3bbb37c618289cc9c96315d8189825",
+      "bytes": 19165543,
+      "sha256": "63085eea2196ebcc773319af1ca45b050e29787e319ebb2e96389578e218112c"
+    },
+    {
+      "id": "muser",
+      "path": "src/experiments/label_pred/all_train_sent_data_zy.json",
+      "url": "https://raw.githubusercontent.com/THUlawtech/MUSER/040ce978da48014980cd3c5935391a5e0c52c737/src/experiments/label_pred/all_train_sent_data_zy.json",
+      "local": "p0/data/external/muser/all_train_sent_data_zy.json",
+      "git_blob_sha1": "770f0d24c66cba3caadece2b415c3f2201fb991c",
+      "bytes": 15892497,
+      "sha256": "5f4fbcc0b2b01c957bf341709bf8f72a7fbacc79f1c52e0ebcb0a3fffd71da8e"
+    },
+    {
+      "id": "cjrc",
+      "path": "阅读理解/data/big_train_data.json",
+      "url": "https://raw.githubusercontent.com/china-ai-law-challenge/CAIL2019/010ebcedb4a1faf0ae25576254d134fa518e4830/阅读理解/data/big_train_data.json",
+      "local": "p0/data/external/cjrc/big_train_data.json",
+      "git_blob_sha1": "095b52bc59491240fd349e3ffe46abc6b4c12a0b",
+      "bytes": 21565270,
+      "sha256": "da5d236c94c9150c03aba54da02548f6f458eaeb39b8ea29e7897351d2a7b56e"
+    },
+    {
+      "id": "cjrc",
+      "path": "阅读理解/data/dev_ground_truth.json",
+      "url": "https://raw.githubusercontent.com/china-ai-law-challenge/CAIL2019/010ebcedb4a1faf0ae25576254d134fa518e4830/阅读理解/data/dev_ground_truth.json",
+      "local": "p0/data/external/cjrc/dev_ground_truth.json",
+      "git_blob_sha1": "ec80b82875e8c784eb8ff99893b142ec1bf85770",
+      "bytes": 3555905,
+      "sha256": "5b93979df9085fcf1b3f72481aa19e6625c4b2da175925d4c9a90f6494c4ef8b"
+    },
+    {
+      "id": "cjrc",
+      "path": "阅读理解/data/test_ground_truth.json",
+      "url": "https://raw.githubusercontent.com/china-ai-law-challenge/CAIL2019/010ebcedb4a1faf0ae25576254d134fa518e4830/阅读理解/data/test_ground_truth.json",
+      "local": "p0/data/external/cjrc/test_ground_truth.json",
+      "git_blob_sha1": "2269ae81180d11ab35cbd089175c361323fb64e7",
+      "bytes": 3519707,
+      "sha256": "3d5d67b5b03ad15d3224da18834e2eb95399cfa98a8d5fd48f91621cf7928dca"
+    }
+  ]
+}

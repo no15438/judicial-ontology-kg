@@ -1,0 +1,156 @@
+{
+  "legacy_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+  "scope": "Git-tracked metadata and source inspection; no Spark access or raw-data audit",
+  "ground_truth": {
+    "records": 200,
+    "record_fields": [
+      "claims",
+      "claims_labels",
+      "fact_labels"
+    ]
+  },
+  "qa": {
+    "qa_v0": {
+      "questions": 20,
+      "fields": [
+        "case_id",
+        "category",
+        "id",
+        "notes",
+        "question",
+        "reference_answer",
+        "reference_span"
+      ]
+    },
+    "qa_v1": {
+      "questions": 45,
+      "fields": [
+        "case_id",
+        "category",
+        "id",
+        "notes",
+        "question",
+        "reference_answer",
+        "reference_span"
+      ]
+    },
+    "qa_v2": {
+      "questions": 28,
+      "fields": [
+        "answer_type",
+        "case_ids",
+        "category",
+        "derivation",
+        "fact_basis",
+        "hops",
+        "id",
+        "question",
+        "reference_answer"
+      ]
+    }
+  },
+  "reviews": {
+    "qa_v1": {
+      "rows": 48,
+      "unique_question_ids": 30,
+      "modes": [
+        "bm25",
+        "graph",
+        "longctx",
+        "vector"
+      ],
+      "nonempty_human_fields": {
+        "human_correctness": 48,
+        "human_hallucination": 48,
+        "human_notes": 48
+      },
+      "reviewer_identity_independently_verified": false
+    },
+    "qa_v2": {
+      "rows": 112,
+      "unique_question_ids": 28,
+      "modes": [
+        "bm25",
+        "graph",
+        "longctx",
+        "vector"
+      ],
+      "nonempty_human_fields": {
+        "human_correctness": 112,
+        "human_hallucination": 112,
+        "human_notes": 112
+      },
+      "reviewer_identity_independently_verified": false
+    }
+  },
+  "event_sample": {
+    "case_ids": 40,
+    "tracked_files": [
+      "data/processed/eval/event_layer/event_annotation_sample.json",
+      "data/processed/eval/event_layer/warning_rule_eval.json"
+    ],
+    "event_annotation_csv_tracked": false
+  },
+  "source_files": [
+    {
+      "path": "data/annotations/ljp_ground_truth.json",
+      "bytes": 147583,
+      "sha256": "a43c4840603ea0f5a40e0535d420621450ca0d9fa112189208aef4a72a9d1884"
+    },
+    {
+      "path": "data/annotations/qa_v0.json",
+      "bytes": 11634,
+      "sha256": "67a92deb30b2f001f2e9ca6fb6f26080017e87395e230278dc772b76b6b5571b"
+    },
+    {
+      "path": "data/annotations/qa_v1.json",
+      "bytes": 33412,
+      "sha256": "1f9633aae9315889f614eabeaced504cfd93cefb6e4279adfbc5ef8b3106f6fd"
+    },
+    {
+      "path": "data/annotations/qa_v2.json",
+      "bytes": 52712,
+      "sha256": "f53adcd2cc0fddd37c78b23a37bca0003a20c8b770a672eefe870ac53207fbdd"
+    },
+    {
+      "path": "data/processed/eval/qa_v1/qa_v1_human_review.csv",
+      "bytes": 120394,
+      "sha256": "ddfb824a6dc09cb68b7e7ca135584923a8a88096fdcb177da2488d9e3ef04953"
+    },
+    {
+      "path": "data/processed/eval/qa_v2/qa_v2_human_review.csv",
+      "bytes": 6736109,
+      "sha256": "682ae3772129f183232e5e2c8f4119745e03c48f435d56477676cc71a73542b2"
+    },
+    {
+      "path": "data/processed/eval/event_layer/event_annotation_sample.json",
+      "bytes": 819,
+      "sha256": "c497c6948de489f403a61819314603df06ad7ea599039d4a763a953dce61c93b"
+    },
+    {
+      "path": "src/preprocess/build_raw_from_ljp.py",
+      "bytes": 7214,
+      "sha256": "cd210200c4047a8b8df7137a8689cdb1a06fffbdaaeb437b12989aac5edcf6c2"
+    },
+    {
+      "path": "src/evaluation/build_qa_v2.py",
+      "bytes": 30507,
+      "sha256": "dc62122087e763b752bda6dc7ded209d8fd5a4dfa2b875b32598f84d1085dc0b"
+    },
+    {
+      "path": "src/evaluation/build_event_annotation.py",
+      "bytes": 10902,
+      "sha256": "a12d325b74d36a27c0614e58aefe570665404a47b0cb6a0dcdd2eccd131a5f31"
+    },
+    {
+      "path": "src/evaluation/make_human_review_sheet.py",
+      "bytes": 13120,
+      "sha256": "2f351e4df2cf155c02af9987d04d2392c15fd09d5bd7619437b7715b0088a67e"
+    },
+    {
+      "path": "data/processed/eval/qa_v2/qa_v2_human_review_README.md",
+      "bytes": 2247,
+      "sha256": "d5c335c5e63cfaff7549bcbf262a3aa5db5f8d7065c822c216b723eea37da086"
+    }
+  ]
+}

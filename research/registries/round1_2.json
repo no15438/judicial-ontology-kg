@@ -1,0 +1,2248 @@
+{
+  "schema_version": "1.0.0",
+  "title": "民间借贷真实原文与标注数据审计 首轮登记",
+  "as_of_date": "2026-10-03",
+  "timezone": "Australia/Sydney",
+  "round_scope": "本次完成的一轮公开来源核验；持续研究未宣称完结",
+  "baseline_source": {
+    "source_type": "user_supplied_prior_audit",
+    "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+    "source_label": "用户任务书内历史实测",
+    "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+    "recomputed_this_round": false,
+    "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+  },
+  "evidence_rules": {
+    "null_means": "未知 未取得 或本轮未核验，依旁注区分",
+    "sha256_scope": "只对实际取得的文件字节计算；重建文本另标本地文件hash，不冒充上游原件",
+    "count_units": "记录 句子 题目 文本出现 不同文本 案件身份分别计数",
+    "no_republication": "包内不含原始案件语料 上游论文或许可未明文件",
+    "test_policy": "测试集仅结构审计，不用于本体 提示 或筛选规则调参"
+  },
+  "datasets": [
+    {
+      "dataset_id": "cail2019_scm",
+      "official_name": "CAIL2019 SCM",
+      "official_repository": "https://github.com/china-ai-law-challenge/CAIL2019",
+      "paper_url": "https://arxiv.org/abs/1911.08962",
+      "version_or_commit": "010ebcedb4a1faf0ae25576254d134fa518e4830",
+      "checked_at": "2026-10-02T17:20:00Z",
+      "download_url": "https://cail.oss-cn-qingdao.aliyuncs.com/cail2019/CAIL2019-SCM.zip",
+      "filename": "CAIL2019-SCM.zip",
+      "sha256": null,
+      "record_unit": "A B C 三文本相似性三元组",
+      "observed_record_count": 8138,
+      "private_lending_selection_rule": null,
+      "observed_private_lending_count": 8138,
+      "text_origin": "官方称民间借贷事实文本，非完整文书",
+      "transformation_history": "逐字原文一致性及完整清洗路径待核验",
+      "native_case_id_status": "缺法院案号；文件位置只标识文本出现",
+      "annotation_origin": null,
+      "annotation_types": [
+        "三元组B/C相似性选择"
+      ],
+      "annotation_coverage": "原任务相似性监督；不覆盖穷尽实体关系事件",
+      "span_status": "无可采用的原文跨度",
+      "split_status": "原train/valid/test存在大量相同文本，不直接用于未见文本图谱评测",
+      "duplicate_findings": "24,414次文本出现；1,649个不同原字符串；不等于1,649个已确认案件",
+      "license_evidence_url": null,
+      "license_scope_status": "未核验",
+      "recommended_use": "主原文候选与人工补标，先去重及来源定位",
+      "admission_status": "适合原文候选",
+      "open_questions": [
+        "官方关联要素仍未取得",
+        "原案身份和使用条件未解决"
+      ],
+      "next_action": "Only retry when verified official migration/archive or new release appears",
+      "domain": "中国民间借贷纠纷",
+      "files": [
+        {
+          "filename": "mjjd_element.json",
+          "download_url": "https://data.thunlp.org/legal/mjjd_element.json",
+          "download_state": "blocked",
+          "sha256": null,
+          "bytes": null,
+          "error": "HTTP 502 during current ordinary HTTPS attempt; baseline expired-TLS observation not reused as current error"
+        }
+      ],
+      "metrics": {
+        "triples": 8138,
+        "text_occurrences": 24414,
+        "unique_exact_texts": 1649
+      },
+      "evidence": [
+        {
+          "id": "scm_commit_not_payload",
+          "candidate": "CAIL2019-SCM",
+          "observation": "Commit titled upload mjjd_element.json only adds one line to scm/README.md. It does not add the JSON as a Git blob. Current master remains baseline SHA. Releases list is empty.",
+          "evidence_type": "actual GitHub commit diff and tree inspected",
+          "source": "https://github.com/china-ai-law-challenge/CAIL2019/commit/010ebcedb4a1faf0ae25576254d134fa518e4830",
+          "local_evidence": "scm_latest_commit.json",
+          "implication": "Historical commit name is not a downloadable fallback payload"
+        },
+        {
+          "id": "scm_download_blocked",
+          "candidate": "CAIL2019-SCM",
+          "observation": "Standard HTTPS request returned HTTP 502; no bytes acquired, no dataset hash. The baseline reported expired TLS; this run does not establish the current underlying certificate failure cause. No verified official migration found.",
+          "source": "https://data.thunlp.org/legal/mjjd_element.json",
+          "evidence_type": "actual failed download",
+          "download_status": "failed",
+          "sha256": null
+        }
+      ],
+      "stopping_condition": "No new official clue: pause redundant old-link searches",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      },
+      "metrics_provenance": "Historical user-provided baseline; counts not recomputed this round"
+    },
+    {
+      "dataset_id": "cail2019_cjrc",
+      "official_name": "CJRC CAIL2019 阅读理解",
+      "official_repository": "https://github.com/china-ai-law-challenge/CAIL2019",
+      "paper_url": null,
+      "version_or_commit": "010ebcedb4a1faf0ae25576254d134fa518e4830",
+      "checked_at": "2026-10-02T17:20:00Z",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": "阅读理解context记录",
+      "observed_record_count": 10000,
+      "private_lending_selection_rule": "原字段 casename == 民间借贷纠纷",
+      "observed_private_lending_count": 20,
+      "text_origin": "案情描述或原告诉称片段",
+      "transformation_history": null,
+      "native_case_id_status": "dev/test 1,000个caseid重用且context不同；不能跨文件合并",
+      "annotation_origin": null,
+      "annotation_types": [
+        "问答",
+        "部分答案字符跨度"
+      ],
+      "annotation_coverage": "104道QA；115条非空非YES/NO答案标注，不等于115道题",
+      "span_status": "历史审计115条全部逐字偏移匹配；非穷尽实体gold",
+      "split_status": "借贷train/dev/test为16/2/2；dev/test只做结构审计",
+      "duplicate_findings": "20个不同context，仅18个不同ID值",
+      "license_evidence_url": null,
+      "license_scope_status": "未核验",
+      "recommended_use": "16条训练记录验证原文答案跨度和补标流程",
+      "admission_status": "适合部分标注参考",
+      "open_questions": [
+        "caseid跨文件命名空间未解释",
+        "更大正式借贷子集未取得",
+        "原文映射和数据许可待核验"
+      ],
+      "next_action": "Retain 16 training records for span pilot; reopen only upon formal new release or original-ID mapping",
+      "domain": "民事及刑事各5,000条；本项目仅借贷子集",
+      "files": [],
+      "metrics": {
+        "all_records": 10000,
+        "lending_records": 20,
+        "lending_train": 16,
+        "lending_dev": 2,
+        "lending_test": 2,
+        "lending_qa": 104,
+        "extractive_answer_annotations": 115,
+        "unique_lending_id_values": 18
+      },
+      "evidence": [
+        {
+          "id": "cjrc_author_repo_history",
+          "candidate": "CJRC",
+          "observation": "Bare clone of iFlytekJudiciary/CAIL2019_CJRC contains 26 commits and one master ref. Across history the only file paths are README.md and seven picture/* paths. The historical picture/test is a one-byte blank placeholder, not withheld test corpus. No larger raw-case pool, case mapping or license was found here.",
+          "version": "fc6276a3b802d550d31607b3169c8479553bf551",
+          "source": "https://github.com/iFlytekJudiciary/CAIL2019_CJRC",
+          "local_evidence": [
+            "cjrc_git_objects.txt",
+            "cjrc_git_log.txt",
+            "cjrc_history_create_test.json"
+          ],
+          "evidence_type": "complete accessible Git history objects"
+        },
+        {
+          "id": "cjrc_early_version_not_public",
+          "candidate": "CJRC",
+          "observation": "The author-associated Chinese-BERT-wwm repository states its CJRC test set is in-house and cannot be downloaded; main README warns its experimental CJRC was not the final official release. HFL-Anthology and xfyun/datasets both redirect CJRC to the already-audited CAIL2019 repository. Their catalog licenses do not establish a data-specific license on that external corpus.",
+          "version": "4c256d460f30cf899f42a16f4125be205e9ea270",
+          "source": "https://github.com/ymcui/Chinese-BERT-wwm/blob/4c256d460f30cf899f42a16f4125be205e9ea270/data/cjrc/README.md",
+          "supporting_sources": [
+            "https://github.com/iflytek/HFL-Anthology",
+            "https://github.com/xfyun/datasets",
+            "https://github.com/ymcui/Chinese-BERT-wwm#司法阅读理解cjrc"
+          ],
+          "evidence_type": "author-published statements, not acquired data",
+          "implication": "Do not count author-model benchmark variants as newly available CJRC cases"
+        },
+        {
+          "id": "cail2020_new_download",
+          "candidate": "CAIL2020 judicial MRC training",
+          "evidence_type": "actual raw-byte download and full structural audit",
+          "source": "https://github.com/china-ai-law-challenge/CAIL2020/tree/d4e3c1486f444014197f41078ee3bb7317318e09/ydlj",
+          "audit": {
+            "source_commit": "d4e3c1486f444014197f41078ee3bb7317318e09",
+            "source_git_blob": "42184fd534ddaab015266d0300e8856a7e52eeaa",
+            "bytes": 11811123,
+            "sha256": "dedc9a5cad0050a66ed79214770c979792be74a70ae12004091304fcdc6b40ee",
+            "record_count": 5054,
+            "unit": "question-context pair, not verified original court cases",
+            "schema": [
+              {
+                "keys": [
+                  "_id",
+                  "answer",
+                  "context",
+                  "question",
+                  "supporting_facts"
+                ],
+                "records": 5054
+              }
+            ],
+            "id_types": {
+              "int": 5054
+            },
+            "distinct_ids": 5054,
+            "id_min": 0,
+            "id_max": 5053,
+            "ids_equal_record_position": true,
+            "unique_context_arrays_exact": 4987,
+            "duplicate_context_excess_records": 67,
+            "distinct_questions_exact": 4964,
+            "context_blocks": 5054,
+            "sentence_occurrences": 117327,
+            "distinct_title_strings": 2032,
+            "title_not_equal_first_sentence_blocks": 0,
+            "supporting_fact_occurrences": 11871,
+            "invalid_supporting_fact_occurrences": 0,
+            "invalid_support_details": [],
+            "duplicate_support_occurrences_within_record": 32,
+            "records_no_supporting_facts": 758,
+            "empty_contexts": 0,
+            "empty_questions": 4,
+            "empty_answers": 0,
+            "replacement_character_occurrences": 0,
+            "answer_type_strings": {
+              "yes": 758,
+              "no": 754,
+              "unknown": 758,
+              "other": 2784
+            },
+            "char_offset_fields_present": false,
+            "court_id_fields_present": false,
+            "cause_fields_present": false,
+            "keyword_retrieval_rule": "literal 民间借贷 anywhere in original context title or sentence; discovery only, not inclusion rule",
+            "keyword_retrieval_records": [
+              {
+                "record_index_0based": 777,
+                "dataset_id": 777,
+                "context_sha256_canonical_json": "dfae431bea2d2dfb8d86dc4593c12f3257a15abd19d2b71d0f8d192d1b7e42db",
+                "text_sha256_sentence_concatenation_utf8": "7218940803067e58ee6a910ceba48bfdde1b2a79318e2e4692ce762a0eaa7451",
+                "supporting_fact_count": 2,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 1947,
+                "dataset_id": 1947,
+                "context_sha256_canonical_json": "69299eb11825f72f6f3e077c9cb87f82add1932fdd40e26c0b107c3581a63583",
+                "text_sha256_sentence_concatenation_utf8": "43c0f1ea37f35db2228b780611e85a1461b05021fafb46c74d0f486c38b54c90",
+                "supporting_fact_count": 2,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 2070,
+                "dataset_id": 2070,
+                "context_sha256_canonical_json": "bce26dc0a01811baf04cf1f6ad86c14a212e3b7163cb5bd9b5f16db24011d985",
+                "text_sha256_sentence_concatenation_utf8": "09f696f197aad4cc09b7664d0c8be96f4173e9f755c6c4ac4cdb0504ac94aaf7",
+                "supporting_fact_count": 3,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 2550,
+                "dataset_id": 2550,
+                "context_sha256_canonical_json": "50485c5db97607039544c3a92917816d12eebf34d454b7f6f3f62f3803ffb188",
+                "text_sha256_sentence_concatenation_utf8": "628b63344146138da8a1bc02d76d542f8a0d02bbd5433f6c6d95db17a047cac5",
+                "supporting_fact_count": 3,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 2936,
+                "dataset_id": 2936,
+                "context_sha256_canonical_json": "4e6c9c809e950053c441e960253b4acb12ad4f1729e524b7ebd7536a4bb316cc",
+                "text_sha256_sentence_concatenation_utf8": "6c24e8ac0a5aaa2628c1a5125e003d9fa851dee81683c102e505f5d5f57ab854",
+                "supporting_fact_count": 3,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 3123,
+                "dataset_id": 3123,
+                "context_sha256_canonical_json": "fb7574bb2d7e261c601bf3715e6bc02d9849a2e5f99dd3c0338de16720b7cf6a",
+                "text_sha256_sentence_concatenation_utf8": "33f4b926d0efb809afb1f3863e5362a7e7815bae304099c302bd2953188b1836",
+                "supporting_fact_count": 0,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 3895,
+                "dataset_id": 3895,
+                "context_sha256_canonical_json": "09ad5da40b7e39280aacb869dcf08ab571e398d9770a11e7545be4d4d3dc2628",
+                "text_sha256_sentence_concatenation_utf8": "d903c63487d23365c4b06a5c2aa69e65c7ef726ba5f2af23eace582ca0e21ef6",
+                "supporting_fact_count": 0,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 4646,
+                "dataset_id": 4646,
+                "context_sha256_canonical_json": "35343f3460c8da9b16f1dd7341d756ad5c39a1c842753dd054ec45188f9bf9b1",
+                "text_sha256_sentence_concatenation_utf8": "bc5d828c470c14c32dd60cfe4bd618bcb47480e1fad1db5d3bfe62d1a55cc9dc",
+                "supporting_fact_count": 2,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 4695,
+                "dataset_id": 4695,
+                "context_sha256_canonical_json": "30c77f85555e17d76e5017f3eb261458882e453cd4ef6e7aa5db8809e709191f",
+                "text_sha256_sentence_concatenation_utf8": "42d83164ea7a2443cacc302a7858c5bbd81f59c59c6f774752bbf72c1358f384",
+                "supporting_fact_count": 2,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              },
+              {
+                "record_index_0based": 4876,
+                "dataset_id": 4876,
+                "context_sha256_canonical_json": "8172a2d37cec5dbcffca17d1b7313751090bee33839d90b5e670a4a5525f5d89",
+                "text_sha256_sentence_concatenation_utf8": "9aa6cd1f87992fceead9dde81ea1aa710bd2142ce60b792f4997a2ec5320f6c4",
+                "supporting_fact_count": 3,
+                "status": "keyword_retrieval_only_not_confirmed_current_cause"
+              }
+            ],
+            "warning": "No dev/test file inspected. Dataset IDs and supporting-fact offsets are release-local, not original court identifiers or original judgment character offsets. Multiple task contexts may be same original court case despite distinct strings.",
+            "duplicate_records_ignoring_id": 0,
+            "empty_question_record_ids": [
+              110,
+              2514,
+              3564,
+              4139
+            ],
+            "no_support_all_are_unknown_answers": true,
+            "supporting_facts_after_within_record_deduplication": 11839,
+            "verified_git_blob_sha1": "42184fd534ddaab015266d0300e8856a7e52eeaa"
+          },
+          "status": [
+            "已取得文件并固定版本",
+            "已完成结构审计",
+            "适合部分标注参考",
+            "当前民间借贷覆盖待确认",
+            "使用条件待确认"
+          ],
+          "new_value": "Sentence-level supporting-fact links absent from baseline CJRC; no court identity recovery and no char offsets",
+          "domain_limit": "10 literal keyword hits are discovery candidates only. Four are clearly criminal proceedings about enforcing prior lending judgments; other hits include agency fees, property/gift disputes and disputed debt assumption. No verified lending-case count claimed.",
+          "license": "Only repository LICENSE path is sfks/baseline/LICENSE, an unrelated task baseline. No ydlj data-specific terms found in inspected tree/readme."
+        }
+      ],
+      "stopping_condition": "No formal version/mapping: stop searching repeated mirrors and unavailable in-house test data",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      },
+      "metrics_provenance": "Historical user-provided baseline; counts not recomputed this round"
+    },
+    {
+      "dataset_id": "muser",
+      "official_name": "MUSER cases_pool.json",
+      "official_repository": "https://github.com/THUlawtech/MUSER",
+      "paper_url": "https://arxiv.org/abs/2310.15602",
+      "version_or_commit": "085d223034ab82d55070a9f457ad6060aca045ef (official link provenance); sha256 2777815df8d39dcfb59050a67ff86d4fee2746aee6adc31b92f5201c1801fd87 (downloaded bytes)",
+      "checked_at": "2026-10-02T17:46:51.939757+00:00",
+      "download_url": "https://drive.google.com/file/d/15TgaACV8hilVeMl8zUTUuZ4RKqNPQ_38/view?usp=sharing",
+      "filename": "cases_pool.json",
+      "sha256": "2777815df8d39dcfb59050a67ff86d4fee2746aee6adc31b92f5201c1801fd87",
+      "record_unit": "Document object with uid, caseID and sentence arrays for court findings/opinions",
+      "observed_record_count": 4024,
+      "private_lending_selection_rule": "MUSER official paper describes the whole dataset as private lending; no per-record cause-of-action field independently checked",
+      "observed_private_lending_count": null,
+      "text_origin": "Author-described Chinese civil private-lending judgments; caseID supplied for every object",
+      "transformation_history": "Sentence segmentation observed; actual cleaning/de-identification pipeline and original court wording unverified",
+      "native_case_id_status": "4024 nonempty unique caseID strings with court-docket form and 4024 uid matching outer keys; original court source and same-dispute identity not independently verified",
+      "annotation_origin": "Authors describe trained civil-law student annotation with group-leader review; not newly human-verified",
+      "annotation_types": [
+        "sentence-level hierarchical legal fact",
+        "sentence-level dispute focus",
+        "is_important boolean",
+        "case retrieval relevance"
+      ],
+      "annotation_coverage": "54334 labeled sentence entries, 65137 label instances; no entity/relation/event gold. Initial terminal-component comparator leaves 700 unmatched public occurrences. Public-code-style whole-sentence third-level fallback leaves 225; reconstructed per-path shallow-to-other projection leaves 0. The reconstruction is compatible, not verified production code or label correctness.",
+      "span_status": "Sentence array sent_id association empirically supported as zero-based; no original-document character offsets or evidence spans",
+      "split_status": "Official 80/20 query split, with 1125 shared referenced documents; must not inherit as unseen-case extraction split",
+      "duplicate_findings": "4024 exact two-section tuples differ. Under reconstructed per-path projection, 10320 public sentence occurrences have multiple candidate positions, 155851 have one, and zero have none. Case/source identity and same-dispute multi-stage relationships remain unverified; do not force an origin.",
+      "license_evidence_url": "https://github.com/THUlawtech/MUSER/blob/040ce978da48014980cd3c5935391a5e0c52c737/LICENSE",
+      "license_scope_status": "MIT repository license; external Drive data-specific scope not confirmed; 2025 README link removal unexplained",
+      "recommended_use": "High-priority case-associated source-section and sentence-label candidate; evaluate as potential main corpus after permissions/provenance review",
+      "admission_status": "Actual files obtained and hashed; full structural audit complete; conditional candidate, not frozen gold",
+      "open_questions": [
+        "Confirm actual published-sentence production handling of shallow paths and mixed shallow/third-level labels, especially other",
+        "Resolve data-specific research/redistribution conditions and reason for link removal",
+        "Confirm text cleaning and caseID provenance against original publication sources",
+        "Audit near duplicates and same-dispute different stages before split freeze"
+      ],
+      "next_action": "Confirm other semantics and the actual release pipeline; retain ambiguity quarantine and inspect original-source/rights evidence before admitting main corpus. Do not treat compatibility reconstruction as official implementation.",
+      "domain": "中国民间借贷（作者整体描述；未逐记录独立核实当前案由）",
+      "files": [
+        {
+          "role": "pool",
+          "filename": "cases_pool.json",
+          "official_filename": "cases_pool.json",
+          "download_url": "https://drive.google.com/file/d/15TgaACV8hilVeMl8zUTUuZ4RKqNPQ_38/view?usp=sharing",
+          "file_id": "15TgaACV8hilVeMl8zUTUuZ4RKqNPQ_38",
+          "bytes": 70729711,
+          "sha256": "2777815df8d39dcfb59050a67ff86d4fee2746aee6adc31b92f5201c1801fd87",
+          "modified_time": "2023-07-06T06:49:51.975Z",
+          "record_count": 4024,
+          "version_note": "External Drive bytes pinned by sha256; Git commit pins provenance link, not a Git blob for this file.",
+          "download_state": "downloaded",
+          "byte_provenance": "actual_downloaded_bytes",
+          "checked_at": "2026-10-02T17:18:00Z"
+        },
+        {
+          "role": "train",
+          "filename": "retrieval_train.json",
+          "official_filename": "train.json",
+          "download_url": "https://drive.google.com/file/d/1_q2WgfDH84aAbWfytZz4j6cJEW-CznJl/view?usp=sharing",
+          "file_id": "1_q2WgfDH84aAbWfytZz4j6cJEW-CznJl",
+          "bytes": 8194012,
+          "sha256": "13b99035487309c5b6cbf537ceb104e24d39a3cdf22c69babdba538e17df66d6",
+          "modified_time": "2023-07-06T06:51:03.096Z",
+          "record_count": 2369,
+          "version_note": "External Drive bytes pinned by sha256; Git commit pins provenance link, not a Git blob for this file.",
+          "download_state": "downloaded",
+          "byte_provenance": "actual_downloaded_bytes",
+          "checked_at": "2026-10-02T17:18:00Z"
+        },
+        {
+          "role": "test",
+          "filename": "retrieval_test.json",
+          "official_filename": "test.json",
+          "download_url": "https://drive.google.com/file/d/1xdHAATu1_5yNRiOMjnBfJHpGVzhTScpL/view?usp=sharing",
+          "file_id": "1xdHAATu1_5yNRiOMjnBfJHpGVzhTScpL",
+          "bytes": 2377273,
+          "sha256": "0a2be59acd8e818e0d51cfc3ee4e607ad602ac7a2c877c07575f74f1d22b9536",
+          "modified_time": "2023-07-06T06:51:26.437Z",
+          "record_count": 693,
+          "version_note": "External Drive bytes pinned by sha256; Git commit pins provenance link, not a Git blob for this file.",
+          "download_state": "downloaded",
+          "byte_provenance": "actual_downloaded_bytes",
+          "checked_at": "2026-10-02T17:18:00Z"
+        }
+      ],
+      "evidence": [
+        {
+          "type": "official_historical_source",
+          "url": "https://github.com/THUlawtech/MUSER/blob/085d223034ab82d55070a9f457ad6060aca045ef/README.md#L34"
+        },
+        {
+          "type": "actual_download_and_full_structural_audit",
+          "metadata_file": "evidence/muser/evidence.json"
+        },
+        {
+          "type": "round2_source_rule_and_reconstruction_comparison",
+          "metadata_file": "evidence/muser/round2/classification.json",
+          "code_url": "https://github.com/THUlawtech/MUSER/blob/040ce978da48014980cd3c5935391a5e0c52c737/src/experiments/label_pred/data_preprocess.py#L219-L232"
+        }
+      ],
+      "stopping_condition": "No new official versions or clarification: stop repeated pool discovery. Without rights/transform provenance, retain conditional section-level status rather than freezing gold.",
+      "baseline_provenance": null,
+      "file_size_bytes": 70729711,
+      "historical_baseline": {
+        "dataset_id": "muser",
+        "official_name": "MUSER",
+        "official_repository": "https://github.com/THUlawtech/MUSER",
+        "paper_url": "https://arxiv.org/abs/2310.15602",
+        "version_or_commit": "040ce978da48014980cd3c5935391a5e0c52c737",
+        "checked_at": "2026-10-03T03:00:00+10:00",
+        "download_url": null,
+        "filename": null,
+        "sha256": null,
+        "record_unit": "句子出现",
+        "observed_record_count": null,
+        "private_lending_selection_rule": null,
+        "observed_private_lending_count": null,
+        "text_origin": "法院事实认定及意见的句子；基线无原案映射",
+        "transformation_history": null,
+        "native_case_id_status": "历史固定tree缺case_pool.json，四句子文件无原案ID",
+        "annotation_origin": null,
+        "annotation_types": [
+          "句子级事实要素",
+          "争议焦点"
+        ],
+        "annotation_coverage": "多标签句子；非完整图谱gold",
+        "span_status": "四句子文件无原文偏移",
+        "split_status": "案情和争议train/test存在大量精确文本重叠",
+        "duplicate_findings": "案情train/test 13,785个不同原字符串重叠；争议8,172个",
+        "license_evidence_url": "https://github.com/THUlawtech/MUSER/blob/040ce978da48014980cd3c5935391a5e0c52c737/LICENSE",
+        "license_scope_status": "仓库MIT，数据特定范围待核验",
+        "recommended_use": "句子级标签参考；等待本轮案件池审计升级",
+        "admission_status": "需要原文映射或人工核验",
+        "open_questions": [],
+        "next_action": null,
+        "domain": "中国民间借贷纠纷",
+        "files": [],
+        "metrics": {
+          "fact_train_occurrences": 82981,
+          "fact_train_unique": 31561,
+          "fact_test_occurrences": 20746,
+          "fact_test_unique": 14741,
+          "issue_train_occurrences": 49955,
+          "issue_train_unique": 18908,
+          "issue_test_occurrences": 12489,
+          "issue_test_unique": 8740,
+          "fact_cross_split_unique_overlap": 13785,
+          "issue_cross_split_unique_overlap": 8172
+        },
+        "evidence": [],
+        "stopping_condition": null,
+        "baseline_provenance": {
+          "source_type": "user_supplied_prior_audit",
+          "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+          "source_label": "用户任务书内历史实测",
+          "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+          "recomputed_this_round": false,
+          "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+        }
+      },
+      "historical_round1_metrics": {
+        "checked_at": "2026-10-02",
+        "commit": "040ce978da48014980cd3c5935391a5e0c52c737",
+        "pool": {
+          "filename": "cases_pool.json",
+          "bytes": 70729711,
+          "sha256": "2777815df8d39dcfb59050a67ff86d4fee2746aee6adc31b92f5201c1801fd87",
+          "record_count": 4024,
+          "unique_uid": 4024,
+          "uid_key_mismatch_count": 0,
+          "case_id_nonempty": 4024,
+          "unique_case_id": 4024,
+          "duplicate_case_id_groups": 0,
+          "case_id_records_in_duplicate_groups": 0,
+          "sections": {
+            "本院查明": {
+              "sentence_count": 112951,
+              "unique_sentence_strings": 92975,
+              "empty_sentences": 113,
+              "section_char_lengths": {
+                "min": 80,
+                "max": 7969,
+                "median": 1047.5,
+                "total": 5511720
+              },
+              "empty_sections": 0,
+              "labeled_sentence_entries": 34035,
+              "label_instances": 40636,
+              "unique_label_paths": 239,
+              "important_true": 6532,
+              "duplicate_sent_id_within_document": 0,
+              "one_based_out_of_bounds": 0,
+              "zero_based_out_of_bounds": 0,
+              "sent_id_min": 1,
+              "sent_id_max": 285
+            },
+            "本院认为": {
+              "sentence_count": 112229,
+              "unique_sentence_strings": 84273,
+              "empty_sentences": 105,
+              "section_char_lengths": {
+                "min": 170,
+                "max": 7018,
+                "median": 1435.0,
+                "total": 6556453
+              },
+              "empty_sections": 0,
+              "labeled_sentence_entries": 20299,
+              "label_instances": 24501,
+              "unique_label_paths": 338,
+              "important_true": 9496,
+              "duplicate_sent_id_within_document": 0,
+              "one_based_out_of_bounds": 0,
+              "zero_based_out_of_bounds": 0,
+              "sent_id_min": 1,
+              "sent_id_max": 134
+            }
+          },
+          "unique_section_pair_texts": 4024
+        },
+        "retrieval_files": {
+          "train": {
+            "filename": "retrieval_train.json",
+            "bytes": 8194012,
+            "sha256": "13b99035487309c5b6cbf537ceb104e24d39a3cdf22c69babdba538e17df66d6",
+            "records": 2369,
+            "field_sets": [
+              [
+                "c_bycm",
+                "c_byrw",
+                "label",
+                "q_bycm",
+                "q_byrw"
+              ]
+            ],
+            "exact_unique_rows": 2358,
+            "labels": {
+              "0": 1562,
+              "1": 807
+            },
+            "text_fields": {
+              "q_bycm": {
+                "min_chars": 300,
+                "max_chars": 300,
+                "at_300_chars": 2369,
+                "empty": 0,
+                "unique_strings": 68
+              },
+              "q_byrw": {
+                "min_chars": 300,
+                "max_chars": 300,
+                "at_300_chars": 2369,
+                "empty": 0,
+                "unique_strings": 68
+              },
+              "c_bycm": {
+                "min_chars": 102,
+                "max_chars": 300,
+                "at_300_chars": 2260,
+                "empty": 0,
+                "unique_strings": 1311
+              },
+              "c_byrw": {
+                "min_chars": 214,
+                "max_chars": 300,
+                "at_300_chars": 2362,
+                "empty": 0,
+                "unique_strings": 1235
+              }
+            },
+            "unique_query_section_pairs": 68,
+            "unique_candidate_section_pairs": 1312,
+            "unique_document_section_pairs": 1362
+          },
+          "test": {
+            "filename": "retrieval_test.json",
+            "bytes": 2377273,
+            "sha256": "0a2be59acd8e818e0d51cfc3ee4e607ad602ac7a2c877c07575f74f1d22b9536",
+            "records": 693,
+            "field_sets": [
+              [
+                "c_bycm",
+                "c_byrw",
+                "label",
+                "q_bycm",
+                "q_byrw"
+              ]
+            ],
+            "exact_unique_rows": 693,
+            "labels": {
+              "0": 462,
+              "1": 231
+            },
+            "text_fields": {
+              "q_bycm": {
+                "min_chars": 230,
+                "max_chars": 300,
+                "at_300_chars": 675,
+                "empty": 0,
+                "unique_strings": 18
+              },
+              "q_byrw": {
+                "min_chars": 300,
+                "max_chars": 300,
+                "at_300_chars": 693,
+                "empty": 0,
+                "unique_strings": 18
+              },
+              "c_bycm": {
+                "min_chars": 80,
+                "max_chars": 300,
+                "at_300_chars": 659,
+                "empty": 0,
+                "unique_strings": 552
+              },
+              "c_byrw": {
+                "min_chars": 239,
+                "max_chars": 300,
+                "at_300_chars": 691,
+                "empty": 0,
+                "unique_strings": 530
+              }
+            },
+            "unique_query_section_pairs": 18,
+            "unique_candidate_section_pairs": 552,
+            "unique_document_section_pairs": 569
+          }
+        },
+        "sentence_mapping": {
+          "本院查明": {
+            "offset_hypotheses": {
+              "0": {
+                "valid_entries": 34035,
+                "sentence_found_in_released": 34035,
+                "exact_sentence_and_leaf_labelset_found_in_released": 33903
+              },
+              "1": {
+                "valid_entries": 34035,
+                "sentence_found_in_released": 18167,
+                "exact_sentence_and_leaf_labelset_found_in_released": 5607
+              }
+            },
+            "released_train_count": 82981,
+            "released_test_count": 20746,
+            "position_matches": {
+              "train": {
+                "rows": 82981,
+                "sentence_and_leaf_labelset_candidate_positions": {
+                  "unique": 77187,
+                  "multiple": 5502,
+                  "none": 292
+                },
+                "sentence_candidate_positions": {
+                  "unique": 75640,
+                  "multiple": 7341
+                }
+              },
+              "test": {
+                "rows": 20746,
+                "sentence_and_leaf_labelset_candidate_positions": {
+                  "unique": 19401,
+                  "multiple": 1281,
+                  "none": 64
+                },
+                "sentence_candidate_positions": {
+                  "unique": 19065,
+                  "multiple": 1681
+                }
+              }
+            },
+            "note": "Structural comparison only. No test text shown or used for ontology/prompt design. Exact-string equality does not establish original court wording or author-provided identity mapping; ambiguous matches are not resolved automatically."
+          },
+          "本院认为": {
+            "offset_hypotheses": {
+              "0": {
+                "valid_entries": 20299,
+                "sentence_found_in_released": 20299,
+                "exact_sentence_and_leaf_labelset_found_in_released": 20168
+              },
+              "1": {
+                "valid_entries": 20299,
+                "sentence_found_in_released": 8971,
+                "exact_sentence_and_leaf_labelset_found_in_released": 4872
+              }
+            },
+            "released_train_count": 49955,
+            "released_test_count": 12489,
+            "position_matches": {
+              "train": {
+                "rows": 49955,
+                "sentence_and_leaf_labelset_candidate_positions": {
+                  "unique": 46779,
+                  "multiple": 2905,
+                  "none": 271
+                },
+                "sentence_candidate_positions": {
+                  "unique": 44382,
+                  "multiple": 5573
+                }
+              },
+              "test": {
+                "rows": 12489,
+                "sentence_and_leaf_labelset_candidate_positions": {
+                  "unique": 11797,
+                  "multiple": 619,
+                  "none": 73
+                },
+                "sentence_candidate_positions": {
+                  "unique": 11323,
+                  "multiple": 1166
+                }
+              }
+            },
+            "note": "Structural comparison only. No test text shown or used for ontology/prompt design. Exact-string equality does not establish original court wording or author-provided identity mapping; ambiguous matches are not resolved automatically."
+          }
+        },
+        "query_split": {
+          "train_queries": 80,
+          "test_queries": 20,
+          "query_id_overlap": 0,
+          "all_query_ids_in_pool": true,
+          "candidate_references": 10000,
+          "unique_candidate_ids": 3994,
+          "candidate_ids_missing_from_pool": 0,
+          "train_all_referenced_documents": 3602,
+          "test_all_referenced_documents": 1547,
+          "referenced_document_overlap": 1125
+        },
+        "retrieval_overlap": {
+          "unique_section_pairs_across_files": 1664,
+          "exact_section_pairs_shared_between_files": 267
+        },
+        "retrieval_prefix_mapping": {
+          "train": {
+            "unique_section_pairs": 1362,
+            "pairs_exactly_equal_to_pool_first_300_chars_each_section": 1362,
+            "pairs_with_one_pool_match": 1355,
+            "pairs_with_multiple_pool_matches": 7
+          },
+          "test": {
+            "unique_section_pairs": 569,
+            "pairs_exactly_equal_to_pool_first_300_chars_each_section": 569,
+            "pairs_with_one_pool_match": 569,
+            "pairs_with_multiple_pool_matches": 0
+          }
+        }
+      },
+      "metrics": {
+        "pool_record_count": 4024,
+        "released_sentence_occurrences": 166171,
+        "projection_round2": {
+          "rule": "For each annotated label path: choose component index 2 if present, otherwise other; union the projected labels. For an unannotated sentence use other only for this alignment comparison. Do not modify the pool.",
+          "status": "All-row compatibility check of a declared granularity; actual production pipeline and semantics of other still require author confirmation.",
+          "sections": {
+            "本院查明": {
+              "pool_label_instance_depths": {
+                "3": 40502,
+                "2": 131,
+                "1": 3
+              },
+              "pool_entry_depth_categories": {
+                "annotated_entries": 34035,
+                "level3_only": 33901,
+                "shallow_only": 108,
+                "mixed_shallow_and_level3": 26
+              },
+              "published_rows": {
+                "train": {
+                  "per_path_fallback_compatibility": {
+                    "unique_candidate_position": 77478,
+                    "multiple_candidate_positions": 5503
+                  },
+                  "whole_sentence_fallback_compatibility": {
+                    "unique_candidate_position": 77430,
+                    "multiple_candidate_positions": 5503,
+                    "mismatch": 48
+                  }
+                },
+                "test": {
+                  "per_path_fallback_compatibility": {
+                    "unique_candidate_position": 19465,
+                    "multiple_candidate_positions": 1281
+                  },
+                  "whole_sentence_fallback_compatibility": {
+                    "unique_candidate_position": 19459,
+                    "multiple_candidate_positions": 1281,
+                    "mismatch": 6
+                  }
+                }
+              },
+              "pool_annotated_entries_without_any_projected_published_match": 0
+            },
+            "本院认为": {
+              "pool_label_instance_depths": {
+                "3": 24370,
+                "2": 123,
+                "1": 8
+              },
+              "pool_entry_depth_categories": {
+                "annotated_entries": 20299,
+                "level3_only": 20168,
+                "shallow_only": 58,
+                "mixed_shallow_and_level3": 73
+              },
+              "published_rows": {
+                "train": {
+                  "per_path_fallback_compatibility": {
+                    "unique_candidate_position": 47041,
+                    "multiple_candidate_positions": 2914
+                  },
+                  "whole_sentence_fallback_compatibility": {
+                    "unique_candidate_position": 46904,
+                    "multiple_candidate_positions": 2910,
+                    "mismatch": 141
+                  }
+                },
+                "test": {
+                  "per_path_fallback_compatibility": {
+                    "unique_candidate_position": 11867,
+                    "multiple_candidate_positions": 622
+                  },
+                  "whole_sentence_fallback_compatibility": {
+                    "unique_candidate_position": 11837,
+                    "multiple_candidate_positions": 622,
+                    "mismatch": 30
+                  }
+                }
+              },
+              "pool_annotated_entries_without_any_projected_published_match": 0
+            }
+          },
+          "remaining_published_identity_ambiguous_rows": 10320
+        },
+        "official_task_rule_comparison": {
+          "本院查明": {
+            "pool_annotation_depth_categories": {
+              "level3_only": 33901,
+              "shallow_only": 108,
+              "mixed_shallow_and_level3": 26
+            },
+            "public_rows_global_other_fallback_projection": {
+              "train": {
+                "unique": 77430,
+                "multiple": 5503,
+                "none": 48
+              },
+              "test": {
+                "unique": 19459,
+                "multiple": 1281,
+                "none": 6
+              }
+            }
+          },
+          "本院认为": {
+            "pool_annotation_depth_categories": {
+              "level3_only": 20168,
+              "shallow_only": 58,
+              "mixed_shallow_and_level3": 73
+            },
+            "public_rows_global_other_fallback_projection": {
+              "train": {
+                "unique": 46904,
+                "multiple": 2910,
+                "none": 141
+              },
+              "test": {
+                "unique": 11837,
+                "multiple": 622,
+                "none": 30
+              }
+            }
+          }
+        },
+        "initial_terminal_component_comparison": {
+          "unique_candidate_positions": 155164,
+          "multiple_candidate_positions": 10307,
+          "no_exact_text_label_match": 700,
+          "status": "Historical comparator, not proven label errors"
+        },
+        "comparison_totals": [
+          {
+            "rule": "initial_terminal_component",
+            "unique": 155164,
+            "multiple": 10307,
+            "unmatched": 700
+          },
+          {
+            "rule": "whole_sentence_fallback_public_code_style",
+            "unique": 155630,
+            "multiple": 10316,
+            "unmatched": 225
+          },
+          {
+            "rule": "per_path_shallow_other_reconstruction",
+            "unique": 155851,
+            "multiple": 10320,
+            "unmatched": 0,
+            "production_rule_verified": false
+          }
+        ]
+      },
+      "projection_rule_evidence": {
+        "paper_section": "4.1",
+        "paper_url": "https://arxiv.org/abs/2310.15602",
+        "code_url": "https://github.com/THUlawtech/MUSER/blob/040ce978da48014980cd3c5935391a5e0c52c737/src/experiments/label_pred/data_preprocess.py#L219-L232",
+        "official_supported_rule": "Collect third-level labels, then other only if no third-level label for the whole sentence; comparison applies this abstraction to the pool, not a full rerun of the official pipeline",
+        "reconstruction_rule": "Map each shallow path to other and union with existing third-level labels",
+        "reconstruction_production_status": "Not established in inspected official implementation; all-row compatibility only"
+      }
+    },
+    {
+      "dataset_id": "lae",
+      "official_name": "LAE",
+      "official_repository": "https://github.com/thunlp/LAE",
+      "paper_url": null,
+      "version_or_commit": "886a6fbb5e66502167149a8eb98ba3ce5ce78007",
+      "checked_at": "2026-10-03T03:00:00+10:00",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": "预训练记录及五选一题目",
+      "observed_record_count": null,
+      "private_lending_selection_rule": null,
+      "observed_private_lending_count": null,
+      "text_origin": "论辩片段",
+      "transformation_history": null,
+      "native_case_id_status": "缺原始案件ID",
+      "annotation_origin": null,
+      "annotation_types": [
+        "五选一问答"
+      ],
+      "annotation_coverage": "非图谱gold；两侧文本不能机械认定原被告角色",
+      "span_status": "无图谱跨度",
+      "split_status": "train/valid/test题目数为11,930/4,420/4,758",
+      "duplicate_findings": "历史审计有重复候选及辅助字段语义问题",
+      "license_evidence_url": null,
+      "license_scope_status": "代码许可不能自动覆盖外部包",
+      "recommended_use": "有条件的论辩标签与任务方法参考",
+      "admission_status": "适合部分标注参考",
+      "open_questions": [
+        "原文映射 标注覆盖或许可仍待按用途核验"
+      ],
+      "next_action": "沿用历史限定；仅有正式新证据或本项目实际需要时重启专项核验",
+      "domain": "民间借贷子集",
+      "files": [],
+      "metrics": {
+        "lending_pretrain_records": 21300,
+        "lending_train_questions": 11930,
+        "lending_valid_questions": 4420,
+        "lending_test_questions": 4758
+      },
+      "evidence": [],
+      "stopping_condition": "没有与当前民间借贷真实原文任务直接相关的新证据时，不扩展投入",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      }
+    },
+    {
+      "dataset_id": "ljp_msjudge",
+      "official_name": "LJP MSJudge",
+      "official_repository": "https://github.com/mly-nlp/LJP-MSJudge",
+      "paper_url": null,
+      "version_or_commit": "87f038e714f3bac4e8bee461983715f8893261db",
+      "checked_at": "2026-10-03T03:00:00+10:00",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": "记录及诉求",
+      "observed_record_count": 70487,
+      "private_lending_selection_rule": null,
+      "observed_private_lending_count": null,
+      "text_origin": "庭审及事实描述",
+      "transformation_history": null,
+      "native_case_id_status": "未提供可直接采用的法院案号；大量PER脱敏",
+      "annotation_origin": null,
+      "annotation_types": [
+        "诉求标签",
+        "角色",
+        "事实标签"
+      ],
+      "annotation_coverage": "-1含义待核验；两列事实标签逐条完全相同",
+      "span_status": "未提供可直接采用的图谱跨度",
+      "split_status": "未提供冻结划分",
+      "duplicate_findings": null,
+      "license_evidence_url": null,
+      "license_scope_status": "数据条款未明确",
+      "recommended_use": "局部事实或诉求标签参考，不能直接作完整gold",
+      "admission_status": "需要原文映射或人工核验",
+      "open_questions": [
+        "原文映射 标注覆盖或许可仍待按用途核验"
+      ],
+      "next_action": "沿用历史限定；仅有正式新证据或本项目实际需要时重启专项核验",
+      "domain": "民间借贷相关民事庭审",
+      "files": [],
+      "metrics": {
+        "records": 70487,
+        "claims": 133214,
+        "empty_claim_strings": 3586,
+        "records_with_empty_claim_list": 2,
+        "identical_fact_columns_records": 70487
+      },
+      "evidence": [],
+      "stopping_condition": "没有与当前民间借贷真实原文任务直接相关的新证据时，不扩展投入",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      }
+    },
+    {
+      "dataset_id": "lexrel",
+      "official_name": "LexRel",
+      "official_repository": "https://github.com/thunlp/LexRel",
+      "paper_url": "https://arxiv.org/abs/2512.12643",
+      "version_or_commit": "5d04570483da5726d5db99d72633c3ab919b4e4b",
+      "checked_at": "2026-10-03T03:00:00+10:00",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": "测试记录及关系实例",
+      "observed_record_count": 1140,
+      "private_lending_selection_rule": "536条带借款合同关系，不自动等同纯民间借贷子集",
+      "observed_private_lending_count": null,
+      "text_origin": "模型提取事实并有专家核验或修订",
+      "transformation_history": "非已证逐字原文；合成训练部分排除",
+      "native_case_id_status": "无原文链接",
+      "annotation_origin": null,
+      "annotation_types": [
+        "106类关系"
+      ],
+      "annotation_coverage": "1,932关系实例，其中551借款合同关系",
+      "span_status": "无原文跨度",
+      "split_status": "本轮继承历史test结构审计，不调参",
+      "duplicate_findings": null,
+      "license_evidence_url": null,
+      "license_scope_status": "数据许可及原文一致性待核验",
+      "recommended_use": "关系分类方法参考；暂不纳入真实原文图谱评测",
+      "admission_status": "明确包含合成或改写内容 按范围排除",
+      "open_questions": [
+        "原文映射 标注覆盖或许可仍待按用途核验"
+      ],
+      "next_action": "沿用历史限定；仅有正式新证据或本项目实际需要时重启专项核验",
+      "domain": "民事关系；借款合同子集",
+      "files": [],
+      "metrics": {
+        "test_records": 1140,
+        "relations": 1932,
+        "relation_types": 106,
+        "records_with_loan_contract_relation": 536,
+        "loan_contract_relations": 551
+      },
+      "evidence": [],
+      "stopping_condition": "没有与当前民间借贷真实原文任务直接相关的新证据时，不扩展投入",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      }
+    },
+    {
+      "dataset_id": "cail2019_elements",
+      "official_name": "CAIL2019 要素识别",
+      "official_repository": "https://github.com/china-ai-law-challenge/CAIL2019",
+      "paper_url": null,
+      "version_or_commit": "010ebcedb4a1faf0ae25576254d134fa518e4830",
+      "checked_at": "2026-10-02T17:20:00Z",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": "原文分句及句子级要素标签",
+      "observed_record_count": null,
+      "private_lending_selection_rule": null,
+      "observed_private_lending_count": null,
+      "text_origin": "官方说明为原文分句",
+      "transformation_history": null,
+      "native_case_id_status": null,
+      "annotation_origin": null,
+      "annotation_types": [
+        "20个借贷要素名"
+      ],
+      "annotation_coverage": "基线仅取得两个标签文件，非训练语料",
+      "span_status": "未取得语料，无法核验",
+      "split_status": null,
+      "duplicate_findings": null,
+      "license_evidence_url": null,
+      "license_scope_status": "数据条款未核验",
+      "recommended_use": "候选标签体系参考",
+      "admission_status": "已核验官方说明",
+      "open_questions": [
+        "正式要素标注语料未取得",
+        "数据条款待确认"
+      ],
+      "next_action": "Require new official corpus/archive or byte-level equivalence before reopening third-party lead",
+      "domain": "婚姻 劳动 借贷",
+      "files": [
+        {
+          "filename": "predictor.zip",
+          "local_filename": "element_predictor.zip",
+          "download_url": "https://raw.githubusercontent.com/china-ai-law-challenge/CAIL2019/010ebcedb4a1faf0ae25576254d134fa518e4830/%E8%A6%81%E7%B4%A0%E8%AF%86%E5%88%AB/baseline/predictor/predictor.zip",
+          "bytes": 5906180,
+          "sha256": "22faf7a5a85cebffad99320def274de7b129c197e1c3b34f595b204b1950b199",
+          "download_state": "downloaded",
+          "byte_provenance": "actual_downloaded_bytes",
+          "role": "model_archive_inventory_only_not_corpus",
+          "checked_at": "2026-10-02"
+        }
+      ],
+      "metrics": {
+        "visible_lending_label_names": 20
+      },
+      "evidence": [
+        {
+          "id": "element_history_and_archive",
+          "candidate": "CAIL2019 element recognition",
+          "observation": "All six path-changing commits were inspected. Loan data paths contain only tags.txt and selectedtags.txt on both official branches. The 5,906,180-byte predictor.zip contains 35 entries (code, models, tags, directories), no training corpus. No model files were executed or deserialized.",
+          "evidence_type": "actual API commit diff/tree plus ZIP central-directory inventory",
+          "version": "010ebcedb4a1faf0ae25576254d134fa518e4830",
+          "develop_version": "e2dbe7a2719131ab083db55f249145cdf5ed9b2e",
+          "local_evidence": [
+            "cail_element_commits.json",
+            "element_predictor_inventory.json",
+            "cail_develop_tree.json"
+          ],
+          "implication": "History/archive recovery of the organizer corpus is exhausted within these observed refs"
+        },
+        {
+          "id": "element_third_party_lead",
+          "candidate": "CAIL2019 element recognition",
+          "observation": "Issue #12 has a participant-repository pointer made by a commenter with author_association NONE. The repository describes transformed sentence-pair data and points to data_all.zip. Web download returns 403. This is not verified official corpus or permission to bypass access.",
+          "source": "https://github.com/china-ai-law-challenge/CAIL2019/issues/12#issuecomment-1504783173",
+          "linked_source": "https://github.com/brightmart/multi-label_classification/blob/b5febe17eaf9d937d71cabab56c5da48ee68f7b5/README.md",
+          "download_url": "https://storage.googleapis.com/roberta_zh/roberta_model/data_all.zip",
+          "sha256": null,
+          "evidence_type": "actual comment metadata and participant README, failed fetch"
+        }
+      ],
+      "stopping_condition": "Current six commits, two branches and predictor archive exhausted; pause without new evidence",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      },
+      "metrics_provenance": "Historical user-provided baseline; counts not recomputed this round"
+    },
+    {
+      "dataset_id": "cail2021_ie",
+      "official_name": "CAIL2021 信息抽取",
+      "official_repository": "https://github.com/china-ai-law-challenge/CAIL2021",
+      "paper_url": null,
+      "version_or_commit": null,
+      "checked_at": "2026-10-03T03:00:00+10:00",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": null,
+      "observed_record_count": null,
+      "private_lending_selection_rule": null,
+      "observed_private_lending_count": null,
+      "text_origin": null,
+      "transformation_history": null,
+      "native_case_id_status": null,
+      "annotation_origin": null,
+      "annotation_types": [
+        "实体抽取"
+      ],
+      "annotation_coverage": null,
+      "span_status": null,
+      "split_status": null,
+      "duplicate_findings": null,
+      "license_evidence_url": null,
+      "license_scope_status": "未核验",
+      "recommended_use": "方法及后期扩展参考",
+      "admission_status": "当前领域不适用",
+      "open_questions": [],
+      "next_action": "保留方法参考；当前阶段不扩展到刑事领域",
+      "domain": "刑事盗窃起诉意见书",
+      "files": [],
+      "metrics": {},
+      "evidence": [],
+      "stopping_condition": "没有与当前民间借贷真实原文任务直接相关的新证据时，不扩展投入",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      }
+    },
+    {
+      "dataset_id": "leec",
+      "official_name": "LEEC",
+      "official_repository": "https://github.com/THUlawtech/LEEC",
+      "paper_url": null,
+      "version_or_commit": null,
+      "checked_at": "2026-10-03T03:00:00+10:00",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": null,
+      "observed_record_count": null,
+      "private_lending_selection_rule": null,
+      "observed_private_lending_count": null,
+      "text_origin": null,
+      "transformation_history": null,
+      "native_case_id_status": null,
+      "annotation_origin": null,
+      "annotation_types": [],
+      "annotation_coverage": null,
+      "span_status": null,
+      "split_status": null,
+      "duplicate_findings": null,
+      "license_evidence_url": null,
+      "license_scope_status": "未核验",
+      "recommended_use": "方法及后期扩展参考",
+      "admission_status": "当前领域不适用",
+      "open_questions": [],
+      "next_action": "保留方法参考；当前阶段不扩展到刑事领域",
+      "domain": "刑事",
+      "files": [],
+      "metrics": {},
+      "evidence": [],
+      "stopping_condition": "没有与当前民间借贷真实原文任务直接相关的新证据时，不扩展投入",
+      "baseline_provenance": {
+        "source_type": "user_supplied_prior_audit",
+        "source_url": "https://docs.google.com/document/d/1yVrQT_UugUYaDPc9qlsMXKJmRlcmw-WoO9wUjOFn4M8/edit",
+        "source_label": "用户任务书内历史实测",
+        "project_commit": "d4614083e72e8d4f4d6543b818e1f8935634fec7",
+        "recomputed_this_round": false,
+        "note": "未读取私有仓库中的历史数据或审计实现。历史规模不得标注为本轮重新下载复算。"
+      }
+    },
+    {
+      "dataset_id": "cail2020_mrc",
+      "official_name": "CAIL2020 阅读理解训练集",
+      "official_repository": "https://github.com/china-ai-law-challenge/CAIL2020",
+      "paper_url": null,
+      "version_or_commit": "d4e3c1486f444014197f41078ee3bb7317318e09",
+      "checked_at": "2026-10-03T03:00:00+10:00",
+      "download_url": "https://raw.githubusercontent.com/china-ai-law-challenge/CAIL2020/d4e3c1486f444014197f41078ee3bb7317318e09/ydlj/data/train.json",
+      "filename": "train.json",
+      "sha256": "dedc9a5cad0050a66ed79214770c979792be74a70ae12004091304fcdc6b40ee",
+      "record_unit": "question-context pair",
+      "observed_record_count": 5054,
+      "private_lending_selection_rule": "No admitted lending subset; 10 literal keyword hits for discovery only",
+      "observed_private_lending_count": null,
+      "text_origin": "Author-described fact excerpts from judgments, sentence segmented",
+      "transformation_history": "Rule-extracted and sentence-segmented contexts; original-site verbatim equivalence unverified",
+      "native_case_id_status": "_id is 0-based row number; no native court identity; all context titles equal first sentence",
+      "annotation_origin": "Official task describes reannotation of multi-step QA and supporting sentences; no new human gold verification",
+      "annotation_types": [
+        "QA",
+        "supporting sentence references"
+      ],
+      "annotation_coverage": "Partial answer evidence only, not exhaustive graph gold; 758 unknown answers have no support as design",
+      "span_status": "11871 supporting-fact refs in range, 11839 after within-record dedup; no original character offsets",
+      "split_status": "Only train inspected; dev/test not read",
+      "duplicate_findings": "4987 unique context arrays; 67 excess repeated contexts; zero exact records ignoring _id",
+      "license_evidence_url": null,
+      "license_scope_status": "No ydlj-specific terms found; another task baseline LICENSE cannot establish data rights",
+      "recommended_use": "Evidence-sentence reference; manual adjudication needed before admitting any lending contexts",
+      "admission_status": "已取得文件并固定版本 已完成结构审计 适合部分标注参考",
+      "open_questions": [
+        "当前案由需人工判断",
+        "原文逐字一致性及数据条款未解决"
+      ],
+      "next_action": "Review 10 training hits into current lending, historical case, lending fact only, uncertain; isolate four empty questions",
+      "domain": "官方称民事 刑事 行政；民间借贷子集未确认",
+      "files": [
+        {
+          "filename": "train.json",
+          "local_filename": "cail2020_train.json",
+          "download_url": "https://raw.githubusercontent.com/china-ai-law-challenge/CAIL2020/d4e3c1486f444014197f41078ee3bb7317318e09/ydlj/data/train.json",
+          "bytes": 11811123,
+          "sha256": "dedc9a5cad0050a66ed79214770c979792be74a70ae12004091304fcdc6b40ee",
+          "git_blob": "42184fd534ddaab015266d0300e8856a7e52eeaa",
+          "git_blob_verified_from_downloaded_bytes": true,
+          "download_state": "downloaded",
+          "byte_provenance": "actual_downloaded_bytes"
+        }
+      ],
+      "metrics": {
+        "source_commit": "d4e3c1486f444014197f41078ee3bb7317318e09",
+        "source_git_blob": "42184fd534ddaab015266d0300e8856a7e52eeaa",
+        "bytes": 11811123,
+        "sha256": "dedc9a5cad0050a66ed79214770c979792be74a70ae12004091304fcdc6b40ee",
+        "record_count": 5054,
+        "unit": "question-context pair, not verified original court cases",
+        "schema": [
+          {
+            "keys": [
+              "_id",
+              "answer",
+              "context",
+              "question",
+              "supporting_facts"
+            ],
+            "records": 5054
+          }
+        ],
+        "id_types": {
+          "int": 5054
+        },
+        "distinct_ids": 5054,
+        "id_min": 0,
+        "id_max": 5053,
+        "ids_equal_record_position": true,
+        "unique_context_arrays_exact": 4987,
+        "duplicate_context_excess_records": 67,
+        "distinct_questions_exact": 4964,
+        "context_blocks": 5054,
+        "sentence_occurrences": 117327,
+        "distinct_title_strings": 2032,
+        "title_not_equal_first_sentence_blocks": 0,
+        "supporting_fact_occurrences": 11871,
+        "invalid_supporting_fact_occurrences": 0,
+        "invalid_support_details": [],
+        "duplicate_support_occurrences_within_record": 32,
+        "records_no_supporting_facts": 758,
+        "empty_contexts": 0,
+        "empty_questions": 4,
+        "empty_answers": 0,
+        "replacement_character_occurrences": 0,
+        "answer_type_strings": {
+          "yes": 758,
+          "no": 754,
+          "unknown": 758,
+          "other": 2784
+        },
+        "char_offset_fields_present": false,
+        "court_id_fields_present": false,
+        "cause_fields_present": false,
+        "keyword_retrieval_rule": "literal 民间借贷 anywhere in original context title or sentence; discovery only, not inclusion rule",
+        "keyword_retrieval_records": [
+          {
+            "record_index_0based": 777,
+            "dataset_id": 777,
+            "context_sha256_canonical_json": "dfae431bea2d2dfb8d86dc4593c12f3257a15abd19d2b71d0f8d192d1b7e42db",
+            "text_sha256_sentence_concatenation_utf8": "7218940803067e58ee6a910ceba48bfdde1b2a79318e2e4692ce762a0eaa7451",
+            "supporting_fact_count": 2,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 1947,
+            "dataset_id": 1947,
+            "context_sha256_canonical_json": "69299eb11825f72f6f3e077c9cb87f82add1932fdd40e26c0b107c3581a63583",
+            "text_sha256_sentence_concatenation_utf8": "43c0f1ea37f35db2228b780611e85a1461b05021fafb46c74d0f486c38b54c90",
+            "supporting_fact_count": 2,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 2070,
+            "dataset_id": 2070,
+            "context_sha256_canonical_json": "bce26dc0a01811baf04cf1f6ad86c14a212e3b7163cb5bd9b5f16db24011d985",
+            "text_sha256_sentence_concatenation_utf8": "09f696f197aad4cc09b7664d0c8be96f4173e9f755c6c4ac4cdb0504ac94aaf7",
+            "supporting_fact_count": 3,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 2550,
+            "dataset_id": 2550,
+            "context_sha256_canonical_json": "50485c5db97607039544c3a92917816d12eebf34d454b7f6f3f62f3803ffb188",
+            "text_sha256_sentence_concatenation_utf8": "628b63344146138da8a1bc02d76d542f8a0d02bbd5433f6c6d95db17a047cac5",
+            "supporting_fact_count": 3,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 2936,
+            "dataset_id": 2936,
+            "context_sha256_canonical_json": "4e6c9c809e950053c441e960253b4acb12ad4f1729e524b7ebd7536a4bb316cc",
+            "text_sha256_sentence_concatenation_utf8": "6c24e8ac0a5aaa2628c1a5125e003d9fa851dee81683c102e505f5d5f57ab854",
+            "supporting_fact_count": 3,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 3123,
+            "dataset_id": 3123,
+            "context_sha256_canonical_json": "fb7574bb2d7e261c601bf3715e6bc02d9849a2e5f99dd3c0338de16720b7cf6a",
+            "text_sha256_sentence_concatenation_utf8": "33f4b926d0efb809afb1f3863e5362a7e7815bae304099c302bd2953188b1836",
+            "supporting_fact_count": 0,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 3895,
+            "dataset_id": 3895,
+            "context_sha256_canonical_json": "09ad5da40b7e39280aacb869dcf08ab571e398d9770a11e7545be4d4d3dc2628",
+            "text_sha256_sentence_concatenation_utf8": "d903c63487d23365c4b06a5c2aa69e65c7ef726ba5f2af23eace582ca0e21ef6",
+            "supporting_fact_count": 0,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 4646,
+            "dataset_id": 4646,
+            "context_sha256_canonical_json": "35343f3460c8da9b16f1dd7341d756ad5c39a1c842753dd054ec45188f9bf9b1",
+            "text_sha256_sentence_concatenation_utf8": "bc5d828c470c14c32dd60cfe4bd618bcb47480e1fad1db5d3bfe62d1a55cc9dc",
+            "supporting_fact_count": 2,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 4695,
+            "dataset_id": 4695,
+            "context_sha256_canonical_json": "30c77f85555e17d76e5017f3eb261458882e453cd4ef6e7aa5db8809e709191f",
+            "text_sha256_sentence_concatenation_utf8": "42d83164ea7a2443cacc302a7858c5bbd81f59c59c6f774752bbf72c1358f384",
+            "supporting_fact_count": 2,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          },
+          {
+            "record_index_0based": 4876,
+            "dataset_id": 4876,
+            "context_sha256_canonical_json": "8172a2d37cec5dbcffca17d1b7313751090bee33839d90b5e670a4a5525f5d89",
+            "text_sha256_sentence_concatenation_utf8": "9aa6cd1f87992fceead9dde81ea1aa710bd2142ce60b792f4997a2ec5320f6c4",
+            "supporting_fact_count": 3,
+            "status": "keyword_retrieval_only_not_confirmed_current_cause"
+          }
+        ],
+        "warning": "No dev/test file inspected. Dataset IDs and supporting-fact offsets are release-local, not original court identifiers or original judgment character offsets. Multiple task contexts may be same original court case despite distinct strings.",
+        "duplicate_records_ignoring_id": 0,
+        "empty_question_record_ids": [
+          110,
+          2514,
+          3564,
+          4139
+        ],
+        "no_support_all_are_unknown_answers": true,
+        "supporting_facts_after_within_record_deduplication": 11839,
+        "verified_git_blob_sha1": "42184fd534ddaab015266d0300e8856a7e52eeaa"
+      },
+      "evidence": [
+        {
+          "type": "official_source_and_actual_byte_audit",
+          "url": "https://github.com/china-ai-law-challenge/CAIL2020/tree/d4e3c1486f444014197f41078ee3bb7317318e09/ydlj",
+          "file": "evidence/cail/evidence.json"
+        }
+      ],
+      "stopping_condition": "If no true current lending context with sufficient source text, stop corpus expansion and retain method reference",
+      "baseline_provenance": null
+    },
+    {
+      "dataset_id": "C3RD-2024-full",
+      "official_name": "Chinese Civil Case Retrieval Dataset (C3RD)",
+      "official_repository": "https://github.com/YeFD/MileCut",
+      "paper_url": "https://doi.org/10.1145/3589334.3645349",
+      "version_or_commit": "e8e06dece41c2b5b2a84c0741861c3785935b68a (repository); external Drive archive fixed by SHA-256",
+      "checked_at": "2026-10-02T17:16:00Z",
+      "download_url": "https://drive.google.com/file/d/1LwaEWc7iYEu6qDFKu5wworGOkKFouLm3",
+      "filename": "C3RD_full.zip",
+      "sha256": "0c3afb10cb5f9f938bd6c7fe15ed932ac89d1d072e2d05b45340c6ed58decef6",
+      "record_unit": "retrieval query pool; candidate document occurrence; distinct dataset CaseId separately",
+      "observed_record_count": 1146,
+      "private_lending_selection_rule": "CaseCause == ['民间借贷纠纷']; whole-record metadata equality, no keyword expansion",
+      "observed_private_lending_count": 1437,
+      "text_origin": "Author README: China Judgments Online civil judgments, regex section splitting and length/procedure filtering. Local files contain distinct CaseRecord/JudgeAccusation/JudgeReason/JudgeResult fields.",
+      "transformation_history": "Section splitting/filtering claimed; exact end-to-end cleaning and original-page verbatim equivalence not verified. Not an unbroken full judgment.",
+      "native_case_id_status": "CaseId exists, no conflicting full records for same ID in archive; CJO original ID/URL and court docket mapping not established. Dedicated docket/source URL fields absent.",
+      "annotation_origin": "Retrieval relevance uses heuristic cause + law matches per authors. Parties and LegalBasis structured fields are present, but human provenance and exhaustive coverage not established.",
+      "annotation_types": [
+        "retrieval relevance",
+        "structured party values (provenance unresolved)",
+        "referenced laws (provenance unresolved)"
+      ],
+      "annotation_coverage": "No entity/relationship/event/attribution gold established; unannotated cannot be treated as negative.",
+      "span_status": "No native offsets; field-level provenance index created; source-page spans unavailable.",
+      "split_status": "Archive is 1146 retrieval query pools, not released case-disjoint graph train/dev/test split; repeated candidates and query/candidate overlap preclude automatic reuse.",
+      "duplicate_findings": "Full archive: 133 CaseIds occur as both query and candidate; 702 groups share exact fact/reason/result strings under different CaseIds. Loan subset 1437 unique fact strings. Near-duplicate/proceeding linkage not audited.",
+      "license_evidence_url": "https://github.com/YeFD/MileCut/blob/e8e06dece41c2b5b2a84c0741861c3785935b68a/LICENSE.txt",
+      "license_scope_status": "Repository MIT; external original Drive archive has only 1146 JSON files and no separate data terms. Data scope unresolved. HF metadata says MIT but is gated and publisher cross-identity was not verified; does not settle external package permission.",
+      "recommended_use": "Promote as additional private-lending section-text candidate for source verification and manual annotation pilot. Has richer multi-section context and data-local identity than SCM; do not yet replace frozen corpus or call gold.",
+      "admission_status": [
+        "已取得文件并固定版本",
+        "已完成结构审计",
+        "适合原文候选（带条件）",
+        "需要原文映射或人工核验",
+        "使用条件待确认"
+      ],
+      "open_questions": [
+        "CaseId-to-CJO/docket mapping",
+        "Exact section extraction and 700-character fact bound: filtering or truncation?",
+        "Data-specific license",
+        "13 occurrences whose Case title lacks 民间借贷 despite native cause exact match",
+        "Near-duplicates and same-case different proceedings"
+      ],
+      "next_action": "Use existing 1437-ID source index; verify a small preselected development-only sample against original official judgments, resolve source identity/cleaning/license before freeze. Group same IDs, exact and near-duplicate text, linked proceedings before new split.",
+      "domain": "中国民事混合（精确原生案由筛借贷）",
+      "files": [
+        {
+          "filename": "C3RD_full.zip",
+          "download_url": "https://drive.google.com/file/d/1LwaEWc7iYEu6qDFKu5wworGOkKFouLm3",
+          "bytes": 128433952,
+          "sha256": "0c3afb10cb5f9f938bd6c7fe15ed932ac89d1d072e2d05b45340c6ed58decef6",
+          "download_state": "downloaded",
+          "byte_provenance": "actual_downloaded_bytes",
+          "git_blob": null
+        }
+      ],
+      "metrics": {
+        "dataset": "C3RD full Google Drive archive",
+        "checked_at": "2026-10-02T17:13:00Z",
+        "source_url": "https://drive.google.com/file/d/1LwaEWc7iYEu6qDFKu5wworGOkKFouLm3",
+        "repository_commit": "e8e06dece41c2b5b2a84c0741861c3785935b68a",
+        "archive_bytes": 128433952,
+        "archive_sha256": "0c3afb10cb5f9f938bd6c7fe15ed932ac89d1d072e2d05b45340c6ed58decef6",
+        "query_records": 1146,
+        "distinct_query_ids": 1146,
+        "distinct_query_strings": 1146,
+        "query_is_substring_of_fact_field_all": true,
+        "candidate_document_occurrences": 114600,
+        "all_document_occurrences_with_queries": 115746,
+        "distinct_dataset_CaseId": 93669,
+        "distinct_CaseId_candidates": 92656,
+        "distinct_CaseId_queries": 1146,
+        "query_candidate_CaseId_overlap": 133,
+        "distinct_three_section_text_fingerprints": 92483,
+        "different_CaseId_same_three_section_groups": 702,
+        "distinct_fact_strings": 92334,
+        "CaseId_conflict_count": 0,
+        "CaseId_conflict_examples": [],
+        "schema_field_occurrences": {
+          "Case": 115746,
+          "CaseCause": 115746,
+          "CaseId": 115746,
+          "CaseProc": 115746,
+          "CaseRecord": 115746,
+          "CaseType": 115746,
+          "Category": 115746,
+          "JudgeAccusation": 115746,
+          "JudgeReason": 115746,
+          "JudgeResult": 115746,
+          "Keywords": 115746,
+          "LegalBasis": 115746,
+          "Parties": 115746
+        },
+        "schema_value_types": {
+          "Case:str": 115746,
+          "CaseCause:list": 115746,
+          "CaseId:str": 115746,
+          "CaseProc:str": 115746,
+          "CaseRecord:str": 114861,
+          "CaseType:str": 115746,
+          "Category:list": 115746,
+          "JudgeAccusation:str": 115746,
+          "JudgeReason:str": 115746,
+          "JudgeResult:str": 115744,
+          "Keywords:list": 115746,
+          "LegalBasis:list": 115746,
+          "Parties:list": 115746,
+          "CaseRecord:NoneType": 885,
+          "JudgeResult:NoneType": 2
+        },
+        "blank_field_occurrences": {
+          "Keywords": 14612,
+          "Parties": 1724,
+          "CaseRecord": 885,
+          "LegalBasis": 1706,
+          "JudgeResult": 2
+        },
+        "cause_field_distribution_occurrences": {
+          "['股权转让纠纷']": 1326,
+          "['离婚纠纷']": 1511,
+          "['农村建房施工合同纠纷']": 1299,
+          "['借款合同纠纷']": 1241,
+          "['加工合同纠纷']": 1543,
+          "['同居关系子女抚养纠纷']": 1433,
+          "['教育培训合同纠纷']": 1367,
+          "['侵害作品放映权纠纷']": 1257,
+          "['银行卡纠纷']": 1257,
+          "['确认合同效力纠纷']": 1340,
+          "['保险人代位求偿权纠纷']": 1469,
+          "['婚约财产纠纷']": 1341,
+          "['产品销售者责任纠纷']": 1241,
+          "['确认劳动关系纠纷']": 1364,
+          "['商品房销售合同纠纷']": 1397,
+          "['修理合同纠纷']": 1436,
+          "['追索劳动报酬纠纷']": 1297,
+          "['民间借贷纠纷']": 1469,
+          "['建设工程施工合同纠纷']": 1455,
+          "['劳务合同纠纷']": 1405,
+          "['物权保护纠纷']": 1231,
+          "['排除妨害纠纷']": 1347,
+          "['财产保险合同纠纷']": 1337,
+          "['离婚后财产纠纷']": 1433,
+          "['房屋拆迁安置补偿合同纠纷']": 1405,
+          "['劳动争议']": 1393,
+          "['侵权责任纠纷']": 1335,
+          "['著作权权属、侵权纠纷']": 1338,
+          "['承揽合同纠纷']": 1343,
+          "['合伙协议纠纷']": 1378,
+          "['企业借贷纠纷']": 1446,
+          "['供用热力合同纠纷']": 1439,
+          "['追偿权纠纷']": 1450,
+          "['定作合同纠纷']": 1460,
+          "['变更抚养关系纠纷']": 1357,
+          "['农村土地承包合同纠纷']": 1374,
+          "['租赁合同纠纷']": 1359,
+          "['生命权、健康权、身体权纠纷']": 1419,
+          "['信用卡纠纷']": 1526,
+          "['保证合同纠纷']": 1362,
+          "['物业服务合同纠纷']": 1381,
+          "['公路货物运输合同纠纷']": 1362,
+          "['融资租赁合同纠纷']": 1368,
+          "['运输合同纠纷']": 1429,
+          "['建设工程分包合同纠纷']": 1402,
+          "['土地租赁合同纠纷']": 1415,
+          "['侵害集体经济组织成员权益纠纷']": 1386,
+          "['抚养纠纷']": 1240,
+          "['小额借款合同纠纷']": 1360,
+          "['财产损害赔偿纠纷']": 1335,
+          "['赡养费纠纷']": 1371,
+          "['土地承包经营权纠纷']": 1443,
+          "['合同纠纷']": 1427,
+          "['网络购物合同纠纷']": 1297,
+          "['分期付款买卖合同纠纷']": 1412,
+          "['商品房预售合同纠纷']": 1484,
+          "['提供劳务者受害责任纠纷']": 1255,
+          "['赡养纠纷']": 1390,
+          "['金融借款合同纠纷']": 1447,
+          "['保证保险合同纠纷']": 1382,
+          "['挂靠经营合同纠纷']": 1400,
+          "['买卖合同纠纷']": 1472,
+          "['装饰装修合同纠纷']": 1546,
+          "['债权转让合同纠纷']": 1319,
+          "['建筑设备租赁合同纠纷']": 1336,
+          "['房屋买卖合同纠纷']": 1407,
+          "['委托合同纠纷']": 1450,
+          "['电信服务合同纠纷']": 1269,
+          "['确认合同无效纠纷']": 1344,
+          "['房屋租赁合同纠纷']": 1461,
+          "['承包地征收补偿费用分配纠纷']": 1296,
+          "['抚养费纠纷']": 1399,
+          "['产品责任纠纷']": 1406,
+          "['建设工程合同纠纷']": 1379,
+          "['车辆租赁合同纠纷']": 1488,
+          "['继承纠纷']": 1274,
+          "['居间合同纠纷']": 1315,
+          "['合同、无因管理、不当得利纠纷']": 1283,
+          "['保险纠纷']": 1361,
+          "['法定继承纠纷']": 1316,
+          "['相邻关系纠纷']": 1265,
+          "['机动车交通事故责任纠纷']": 1403,
+          "['返还原物纠纷']": 1442,
+          "['劳动合同纠纷']": 1349
+        },
+        "private_lending_selection_rule": "CaseCause == ['民间借贷纠纷']; whole-record metadata equality, no keyword expansion",
+        "private_lending_document_occurrences": 1469,
+        "private_lending_query_occurrences": 17,
+        "private_lending_candidate_occurrences": 1452,
+        "private_lending_distinct_CaseId": 1437,
+        "private_lending_distinct_three_section_texts": 1437,
+        "private_lending_distinct_fact_strings": 1437,
+        "private_lending_title_mismatch_occurrences": 13,
+        "private_lending_case_number_mention_occurrences": 38,
+        "private_lending_section_length_occurrence_stats": {
+          "JudgeAccusation": {
+            "min": 85,
+            "median": 484,
+            "max": 700
+          },
+          "JudgeReason": {
+            "min": 55,
+            "median": 290,
+            "max": 697
+          },
+          "JudgeResult": {
+            "min": 21,
+            "median": 252,
+            "max": 835
+          }
+        },
+        "private_lending_party_count_occurrence_stats": {
+          "min": 0,
+          "median": 2,
+          "max": 8
+        },
+        "mini_to_full_core_json_checks": [
+          {
+            "file": "C3RD/0.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/1.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/2.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/3.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/4.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/5.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/6.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/7.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/8.json",
+            "same_core_json": true,
+            "same_bytes": false
+          },
+          {
+            "file": "C3RD/9.json",
+            "same_core_json": true,
+            "same_bytes": false
+          }
+        ],
+        "spans": "No native character offsets or evidence-span annotations. Parties/LegalBasis source unconfirmed; retrieval labels are heuristics by author description.",
+        "document_identity": "CaseId dataset identity, no court docket or source URL field; linking CaseId to original CJO document not verified. Case-number mentions may name a different proceeding.",
+        "text_completeness": "Separated CaseRecord/JudgeAccusation/JudgeReason/JudgeResult fields; not an unbroken full judgment containing header/signature. No source-side exact comparison yet.",
+        "split": "Archive is 1146 retrieval query pools, not released case-disjoint graph train/dev/test split; repeated candidates and query/candidate overlap preclude automatic reuse.",
+        "loan_index_file": "C3RD_loan_source_index.json",
+        "member_manifest_file": "C3RD_full_member_manifest.json"
+      },
+      "evidence": [
+        {
+          "type": "current_round_audit",
+          "metadata_file": "evidence/alternatives/evidence.json"
+        }
+      ],
+      "stopping_condition": "If no authorized original mapping or licensing path, retain only provisional supplementary source and do not spend another round rediscovering unchanged download.",
+      "baseline_provenance": null,
+      "authors": "Fuda Ye; Shuangyin Li",
+      "file_size_bytes": 128433952,
+      "observed_candidate_document_occurrences": 114600,
+      "observed_distinct_document_ids_including_queries": 93669,
+      "observed_private_lending_count_unit": "distinct dataset CaseId; same count of distinct JudgeAccusation strings; not independently verified real-case count",
+      "observed_private_lending_document_occurrences": 1469,
+      "upgrade_condition": "Document-level official source matches and data-use scope established; annotations reviewed independently.",
+      "stop_condition": "If no authorized original mapping or licensing path, retain only provisional supplementary source and do not spend another round rediscovering unchanged download.",
+      "evidence_files": [
+        "C3RD_full_audit.json",
+        "C3RD_full_member_manifest.json",
+        "C3RD_loan_source_index.json",
+        "C3RD_mini_audit.json"
+      ],
+      "claims_vs_observed": "Authors:1146 queries/100 candidates each. Observed: agrees, but 114600 is candidate occurrences, not unique documents. HF claimed 92656 unique candidate docs corroborated by full-byte audit."
+    },
+    {
+      "dataset_id": "CPL-TKGT-2024",
+      "official_name": "Chinese Private Lending (CPL), TKGT",
+      "official_repository": "https://github.com/jiangpw41/TKGT",
+      "paper_url": "https://aclanthology.org/2024.emnlp-main.901/",
+      "version_or_commit": "22f7a68726fe73697bcd7cf5d4f4db802123428d",
+      "checked_at": "2026-10-02T17:16:00Z",
+      "download_url": "https://raw.githubusercontent.com/jiangpw41/TKGT/22f7a68726fe73697bcd7cf5d4f4db802123428d/data/cpl.zip",
+      "filename": "CPL_22f7a687.zip",
+      "sha256": "d8f7862d45de1c9da0bb8f36f9ee0634a01e4d3770200ef9c7be230b3e9c4ce9",
+      "record_unit": "text/table pair in processed corpus",
+      "observed_record_count": 703,
+      "private_lending_selection_rule": "Dataset domain claimed CPL; filename titles containing 民间借贷 count 698 of 703, not an authoritative case-cause filter.",
+      "observed_private_lending_count": null,
+      "text_origin": "Authors say real CJO judgments from manually structured CELS project; released material is processed rather than original DOC/DOCX.",
+      "transformation_history": "Paper ethics statement explicitly says randomly replaced person names. README withholds original data for privacy. Static code also removes spaces and normalizes punctuation/newlines; exact released pipeline not proven.",
+      "native_case_id_status": "Header regex locates docket-like string in 702 rows, 700 distinct strings; not source-validated. Row keys 0..702 and filenames are release-local IDs. Do not equate regex counts with unique real cases.",
+      "annotation_origin": "Paper appendix: undergraduate structuring with graduate review. Released tables have role-conditioned 原文/取值 evidence/value cells; independently reviewed gold not certified here.",
+      "annotation_types": [
+        "role-conditioned structured attributes",
+        "loan/event-related nested fields",
+        "claim/finding attribution by table role",
+        "evidence strings"
+      ],
+      "annotation_coverage": "469923 evidence cells, many literal nan. 42216 nonempty evidence strings; these are cell occurrences, not independent facts/entities.",
+      "span_status": "No native offsets. With row-order alignment and only literal \\n decoding, 29905/42216 nonempty evidence strings match exact substring; 12311 do not; 3235 matching cells have multiple occurrences. Derived matching is not gold span verification.",
+      "split_status": "Archive contains only texts_703 and tables_703.json; no frozen train/dev/test. Upstream script generates splits; not executed.",
+      "duplicate_findings": "703 records but 702 exact texts; rows 56 and 72 duplicate.",
+      "license_evidence_url": "https://github.com/jiangpw41/TKGT/blob/22f7a68726fe73697bcd7cf5d4f4db802123428d/LICENSE",
+      "license_scope_status": "Apache-2.0 repository LICENSE present; not a separately verified grant for original court data or withheld preprocessed source.",
+      "recommended_use": "Strong partial annotation/schema and attribution reference; exclude current processed text from strict unchanged-original primary corpus. Can inform annotation planning only after split separation, not be silently accepted as original gold.",
+      "admission_status": [
+        "已取得文件并固定版本",
+        "已完成结构审计",
+        "适合部分标注参考",
+        "明确姓名替换，按原文范围排除"
+      ],
+      "open_questions": [
+        "Original unchanged judgment mapping and replaced-name mapping",
+        "703/702/850 version units",
+        "Meaning of nan and annotation exhaustiveness",
+        "Why 12311 evidence-cell strings do not exactly align",
+        "Release-specific data license"
+      ],
+      "next_action": "Do not build primary raw corpus from this release. If pursuing, prepare a precise author question for user review about original/mapping/terms; no outreach sent. Static mismatch diagnosis may distinguish punctuation normalization from actual annotation differences without rewriting cases.",
+      "domain": "中国民间借贷相关",
+      "files": [
+        {
+          "filename": "CPL_22f7a687.zip",
+          "download_url": "https://raw.githubusercontent.com/jiangpw41/TKGT/22f7a68726fe73697bcd7cf5d4f4db802123428d/data/cpl.zip",
+          "bytes": 4748502,
+          "sha256": "d8f7862d45de1c9da0bb8f36f9ee0634a01e4d3770200ef9c7be230b3e9c4ce9",
+          "download_state": "downloaded",
+          "byte_provenance": "actual_downloaded_bytes",
+          "git_blob": "b69b6e0f5d4e6361e158c798fdd913bcf512ff93"
+        }
+      ],
+      "metrics": {
+        "dataset": "CPL / TKGT",
+        "version": "22f7a68726fe73697bcd7cf5d4f4db802123428d",
+        "archive_sha256": "d8f7862d45de1c9da0bb8f36f9ee0634a01e4d3770200ef9c7be230b3e9c4ce9",
+        "members": [
+          {
+            "name": "tables_703.json",
+            "bytes": 103425921,
+            "sha256": "769ae294d59020576dd8ebc561f4b28c288cd3239b5a7f9a5b3f588cb9e0986b"
+          },
+          {
+            "name": "texts_703",
+            "bytes": 4556173,
+            "sha256": "14e7554afd669e5f191812788bbdb821f35eb08b792c4c226c2cfed80fa4cc4d"
+          }
+        ],
+        "text_record_count": 703,
+        "table_record_count": 703,
+        "table_keys_zero_based_consecutive": true,
+        "text_distinct_exact_count": 702,
+        "filename_distinct_count": 703,
+        "top_schema_counts": {
+          "first_column": 703,
+          "data_cell": 703
+        },
+        "case_number_found_in_first_350_chars": 702,
+        "distinct_header_case_number_strings": 700,
+        "case_number_extraction_is_heuristic_not_verified_original_identity": true,
+        "text_lengths": {
+          "min": 320,
+          "median": 2061,
+          "max": 10814
+        },
+        "private_lending_in_title_count": 698,
+        "text_empty_count": 0,
+        "evidence_audit": {
+          "evidence_cells_total": 469923,
+          "evidence_type_str": 469923,
+          "evidence_nonempty_non_nan": 42216,
+          "literal_exact_substring_match": 29905,
+          "literal_unique_occurrence": 26670,
+          "no_exact_match": 12311,
+          "evidence_missing_or_literal_nan": 427707,
+          "nonempty_value_with_evidence": 33607,
+          "literal_multi_occurrence": 3235
+        },
+        "evidence_alignment_method": "Correspond table key 0..702 to text line order; split first ###; decode only literal backslash-n to newline. Exact substring search, no fuzzy normalization. No upstream code executed. No byte offsets supplied in table; found substring position is derived, not original annotation offset.",
+        "mismatch_examples_no_raw_text": [
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "【诉讼请求原文】【法院认为及判决结果原文】",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "1569354aed3355066d8d0f0dafc74404158078a99d2a808b6c9eb6b624f4918f",
+            "evidence_length": 119
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "需返回逾期利息",
+              "1",
+              "总额（元）",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "0e5d51edaef21e01c0191c072f05ea168ebfbf1b1125588f7f0f491e555bcc03",
+            "evidence_length": 34
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "需返回逾期利息",
+              "1",
+              "计算起始日期",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "74bbc0ac2e6b7870251c4eb89c1e21b5c9ca1e5bdc6b0e858deb60f7ef3d61c2",
+            "evidence_length": 55
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "需返回逾期利息",
+              "1",
+              "计算起始日期类型",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "74bbc0ac2e6b7870251c4eb89c1e21b5c9ca1e5bdc6b0e858deb60f7ef3d61c2",
+            "evidence_length": 55
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "需返回逾期利息",
+              "1",
+              "计算截止日期类型",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "74bbc0ac2e6b7870251c4eb89c1e21b5c9ca1e5bdc6b0e858deb60f7ef3d61c2",
+            "evidence_length": 55
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "需返回逾期利息",
+              "1",
+              "利息率类型",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "74bbc0ac2e6b7870251c4eb89c1e21b5c9ca1e5bdc6b0e858deb60f7ef3d61c2",
+            "evidence_length": 55
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【事实与理由】【辩称】【法院认定事实】",
+              "【事实与理由原文】【辩称原文】【法院认定事实原文】",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "df7679c2036b85bd522e5d689ba22404c600e2765159facb5597943ddb57692b",
+            "evidence_length": 189
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【事实与理由】【辩称】【法院认定事实】",
+              "借款次数",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "d824b47fd2dcaf5882c5507a78e5254cf53f09372fd51ed41cde29b01ebad910",
+            "evidence_length": 98
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【事实与理由】【辩称】【法院认定事实】",
+              "借款次数情况",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "d824b47fd2dcaf5882c5507a78e5254cf53f09372fd51ed41cde29b01ebad910",
+            "evidence_length": 98
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【事实与理由】【辩称】【法院认定事实】",
+              "借款实际交付",
+              "2",
+              "金额（元）",
+              "法院"
+            ],
+            "evidence_sha256": "a6ea7f963f55e4212398a5f4be11daab453730e06b1db89b58803f4d454cbbb5",
+            "evidence_length": 38
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【事实与理由】【辩称】【法院认定事实】",
+              "借款实际交付",
+              "2",
+              "时间",
+              "法院"
+            ],
+            "evidence_sha256": "a6ea7f963f55e4212398a5f4be11daab453730e06b1db89b58803f4d454cbbb5",
+            "evidence_length": 38
+          },
+          {
+            "record_index": "0",
+            "field_path": [
+              "data_cell",
+              "【事实与理由】【辩称】【法院认定事实】",
+              "借款实际交付",
+              "2",
+              "方式类型",
+              "法院"
+            ],
+            "evidence_sha256": "a6ea7f963f55e4212398a5f4be11daab453730e06b1db89b58803f4d454cbbb5",
+            "evidence_length": 38
+          },
+          {
+            "record_index": "1",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "需返回逾期利息",
+              "1",
+              "计算起始日期类型",
+              "法院"
+            ],
+            "evidence_sha256": "6e078a13148b269f6e13a9af7cc1c7a75030c3fc30b3c7e0d5597d7b61d4b9f8",
+            "evidence_length": 80
+          },
+          {
+            "record_index": "1",
+            "field_path": [
+              "data_cell",
+              "【诉讼请求】【法院认为及判决结果】",
+              "需返回逾期利息",
+              "1",
+              "计算起始日期类型",
+              "出借人（原告）"
+            ],
+            "evidence_sha256": "b2bac96cdc8a2c59c2dba27554e88763c26736e66babc08e4f154366fdb1948b",
+            "evidence_length": 106
+          },
+          {
+            "record_index": "1",
+            "field_path": [
+              "data_cell",
+              "【事实与理由】【辩称】【法院认定事实】",
+              "借款实际交付",
+              "1",
+              "时间",
+              "法院"
+            ],
+            "evidence_sha256": "569e64f4e0167c674d8ae6a36adfaa323f19212197eeeb61147ff11143d82427",
+            "evidence_length": 58
+          }
+        ],
+        "field_path_count": 650
+      },
+      "evidence": [
+        {
+          "type": "current_round_audit",
+          "metadata_file": "evidence/alternatives/evidence.json"
+        }
+      ],
+      "stopping_condition": "Without original mapping this stays annotation-method reference and does not displace SCM/C3RD.",
+      "baseline_provenance": null,
+      "authors": "Peiwen Jiang et al.; Shanghai Jiao Tong University CELS research project",
+      "file_size_bytes": 4748502,
+      "git_blob": "b69b6e0f5d4e6361e158c798fdd913bcf512ff93",
+      "observed_distinct_texts": 702,
+      "upgrade_condition": "Obtain authorized unchanged original text with mapping; independently verify alignment and roles.",
+      "stop_condition": "Without original mapping this stays annotation-method reference and does not displace SCM/C3RD.",
+      "evidence_files": [
+        "CPL_audit.json"
+      ],
+      "claims_vs_observed": "Paper distinguishes original project 850 and experimental selection 702; downloaded release actually has 703 rows, 702 different text strings. No claim that exact dedup explains paper selection."
+    },
+    {
+      "dataset_id": "AC-NLG-2020",
+      "official_name": "De-biased Court’s View Generation with Causality / AC-NLG",
+      "official_repository": "https://github.com/wuyiquan/AC-NLG",
+      "paper_url": "https://aclanthology.org/2020.emnlp-main.56/",
+      "version_or_commit": "ac10ef21e248f7d535e900c72a85e199b0f90382",
+      "checked_at": "2026-10-02T17:16:00Z",
+      "download_url": null,
+      "filename": null,
+      "sha256": null,
+      "record_unit": null,
+      "observed_record_count": null,
+      "private_lending_selection_rule": null,
+      "observed_private_lending_count": null,
+      "text_origin": "Civil/private-lending clue from downstream paper; original data not obtained.",
+      "transformation_history": null,
+      "native_case_id_status": "未核验",
+      "annotation_origin": "未核验",
+      "annotation_types": [],
+      "annotation_coverage": "未核验",
+      "span_status": "未核验",
+      "split_status": "未核验",
+      "duplicate_findings": "未核验",
+      "license_evidence_url": null,
+      "license_scope_status": "Official README says data approval still pending and offers email request; no data-specific grant verified.",
+      "recommended_use": "Bounded negative lead; do not claim 67k or downstream reformatted examples as obtained original corpus.",
+      "admission_status": [
+        "已核验官方说明",
+        "数据申请或使用条件待确认"
+      ],
+      "open_questions": [
+        "Whether official raw corpus can be released with case IDs and terms"
+      ],
+      "next_action": "If user chooses author contact, prepare identity/purpose plus specific raw-text/ID/license questions for review; no message sent.",
+      "domain": "民事借贷相关申请线索",
+      "files": [],
+      "metrics": {},
+      "evidence": [
+        {
+          "type": "current_round_audit",
+          "metadata_file": "evidence/alternatives/evidence.json"
+        }
+      ],
+      "stopping_condition": "No further mirror search while original access/terms unresolved.",
+      "baseline_provenance": null,
+      "authors": "Yiquan Wu et al.",
+      "upgrade_condition": "Author-approved official raw file and terms available.",
+      "stop_condition": "No further mirror search while original access/terms unresolved.",
+      "evidence_files": [
+        "ACNLG_tree.txt",
+        "ACNLG_readme.txt"
+      ],
+      "claims_vs_observed": "Complete pinned tree has 22 blobs of README/code/pyc, no dataset file; README explicitly says data not uploaded."
+    }
+  ],
+  "additional_method_only_leads": [
+    {
+      "name": "JuDGE",
+      "url": "https://github.com/oneal2000/JuDGE",
+      "reason": "Official fields and examples are criminal judgment generation; outside current civil lending scope; no download needed."
+    },
+    {
+      "name": "Joint Entity and Relation Extraction for Legal Documents with Legal Feature Enhancement",
+      "url": "https://aclanthology.org/2020.coling-main.137/",
+      "reason": "Paper explicitly drug-related criminal cases; method only, not a lending substitute."
+    }
+  ],
+  "recommendation_order": [
+    {
+      "dataset_id": "muser",
+      "rank": 1,
+      "reason": "Recovered case-associated sections and sentence labels; conditional, not frozen gold"
+    },
+    {
+      "dataset_id": "C3RD-2024-full",
+      "rank": 2,
+      "reason": "Multi-section lending contexts and dataset identity; original-source mapping unresolved"
+    },
+    {
+      "dataset_id": "cail2019_scm",
+      "rank": 3,
+      "reason": "Established fallback fact-text source, baseline retained"
+    },
+    {
+      "dataset_id": "cail2019_cjrc",
+      "rank": 4,
+      "reason": "16 training records for span and manual annotation pilot"
+    },
+    {
+      "dataset_id": "cail2020_mrc",
+      "rank": 5,
+      "reason": "Evidence sentence subtask reference; lending subset unconfirmed"
+    }
+  ],
+  "assembled_at_utc": "2026-10-02T17:46:51.939770+00:00",
+  "revision_history": [
+    {
+      "version": "0",
+      "scope": "Initial round; terminal-component label comparator produced 700 unmatched occurrences",
+      "superseded_claim": "700 unmatched is no longer presented as a standalone unresolved label-consistency conclusion"
+    },
+    {
+      "version": "1",
+      "scope": "Added three-way label projection comparison; preserve 700/225/0 and distinguish public code from reconstruction",
+      "raw_dataset_changed": false,
+      "gold_validated": false,
+      "source_identity_verified": false
+    }
+  ]
+}

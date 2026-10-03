@@ -1,0 +1,2 @@
+# Preserve byte-identical historical reference documents, including trailing blank lines.
+research/legacy/** whitespace=-blank-at-eof

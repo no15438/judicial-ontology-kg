@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-10-03",
+  "timezone": "Australia/Sydney",
+  "datasets": [
+    {
+      "id": "cail2019_scm",
+      "source_repository": "https://github.com/china-ai-law-challenge/CAIL2019",
+      "source_commit": "010ebcedb4a1faf0ae25576254d134fa518e4830",
+      "download_url": "https://cail.oss-cn-qingdao.aliyuncs.com/cail2019/CAIL2019-SCM.zip",
+      "local_file": "p0/data/external/cail2019-scm/CAIL2019-SCM.zip",
+      "sha256": "c1517efc5eab5178e101100e5b2566840ad8040e3f4e9431d451948c4fef99b3",
+      "bytes": 11656075,
+      "source_kind": "Officially released real private-lending fact texts, per SCM README; original task similarity matching",
+      "audit_scope": "Full archive structural and exact-hash audit; no source case identity or semantic completeness verified",
+      "status": "candidate_for_source_adaptation; formal_graph_evaluation_not_admitted",
+      "local_audit_allowed": true,
+      "formal_graph_gold_available": false,
+      "license_status": "No dataset license located in inspected official README/archive; record as unresolved, not a legal prohibition finding",
+      "split_status": "Original split unsuitable for unseen-text graph extraction: exact text overlap across splits",
+      "native_case_id_present": false,
+      "sidecar": {
+        "url": "https://data.thunlp.org/legal/mjjd_element.json",
+        "status": "download_failed_tls_certificate_expired",
+        "contents_verified": false,
+        "sha256": null
+      },
+      "open_questions": [
+        "Released count differs from paper and README",
+        "Explicit data usage terms",
+        "Sidecar access and label provenance",
+        "Original case identity and near duplicates",
+        "Human span/relation gold"
+      ]
+    },
+    {
+      "id": "lexrel_test",
+      "source_repository": "https://github.com/thunlp/LexRel",
+      "source_commit": "5d04570483da5726d5db99d72633c3ab919b4e4b",
+      "download_url": "https://raw.githubusercontent.com/thunlp/LexRel/5d04570483da5726d5db99d72633c3ab919b4e4b/LexRel/test.json",
+      "local_file": "p0/data/external/lexrel/test.json",
+      "sha256": "4dbc837e1f287fe2bc322523494061a70da2b49c344250e2bbe40065aea334a0",
+      "bytes": 2100237,
+      "source_kind": "Real-case-derived, LLM-extracted input facts and draft labels with expert verification/refinement described in paper",
+      "status": "reference_candidate_only; original_text_constraint_and_license_unresolved",
+      "audit_scope": "Aggregate structure only; no held-out raw sample inspection or ontology tuning",
+      "license_status": "No LICENSE file in pinned repository tree",
+      "source_case_id_present": false,
+      "span_gold_available": false,
+      "train_files": {
+        "downloaded": false,
+        "status": "excluded_synthetic_training_material_by_paper_description"
+      },
+      "open_questions": [
+        "Whether released input is verbatim from original judgment",
+        "Original text linkage",
+        "Explicit data terms",
+        "Scope of expert verification and missing argument values"
+      ],
+      "git_blob_sha1": "0343333a26d2cd82bfbdc63ee4e0dcf8e6ed47b7"
+    },
+    {
+      "id": "leec",
+      "source_repository": "https://github.com/THUlawtech/LEEC",
+      "source_commit": "4f4394581990caca4ae5eda2fd936fb717d1eae0",
+      "status": "deferred_outside_private_lending_scope",
+      "audit_scope": "Official README and license only; raw data not downloaded",
+      "domain": "criminal",
+      "license_status": "Repository README states MIT; LICENCE is software text. Data-specific scope not resolved in this screen.",
+      "label_caveat": "DEE README assigns first victim to event tables when correspondence is unclear; not automatically gold for victim-defendant links"
+    }
+  ],
+  "operational_decision": "Continue offline source audit and provenance engineering. No synthetic cases, new official split, or graph gold created. No candidate here is declared a frozen formal graph benchmark.",
+  "evidence_urls": [
+    "https://github.com/china-ai-law-challenge/CAIL2019/blob/010ebcedb4a1faf0ae25576254d134fa518e4830/scm/README.md",
+    "https://arxiv.org/abs/1911.08962",
+    "https://arxiv.org/html/2512.12643v1#S4.SS2",
+    "https://github.com/THUlawtech/LEEC/blob/4f4394581990caca4ae5eda2fd936fb717d1eae0/README.md",
+    "https://github.com/THUlawtech/LEEC/blob/4f4394581990caca4ae5eda2fd936fb717d1eae0/LICENCE"
+  ]
+}
