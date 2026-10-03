@@ -2,7 +2,7 @@
 
 司法文书本体与知识图谱构建研究的新仓库。首期研究中国民间借贷：真实原文 → 带证据的抽取记录 → 本体约束图谱 → 分层质量与效率评测。
 
-当前已完成研究资料接续、开发环境、AppealCase/Spark 来源适配、开发隔离与证据回放；本体、语义抽取、图谱装配与正式评测尚未实现或冻结。用户无法提供专业人工 gold，开发按工程验证及已有标签覆盖继续推进，不以用户补标为前提。旧 GraphRAG 产品不作为新项目运行依赖。
+当前已完成研究资料接续、开发环境、AppealCase/Spark 来源适配、开发隔离、证据回放，以及开发版最小本体、抽取契约和校验账本；本地模型抽取、图谱装配与正式评测尚未实现或冻结。用户无法提供专业人工 gold，开发按工程验证及已有标签覆盖继续推进，不以用户补标为前提。旧 GraphRAG 产品不作为新项目运行依赖。
 
 ## 开始工作
 
@@ -21,6 +21,7 @@ bash scripts/run.sh verify-sources
 - [当前进度与证据](docs/progress.md)：旧仓库和 Drive 三轮研究的合并结论。
 - [现有标注可用性](docs/gold-data-audit.md)：200 条案件标签、QA 复核和事件抽样的区别。
 - [来源适配与开发验证](docs/source-development.md)：24 份 AppealCase 和 12 份 Spark 开发文书的可复跑入口，以及无用户人工 gold 的边界。
+- [最小本体与抽取契约](docs/ontology-contract.md)：开发版概念、证据/语境约束、逐篇失败账本及真实来源探针。
 - [新架构与迁移范围](docs/architecture.md)：模块边界与尚未实现的部分。
 - [云端环境](docs/cloud-environment.md)：启动方式、网络和 Spark 连接状态。
 - [本地开发](docs/local-development.md)：当前优先方式，Mac 直接通过局域网连接 Spark。

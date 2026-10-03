@@ -1,0 +1,35 @@
+{
+  "version": "0.1.0",
+  "status": "development_candidate",
+  "domain": "民间借贷发布文书",
+  "identity_scope": "document_only",
+  "concepts": {
+    "Actor": "单篇文书内的候选主体。名称或脱敏占位符相同不建立跨文书身份；类型不是诉讼或交易角色。",
+    "Mention": "指向一个候选主体的一次原文提及，必须保留精确字段跨度。多次提及合并仍是待核验候选。",
+    "Context": "一次有来源的陈述语境。字段名不决定语境；引用、转述和法院认定分别建模。父语境不向子语境传递事实成立状态。",
+    "Role": "特定陈述语境中赋给主体的诉讼或交易角色，附原文和肯定、否定、不确定或条件状态。",
+    "Event": "被陈述的候选事件，附参与者、语境与陈述状态。事件节点的存在不证明事件发生。",
+    "Statement": "关于主体或事件的有归属陈述。金额、日期与条文保持原文；归一化值是候选，不填补未知信息。"
+  },
+  "actor_types": ["person", "organization", "court", "unknown"],
+  "mention_kinds": ["name", "pronoun", "description"],
+  "context_kinds": ["party_claim", "party_defense", "court_finding", "court_reasoning", "court_disposition", "court_report", "quoted_material", "procedural_record", "unknown"],
+  "roles": ["plaintiff", "defendant", "third_party", "appellant", "appellee", "lender", "borrower", "guarantor", "agent", "other"],
+  "event_types": ["loan_agreement", "funds_transfer", "repayment", "guarantee", "demand", "litigation", "other"],
+  "participant_roles": ["lender", "borrower", "transferor", "transferee", "guarantor", "claimant", "respondent", "other"],
+  "polarities": ["affirmed", "negated", "uncertain", "conditional"],
+  "predicates": ["principal_amount", "transfer_amount", "repayment_amount", "interest_amount", "outstanding_amount", "interest_rate", "event_date", "repayment_deadline", "legal_basis", "other"],
+  "predicate_value_kinds": {
+    "principal_amount": "money",
+    "transfer_amount": "money",
+    "repayment_amount": "money",
+    "interest_amount": "money",
+    "outstanding_amount": "money",
+    "interest_rate": "rate",
+    "event_date": "date",
+    "repayment_deadline": "date",
+    "legal_basis": "text"
+  },
+  "provenance_methods": ["model", "rule", "upstream_label"],
+  "evaluation_boundary": "原文回放与结构通过不构成法律语义正确性；没有独立覆盖标注时整体图谱 P/R/F1 为 null。"
+}

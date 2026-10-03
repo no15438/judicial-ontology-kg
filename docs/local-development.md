@@ -6,7 +6,7 @@
 
 本机项目“知识图谱研究”的父目录是 `/Users/no15438/Documents/Codex/2026-10-02/new-chat-5`，它本身不是 Git 仓库。2026-10-04 实查发现 `judicial-ontology-kg` 子目录仍是 `2eb9811` 旧历史，与远端 `bec2b6a` 没有共同祖先。本次保留该目录及其忽略数据，通过 Git worktree 在 `judicial-ontology-kg-current` 接续远端，分支为 `codex/spark-data-audit`。不要把这两套历史直接合并。
 
-后续来源适配开发使用同一工作树中的 `codex/source-adapters` 分支，继承 `32ea863`。运行入口改为 `bash scripts/run.sh`，会显式使用当前 checkout 的源码，避免本机 editable `.pth` hidden 标记影响导入。
+来源适配开发使用同一工作树中的 `codex/source-adapters` 分支；本体契约继续在其 `73a418b` 上建立的 `codex/ontology-contracts`。运行入口为 `bash scripts/run.sh`，会显式使用当前 checkout 的源码，避免本机 editable `.pth` hidden 标记影响导入。
 
 本机接续执行：
 
@@ -23,7 +23,7 @@ bash scripts/check.sh
 
 接续提示：
 
-> 阅读 AGENTS.md、CODEX_HANDOFF.md、docs/progress.md 和 docs/source-development.md。继续使用本机 -current 工作树和 codex/source-adapters 分支，不重新创建仓库或导入旧系统。两类来源适配、开发小样与证据回放已完成，接续最小本体与抽取契约。用户无法提供法律人工 gold，不以用户补标为前提；固定审核字段不能当 gold。不配置收费远程连接，不上传案件正文，不修改 Spark 服务。8K/16K 测速请求已撤回。
+> 阅读 AGENTS.md、CODEX_HANDOFF.md、docs/progress.md、docs/source-development.md 和 docs/ontology-contract.md。继续使用本机 -current 工作树和 codex/ontology-contracts 分支，不重新创建仓库或导入旧系统。两类来源适配、开发小样、最小本体与抽取契约已实现，接续本地抽取适配与保留语境的图谱装配。用户无法提供法律人工 gold，不以用户补标为前提；固定审核字段不能当 gold。不配置收费远程连接，不上传案件正文，不修改 Spark 服务。8K/16K 测速请求已撤回。
 
 ## Spark 与模型选择
 

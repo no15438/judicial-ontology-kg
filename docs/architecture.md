@@ -1,6 +1,6 @@
 # 新架构与迁移边界
 
-状态：当前已实现环境、资料完整性、两类来源适配、开发数据准备、保守分组和证据回放。下列抽取、构图和正式评测业务模块仍是设计；来源适配不等于完整数据准入或法律语义核验。具体实现与运行见 [来源开发](source-development.md)。
+状态：当前已实现环境、资料完整性、两类来源适配、开发数据准备、保守分组、证据回放、开发版最小本体与抽取契约校验。模型抽取、构图和正式评测仍未实现；结构检查不等于完整数据准入或法律语义核验。见 [来源开发](source-development.md) 与 [本体契约](ontology-contract.md)。
 
 ```mermaid
 flowchart LR
@@ -19,11 +19,11 @@ flowchart LR
 | 来源 | 原文件哈希、版本/文件/记录/字段定位、派生偏移 | `src/judicial_kg/sources/` |
 | 本体 | 通用概念、民间借贷领域定义、结构契约 | `ontology/`、`schemas/` |
 | 抽取 | Qwen 协议适配、提示版本、原输出、失败记录 | `src/judicial_kg/extraction/` |
-| 校验 | 字段、引用、端点、否定和陈述归属 | `src/judicial_kg/validation/` |
+| 校验 | 字段、引用、端点、否定状态结构和陈述归属约束 | `src/judicial_kg/validation.py`、`validation_run.py` |
 | 装配 | 案件内身份、节点/边/事件/主张/来源记录 | `src/judicial_kg/graph/` |
 | 评测 | 固定一对一匹配、TP/FP/FN、覆盖与效率 | `src/judicial_kg/evaluation/` |
 
-来源目录已创建并实现，其余目录随首个实际实现创建。首版契约优先 YAML/JSON Schema；没有选择完整 OWL 推理或 SHACL 作为必需依赖。先输出存储无关的记录，再决定数据库适配。当前环境无需 Neo4j、PostgreSQL、向量库或 GPU。
+来源模块及首版 JSON Schema 契约已经实现；未实现目录随实际代码创建。本体词表放 `ontology/`，结构契约放 `schemas/`，生成与加载逻辑位于 `contracts.py`。没有选择完整 OWL 推理或 SHACL 作为必需依赖。先输出存储无关的候选记录，再决定数据库适配。契约验证无需 Neo4j、PostgreSQL、向量库或 GPU。
 
 本次迁入旧设计与数据登记，保留固定提交和哈希。旧 `src/`、拼接文书、图数据库、QA 产物和既往分数保留在旧仓库，不形成新项目基线。旧 `p0/datasets/` 中的审计脚本仍可从固定提交复现；需要迁移时逐项确认输入、输出和依赖，再落入新结构，不整体复制旧运行环境。
 

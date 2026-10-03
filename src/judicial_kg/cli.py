@@ -1,4 +1,4 @@
-"""Source preparation and environment checks, not semantic graph evaluation."""
+"""Source preparation and extraction contracts, not semantic graph evaluation."""
 
 import argparse
 import json
@@ -11,13 +11,27 @@ from judicial_kg.provenance import verify_manifest
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["doctor", "verify-sources", "prepare-development"])
+    parser.add_argument(
+        "command",
+        choices=["doctor", "verify-sources", "prepare-development", "validate-extractions"],
+    )
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path)
     parser.add_argument("--spark-capture", type=Path)
+    parser.add_argument("--documents", type=Path, action="append")
+    parser.add_argument("--candidates", type=Path)
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command == "validate-extractions":
+            from judicial_kg.validation_run import run_validation
+
+            if not args.documents or args.candidates is None:
+                parser.error("validate-extractions requires --documents and --candidates")
+            output = args.output or args.root / "artifacts/contract-validation"
+            result = run_validation(args.root, args.documents, args.candidates, output)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return int(bool(result["attempts_rejected"] or result["documents_missing"]))
         if args.command == "prepare-development":
             from judicial_kg.sources.development import prepare
 
@@ -61,7 +75,7 @@ def main() -> int:
                 "verified_reference_files": len(verified),
                 "raw_corpus": "not checked",
                 "model_services": "not configured or probed by this command",
-                "graph_pipeline": "not implemented",
+                "graph_pipeline": "source/contracts implemented; semantic graph not implemented",
             },
             indent=2,
         )
