@@ -2,9 +2,11 @@
 
 核对日期：2026-10-04，Australia/Sydney。
 
-当前最新：Google 项目任务文档与新仓库 Issues #1–13 已更新。0.2.0 多陈述者契约和新旧图谱兼容已实现，194 项测试通过。`47cfa9e` 上的本地 v6 同两篇回归为 1 通过、1 定位失败、34 未选中；没有新增云端调用。下一步先修复 6 处引用定位问题与 3 处旧提及未保留，暂不扩批，默认仍是 v5。详见 [最新回归报告](research/qwen-contextual-report.json) 和 progress.md 末节。
+当前最新：有界提及修复器已实现，215 项测试通过。`80c0c00` 上修复协议第五版对原 v6 同两篇均通过，修正 6 处位置/实际提及问题并补回 Spark 的 3 处旧提及；29 个旧提及位置均有新版重叠。新图 778 节点、1,581 边、623 次证据引用，写盘还原及 CSV 保真检查通过。历史失败与第三轮字符边界错误全部保留，整体语义 P/R/F1 仍未评估。见 [修复报告](research/qwen-mention-repair-report.json)。
 
-新输出 `artifacts/qwen-extraction/contextual-v1/`；通过的 1 篇图在 `artifacts/graph/contextual-v1/`，204 节点、431 边、168 次证据引用。Neo4j CSV 已独立导出至 `artifacts/neo4j/contextual-v1/`，逐条 payload 校验通过，未加载到 Neo4j。原 524/994 快照保持不变。失败响应不改写，不自动迁移旧记录或补归属。以下为分阶段历史与开发约束，以本段和 progress.md 末节为最新状态。
+最终修复在 `artifacts/qwen-extraction/mention-repair-v5/`，图和 CSV 分别在 `artifacts/graph/mention-repair-v5/` 与 `artifacts/neo4j/mention-repair-v5/`；没有覆盖 Neo4j 旧 524/994 展示。
+
+已启动新增 8 篇的独立串行运行 `artifacts/qwen-extraction/expansion8-v6/`；本轮终态见 report.json，若 completed=false 不要重复启动。输入重排清单与固定选样记录在 `artifacts/development-expansion-10/`，仍保留完整 36 篇分母。当前普通抽取默认仍是 v5，扩展调用显式用 v6；不会把局部修复或单篇通过当成全图谱语义验证。以下为分阶段历史，以本段和 progress.md 末节为最新。
 
 当前仓库是 `no15438/judicial-ontology-kg`，与旧 `judicial-graphrag` 独立。不要把旧历史和旧系统整体导入，也不要重复创建仓库。
 

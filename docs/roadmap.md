@@ -18,10 +18,10 @@
 | 顺序 | 任务 | 状态 | 验收条件 |
 |---|---|---|---|
 | 1 | [#3 联合陈述者契约](https://github.com/no15438/judicial-ontology-kg/issues/3) | 工程实现完成；194 项测试通过 | 版本化多主体归属；旧候选保持可复现；非法引用拒收；图谱关系顺序和证据无损还原 |
-| 2 | [#6 多次提及与转述回归](https://github.com/no15438/judicial-ontology-kg/issues/6) | 回归已跑，继续修复 | v6 两篇 1 通过/1 定位失败；先处理 6 处引用定位问题和 3 处旧提及未保留，再重验归属与覆盖 |
-| 3 | [#8 约 10 篇开发扩展](https://github.com/no15438/judicial-ontology-kg/issues/8) | 待回归 | 从既有开发清单选样，报告困难类型、工程失败、疑点、用量和耗时，未选中仍记缺失 |
+| 2 | [#6 多次提及与转述回归](https://github.com/no15438/judicial-ontology-kg/issues/6) | 本轮已通过；持续覆盖诊断 | 有界修复后两篇通过，6 处定位/提及问题与 3 处旧提及已处理；215 项测试；剩余 11 处字面线索和语义覆盖仍待核验 |
+| 3 | [#8 约 10 篇开发扩展](https://github.com/no15438/judicial-ontology-kg/issues/8) | 进行中：新增 8 篇已提交串行抽取 | 从既有开发清单选样，报告困难类型、工程失败、疑点、用量和耗时，未选中仍记缺失 |
 | 4 | [#4 参考覆盖](https://github.com/no15438/judicial-ontology-kg/issues/4)、[#5 局部质量检查](https://github.com/no15438/judicial-ontology-kg/issues/5) | 待推进 | 不依赖用户法律标注；只在独立参考覆盖范围计分；无参考不报告全图谱 P/R/F1 |
-| 5 | [#7 Neo4j 与图谱保真](https://github.com/no15438/judicial-ontology-kg/issues/7) | 兼容代码完成；新候选 1 篇导出通过 | 旧 524/994 展示保留；新 204/431 独立导出、168 次证据引用还原；多陈述者实候选仍待通过 |
+| 5 | [#7 Neo4j 与图谱保真](https://github.com/no15438/judicial-ontology-kg/issues/7) | 兼容代码完成；新候选 1 篇导出通过 | 旧 524/994 展示保留；新修复后 778/1581 独立导出、623 次证据引用还原；多陈述者候选通过工程校验 |
 | 6 | [#9 OpenJev 可选对照](https://github.com/no15438/judicial-ontology-kg/issues/9) | 后续可选 | 相同疑难片段对比 Qwen＋规则、Qwen 复核、OpenJev 辅助；收益未验证不接入主流程 |
 
 Google 项目任务文档：[01 开发进度与复现入口](https://docs.google.com/document/d/1XTgwWemA-ajnaWbhqZZZ45_8sUHOag6W8BXObvU8Q4s/edit)。只同步任务与元数据，原文和图谱输出仍在本地忽略目录。

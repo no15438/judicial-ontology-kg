@@ -114,3 +114,37 @@ PYTHONPATH=src .venv/bin/python scripts/inspect_contextual_run.py \
 ```
 
 新 0.2.0 候选离线装配须显式传 `assemble-graph --contract-version 0.2.0`；本轮 1 篇生成 204 节点/431 边，168 次证据还原。未修改旧 Neo4j 图。下一步处理重复引用序号、片段定位漂移及旧提及未保留，再决定扩批。
+
+## 提及的有界修复
+
+新增 `repair-qwen-mentions`，只处理已完整保存的 v6 草稿和已验证来源的旧候选覆盖线索。先核对完整 36 篇输入、原请求/响应及旧候选哈希，再列出真实来源位置供本地 Qwen 选择。旧候选不作为 gold。当前修复协议为 `qwen-mention-repair-v5`，与抽取 v5/v6 是不同版本序列；早期修复配置留作历史，使用相应 Git 提交复现。
+
+允许的变更仅包括：选择明确原文位置；把误展开的名称改回原片段内唯一匹配的代词/描述；明确标记同主体同文字的重复提及；依据旧位置复核补提及和新主体。已有 Actor 身份/类型、Context、Role、Event、Statement 和极性均不能被修复响应改写。缺失/重复决策、目录外位置、不唯一引用和未知主体均拒收；不确定项仍保留失败，不能选第一个或最近位置制造通过。
+
+```sh
+bash scripts/run.sh repair-qwen-mentions \
+  --source-run artifacts/qwen-extraction/contextual-v1 \
+  --candidates artifacts/qwen-extraction/typed-v1-replay/candidates.jsonl \
+  --documents artifacts/source-development/appealcase-documents.json \
+  --documents artifacts/source-development/spark-documents.json \
+  --output artifacts/qwen-extraction/mention-repair-new
+```
+
+`repair-plans.json`、`original-drafts.json`、原始修复响应和 `patched-*.json` 均保存在新忽略目录；报告另记原运行状态、修复决策计数和哈希。局部修复不是新的独立文书样本，也不是独立法律复核。
+
+真实五轮局部修复共 10 次本地调用：前两轮暴露位置冲突和不确定归属；第三轮工程通过但提及边界有误；第四轮因提示歧义拒判；第五轮修正提示并用唯一原文文字定位，两篇通过。最终两处代词/描述边界已对照原文检查，Spark 的 3 处旧提及补回；29 个旧提及位置均有新版重叠，85 处旧重复名称线索中 74 处有精确对应，剩余 11 处仍须分层检查。它们不是语义 recall。
+
+最终图 778 节点/1,581 边、623 次证据引用，写盘还原、原文重验和 CSV payload 比对通过；未覆盖旧 Neo4j 展示。215 项工程测试通过。完整历史见 [提及修复报告](../research/qwen-mention-repair-report.json)。
+
+
+当前版本修复决策可离线重放，核对原文清单、原 v6 草稿、旧候选、修复计划及逐篇请求/响应绑定；不调用模型。重放同时比对候选内容和逐篇状态，不能只以空输出一致冒充成功。
+
+```sh
+bash scripts/run.sh replay-qwen-mentions \
+  --source-run artifacts/qwen-extraction/contextual-v1 \
+  --repair-run artifacts/qwen-extraction/mention-repair-v5 \
+  --candidates artifacts/qwen-extraction/typed-v1-replay/candidates.jsonl \
+  --documents artifacts/source-development/appealcase-documents.json \
+  --documents artifacts/source-development/spark-documents.json \
+  --output artifacts/qwen-extraction/mention-repair-replay-new
+```
