@@ -13,16 +13,49 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "command",
-        choices=["doctor", "verify-sources", "prepare-development", "validate-extractions"],
+        choices=[
+            "doctor",
+            "verify-sources",
+            "prepare-development",
+            "validate-extractions",
+            "extract-qwen",
+        ],
     )
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path)
     parser.add_argument("--spark-capture", type=Path)
     parser.add_argument("--documents", type=Path, action="append")
     parser.add_argument("--candidates", type=Path)
+    parser.add_argument("--config", type=Path)
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command == "extract-qwen":
+            from datetime import UTC, datetime
+            from uuid import uuid4
+
+            from judicial_kg.extraction.run import run_extraction
+
+            if not args.documents:
+                parser.error("extract-qwen requires --documents")
+            run_name = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
+            output = args.output or args.root / "artifacts/qwen-extraction" / run_name
+            result = run_extraction(
+                args.root,
+                args.documents,
+                args.config or args.root / "configs/qwen-extraction.json",
+                output,
+            )
+            print(
+                json.dumps(
+                    {"output": str(output.resolve()), **result}, ensure_ascii=False, indent=2
+                )
+            )
+            accepted = sum(
+                result["document_status_counts"].get(k, 0)
+                for k in ("accepted_candidate", "accepted_empty")
+            )
+            return int(accepted != result["selected_documents"])
         if args.command == "validate-extractions":
             from judicial_kg.validation_run import run_validation
 
