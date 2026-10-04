@@ -258,6 +258,49 @@ class SimulatedClient:
         return response(payload)
 
 
+@pytest.mark.parametrize("missing_quote", [False, True])
+def test_local_runner_uses_anchored_protocol_and_keeps_all_issues(workspace, missing_quote):
+    root, docs, config_path = workspace
+    prompt = root / "prompts/qwen-extraction-v4.txt"
+    prompt.write_bytes((ROOT / "prompts/qwen-extraction-v4.txt").read_bytes())
+    config = json.loads(config_path.read_text())
+    config.update(version="qwen-extraction-v4", temperature=0.2)
+    config_path.write_text(json.dumps(config))
+
+    class AnchoredClient(SimulatedClient):
+        def call(self, path, body=None, timeout=15):
+            if path != "/v1/chat/completions":
+                return super().call(path, body, timeout)
+            self.paths.append(path)
+            assert "source_units" in body["messages"][1]["content"]
+            value = {
+                "actors": [{"id": "a", "actor_type": "unknown"}],
+                "contexts": [],
+                "mentions": [
+                    {
+                        "id": "m",
+                        "actor_id": "a",
+                        "kind": "description",
+                        "evidence": {
+                            "unit_id": "u0",
+                            "text": "NO" if missing_quote else "B",
+                            "occurrence": None,
+                        },
+                    }
+                ],
+            }
+            return response(completion(json.dumps(value)))
+
+    report = run_extraction(
+        root, [docs], config_path, root / "artifacts/anchored", AnchoredClient()
+    )
+    assert report["prompt_file"] == "prompts/qwen-extraction-v4.txt"
+    status = "draft_grounding_failed" if missing_quote else "accepted_candidate"
+    assert report["document_status_counts"][status] == 2
+    if missing_quote:
+        assert report["selected_outcomes"][0]["issues"][0]["code"] == "quote_missing_in_unit"
+
+
 @pytest.mark.parametrize(
     "mode,status,submitted",
     [

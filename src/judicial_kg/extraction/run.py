@@ -8,7 +8,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from judicial_kg.contracts import COLLECTIONS, Contract
-from judicial_kg.extraction.draft import DraftError, draft_schema, materialize, messages
+from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.transport import SparkClient
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import canonical_hash, sha256
@@ -36,11 +36,11 @@ def load_config(path: Path) -> dict:
         if type(config[key]) is not int or not low <= config[key] <= high:
             raise ValueError(f"Invalid extraction config {key}")
     if (
-        config["version"] != "qwen-extraction-v3"
+        config["version"] not in {"qwen-extraction-v3", "qwen-extraction-v4"}
         or not isinstance(config["model"], str)
         or not config["model"]
         or type(config["temperature"]) not in (int, float)
-        or config["temperature"] != 0
+        or not 0 <= config["temperature"] <= 1
         or type(config["port"]) is not int
         or not isinstance(config["ssh_host"], str)
     ):
@@ -100,8 +100,12 @@ def run_extraction(
     root = root.resolve()
     output = safe_output(root, output)
     config, contract = load_config(config_path), Contract.load(root)
-    prompt = (root / PROMPT_FILE).read_text()
-    schema = draft_schema(contract)
+    from judicial_kg.extraction import anchored, draft
+
+    protocol = anchored if config["version"] == "qwen-extraction-v4" else draft
+    prompt_file = anchored.PROMPT_FILE if protocol is anchored else PROMPT_FILE
+    prompt = (root / prompt_file).read_text()
+    schema = protocol.draft_schema(contract)
     documents, inputs = [], []
     for path in document_paths:
         raw = path.read_bytes()
@@ -154,7 +158,7 @@ def run_extraction(
         "config": config,
         "config_sha256": canonical_hash(config),
         "prompt_sha256": sha256(prompt.encode()),
-        "prompt_file": PROMPT_FILE,
+        "prompt_file": prompt_file,
         "draft_schema_sha256": canonical_hash(schema),
         **contract.versions(),
         "input_files": inputs,
@@ -238,7 +242,7 @@ def run_extraction(
                     raise DraftError("service_busy")
                 request = {
                     "model": config["model"],
-                    "messages": messages(doc, prompt, schema),
+                    "messages": protocol.messages(doc, prompt, schema),
                     "max_tokens": config["max_output_tokens"],
                     "temperature": config["temperature"],
                     "seed": config["seed"],
@@ -279,7 +283,7 @@ def run_extraction(
                 payload = response.json()
                 outcome["usage"] = usage_counts(payload)
                 content, _ = completion_content(payload, config["model"])
-                record = materialize(
+                record = protocol.materialize(
                     content,
                     doc,
                     contract,
@@ -305,7 +309,10 @@ def run_extraction(
             except (DraftError, ValueError, KeyError, TypeError, AttributeError) as error:
                 code = error.code if isinstance(error, DraftError) else "protocol_invalid_response"
                 outcome.update(
-                    status=code, issues=[{"code": code, "path": getattr(error, "path", "/")}]
+                    status=code,
+                    issues=getattr(
+                        error, "issues", [{"code": code, "path": getattr(error, "path", "/")}]
+                    ),
                 )
                 halted = (
                     code == "transport_failed"
