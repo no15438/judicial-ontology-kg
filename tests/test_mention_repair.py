@@ -78,6 +78,9 @@ def fixture():
                 "choice_id": "p0",
                 "action": "locate",
                 "duplicate_of": None,
+                "span_start": None,
+                "span_end": None,
+                "mention_kind": None,
                 "reason": "source",
             }
             for x in plan["selector_items"]
@@ -182,7 +185,7 @@ def saved_fixture(saved_workspace):
         "ontology/private-lending-v0.2.json",
         "schemas/extraction-v0.2.schema.json",
         "prompts/qwen-extraction-v6.txt",
-        "prompts/qwen-mention-repair-v2.txt",
+        "prompts/qwen-mention-repair-v3.txt",
     ):
         (root / name).write_bytes((ROOT / name).read_bytes())
     doc, draft, baseline, _, choices = fixture()
@@ -221,7 +224,7 @@ def saved_fixture(saved_workspace):
             }
         )
     )
-    config["version"] = "qwen-mention-repair-v2"
+    config["version"] = "qwen-mention-repair-v3"
     config_path.write_text(json.dumps(config))
     return root, docs, config_path, run, baseline_path, Client
 
@@ -278,6 +281,9 @@ def test_duplicates_require_explicit_same_actor_same_text_target():
                 "action": "duplicate",
                 "choice_id": None,
                 "duplicate_of": i["duplicate_targets"][0]["mention_id"],
+                "span_start": None,
+                "span_end": None,
+                "mention_kind": None,
                 "reason": "same metadata occurrence",
             }
             for i in plan["selector_items"]
@@ -309,3 +315,69 @@ def test_uncertain_choice_cannot_smuggle_a_location():
     choices["selector_choices"][0]["action"] = "uncertain"
     with pytest.raises(DraftError, match="repair_unused_choice"):
         apply_choices(draft, plan, choices, CONTRACT)
+
+
+@pytest.mark.parametrize("end", [2, 0, 999, True])
+def test_local_span_uses_original_unicode_characters_and_rejects_bad_bounds(end):
+    doc = document(
+        "metadata",
+        {"record_pointer": "/0"},
+        {"field": ("/0/f", "A🙂。")},
+        family_id="family:0",
+        allocation="development_exposed",
+    )
+    draft = {
+        "actors": [{"id": "a", "actor_type": "unknown"}],
+        "contexts": [],
+        "mentions": [
+            {
+                "id": "m",
+                "actor_id": "a",
+                "kind": "name",
+                "evidence": {"unit_id": "u0", "text": "UNSUPPORTED", "occurrence": None},
+            }
+        ],
+    }
+    prior = copy.deepcopy(draft)
+    prior["mentions"][0]["evidence"]["text"] = "A🙂"
+    baseline = typed.materialize(json.dumps(prior), doc, Contract.load(ROOT), PROVENANCE)
+    plan = build_plan(doc, draft, baseline, CONTRACT)
+    choices = {
+        "selector_choices": [
+            {
+                "item_id": "s0",
+                "action": "local_span",
+                "choice_id": None,
+                "duplicate_of": None,
+                "span_start": 0,
+                "span_end": end,
+                "mention_kind": "description",
+                "reason": "metadata source substring",
+            }
+        ],
+        "coverage_choices": [
+            {
+                "item_id": "h0",
+                "action": "covered",
+                "actor_id": None,
+                "actor_type": None,
+                "mention_kind": None,
+                "reason": "explicit position",
+            }
+        ],
+    }
+    if type(end) is not int or end != 2:
+        with pytest.raises(DraftError):
+            apply_choices(draft, plan, choices, CONTRACT)
+        return
+    patched, counts = apply_choices(draft, plan, choices, CONTRACT)
+    assert patched["mentions"][0]["evidence"]["text"] == "A🙂"
+    assert patched["mentions"][0]["kind"] == "description"
+    assert draft["mentions"][0]["evidence"]["text"] == "UNSUPPORTED"
+    assert counts["explicit_local_substring_changed"] == 1
+    assert (
+        validate_record(
+            contextual.materialize(json.dumps(patched), doc, CONTRACT, PROVENANCE), doc, CONTRACT
+        )
+        == []
+    )

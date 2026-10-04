@@ -44,6 +44,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v6",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
+            "qwen-mention-repair-v3",
         }
         or not isinstance(config["model"], str)
         or not config["model"]

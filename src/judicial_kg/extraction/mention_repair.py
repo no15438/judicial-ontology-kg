@@ -18,8 +18,8 @@ from judicial_kg.sources.development import write_json
 from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation_run import strict_json, validate_batch
 
-PROMPT_FILE = "prompts/qwen-mention-repair-v2.txt"
-VERSION = "qwen-mention-repair-v2"
+PROMPT_FILE = "prompts/qwen-mention-repair-v3.txt"
+VERSION = "qwen-mention-repair-v3"
 
 
 def occurrences(units, text):
@@ -83,6 +83,19 @@ def build_plan(doc, draft, baseline, contract):
                 }
             )
     for item in invalid:
+        original_unit = next(
+            (u for u in units if u["id"] == item["original_selector"]["unit_id"]), None
+        )
+        item["original_unit"] = (
+            original_unit
+            if original_unit and item["original_selector"]["text"] not in original_unit["text"]
+            else None
+        )
+        item["character_choices"] = (
+            [{"position": i, "character": c} for i, c in enumerate(original_unit["text"])]
+            if item["original_unit"]
+            else []
+        )
         item["choices"] = [
             p
             for p in item["choices"]
@@ -153,9 +166,12 @@ def response_schema(contract):
                 "items": obj(
                     {
                         "item_id": string,
-                        "action": {"enum": ["locate", "duplicate", "uncertain"]},
+                        "action": {"enum": ["locate", "local_span", "duplicate", "uncertain"]},
                         "choice_id": optional_string,
                         "duplicate_of": optional_string,
+                        "span_start": {"type": ["integer", "null"], "minimum": 0},
+                        "span_end": {"type": ["integer", "null"], "minimum": 0},
+                        "mention_kind": nullable(contract.ontology["mention_kinds"]),
                         "reason": reason,
                     }
                 ),
@@ -217,6 +233,39 @@ def apply_choices(draft, plan, choices, contract):
     selected = bind(plan["selector_items"], choices["selector_choices"])
     for item in plan["selector_items"]:
         decision = selected[item["item_id"]]
+        if decision["action"] == "local_span":
+            unit = item["original_unit"]
+            start, end = decision["span_start"], decision["span_end"]
+            if (
+                unit is None
+                or type(start) is not int
+                or type(end) is not int
+                or not 0 <= start < end <= len(unit["text"])
+                or end - start > 64
+                or decision["mention_kind"] is None
+                or decision["choice_id"] is not None
+                or decision["duplicate_of"] is not None
+            ):
+                raise DraftError("repair_local_span_invalid")
+            quote = unit["text"][start:end]
+            positions = occurrences([unit], quote)
+            match = next(p for p in positions if p["start"] == unit["start"] + start)
+            if any(
+                g["actor_id"] == item["actor_id"]
+                and g["field"] == match["field"]
+                and g["start"] == match["start"]
+                and g["end"] == match["end"]
+                for g in plan["grounded_mentions"]
+            ):
+                raise DraftError("repair_add_overlaps_existing")
+            patched["mentions"][item["mention_index"]].update(
+                evidence=selector(match), kind=decision["mention_kind"]
+            )
+            patched_positions.append(match)
+            actions["explicit_local_substring_changed"] += 1
+            continue
+        if any(decision[k] is not None for k in ("span_start", "span_end", "mention_kind")):
+            raise DraftError("repair_unused_local_span")
         if decision["action"] == "duplicate":
             targets = [
                 g for g in item["duplicate_targets"] if g["mention_id"] == decision["duplicate_of"]
@@ -287,7 +336,8 @@ def apply_choices(draft, plan, choices, contract):
     if issues:
         raise GroundingError(issues)
     # No model patch can alter existing actor identity/type, context, role,
-    # event, statement, polarity or literal quote text.
+    # event, statement or polarity. Explicit local-span choices can change
+    # mention text only to a substring of its original source unit.
     assert patched["contexts"] == draft["contexts"]
     assert patched["actors"][: len(draft["actors"])] == draft["actors"]
     return patched, dict(actions)
