@@ -184,7 +184,7 @@ def saved_fixture(saved_workspace):
         "ontology/private-lending-v0.2.json",
         "schemas/extraction-v0.2.schema.json",
         "prompts/qwen-extraction-v6.txt",
-        "prompts/qwen-mention-repair-v4.txt",
+        "prompts/qwen-mention-repair-v5.txt",
     ):
         (root / name).write_bytes((ROOT / name).read_bytes())
     doc, draft, baseline, _, choices = fixture()
@@ -223,7 +223,7 @@ def saved_fixture(saved_workspace):
             }
         )
     )
-    config["version"] = "qwen-mention-repair-v4"
+    config["version"] = "qwen-mention-repair-v5"
     config_path.write_text(json.dumps(config))
     return root, docs, config_path, run, baseline_path, Client
 

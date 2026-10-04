@@ -69,7 +69,7 @@ def main() -> int:
                 args.documents,
                 args.source_run,
                 args.candidates,
-                args.config or args.root / "configs/qwen-mention-repair-v4.json",
+                args.config or args.root / "configs/qwen-mention-repair-v5.json",
                 args.output,
             )
             print(json.dumps(result, ensure_ascii=False, indent=2))

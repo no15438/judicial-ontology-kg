@@ -18,8 +18,8 @@ from judicial_kg.sources.development import write_json
 from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation_run import strict_json, validate_batch
 
-PROMPT_FILE = "prompts/qwen-mention-repair-v4.txt"
-VERSION = "qwen-mention-repair-v4"
+PROMPT_FILE = "prompts/qwen-mention-repair-v5.txt"
+VERSION = "qwen-mention-repair-v5"
 
 
 def occurrences(units, text):
