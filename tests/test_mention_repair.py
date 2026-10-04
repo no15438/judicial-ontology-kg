@@ -73,7 +73,13 @@ def fixture():
     plan = build_plan(doc, draft, baseline, CONTRACT)
     choices = {
         "selector_choices": [
-            {"item_id": x["item_id"], "choice_id": "p0", "reason": "source"}
+            {
+                "item_id": x["item_id"],
+                "choice_id": "p0",
+                "action": "locate",
+                "duplicate_of": None,
+                "reason": "source",
+            }
             for x in plan["selector_items"]
         ],
         "coverage_choices": [
@@ -152,7 +158,7 @@ def test_invalid_patch_does_not_silently_pass(mutation, code):
 def test_abstention_retains_unresolved_status_and_input():
     _, draft, _, plan, choices = fixture()
     before = copy.deepcopy(draft)
-    choices["selector_choices"][0]["choice_id"] = None
+    choices["selector_choices"][0].update(choice_id=None, action="uncertain")
     choices["coverage_choices"][0]["action"] = "uncertain"
     with pytest.raises(GroundingError) as raised:
         apply_choices(draft, plan, choices, CONTRACT)
@@ -176,7 +182,7 @@ def saved_fixture(saved_workspace):
         "ontology/private-lending-v0.2.json",
         "schemas/extraction-v0.2.schema.json",
         "prompts/qwen-extraction-v6.txt",
-        "prompts/qwen-mention-repair-v1.txt",
+        "prompts/qwen-mention-repair-v2.txt",
     ):
         (root / name).write_bytes((ROOT / name).read_bytes())
     doc, draft, baseline, _, choices = fixture()
@@ -215,7 +221,7 @@ def saved_fixture(saved_workspace):
             }
         )
     )
-    config["version"] = "qwen-mention-repair-v1"
+    config["version"] = "qwen-mention-repair-v2"
     config_path.write_text(json.dumps(config))
     return root, docs, config_path, run, baseline_path, Client
 
@@ -243,3 +249,63 @@ def test_uncertain_network_failure_retains_run_and_does_not_retry(workspace):  #
     assert result["requests_submitted"] == 1
     assert result["document_status_counts"] == {"transport_failed": 1}
     assert client.paths.count("/v1/chat/completions") == 1
+
+
+def test_duplicates_require_explicit_same_actor_same_text_target():
+    doc, draft, baseline, _, _ = fixture()
+    for identifier, actor, unit, text in (
+        ("known_a", "a", "u0", "A🙂"),
+        ("known_b", "b", "u1", "B"),
+        ("extra_b", "b", "u1", "B"),
+    ):
+        draft["mentions"].append(
+            {
+                "id": identifier,
+                "actor_id": actor,
+                "kind": "description",
+                "evidence": {"unit_id": unit, "text": text, "occurrence": 0},
+            }
+        )
+    original = copy.deepcopy(draft)
+    plan = build_plan(doc, draft, baseline, CONTRACT)
+    assert len(plan["selector_items"]) == 3
+    assert plan["selector_items"][-1]["failure_kind"] == "duplicate_position"
+    assert [x["occurrence"] for x in plan["selector_items"][0]["choices"]] == [1]
+    choices = {
+        "selector_choices": [
+            {
+                "item_id": i["item_id"],
+                "action": "duplicate",
+                "choice_id": None,
+                "duplicate_of": i["duplicate_targets"][0]["mention_id"],
+                "reason": "same metadata occurrence",
+            }
+            for i in plan["selector_items"]
+        ],
+        "coverage_choices": [
+            {
+                "item_id": "h0",
+                "action": "add",
+                "actor_id": None,
+                "actor_type": "unknown",
+                "mention_kind": "description",
+                "reason": "metadata",
+            }
+        ],
+    }
+    patched, counts = apply_choices(draft, plan, choices, CONTRACT)
+    assert counts["explicit_duplicate_removed"] == 3
+    assert draft == original and patched["contexts"] == original["contexts"]
+    assert {m["id"] for m in patched["mentions"]} == {"known_a", "known_b", "repair_m0"}
+    record = contextual.materialize(json.dumps(patched), doc, CONTRACT, PROVENANCE)
+    assert validate_record(record, doc, CONTRACT) == []
+    choices["selector_choices"][0]["duplicate_of"] = "known_b"
+    with pytest.raises(DraftError, match="repair_duplicate_target_invalid"):
+        apply_choices(draft, plan, choices, CONTRACT)
+
+
+def test_uncertain_choice_cannot_smuggle_a_location():
+    _, draft, _, plan, choices = fixture()
+    choices["selector_choices"][0]["action"] = "uncertain"
+    with pytest.raises(DraftError, match="repair_unused_choice"):
+        apply_choices(draft, plan, choices, CONTRACT)

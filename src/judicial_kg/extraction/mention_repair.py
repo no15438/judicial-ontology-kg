@@ -18,8 +18,8 @@ from judicial_kg.sources.development import write_json
 from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation_run import strict_json, validate_batch
 
-PROMPT_FILE = "prompts/qwen-mention-repair-v1.txt"
-VERSION = "qwen-mention-repair-v1"
+PROMPT_FILE = "prompts/qwen-mention-repair-v2.txt"
+VERSION = "qwen-mention-repair-v2"
 
 
 def occurrences(units, text):
@@ -57,13 +57,20 @@ def build_plan(doc, draft, baseline, contract):
             if nth is None and len(local) == 1
             else (local[nth] if type(nth) is int and 0 <= nth < len(local) else None)
         )
-        if found:
+        repeated = found is not None and any(
+            x["actor_id"] == mention["actor_id"]
+            and x["field"] == found["field"]
+            and x["start"] == found["start"]
+            and x["end"] == found["end"]
+            for x in grounded
+        )
+        if found and not repeated:
             grounded.append({"mention_id": mention["id"], "actor_id": mention["actor_id"], **found})
         else:
             # Ambiguity within the supplied unit is resolved within that unit.
             # A missing quote may be selected anywhere in the actual source;
             # proximity never chooses or ranks a winner automatically.
-            choices = local if local else all_matches
+            choices = local if local and not repeated else all_matches
             invalid.append(
                 {
                     "item_id": f"s{index}",
@@ -71,9 +78,27 @@ def build_plan(doc, draft, baseline, contract):
                     "mention_id": mention["id"],
                     "actor_id": mention["actor_id"],
                     "original_selector": e,
+                    "failure_kind": "duplicate_position" if repeated else "unresolved_position",
                     "choices": [{"choice_id": f"p{i}", **p} for i, p in enumerate(choices)],
                 }
             )
+    for item in invalid:
+        item["choices"] = [
+            p
+            for p in item["choices"]
+            if not any(
+                g["actor_id"] == item["actor_id"]
+                and g["field"] == p["field"]
+                and g["start"] == p["start"]
+                and g["end"] == p["end"]
+                for g in grounded
+            )
+        ]
+        item["duplicate_targets"] = [
+            g
+            for g in grounded
+            if g["actor_id"] == item["actor_id"] and g["text"] == item["original_selector"]["text"]
+        ]
     missing = []
     for mention in baseline["mentions"]:
         e = mention["evidence"]
@@ -128,7 +153,9 @@ def response_schema(contract):
                 "items": obj(
                     {
                         "item_id": string,
+                        "action": {"enum": ["locate", "duplicate", "uncertain"]},
                         "choice_id": optional_string,
+                        "duplicate_of": optional_string,
                         "reason": reason,
                     }
                 ),
@@ -185,19 +212,36 @@ def apply_choices(draft, plan, choices, contract):
             raise DraftError("repair_item_coverage_mismatch")
         return {d["item_id"]: d for d in decisions}
 
+    removed_indexes = set()
     patched_positions = list(plan["grounded_mentions"])
     selected = bind(plan["selector_items"], choices["selector_choices"])
     for item in plan["selector_items"]:
         decision = selected[item["item_id"]]
-        if decision["choice_id"] is None:
+        if decision["action"] == "duplicate":
+            targets = [
+                g for g in item["duplicate_targets"] if g["mention_id"] == decision["duplicate_of"]
+            ]
+            if len(targets) != 1 or decision["choice_id"] is not None:
+                raise DraftError("repair_duplicate_target_invalid")
+            removed_indexes.add(item["mention_index"])
+            actions["explicit_duplicate_removed"] += 1
+            continue
+        if decision["duplicate_of"] is not None:
+            raise DraftError("repair_unused_duplicate_target")
+        if decision["action"] == "uncertain":
+            if decision["choice_id"] is not None:
+                raise DraftError("repair_unused_choice")
             issues.append({"code": "selector_unresolved", "path": item["item_id"]})
             continue
+        if decision["choice_id"] is None:
+            raise DraftError("repair_location_choice_required")
         matches = [p for p in item["choices"] if p["choice_id"] == decision["choice_id"]]
         if len(matches) != 1:
             raise DraftError("repair_choice_outside_catalog")
         patched["mentions"][item["mention_index"]]["evidence"] = selector(matches[0])
         patched_positions.append(matches[0])
         actions["selector_changed"] += 1
+    patched["mentions"] = [m for i, m in enumerate(patched["mentions"]) if i not in removed_indexes]
     selected = bind(plan["coverage_items"], choices["coverage_choices"])
     actor_ids = {a["id"] for a in draft["actors"]}
     for item in plan["coverage_items"]:

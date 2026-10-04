@@ -43,6 +43,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v5",
             "qwen-extraction-v6",
             "qwen-mention-repair-v1",
+            "qwen-mention-repair-v2",
         }
         or not isinstance(config["model"], str)
         or not config["model"]
@@ -114,7 +115,7 @@ def run_extraction(
     config = load_config(config_path)
     from judicial_kg.extraction import anchored, contextual, draft, typed
 
-    if config["version"] == "qwen-mention-repair-v1" and protocol_override is None:
+    if config["version"].startswith("qwen-mention-repair-") and protocol_override is None:
         raise ValueError("Mention repair requires verified source-run and baseline inputs")
     protocol = (
         protocol_override
