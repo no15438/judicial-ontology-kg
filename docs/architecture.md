@@ -23,7 +23,7 @@ flowchart LR
 | 装配 | 案件内身份、节点/边/事件/主张/来源记录 | `src/judicial_kg/graph/` |
 | 评测 | 固定一对一匹配、TP/FP/FN、覆盖与效率 | `src/judicial_kg/evaluation/` |
 
-来源模块、首版 JSON Schema 契约与 `extraction/` 已实现；未实现目录随实际代码创建。本体词表放 `ontology/`，结构契约放 `schemas/`，生成与加载逻辑位于 `contracts.py`。本地抽取采用 SSH stdin 到现有 Spark loopback 服务；当前优先百炼北京 HTTPS 接口，密钥留在本地私密环境文件，程序只从模型逐字引用生成坐标，不让模型填写来源哈希。没有选择完整 OWL 推理或 SHACL 作为必需依赖。先输出存储无关的候选记录，再决定数据库适配。离线契约验证无需 Neo4j、PostgreSQL、向量库或 GPU。
+来源模块、首版 JSON Schema 契约与 `extraction/` 已实现；未实现目录随实际代码创建。本体词表放 `ontology/`，结构契约放 `schemas/`，生成与加载逻辑位于 `contracts.py`。按用户最新决定，后续本地抽取采用 SSH stdin 到现有 Spark loopback 服务；百炼仅保留历史适配与试跑，密钥留在本地私密环境文件。程序提供无损来源片段，模型选择证据及语境，程序生成坐标、继承关联、类型与保守归一化，不让模型填写来源哈希；可离线重放原响应。没有选择完整 OWL 推理或 SHACL 作为必需依赖。先输出存储无关的候选记录，再决定数据库适配。离线契约验证无需 Neo4j、PostgreSQL、向量库或 GPU。
 
 本次迁入旧设计与数据登记，保留固定提交和哈希。旧 `src/`、拼接文书、图数据库、QA 产物和既往分数保留在旧仓库，不形成新项目基线。旧 `p0/datasets/` 中的审计脚本仍可从固定提交复现；需要迁移时逐项确认输入、输出和依赖，再落入新结构，不整体复制旧运行环境。
 
