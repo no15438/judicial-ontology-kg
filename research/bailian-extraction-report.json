@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "purpose": "bounded_cloud_extraction_development_not_gold",
+  "provider": "aliyun_bailian",
+  "region": "cn-beijing",
+  "model": "qwen3.8-max-0902",
+  "runs": [
+    {
+      "local_directory": "artifacts/bailian-extraction/pilot-v1",
+      "report_sha256": "ee65fd450e8697d125ec614e95430f26fe98619923558c7c779afe017c272d7d",
+      "code_commit": "4ddae2a95c01c6cd3ad658384d761b83f00d91e0",
+      "worktree_dirty": false,
+      "started_at_utc": "2026-10-04T04:04:50.739151+00:00",
+      "finished_at_utc": "2026-10-04T04:04:53.124683+00:00",
+      "completed": true,
+      "config": {
+        "version": "bailian-extraction-v1",
+        "model": "qwen3.8-max-0902",
+        "max_input_reservation_tokens": 120000,
+        "max_output_tokens": 16384,
+        "temperature": 0.7,
+        "request_timeout_seconds": 300,
+        "budget_cny": "5.00",
+        "input_cny_per_million": "12",
+        "output_cny_per_million": "36",
+        "max_documents": 2,
+        "limit_per_source": 1
+      },
+      "config_sha256": "60cc5c33745203cf97ba2b45f6d3874f0e28f0079d9538870bd9ee0d1fd7ebe9",
+      "prompt_file": "prompts/qwen-extraction-v3.txt",
+      "prompt_sha256": "98409da55a9c0ae9a75d2eb89489025063709aab9016bd56a5879435665b9b50",
+      "draft_schema_sha256": "4b6c65b14485ce2f21761730ca06c21324681106c9ca72be4875dc88b1bfd1bb",
+      "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9",
+      "input_files": [
+        {
+          "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+          "bytes": 302755
+        },
+        {
+          "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+          "bytes": 428236
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 2,
+      "requests_submitted": 1,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+          "selected": true,
+          "status": "transport_failed",
+          "issues": [
+            {
+              "code": "transport_failed",
+              "path": "/"
+            }
+          ],
+          "input_utf8_bytes_plus_template_allowance": 24059,
+          "http_status": null,
+          "request_elapsed_seconds": 2.356583207991207,
+          "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+          "selected": true,
+          "status": "not_attempted_after_failure",
+          "issues": []
+        }
+      ],
+      "document_status_counts": {
+        "not_attempted_after_failure": 1,
+        "not_selected": 34,
+        "transport_failed": 1
+      },
+      "reserved_cny": "2.029824",
+      "observed_usage_list_price_cny": "0",
+      "validation": {
+        "expected_documents": 36,
+        "source_fields_verified": 156,
+        "attempts_total": 0,
+        "attempts_rejected": 0,
+        "documents_accepted_candidate": 0,
+        "documents_accepted_empty": 0,
+        "documents_rejected": 0,
+        "documents_missing": 36,
+        "issue_counts": {},
+        "accepted_node_counts": {
+          "actors": 0,
+          "mentions": 0,
+          "contexts": 0,
+          "roles": 0,
+          "events": 0,
+          "statements": 0
+        },
+        "accepted_evidence_spans_replayed": 0,
+        "semantic_precision_recall_f1": null,
+        "gold_available": false,
+        "semantic_completeness": "not_assessed",
+        "requires_user_legal_annotation": false
+      },
+      "outputs_sha256": {
+        "accepted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "candidates.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "config.json": "87d01b7e3ec5217e81b67e8a6c9f9d636551dbdc02d70cdef12b0b6a36d55495",
+        "prompt.txt": "98409da55a9c0ae9a75d2eb89489025063709aab9016bd56a5879435665b9b50",
+        "request-000.json": "c7ea5031b65e49b9222061510dae67ee2d3497ac6acb5aec8178d45f56cabc87",
+        "response-000.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "validation-ledger.json": "df1dd50e0401151668442799ea25dd7cbde34ad012c040c1d8c4362f69fe08f4"
+      }
+    },
+    {
+      "local_directory": "artifacts/bailian-extraction/pilot-v2",
+      "report_sha256": "b612d2671145672b42ad547c2f9d25d6833e0d5943fbfab32d96ef8ef676e279",
+      "code_commit": "1d5c8279de2e978283ee609d87794c6e4982b229",
+      "worktree_dirty": false,
+      "started_at_utc": "2026-10-04T04:08:18.473818+00:00",
+      "finished_at_utc": "2026-10-04T04:10:13.211847+00:00",
+      "completed": true,
+      "config": {
+        "version": "bailian-extraction-v1",
+        "model": "qwen3.8-max-0902",
+        "max_input_reservation_tokens": 32768,
+        "max_output_tokens": 16384,
+        "temperature": 0.7,
+        "request_timeout_seconds": 300,
+        "budget_cny": "2.970176",
+        "input_cny_per_million": "12",
+        "output_cny_per_million": "36",
+        "max_documents": 2,
+        "limit_per_source": 1
+      },
+      "config_sha256": "b0e28882571e818f9ea14d9a169b1f9f724dd43bee2265a13f0cbb9f3172a803",
+      "prompt_file": "prompts/qwen-extraction-v3.txt",
+      "prompt_sha256": "98409da55a9c0ae9a75d2eb89489025063709aab9016bd56a5879435665b9b50",
+      "draft_schema_sha256": "4b6c65b14485ce2f21761730ca06c21324681106c9ca72be4875dc88b1bfd1bb",
+      "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9",
+      "input_files": [
+        {
+          "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+          "bytes": 302755
+        },
+        {
+          "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+          "bytes": 428236
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 2,
+      "requests_submitted": 2,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+          "selected": true,
+          "status": "quote_ambiguous",
+          "issues": [
+            {
+              "code": "quote_ambiguous",
+              "path": "/mentions/2/evidence"
+            }
+          ],
+          "input_utf8_bytes_plus_template_allowance": 24059,
+          "http_status": 200,
+          "transport_error": null,
+          "request_elapsed_seconds": 71.92424041699269,
+          "response_sha256": "8db26cb98994e99ba20a9a6f10c343a4086b2992e4137eacc1952da29d4c67d3",
+          "usage": {
+            "prompt_tokens": 4972,
+            "completion_tokens": 4507,
+            "total_tokens": 9479
+          },
+          "usage_list_price_cny": "0.221916"
+        },
+        {
+          "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+          "selected": true,
+          "status": "contract_rejected",
+          "issues": [
+            {
+              "code": "evidence_outside_context",
+              "path": "/roles/2"
+            },
+            {
+              "code": "evidence_outside_context",
+              "path": "/statements/10"
+            }
+          ],
+          "input_utf8_bytes_plus_template_allowance": 16837,
+          "http_status": 200,
+          "transport_error": null,
+          "request_elapsed_seconds": 42.75777675001882,
+          "response_sha256": "ab5140bad89a6a94fcd0d2b32b95ee525c2c2edac64c6339ccabf9950cd45505",
+          "usage": {
+            "prompt_tokens": 3452,
+            "completion_tokens": 2624,
+            "total_tokens": 6076
+          },
+          "usage_list_price_cny": "0.135888"
+        }
+      ],
+      "document_status_counts": {
+        "contract_rejected": 1,
+        "not_selected": 34,
+        "quote_ambiguous": 1
+      },
+      "reserved_cny": "1.96608",
+      "observed_usage_list_price_cny": "0.357804",
+      "validation": {
+        "expected_documents": 36,
+        "source_fields_verified": 156,
+        "attempts_total": 1,
+        "attempts_rejected": 1,
+        "documents_accepted_candidate": 0,
+        "documents_accepted_empty": 0,
+        "documents_rejected": 1,
+        "documents_missing": 35,
+        "issue_counts": {
+          "evidence_outside_context": 2
+        },
+        "accepted_node_counts": {
+          "actors": 0,
+          "mentions": 0,
+          "contexts": 0,
+          "roles": 0,
+          "events": 0,
+          "statements": 0
+        },
+        "accepted_evidence_spans_replayed": 0,
+        "semantic_precision_recall_f1": null,
+        "gold_available": false,
+        "semantic_completeness": "not_assessed",
+        "requires_user_legal_annotation": false
+      },
+      "outputs_sha256": {
+        "accepted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "candidate-024.json": "e6c9fecb141335824246237f76c865edfc36a7ba8aefc6817dff1d3bb6282955",
+        "candidates.jsonl": "6cea8a9ff677974cd5fcc6694e6eb0911d21b3760fa881c84d7e29d7ec4854b4",
+        "config.json": "6cd934b2e9628108c616b7e87055a6e988dab2ae99ac256bc977d1c43ddfa023",
+        "prompt.txt": "98409da55a9c0ae9a75d2eb89489025063709aab9016bd56a5879435665b9b50",
+        "request-000.json": "c7ea5031b65e49b9222061510dae67ee2d3497ac6acb5aec8178d45f56cabc87",
+        "request-024.json": "81671cc63ac29cde996a63e99f41ef5844adf05ed3ffd5ee9b935a84015ba2d4",
+        "response-000.bin": "8db26cb98994e99ba20a9a6f10c343a4086b2992e4137eacc1952da29d4c67d3",
+        "response-024.bin": "ab5140bad89a6a94fcd0d2b32b95ee525c2c2edac64c6339ccabf9950cd45505",
+        "validation-ledger.json": "2c2a59cdd0fc1bd8e69ee25851ec275a41343b5222d02be3b2158ffb80dd58e8"
+      }
+    },
+    {
+      "local_directory": "artifacts/bailian-extraction/pilot-v3-low-temperature",
+      "report_sha256": "4256cd91eb75033f0d50e157decf0bb479345848958686ba2cace7c6a0587643",
+      "code_commit": "b471bcb76d95584dc20f227b912c2c57661616b2",
+      "worktree_dirty": false,
+      "started_at_utc": "2026-10-04T04:13:19.521658+00:00",
+      "finished_at_utc": "2026-10-04T04:15:31.694772+00:00",
+      "completed": true,
+      "config": {
+        "version": "bailian-extraction-v1",
+        "model": "qwen3.8-max-0902",
+        "max_input_reservation_tokens": 24576,
+        "max_output_tokens": 5632,
+        "temperature": 0.2,
+        "request_timeout_seconds": 300,
+        "budget_cny": "1.004096",
+        "input_cny_per_million": "12",
+        "output_cny_per_million": "36",
+        "max_documents": 2,
+        "limit_per_source": 1
+      },
+      "config_sha256": "1e3b812d8b753272838cd3ea6f43ed2ace675c1d4816ddc0a3e94b09199fdb57",
+      "prompt_file": "prompts/qwen-extraction-v3.txt",
+      "prompt_sha256": "98409da55a9c0ae9a75d2eb89489025063709aab9016bd56a5879435665b9b50",
+      "draft_schema_sha256": "4b6c65b14485ce2f21761730ca06c21324681106c9ca72be4875dc88b1bfd1bb",
+      "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9",
+      "input_files": [
+        {
+          "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+          "bytes": 302755
+        },
+        {
+          "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+          "bytes": 428236
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 2,
+      "requests_submitted": 2,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+          "selected": true,
+          "status": "quote_occurrence_invalid",
+          "issues": [
+            {
+              "code": "quote_occurrence_invalid",
+              "path": "/mentions/7/evidence"
+            }
+          ],
+          "input_utf8_bytes_plus_template_allowance": 24059,
+          "http_status": 200,
+          "transport_error": null,
+          "request_elapsed_seconds": 75.0819734169927,
+          "response_sha256": "a08ba0be7849f7e23bb9f22b4cfb746a54d271e2ee689190572578c048361996",
+          "usage": {
+            "prompt_tokens": 4972,
+            "completion_tokens": 4210,
+            "total_tokens": 9182
+          },
+          "usage_list_price_cny": "0.211224"
+        },
+        {
+          "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+          "selected": true,
+          "status": "contract_rejected",
+          "issues": [
+            {
+              "code": "evidence_outside_context",
+              "path": "/roles/0"
+            },
+            {
+              "code": "evidence_outside_context",
+              "path": "/roles/1"
+            },
+            {
+              "code": "evidence_outside_context",
+              "path": "/roles/2"
+            },
+            {
+              "code": "value_raw_not_in_evidence",
+              "path": "/statements/3/value/raw"
+            },
+            {
+              "code": "event_statement_context_mismatch",
+              "path": "/statements/11"
+            }
+          ],
+          "input_utf8_bytes_plus_template_allowance": 16837,
+          "http_status": 200,
+          "transport_error": null,
+          "request_elapsed_seconds": 57.023864124988904,
+          "response_sha256": "833da38096985f7e443f7db6c9a97a5aaec044f9a63d778cf5d3c64f58d84218",
+          "usage": {
+            "prompt_tokens": 3452,
+            "completion_tokens": 3428,
+            "total_tokens": 6880
+          },
+          "usage_list_price_cny": "0.164832"
+        }
+      ],
+      "document_status_counts": {
+        "contract_rejected": 1,
+        "not_selected": 34,
+        "quote_occurrence_invalid": 1
+      },
+      "reserved_cny": "0.995328",
+      "observed_usage_list_price_cny": "0.376056",
+      "validation": {
+        "expected_documents": 36,
+        "source_fields_verified": 156,
+        "attempts_total": 1,
+        "attempts_rejected": 1,
+        "documents_accepted_candidate": 0,
+        "documents_accepted_empty": 0,
+        "documents_rejected": 1,
+        "documents_missing": 35,
+        "issue_counts": {
+          "event_statement_context_mismatch": 1,
+          "evidence_outside_context": 3,
+          "value_raw_not_in_evidence": 1
+        },
+        "accepted_node_counts": {
+          "actors": 0,
+          "mentions": 0,
+          "contexts": 0,
+          "roles": 0,
+          "events": 0,
+          "statements": 0
+        },
+        "accepted_evidence_spans_replayed": 0,
+        "semantic_precision_recall_f1": null,
+        "gold_available": false,
+        "semantic_completeness": "not_assessed",
+        "requires_user_legal_annotation": false
+      },
+      "outputs_sha256": {
+        "accepted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "candidate-024.json": "b2dd75c119f7e2a32d4023deddaa073ac281840c986e49747daf1ff905c86a77",
+        "candidates.jsonl": "17f69915a0a2d291f5aaaa47cee864f17e167f715523a7565698458774f6903b",
+        "config.json": "179370e7a6fc8a03d8dd88c80c00836621fc5fdcd0afca03914a285c7de5014a",
+        "prompt.txt": "98409da55a9c0ae9a75d2eb89489025063709aab9016bd56a5879435665b9b50",
+        "request-000.json": "b2d1a6896d6e4407377b8d0fc834b4430ca74b5db91d628de6d3b186b082d8e6",
+        "request-024.json": "bf415a0f68f91b62fe5a219a9f3189cef71656f9d043f5633417390c66eee287",
+        "response-000.bin": "a08ba0be7849f7e23bb9f22b4cfb746a54d271e2ee689190572578c048361996",
+        "response-024.bin": "833da38096985f7e443f7db6c9a97a5aaec044f9a63d778cf5d3c64f58d84218",
+        "validation-ledger.json": "108c51c0cd26e975c0fc05d7e8f6f544c8609d307fa75b0ad2861ed0955f9558"
+      }
+    }
+  ],
+  "unique_documents_selected": 2,
+  "http_200_completions": 4,
+  "accepted_candidate_records": 0,
+  "all_completed_responses_finish_reason": "stop",
+  "observed_usage_list_price_total_cny": "0.733860",
+  "cumulative_reservation_cny": "4.991232",
+  "user_approved_round_budget_cny": "5.00",
+  "billing_verified": false,
+  "billing_note": "Only returned usage priced at official list rates; not a provider bill. First TLS failure has no usage and its full reservation remains counted.",
+  "temperature_cause_established": false,
+  "temperature_contrast_limitation": "Same two source documents and prompt; output cap also changed. No semantic reference available.",
+  "local_dataset_uploaded_to_github": false,
+  "raw_outputs_committed": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false
+}

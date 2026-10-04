@@ -3,7 +3,7 @@
   "model": "qwen3.8-max-0902",
   "max_input_reservation_tokens": 120000,
   "max_output_tokens": 16384,
-  "temperature": 0.7,
+  "temperature": 0.2,
   "request_timeout_seconds": 300,
   "budget_cny": "5.00",
   "input_cny_per_million": "12",
