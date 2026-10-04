@@ -378,3 +378,33 @@ def test_local_quote_is_unique_and_never_guesses_offsets(text):
         )
         == []
     )
+
+
+def test_repair_replay_is_offline_and_binds_decisions_to_plan(workspace, monkeypatch):  # noqa: F811
+    from judicial_kg.extraction.repair_replay import replay_repairs
+    from judicial_kg.extraction.transport import SparkClient
+
+    root, docs, config, run, baseline, Client = saved_fixture(workspace)
+    saved = root / "artifacts/repaired"
+    run_repair(root, [docs], run, baseline, config, saved, Client())
+    original_hash = sha256((saved / "report.json").read_bytes())
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Offline repair replay must not contact the model")
+
+    monkeypatch.setattr(SparkClient, "call", forbidden)
+    report = replay_repairs(root, [docs], run, baseline, saved, root / "artifacts/replayed")
+    assert report["requests_submitted"] == 0
+    assert report["accepted_candidates_match_saved"] and report["outcomes_match_saved"]
+    assert report["validation"]["documents_accepted_candidate"] == 1
+    assert sha256((saved / "report.json").read_bytes()) == original_hash
+    request_path = saved / "rpc-007.request.json"
+    request = json.loads(request_path.read_text())
+    request["body"]["messages"][-1]["content"] = "different source"
+    request_path.write_text(json.dumps(request))
+    metadata = json.loads((saved / "report.json").read_text())
+    metadata["outputs_sha256"][request_path.name] = sha256(request_path.read_bytes())
+    (saved / "report.json").write_text(json.dumps(metadata))
+    with pytest.raises(ValueError, match="not bound"):
+        replay_repairs(root, [docs], run, baseline, saved, root / "artifacts/wrong-binding")
+    assert not (root / "artifacts/wrong-binding").exists()

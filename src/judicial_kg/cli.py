@@ -22,6 +22,7 @@ def main() -> int:
             "extract-bailian",
             "replay-qwen",
             "repair-qwen-mentions",
+            "replay-qwen-mentions",
             "assemble-graph",
         ],
     )
@@ -32,6 +33,7 @@ def main() -> int:
     parser.add_argument("--candidates", type=Path)
     parser.add_argument("--config", type=Path)
     parser.add_argument("--source-run", type=Path)
+    parser.add_argument("--repair-run", type=Path)
     parser.add_argument(
         "--contract-version",
         choices=["0.1.0", "0.2.0"],
@@ -58,6 +60,27 @@ def main() -> int:
                     or validation["documents_missing"]
                     or result["documents_assembly_failed"]
                 )
+            )
+        if args.command == "replay-qwen-mentions":
+            from judicial_kg.extraction.repair_replay import replay_repairs
+
+            if not all(
+                (args.documents, args.source_run, args.repair_run, args.candidates, args.output)
+            ):
+                parser.error(
+                    "repair replay requires documents, source/repair runs, candidates and output"
+                )
+            result = replay_repairs(
+                args.root,
+                args.documents,
+                args.source_run,
+                args.candidates,
+                args.repair_run,
+                args.output,
+            )
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return int(
+                not (result["accepted_candidates_match_saved"] and result["outcomes_match_saved"])
             )
         if args.command == "repair-qwen-mentions":
             from judicial_kg.extraction.mention_repair import run_repair
