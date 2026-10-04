@@ -152,6 +152,29 @@ def test_v6_compiles_multiple_mentions_without_expanding_or_reassigning_them():
         contextual.materialize(json.dumps(value), source(), CONTRACT, PROVENANCE)
 
 
+def test_identical_redundant_mention_type_preserves_every_final_field():
+    value = joint_draft()
+    expected = contextual.materialize(json.dumps(value), source(), CONTRACT, PROVENANCE)
+    value["mentions"][0]["actor_type"] = value["actors"][0]["actor_type"]
+    assert contextual.materialize(json.dumps(value), source(), CONTRACT, PROVENANCE) == expected
+
+
+@pytest.mark.parametrize("change", ["conflict", "missing_actor", "duplicate_actor", "other_field"])
+def test_redundant_type_does_not_hide_conflict_or_other_schema_errors(change):
+    value = joint_draft()
+    value["mentions"][0]["actor_type"] = value["actors"][0]["actor_type"]
+    if change == "conflict":
+        value["mentions"][0]["actor_type"] = "court"
+    elif change == "missing_actor":
+        value["mentions"][0]["actor_id"] = "absent"
+    elif change == "duplicate_actor":
+        value["actors"].append(copy.deepcopy(value["actors"][0]))
+    else:
+        value["mentions"][0]["unrecognized"] = "metadata"
+    with pytest.raises(GroundingError):
+        contextual.materialize(json.dumps(value), source(), CONTRACT, PROVENANCE)
+
+
 def test_v6_saved_run_replays_with_its_own_contract(workspace):  # noqa: F811
     root, docs, config_path = workspace
     for filename in (
