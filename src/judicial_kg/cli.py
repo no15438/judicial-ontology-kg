@@ -21,6 +21,7 @@ def main() -> int:
             "extract-qwen",
             "extract-bailian",
             "replay-qwen",
+            "assemble-graph",
         ],
     )
     parser.add_argument("--root", type=Path, default=Path.cwd())
@@ -34,6 +35,21 @@ def main() -> int:
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command == "assemble-graph":
+            from judicial_kg.graph.run import run_assembly
+
+            if not args.documents or args.candidates is None or args.output is None:
+                parser.error("assemble-graph requires --documents, --candidates and a new --output")
+            result = run_assembly(args.root, args.documents, args.candidates, args.output)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            validation = result["validation"]
+            return int(
+                bool(
+                    validation["attempts_rejected"]
+                    or validation["documents_missing"]
+                    or result["documents_assembly_failed"]
+                )
+            )
         if args.command == "replay-qwen":
             from judicial_kg.extraction.replay import replay_completed
 
@@ -131,7 +147,9 @@ def main() -> int:
                 "verified_reference_files": len(verified),
                 "raw_corpus": "not checked",
                 "model_services": "not configured or probed by this command",
-                "graph_pipeline": "source/contracts implemented; semantic graph not implemented",
+                "graph_pipeline": (
+                    "source/contracts/candidate assembly implemented; semantics not assessed"
+                ),
             },
             indent=2,
         )
