@@ -19,6 +19,7 @@ def main() -> int:
             "prepare-development",
             "validate-extractions",
             "extract-qwen",
+            "extract-bailian",
         ],
     )
     parser.add_argument("--root", type=Path, default=Path.cwd())
@@ -27,24 +28,32 @@ def main() -> int:
     parser.add_argument("--documents", type=Path, action="append")
     parser.add_argument("--candidates", type=Path)
     parser.add_argument("--config", type=Path)
+    parser.add_argument("--execute", action="store_true", help="Submit approved cloud requests")
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
-        if args.command == "extract-qwen":
+        if args.command in {"extract-qwen", "extract-bailian"}:
             from datetime import UTC, datetime
             from uuid import uuid4
 
-            from judicial_kg.extraction.run import run_extraction
-
             if not args.documents:
-                parser.error("extract-qwen requires --documents")
+                parser.error("extraction requires --documents")
             run_name = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
-            output = args.output or args.root / "artifacts/qwen-extraction" / run_name
+            provider = "bailian" if args.command == "extract-bailian" else "qwen"
+            output = args.output or args.root / f"artifacts/{provider}-extraction" / run_name
+            options = {}
+            if provider == "bailian":
+                from judicial_kg.extraction.bailian import run_bailian as run_extraction
+
+                options["execute"] = args.execute
+            else:
+                from judicial_kg.extraction.run import run_extraction
             result = run_extraction(
                 args.root,
                 args.documents,
-                args.config or args.root / "configs/qwen-extraction.json",
+                args.config or args.root / f"configs/{provider}-extraction.json",
                 output,
+                **options,
             )
             print(
                 json.dumps(
@@ -53,7 +62,7 @@ def main() -> int:
             )
             accepted = sum(
                 result["document_status_counts"].get(k, 0)
-                for k in ("accepted_candidate", "accepted_empty")
+                for k in ("accepted_candidate", "accepted_empty", "planned_not_submitted")
             )
             return int(accepted != result["selected_documents"])
         if args.command == "validate-extractions":
