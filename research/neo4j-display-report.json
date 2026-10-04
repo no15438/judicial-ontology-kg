@@ -1,0 +1,22 @@
+{
+  "database": "judicial-ontology-kg",
+  "neo4j_version": "2026.05.0",
+  "snapshot": "9ade523ad3c57ab4d67d58366a344750077dce0f80ead64e8df3710b1e88b55d",
+  "graph_sha256": "a9d043311d4289acbd8dce7acca2a81786a340db20a4333d981715a16da09984",
+  "nodes": 524,
+  "relationships": 994,
+  "evidence_links": 462,
+  "node_mismatches": 0,
+  "edge_mismatches": 0,
+  "verification": "Neo4j read-only CSV payload, label, endpoint and relationship-type comparison",
+  "overview_nodes": 44,
+  "overview_relationships": 69,
+  "gold_available": false,
+  "data_location": "local_only",
+  "export_manifest_outputs": {
+    "edges.csv": "90b4ecd64cf51ef23b8d7cf671836b026e133c5b28bfb8c1bf1ff093f0bcbd75",
+    "import.cypher": "25b38e38792a9e4650b42282c779d937cab5f7a78a1883402922049d8745ba72",
+    "nodes.csv": "99ebca0edf76949f1d17e8c219b175da3af1109f5ff07fee594f0db5f4c4e360",
+    "views.cypher": "e6acb1c0f2d1c0210a0dadf33cd2c9a0523316d475a9f95eda7ef4e60e8b4854"
+  }
+}

@@ -1,6 +1,6 @@
 # 后续任务与验收
 
-沿用旧研究依赖顺序；编号仅链接旧任务，尚未在新仓库创建同号 Issues。
+沿用研究依赖顺序，使用新仓库 Issues #1–13；旧 #14–25 仅为历史映射。当前执行入口为 [任务总览 #13](https://github.com/no15438/judicial-ontology-kg/issues/13)。
 
 | 顺序 | 工作 | 当前状态 | 完成所需证据 |
 |---|---|---|---|
@@ -12,6 +12,19 @@
 | P0-05–08（旧 #18–21） | 评测器、Qwen、装配、端到端基线 | 本地 Qwen / 百炼小批抽取适配器、预算和失败账本已实现；候选图装配与无损还原已实现，正式语义评测尚未实现 | 固定输入/版本下候选与失败记录、图谱装配，以及有独立覆盖参考时的 TP/FP/FN、P/R/F1 |
 | P0-09–11（旧 #22–24） | 消融、优化、复现验收 | 未开始 | 固定版本与预算下成对对照，不用覆盖下降换表面速度 |
 | Later（旧 #25） | QA、检索、界面、OCR、第二领域 | 后期 | P0 验收及新的明确需求 |
+
+## 当前执行清单（与 Google 项目文件夹同步）
+
+| 顺序 | 任务 | 状态 | 验收条件 |
+|---|---|---|---|
+| 1 | [#3 联合陈述者契约](https://github.com/no15438/judicial-ontology-kg/issues/3) | 进行中 | 版本化多主体归属；旧候选保持可复现；非法引用拒收；图谱关系顺序和证据无损还原 |
+| 2 | [#6 多次提及与转述回归](https://github.com/no15438/judicial-ontology-kg/issues/6) | 待契约完成 | 同两篇本地 Qwen 回归，复查 85 处字面出现线索及语境归属，记录新旧差异与失败 |
+| 3 | [#8 约 10 篇开发扩展](https://github.com/no15438/judicial-ontology-kg/issues/8) | 待回归 | 从既有开发清单选样，报告困难类型、工程失败、疑点、用量和耗时，未选中仍记缺失 |
+| 4 | [#4 参考覆盖](https://github.com/no15438/judicial-ontology-kg/issues/4)、[#5 局部质量检查](https://github.com/no15438/judicial-ontology-kg/issues/5) | 待推进 | 不依赖用户法律标注；只在独立参考覆盖范围计分；无参考不报告全图谱 P/R/F1 |
+| 5 | [#7 Neo4j 与图谱保真](https://github.com/no15438/judicial-ontology-kg/issues/7) | 基础完成，新契约适配待做 | 当前 524 节点/994 边、462 次证据引用逐条保真；新旧快照隔离 |
+| 6 | [#9 OpenJev 可选对照](https://github.com/no15438/judicial-ontology-kg/issues/9) | 后续可选 | 相同疑难片段对比 Qwen＋规则、Qwen 复核、OpenJev 辅助；收益未验证不接入主流程 |
+
+Google 项目任务文档：[01 开发进度与复现入口](https://docs.google.com/document/d/1XTgwWemA-ajnaWbhqZZZ45_8sUHOag6W8BXObvU8Q4s/edit)。只同步任务与元数据，原文和图谱输出仍在本地忽略目录。
 
 ## 下一项主要实施工作
 
