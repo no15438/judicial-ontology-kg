@@ -1222,5 +1222,28 @@
       "semantic_completeness": "not_assessed",
       "requires_user_legal_annotation": false
     }
+  },
+  "literal_hint_spatial_triage": {
+    "report_sha256": "d974a6f5f86bc6b6d1c1050e584a701caca0b607ad124e1874f282e96a209c66",
+    "documents": [
+      {
+        "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+        "counts": {
+          "exact": 58,
+          "no_overlap": 10,
+          "contained_in_longer_mention": 1
+        },
+        "uncovered_overlapping_regions": 9
+      },
+      {
+        "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+        "counts": {
+          "exact": 16
+        },
+        "uncovered_overlapping_regions": 0
+      }
+    ],
+    "candidate_modified": false,
+    "interpretation": "Literal occurrence locations only. Overlapping name substrings are grouped spatially, not merged as actors or asserted as missing facts. No candidate edits or automatic additions."
   }
 }

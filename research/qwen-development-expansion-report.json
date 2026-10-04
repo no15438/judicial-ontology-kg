@@ -1,0 +1,1579 @@
+{
+  "run_kind": "ten_document_local_development_expansion_not_semantic_evaluation",
+  "runs": [
+    {
+      "local_directory": "artifacts/qwen-extraction/mention-repair-v5",
+      "report_sha256": "c9266b5821aae62a79f8f75b45977f95b0e2265e1c041d096bd19ec9527cd89e",
+      "run_id": "79b15e20c3024bff9df1bb91c12caac6",
+      "run_kind": "local_qwen_bounded_mention_repair_not_gold",
+      "started_at_utc": "2026-10-04T12:22:53.891286+00:00",
+      "finished_at_utc": "2026-10-04T12:24:14.541260+00:00",
+      "completed": true,
+      "code_commit": "80c0c002f758aa99f717fd9e4685430a191953db",
+      "worktree_dirty": false,
+      "config": {
+        "version": "qwen-mention-repair-v5",
+        "ssh_host": "spark-lan",
+        "port": 8003,
+        "model": "qwen3.8-flash-next-iq4xs",
+        "context_tokens": 32768,
+        "max_output_tokens": 4096,
+        "token_margin": 128,
+        "request_timeout_seconds": 480,
+        "temperature": 0.2,
+        "seed": 42,
+        "limit_per_source": 1,
+        "max_documents": 2
+      },
+      "config_sha256": "2a6c7dd77931fc097e2ecf870a431e64b6242eb273523ecacc27f1bc8ed11f6b",
+      "prompt_file": "prompts/qwen-mention-repair-v5.txt",
+      "prompt_sha256": "5741aeccc4d851ad7ce6c12ae2ad7925514d9892aaa5b7fa75ce4bf8bf5afa71",
+      "draft_schema_sha256": "4636d701d3e794a9b2b89859dd3316d1d09b0e5202e352c6f964c00b19e8fcde",
+      "ontology_version": "0.2.0",
+      "ontology_sha256": "fc6dbe3744cbcac76fc36e608bc651d31302c69fbd564f2508754449defd01c3",
+      "schema_sha256": "3d37f11aee015af49264f14872ba7641bb99557db8b834bcd4a4673f7c304022",
+      "input_files": [
+        {
+          "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+          "bytes": 302755
+        },
+        {
+          "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+          "bytes": 428236
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 2,
+      "requests_submitted": 2,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+          "selected": true,
+          "status": "accepted_candidate",
+          "issues": [],
+          "input_tokens": 21896,
+          "request_elapsed_seconds": 60.36440470800153,
+          "usage": {
+            "prompt_tokens": 21896,
+            "completion_tokens": 760,
+            "total_tokens": 22656
+          }
+        },
+        {
+          "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+          "selected": true,
+          "status": "accepted_candidate",
+          "issues": [],
+          "input_tokens": 5591,
+          "request_elapsed_seconds": 16.129279791988665,
+          "usage": {
+            "prompt_tokens": 5591,
+            "completion_tokens": 250,
+            "total_tokens": 5841
+          }
+        }
+      ],
+      "document_status_counts": {
+        "accepted_candidate": 2,
+        "not_selected": 34
+      },
+      "validation": {
+        "expected_documents": 36,
+        "source_fields_verified": 156,
+        "attempts_total": 2,
+        "attempts_rejected": 0,
+        "documents_accepted_candidate": 2,
+        "documents_accepted_empty": 0,
+        "documents_rejected": 0,
+        "documents_missing": 34,
+        "issue_counts": {},
+        "accepted_node_counts": {
+          "actors": 30,
+          "mentions": 141,
+          "contexts": 24,
+          "roles": 47,
+          "events": 34,
+          "statements": 62
+        },
+        "accepted_evidence_spans_replayed": 623,
+        "semantic_precision_recall_f1": null,
+        "gold_available": false,
+        "semantic_completeness": "not_assessed",
+        "requires_user_legal_annotation": false
+      },
+      "service_snapshot": {
+        "models_sha256": "fd960e290fc9961f2a400608c3bf534598b6bd15a979ab00e05251cfad27ff6a",
+        "props_sha256": "0f8325010c5e593b502026c0ccf94bb61c5f974c3f9e9ffba0a79219a68114f9",
+        "context_tokens": 32768,
+        "slots": 8,
+        "build_info": "b1-6fcaa16"
+      },
+      "model_weight_hash_verified": false,
+      "gold_available": false,
+      "semantic_precision_recall_f1": null
+    },
+    {
+      "local_directory": "artifacts/qwen-extraction/expansion8-v6",
+      "report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+      "run_id": "36b4738df91a4a76bbf0465458704dfe",
+      "run_kind": "local_qwen_development_extraction_not_gold",
+      "started_at_utc": "2026-10-04T12:25:11.573449+00:00",
+      "finished_at_utc": "2026-10-04T13:15:36.712428+00:00",
+      "completed": true,
+      "code_commit": "80c0c002f758aa99f717fd9e4685430a191953db",
+      "worktree_dirty": false,
+      "config": {
+        "version": "qwen-extraction-v6",
+        "ssh_host": "spark-lan",
+        "port": 8003,
+        "model": "qwen3.8-flash-next-iq4xs",
+        "context_tokens": 32768,
+        "max_output_tokens": 12288,
+        "token_margin": 128,
+        "request_timeout_seconds": 750,
+        "temperature": 0.2,
+        "seed": 42,
+        "limit_per_source": 4,
+        "max_documents": 8
+      },
+      "config_sha256": "0e3b9266ad43070b582a7aa2ceef202f113bb96b47951acbe0672a27d2485325",
+      "prompt_file": "prompts/qwen-extraction-v6.txt",
+      "prompt_sha256": "a4b4cefac396f67758e6c74ca280785a21aef30bc275abea97efbd1909501f32",
+      "draft_schema_sha256": "663c6ea6a293ee55790a0718e95d0e077b8638493a1c76f580cc55b06109a7a7",
+      "ontology_version": "0.2.0",
+      "ontology_sha256": "fc6dbe3744cbcac76fc36e608bc651d31302c69fbd564f2508754449defd01c3",
+      "schema_sha256": "3d37f11aee015af49264f14872ba7641bb99557db8b834bcd4a4673f7c304022",
+      "input_files": [
+        {
+          "sha256": "c34bb3841a9847e60c1064584902fd3c0d5521194c3d858e791131fa1a1b7b0c",
+          "bytes": 302755
+        },
+        {
+          "sha256": "50c0ed42f75473c42561df1df3e75159457164d88247585d37c2aa5ae9bba215",
+          "bytes": 428236
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 8,
+      "requests_submitted": 8,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+          "selected": true,
+          "status": "response_truncated",
+          "issues": [
+            {
+              "code": "response_truncated",
+              "path": "/"
+            }
+          ],
+          "input_tokens": 10656,
+          "request_elapsed_seconds": 601.9322284579976,
+          "usage": {
+            "prompt_tokens": 10656,
+            "completion_tokens": 12288,
+            "total_tokens": 22944
+          }
+        },
+        {
+          "document_id": "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/contexts/2/events/2/statements/0/value/source"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/contexts/2/events/3/statements/1/value/source"
+            }
+          ],
+          "input_tokens": 9956,
+          "request_elapsed_seconds": 369.2990904999897,
+          "usage": {
+            "prompt_tokens": 9956,
+            "completion_tokens": 8439,
+            "total_tokens": 18395
+          }
+        },
+        {
+          "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/10/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/35/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/37/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/47/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/60/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/65/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/73/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/88/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/97/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/138/evidence"
+            }
+          ],
+          "input_tokens": 10094,
+          "request_elapsed_seconds": 487.9968148340122,
+          "usage": {
+            "prompt_tokens": 10094,
+            "completion_tokens": 11086,
+            "total_tokens": 21180
+          }
+        },
+        {
+          "document_id": "appealcase:6c2f27fa07e45ca57c315183a4d9bdf3675ebf3f699ad4be467687f47996bb00",
+          "selected": true,
+          "status": "accepted_candidate",
+          "issues": [],
+          "input_tokens": 5708,
+          "request_elapsed_seconds": 255.19837720898795,
+          "usage": {
+            "prompt_tokens": 5708,
+            "completion_tokens": 6218,
+            "total_tokens": 11926
+          }
+        },
+        {
+          "document_id": "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/8/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/10/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/31/evidence"
+            }
+          ],
+          "input_tokens": 7636,
+          "request_elapsed_seconds": 168.566894958989,
+          "usage": {
+            "prompt_tokens": 7636,
+            "completion_tokens": 3959,
+            "total_tokens": 11595
+          }
+        },
+        {
+          "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "draft_schema_invalid",
+              "path": "/mentions/7"
+            }
+          ],
+          "input_tokens": 6454,
+          "request_elapsed_seconds": 344.3902362920053,
+          "usage": {
+            "prompt_tokens": 6454,
+            "completion_tokens": 8284,
+            "total_tokens": 14738
+          }
+        },
+        {
+          "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+          "selected": true,
+          "status": "response_truncated",
+          "issues": [
+            {
+              "code": "response_truncated",
+              "path": "/"
+            }
+          ],
+          "input_tokens": 7647,
+          "request_elapsed_seconds": 525.9792234170018,
+          "usage": {
+            "prompt_tokens": 7647,
+            "completion_tokens": 12288,
+            "total_tokens": 19935
+          }
+        },
+        {
+          "document_id": "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/4/evidence"
+            }
+          ],
+          "input_tokens": 8386,
+          "request_elapsed_seconds": 256.17922083399026,
+          "usage": {
+            "prompt_tokens": 8386,
+            "completion_tokens": 6006,
+            "total_tokens": 14392
+          }
+        }
+      ],
+      "document_status_counts": {
+        "accepted_candidate": 1,
+        "draft_grounding_failed": 5,
+        "not_selected": 28,
+        "response_truncated": 2
+      },
+      "validation": {
+        "expected_documents": 36,
+        "source_fields_verified": 156,
+        "attempts_total": 1,
+        "attempts_rejected": 0,
+        "documents_accepted_candidate": 1,
+        "documents_accepted_empty": 0,
+        "documents_rejected": 0,
+        "documents_missing": 35,
+        "issue_counts": {},
+        "accepted_node_counts": {
+          "actors": 8,
+          "mentions": 28,
+          "contexts": 6,
+          "roles": 15,
+          "events": 12,
+          "statements": 33
+        },
+        "accepted_evidence_spans_replayed": 206,
+        "semantic_precision_recall_f1": null,
+        "gold_available": false,
+        "semantic_completeness": "not_assessed",
+        "requires_user_legal_annotation": false
+      },
+      "service_snapshot": {
+        "models_sha256": "93d64c14efd0198149b01a14aa678e9b383941aa0b68afa76162fcda7f65afbd",
+        "props_sha256": "0f8325010c5e593b502026c0ccf94bb61c5f974c3f9e9ffba0a79219a68114f9",
+        "context_tokens": 32768,
+        "slots": 8,
+        "build_info": "b1-6fcaa16"
+      },
+      "model_weight_hash_verified": false,
+      "gold_available": false,
+      "semantic_precision_recall_f1": null
+    },
+    {
+      "local_directory": "artifacts/qwen-extraction/actor-grounded-truncated-pair-v1",
+      "report_sha256": "9849dcc85c494f222198603f87e607aed76433b32b0800efa26984e0768a1c4a",
+      "run_id": "a1450cc67466417f8c20c78f99399e32",
+      "run_kind": "local_qwen_development_extraction_not_gold",
+      "started_at_utc": "2026-10-04T13:16:02.602712+00:00",
+      "finished_at_utc": "2026-10-04T13:27:56.469193+00:00",
+      "completed": true,
+      "code_commit": "c7be7244db0cd98638b4df6e098292401138f918",
+      "worktree_dirty": false,
+      "config": {
+        "version": "qwen-extraction-v7",
+        "ssh_host": "spark-lan",
+        "port": 8003,
+        "model": "qwen3.8-flash-next-iq4xs",
+        "context_tokens": 32768,
+        "max_output_tokens": 12288,
+        "token_margin": 128,
+        "request_timeout_seconds": 750,
+        "temperature": 0.2,
+        "seed": 42,
+        "limit_per_source": 1,
+        "max_documents": 2
+      },
+      "config_sha256": "b8af0f6fd619a61af3fcb56f264e94598492199386daccfcf230b201048f851f",
+      "prompt_file": "prompts/qwen-extraction-v7.txt",
+      "prompt_sha256": "18c761e1718b1b190aed5585f927dcd702d28c0d6a31c587cb6c0b6304a65e77",
+      "draft_schema_sha256": "315d7b1dd374f45031f61e066afd761ab69ea511b4d52e71c073651e07295667",
+      "ontology_version": "0.2.0",
+      "ontology_sha256": "fc6dbe3744cbcac76fc36e608bc651d31302c69fbd564f2508754449defd01c3",
+      "schema_sha256": "3d37f11aee015af49264f14872ba7641bb99557db8b834bcd4a4673f7c304022",
+      "input_files": [
+        {
+          "sha256": "c34bb3841a9847e60c1064584902fd3c0d5521194c3d858e791131fa1a1b7b0c",
+          "bytes": 302755
+        },
+        {
+          "sha256": "5b848a77e591029f2cfc881b83568f5a51195bc5419d581cf992cb4753181c29",
+          "bytes": 428236
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 2,
+      "requests_submitted": 2,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/16/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/24/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/62/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/67/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/82/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/89/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/110/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/112/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/118/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/133/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/137/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/138/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/145/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/146/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/161/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/contexts/2/events/0/statements/1/value/source"
+            }
+          ],
+          "input_tokens": 10678,
+          "request_elapsed_seconds": 428.11607562500285,
+          "usage": {
+            "prompt_tokens": 10678,
+            "completion_tokens": 9761,
+            "total_tokens": 20439
+          }
+        },
+        {
+          "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/3/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/42/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/contexts/3/events/0/statements/2/value/source"
+            }
+          ],
+          "input_tokens": 7669,
+          "request_elapsed_seconds": 280.4308198330109,
+          "usage": {
+            "prompt_tokens": 7669,
+            "completion_tokens": 6642,
+            "total_tokens": 14311
+          }
+        }
+      ],
+      "document_status_counts": {
+        "draft_grounding_failed": 2,
+        "not_selected": 34
+      },
+      "validation": {
+        "expected_documents": 36,
+        "source_fields_verified": 156,
+        "attempts_total": 0,
+        "attempts_rejected": 0,
+        "documents_accepted_candidate": 0,
+        "documents_accepted_empty": 0,
+        "documents_rejected": 0,
+        "documents_missing": 36,
+        "issue_counts": {},
+        "accepted_node_counts": {
+          "actors": 0,
+          "mentions": 0,
+          "contexts": 0,
+          "roles": 0,
+          "events": 0,
+          "statements": 0
+        },
+        "accepted_evidence_spans_replayed": 0,
+        "semantic_precision_recall_f1": null,
+        "gold_available": false,
+        "semantic_completeness": "not_assessed",
+        "requires_user_legal_annotation": false
+      },
+      "service_snapshot": {
+        "models_sha256": "2452cbd5d7578e63399a2b0216f4131b8c621e3fd94ecf75f1103372b9617843",
+        "props_sha256": "0f8325010c5e593b502026c0ccf94bb61c5f974c3f9e9ffba0a79219a68114f9",
+        "context_tokens": 32768,
+        "slots": 8,
+        "build_info": "b1-6fcaa16"
+      },
+      "model_weight_hash_verified": false,
+      "gold_available": false,
+      "semantic_precision_recall_f1": null
+    }
+  ],
+  "documents_in_full_denominator": 36,
+  "unique_documents_attempted": 10,
+  "registered_family_groups_among_attempted": 8,
+  "unique_accepted_documents": 3,
+  "final_candidate_status_counts": {
+    "accepted_candidate": 3,
+    "draft_grounding_failed": 7,
+    "not_selected": 26
+  },
+  "attempts_preserved": [
+    {
+      "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+      "final_candidate_status": "accepted_candidate",
+      "attempts": [
+        {
+          "source_run_id": "79b15e20c3024bff9df1bb91c12caac6",
+          "source_report_sha256": "c9266b5821aae62a79f8f75b45977f95b0e2265e1c041d096bd19ec9527cd89e",
+          "status": "accepted_candidate",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "final_candidate_status": "draft_grounding_failed",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "response_truncated",
+          "issues": [
+            {
+              "code": "response_truncated",
+              "path": "/"
+            }
+          ]
+        },
+        {
+          "source_run_id": "a1450cc67466417f8c20c78f99399e32",
+          "source_report_sha256": "9849dcc85c494f222198603f87e607aed76433b32b0800efa26984e0768a1c4a",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/16/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/24/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/62/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/67/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/82/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/89/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/110/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/112/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/118/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/133/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/137/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/138/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/145/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/146/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/161/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/contexts/2/events/0/statements/1/value/source"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+      "final_candidate_status": "draft_grounding_failed",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/contexts/2/events/2/statements/0/value/source"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/contexts/2/events/3/statements/1/value/source"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "final_candidate_status": "draft_grounding_failed",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/10/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/35/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/37/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/47/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/60/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/65/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/73/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/88/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/97/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/138/evidence"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "appealcase:6c2f27fa07e45ca57c315183a4d9bdf3675ebf3f699ad4be467687f47996bb00",
+      "final_candidate_status": "accepted_candidate",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "accepted_candidate",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "document_id": "appealcase:cb95ec3a3dc7193d3f2e7c13500aa86198514b0a522c5c02e0687423d8a9fa6d",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:2393b4c3a6d0c9a3ae8e35ee010a63ea9c52c92878c343e49aa7150ddf964e54",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:407cc57fdc607ac1d7b8756d9f8fb6fb1a4a3ee2d1f136d79c4a5ebe0ec448ff",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:7acdf1c794a7ca8b469a6f4900ce29196391ee38d7f1fab70721ee241cea87c3",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:417b61ee574639e84224d84b5d6e7b15eee37cbbd976b836ea1cc5b7670dceda",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:1e3f10c6643c6233758167eb397ae95ffdce4e5a3aa6b3a80f9527920957d1b3",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:46d76e8b704b9a519a681341a085638f3b7b843290acf03f7c54fbf6b0d05742",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:2e7c51c267c24d346d42cfa5a64b06759ad1c4d943c9b8b0ef6dc191cc484802",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:998b38f94a0855e4e3d6337dd0db003ea90b2f73d6da63dd795f61eed0ba1736",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:fcb5cdb34dc2af64d4b743a936f854416d66eb9af362cfac15d077e805e5ff68",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:28b294368e2a976e10c3c766dbe0a4d81d112e21c87a81feeb5979190f497b36",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:3907cb17b80b0acb5bc6277141f23b5b4220135967820eba081774d14149becc",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:9cb664fae8f44e6486c447d3e918777707d2a1a2f539261b759cf6abe00d6649",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:ba199dc40ea6e89b7bb5a994789a4057e3a049960d37e4ce9883c8bf86f3dafd",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:aaf78bc3db9a60ccb15596495212706f668e31727ce7ee776e31abe18711089f",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:555e3d826df6f15a57b946ca868fd6febfc180386a16b28668a1168276652744",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:72ec376c0cf5df3aff679752c832db3917d10d754458d2e86d108b692f8442c8",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:e3a36df3cb1e9946e354c60194bd0308324a179d2022861c660b8a0cadf6d13b",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+      "final_candidate_status": "accepted_candidate",
+      "attempts": [
+        {
+          "source_run_id": "79b15e20c3024bff9df1bb91c12caac6",
+          "source_report_sha256": "c9266b5821aae62a79f8f75b45977f95b0e2265e1c041d096bd19ec9527cd89e",
+          "status": "accepted_candidate",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "document_id": "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+      "final_candidate_status": "draft_grounding_failed",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/8/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/10/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/31/evidence"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "final_candidate_status": "draft_grounding_failed",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "draft_schema_invalid",
+              "path": "/mentions/7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "final_candidate_status": "draft_grounding_failed",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "response_truncated",
+          "issues": [
+            {
+              "code": "response_truncated",
+              "path": "/"
+            }
+          ]
+        },
+        {
+          "source_run_id": "a1450cc67466417f8c20c78f99399e32",
+          "source_report_sha256": "9849dcc85c494f222198603f87e607aed76433b32b0800efa26984e0768a1c4a",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/3/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/42/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/contexts/3/events/0/statements/2/value/source"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+      "final_candidate_status": "draft_grounding_failed",
+      "attempts": [
+        {
+          "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+          "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/4/evidence"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "spark_qa:96a43ecd432d4f37f825d5dfc8336044a6b5872d7809528f2f6a4e0bf5e99383",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "spark_qa:d5a9dc721d22b85d99d514ef2b1957c038d72b8f59fb4f2743145bd04880132e",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "spark_qa:07dd3b118cbaf06663e5d8210538a125da876ae52d61aebd2bf465ff681e20e3",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "spark_qa:cf08e48614b0930ba5685020720a4f808d69c30873625445846e3cbbe4fb1554",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "spark_qa:1783d90c5fc63b735e2c5d2e305f2f7efe0dd969c0c1405527fe02220a0a656b",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "spark_qa:3be8e84dd069608b9e381c12086d0cdd8d375b7fecf0d662e54b52def4842aed",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    },
+    {
+      "document_id": "spark_qa:639b49493e45e6041481bf68de91f090f6746495eb55ae89cee4f4fa664b840c",
+      "final_candidate_status": "not_selected",
+      "attempts": []
+    }
+  ],
+  "selection": {
+    "selection_policy": "Move each previously selected first document to the end; take first four per source. All 36 documents remain in input manifests. No outcome-based selection. Eight new documents plus two regression documents; not ten independent cases.",
+    "sources": [
+      {
+        "source": "appealcase",
+        "original_manifest_sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+        "reordered_manifest_sha256": "c34bb3841a9847e60c1064584902fd3c0d5521194c3d858e791131fa1a1b7b0c",
+        "documents_retained": 24,
+        "new_selected_ids": [
+          "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+          "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+          "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+          "appealcase:6c2f27fa07e45ca57c315183a4d9bdf3675ebf3f699ad4be467687f47996bb00"
+        ],
+        "selected_characters": [
+          4328,
+          3777,
+          3928,
+          1276
+        ],
+        "selected_family_ids": [
+          "family:75d35f4fd02941f25b9c7d99053542c13c798c0fc7b8d7d3775c79a984a27c25",
+          "family:78eb5b4847854fa26073b654019fe846a3d0cd7ccae648638addefca46fa14e0",
+          "family:78eb5b4847854fa26073b654019fe846a3d0cd7ccae648638addefca46fa14e0",
+          "family:31d6536ddfa166b173c6e775a3291d1be27b18cf6d07b1e6b6fbddbc2ad7b0c1"
+        ]
+      },
+      {
+        "source": "spark",
+        "original_manifest_sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+        "reordered_manifest_sha256": "50c0ed42f75473c42561df1df3e75159457164d88247585d37c2aa5ae9bba215",
+        "documents_retained": 12,
+        "new_selected_ids": [
+          "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+          "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+          "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+          "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49"
+        ],
+        "selected_characters": [
+          2326,
+          1731,
+          2428,
+          2833
+        ],
+        "selected_family_ids": [
+          "spark-parent:58716729a6ec6a1f43af2121b93070e7768f0e8e54def103370746028277706a",
+          "spark-parent:57dd281ab6bca6400c0f438f7f9105da9138e521a4ca0fba0904f1d184aa3264",
+          "spark-parent:724620a7a58ad425f59934df277fe5d0b735a4ae2f15e5dfdca480cdcb0e513a",
+          "spark-parent:49431fa7eaa89119bb6dd9ef90474eee95fa69aeb83cb95a9120ac58d8ce12db"
+        ]
+      }
+    ]
+  },
+  "graph_assembly": {
+    "schema_version": 1,
+    "run_kind": "offline_candidate_graph_assembly_not_semantic_evaluation",
+    "completed": true,
+    "observed_at_utc": "2026-10-04T13:28:37.076099+00:00",
+    "graph_version": "0.1.0",
+    "diagnostic_version": "candidate-diagnostics-v1",
+    "ontology_version": "0.2.0",
+    "ontology_sha256": "fc6dbe3744cbcac76fc36e608bc651d31302c69fbd564f2508754449defd01c3",
+    "schema_sha256": "3d37f11aee015af49264f14872ba7641bb99557db8b834bcd4a4673f7c304022",
+    "code_commit": "c7be7244db0cd98638b4df6e098292401138f918",
+    "worktree_dirty": true,
+    "code_sha256": {
+      "src/judicial_kg/__init__.py": "6850c172a2800707089289624c0729ab42e7049c43fe5861efbf5a5646df6c9b",
+      "src/judicial_kg/cli.py": "41f019fc785fff1814d7383da649243380448be85cf3415abd5f4a20eccf4128",
+      "src/judicial_kg/contracts.py": "fe3c4f3475e125bbae705669355180a05c4ab3ee5d489c117469f1eba6684509",
+      "src/judicial_kg/extraction/__init__.py": "3f19a4d2eabba0d385c8b5fa37502b46f3160cf43830b0629426f8a09c3134e2",
+      "src/judicial_kg/extraction/actor_grounded.py": "8c737ca8d4cb263cfc68fa0d6f957a9daebc43cbb4be2644c6795f8a35562fff",
+      "src/judicial_kg/extraction/anchored.py": "8de0b1b23dc70d7f6f8998c67ad6f2cf4336e4858668cdc584a050b4da88083d",
+      "src/judicial_kg/extraction/bailian.py": "9c5027dc50064f4b91a509e70d7ba14c8ccfffd48a11fadbc0eb52949099cbc5",
+      "src/judicial_kg/extraction/contextual.py": "175486269b26e3d787e873baa3eeb2e767363c096c985ce718bff3c55ddb7d28",
+      "src/judicial_kg/extraction/draft.py": "b5b0b2cb67b2f14a124e42f3740f16e9dababb760e5e1137442acbf7ad772aa1",
+      "src/judicial_kg/extraction/mention_repair.py": "5bdec15f228d612aabd8140d49e9c6a76ca36ab12c1c659d936107abbfe18b30",
+      "src/judicial_kg/extraction/repair_replay.py": "46c472a005c9856352befd1347a252dad23d97d7b032b8ac9a1832709871914e",
+      "src/judicial_kg/extraction/replay.py": "6d5bfb6bbee477e8cbb563531c7643c080ec4ae3e0c23ff02b32753a7f61b4db",
+      "src/judicial_kg/extraction/run.py": "ef081aef0d3f64746d7fa259fd091e7980bcc706875e86f5060cd955a5f9b316",
+      "src/judicial_kg/extraction/transport.py": "b52997d72edebe7cf5eb132e1afecdd3061f379e2a78b51b78024e80aeac2652",
+      "src/judicial_kg/extraction/typed.py": "06f5fc23c1f6a3d35ab0adaa6a923bcabcf0878e0a8965a6eaaa5c20836bb960",
+      "src/judicial_kg/graph/__init__.py": "032a9439d377b06902014b1edb83bd80092319a74e65edba614987eb6637a564",
+      "src/judicial_kg/graph/assembly.py": "e825a407b117e8ef32aa54f63c0f3e8421d15c3b3c8f4f9761ed8a5e09c10094",
+      "src/judicial_kg/graph/diagnostics.py": "2b7da4c407fe4748141b0b4392eb3203307fd2eef4ebfbab24634d3fef2c767f",
+      "src/judicial_kg/graph/neo4j.py": "88758a1604f900386ab3c710f69540bc7da340acb6bd31297a53df0db31ba07c",
+      "src/judicial_kg/graph/run.py": "1b33129d7204ed4ac48e25dee8e4917f9baa40ded8e1ce19bdd234d301afc30b",
+      "src/judicial_kg/provenance.py": "19e1042bfc65aed40ad2c1d1d16162f390f705a0add1b053418a6a2d230f7758",
+      "src/judicial_kg/sources/__init__.py": "df86466f13948cd5f2218cc7a19db1bb4ee63a0105add5671ea669a9b4795951",
+      "src/judicial_kg/sources/appealcase.py": "64111809440239d3d2fe91ba5b1a523fc5a7b3ad4c300886f56bac9179ec0f9b",
+      "src/judicial_kg/sources/development.py": "8242b25ffd292a9a2e3a7bd601db678f7907e3ebdf43714408626c1304fd90e1",
+      "src/judicial_kg/sources/qa_inventory.py": "c66062a895d0118f9bdb72294ee917236c4126546df0e60470ce652be92bb2ec",
+      "src/judicial_kg/sources/records.py": "9d5d82d8606062be927a0627c618c0228f5a83ca8e7f1dba70effdf42fd5e736",
+      "src/judicial_kg/sources/spark.py": "e581af751aaf38d8965121fe2b3bab15fa3c7219096fbcac7ebb5083ad349e74",
+      "src/judicial_kg/sources/spark_replay.py": "23f892cb50b3b27183993c1d78b0503e684284530f495070b375eada1e3f8772",
+      "src/judicial_kg/sources/spark_scan.py": "e39e759068a78d2f11dc5acd5249ab4e2d668d8d0e1498eabf1414754b76994b",
+      "src/judicial_kg/validation.py": "6d7ee2af2f46e0f0aaf76a26eb160cf0197358f7544a92ac8c0c1f158ac17610",
+      "src/judicial_kg/validation_run.py": "ae1c7d1457b57e968ccf7c346bde6eb5c80b05acb360511ed987d3e968671ee4"
+    },
+    "runtime": {
+      "python": "3.12.2",
+      "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9"
+    },
+    "inputs": [
+      {
+        "kind": "documents",
+        "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+        "bytes": 302755
+      },
+      {
+        "kind": "documents",
+        "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+        "bytes": 428236
+      },
+      {
+        "kind": "candidates",
+        "sha256": "71737ce871ae11f532efb0b6e89ff8de98305294ee2f9d779b2c3df269970d6e",
+        "bytes": 385508
+      }
+    ],
+    "outputs": {
+      "diagnostics.json": "76de62a8ad84dede315d5515c5d8d240c21797d8aa24802dcfe060c634167209",
+      "graph.json": "5bb4df122804554e2af3813bc5e4855c35d2e155710705568ffa57c7365f8a41",
+      "ledger.json": "6547138d9211f0addfbc32b5a68496e97ca69954a82e0840aa66fe4768ce5c87"
+    },
+    "requests_submitted": 0,
+    "validation": {
+      "expected_documents": 36,
+      "source_fields_verified": 156,
+      "attempts_total": 3,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 3,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 33,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 38,
+        "mentions": 169,
+        "contexts": 30,
+        "roles": 62,
+        "events": 46,
+        "statements": 95
+      },
+      "accepted_evidence_spans_replayed": 829,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false
+    },
+    "document_status_counts": {
+      "assembled_candidate": 3,
+      "missing": 33
+    },
+    "documents_assembled": 3,
+    "documents_assembly_failed": 0,
+    "nodes": 997,
+    "edges": 2082,
+    "node_counts": {
+      "Actor": 38,
+      "Context": 30,
+      "Document": 3,
+      "Event": 46,
+      "EvidenceSpan": 554,
+      "Mention": 169,
+      "Role": 62,
+      "Statement": 95
+    },
+    "edge_counts": {
+      "about": 95,
+      "attributed_to": 19,
+      "contains": 440,
+      "denotes": 169,
+      "has_mention": 169,
+      "in_context": 203,
+      "participant": 94,
+      "role_of": 62,
+      "supported_by": 829,
+      "within_context": 2
+    },
+    "assembled_documents_diagnostics": {
+      "assertion_evidence_characters": 3317,
+      "context_evidence_characters": 6220,
+      "literal_name_occurrences_without_mention": 40,
+      "mention_evidence_characters": 713,
+      "source_characters": 6243
+    },
+    "diagnostic_hint_counts": {
+      "joint_attribution_needs_review": 1,
+      "reported_material_in_finding_context": 3
+    },
+    "graph_canonical_sha256": "c9dd294f57e6956b4bfa020ecd2a4d9383960d7d72e393c80602a0f60d54ccb9",
+    "cross_document_identity_merges": 0,
+    "semantic_precision_recall_f1": null,
+    "gold_available": false,
+    "requires_user_legal_annotation": false,
+    "semantic_completeness": "not_assessed"
+  },
+  "neo4j_export": {
+    "import_subdirectory": "judicial-ontology-kg-c9dd294f57e6",
+    "nodes": 997,
+    "edges": 2082
+  },
+  "saved_graph_restored_equals_input": true,
+  "source_validation_after_restore": {
+    "expected_documents": 36,
+    "source_fields_verified": 156,
+    "attempts_total": 3,
+    "attempts_rejected": 0,
+    "documents_accepted_candidate": 3,
+    "documents_accepted_empty": 0,
+    "documents_rejected": 0,
+    "documents_missing": 33,
+    "issue_counts": {},
+    "accepted_node_counts": {
+      "actors": 38,
+      "mentions": 169,
+      "contexts": 30,
+      "roles": 62,
+      "events": 46,
+      "statements": 95
+    },
+    "accepted_evidence_spans_replayed": 829,
+    "semantic_precision_recall_f1": null,
+    "gold_available": false,
+    "semantic_completeness": "not_assessed",
+    "requires_user_legal_annotation": false
+  },
+  "neo4j_imported": false,
+  "csv_payloads_match_graph": true,
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false,
+  "new_cloud_requests": 0,
+  "source_data_uploaded_to_github_or_drive": false,
+  "limitations": [
+    "Development exposed data only; registered groups do not prove absence of cross-source duplicates.",
+    "Accepted means source and contract checks only; semantic completeness and actor identity are not independently judged.",
+    "Whole-document rejection preserves the failure denominator; graph missing is not equivalent to not attempted.",
+    "v7 is selected on two failed development examples, not an independent benchmark."
+  ],
+  "schema_version": 1,
+  "observed_at_utc": "2026-10-04T13:29:41.378489+00:00",
+  "checks": {
+    "tests_passed": 226,
+    "ruff": true,
+    "format": true,
+    "reference_hashes_verified": 9,
+    "diff_check": true
+  },
+  "aggregation_script_sha256": "e29f701f6035f59ff464e418831b2ed651db2c0d6e5bd7dd8466db625d9def9d",
+  "v7_selection": {
+    "selection_policy": "Target the two completed v6 actor-only truncations, one from each source; outcome-driven development regression, not blind evaluation. Full 36 documents remain in manifests.",
+    "selected_document_ids": [
+      "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26"
+    ],
+    "spark_v7_manifest_sha256": "5b848a77e591029f2cfc881b83568f5a51195bc5419d581cf992cb4753181c29",
+    "original_spark_manifest_sha256": "50c0ed42f75473c42561df1df3e75159457164d88247585d37c2aa5ae9bba215",
+    "unique_new_documents": 0
+  },
+  "response_shape_diagnostics": [
+    {
+      "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "response_sha256": "af17cd6cc2ec6638514660983fd20a4cd14b3655fcf5600d18fadf18a7511106",
+      "finish_reason": "length",
+      "status": "response_truncated",
+      "content_characters": 37032,
+      "actor_identifier_occurrences": 1030,
+      "mentions_array_started": false,
+      "contexts_array_started": false,
+      "interpretation": "Actor-only identifier enumeration, not real entity count; incomplete JSON is rejected without salvage."
+    },
+    {
+      "source_run_id": "36b4738df91a4a76bbf0465458704dfe",
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "response_sha256": "b698927c313e0958f9141b7ee2f21dab4b077df995a7986c0902ffd34e05d0c8",
+      "finish_reason": "length",
+      "status": "response_truncated",
+      "content_characters": 29059,
+      "actor_identifier_occurrences": 729,
+      "mentions_array_started": false,
+      "contexts_array_started": false,
+      "interpretation": "Actor-only identifier enumeration, not real entity count; incomplete JSON is rejected without salvage."
+    },
+    {
+      "source_run_id": "a1450cc67466417f8c20c78f99399e32",
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "response_sha256": "8c550b35ac2ec553b39e0bb05610d7b9157408dab889a8fb407b29c1e068c70d",
+      "finish_reason": "stop",
+      "status": "draft_grounding_failed",
+      "content_characters": 26491,
+      "draft_actors": 11,
+      "draft_mentions": 176,
+      "draft_contexts": 11,
+      "interpretation": "Complete schema-shaped draft, still rejected by source grounding; counts are not graph achievements."
+    },
+    {
+      "source_run_id": "a1450cc67466417f8c20c78f99399e32",
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "response_sha256": "15d8493a669a618a67e9e806a5bba58817a668d0b6ae2496e6c4e4fa770b8a84",
+      "finish_reason": "stop",
+      "status": "draft_grounding_failed",
+      "content_characters": 19396,
+      "draft_actors": 14,
+      "draft_mentions": 44,
+      "draft_contexts": 7,
+      "interpretation": "Complete schema-shaped draft, still rejected by source grounding; counts are not graph achievements."
+    }
+  ],
+  "offline_replays": [
+    {
+      "local_directory": "artifacts/qwen-extraction/expansion8-v6-replay",
+      "report_sha256": "cc06677703e9c33838c85a0d9c90e00884576a62e30f0aa1061373cdcd546bd1",
+      "source_report_sha256": "4a80291a54284d73c6356c5aa8d8b54514a62c0d00d52d2485313c06dea6e868",
+      "code_commit": "c7be7244db0cd98638b4df6e098292401138f918",
+      "worktree_dirty": false,
+      "requests_submitted": 0,
+      "accepted_candidates_unchanged": true,
+      "document_status_counts_unchanged": true,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+          "status": "response_truncated",
+          "issues": [
+            {
+              "code": "response_truncated",
+              "path": "/"
+            }
+          ]
+        },
+        {
+          "document_id": "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/contexts/2/events/2/statements/0/value/source"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/contexts/2/events/3/statements/1/value/source"
+            }
+          ]
+        },
+        {
+          "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/10/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/35/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/37/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/47/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/60/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/65/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/73/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/88/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/97/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/138/evidence"
+            }
+          ]
+        },
+        {
+          "document_id": "appealcase:6c2f27fa07e45ca57c315183a4d9bdf3675ebf3f699ad4be467687f47996bb00",
+          "status": "accepted_candidate",
+          "issues": []
+        },
+        {
+          "document_id": "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/8/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/10/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/31/evidence"
+            }
+          ]
+        },
+        {
+          "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/22/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/36/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/44/evidence"
+            }
+          ]
+        },
+        {
+          "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+          "status": "response_truncated",
+          "issues": [
+            {
+              "code": "response_truncated",
+              "path": "/"
+            }
+          ]
+        },
+        {
+          "document_id": "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/4/evidence"
+            }
+          ]
+        }
+      ],
+      "interpretation": "Compatibility repair exposes later grounding errors in one original schema rejection; does not accept that document."
+    },
+    {
+      "local_directory": "artifacts/qwen-extraction/actor-grounded-truncated-pair-v1-replay",
+      "report_sha256": "88ea27e91ecdb96e41720cfa2c68de332aa3b1e9649d720892d3a8d865ead6d8",
+      "source_report_sha256": "9849dcc85c494f222198603f87e607aed76433b32b0800efa26984e0768a1c4a",
+      "code_commit": "c7be7244db0cd98638b4df6e098292401138f918",
+      "worktree_dirty": true,
+      "requests_submitted": 0,
+      "accepted_candidates_unchanged": true,
+      "document_status_counts_unchanged": true,
+      "selected_outcomes": [
+        {
+          "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/16/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/24/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/62/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/67/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/82/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/89/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/110/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/112/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/118/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/133/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/137/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/138/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/145/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/146/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/161/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/contexts/2/events/0/statements/1/value/source"
+            }
+          ]
+        },
+        {
+          "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/mentions/3/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/42/evidence"
+            },
+            {
+              "code": "quote_ambiguous_in_unit",
+              "path": "/contexts/3/events/0/statements/2/value/source"
+            }
+          ]
+        }
+      ],
+      "interpretation": "Same rejected outcomes; not a new model test."
+    }
+  ],
+  "graph_code_files_match_recorded_commit": true,
+  "graph_reproducibility_note": "Assembly worktree was dirty only with documentation updates; every recorded source-code hash matches its recorded Git commit.",
+  "next_work": [
+    "Extend bounded evidence-selector repair to failed new documents without a prior accepted baseline; preserve exact source and original decisions.",
+    "Repair event-value selectors only within their stated context; unresolved or ambiguous matches remain rejected.",
+    "Re-run all fixed failure cases before any further expansion; do not lower acceptance constraints.",
+    "Review nine uncovered literal regions and actor/role/quotation semantics as diagnostics, not independent gold.",
+    "Keep OpenJev optional until Qwen baseline and scoped checks are stable."
+  ]
+}

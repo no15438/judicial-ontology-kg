@@ -27,3 +27,5 @@ bash scripts/run.sh verify-sources
 完整复现脚本继续保存在用户 Drive 的[首轮 v1 包](https://drive.google.com/file/d/1xvijcmNaOVg4liATxnppfkIkrGmQ48Mm/view)与[第三轮包](https://drive.google.com/file/d/117nzt6Q2xgDHjODoo5FNIThQLxp5EV4j/view)。本次认证下载后，逐一核对 SHA256SUMS.txt 的 32/20 个成员，独立登记文件与首轮包成员逐字节一致；没有执行上游审计/模型脚本或重新审计原始案件。
 
 旧仓库审计代码仍在[固定提交 p0/datasets](https://github.com/no15438/judicial-graphrag/tree/d4614083e72e8d4f4d6543b818e1f8935634fec7/p0/datasets)。元数据内原下载 URL 与旧目录不作静默修改；后续接入新数据适配器时另记录新的路径映射。
+
+- `qwen-development-expansion-report.json`：新增 8 篇开发扩展、针对截断失败的 v7 回归、原失败与离线兼容重放，以及完整 36 篇分母下的候选图快照；只含元数据，不是语义准确率。

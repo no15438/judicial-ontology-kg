@@ -1,18 +1,22 @@
 # 新仓库交接
 
-核对日期：2026-10-04，Australia/Sydney。
+核对日期：2026-10-05，Australia/Sydney。
 
-当前最新：有界提及修复器已实现，215 项测试通过。`80c0c00` 上修复协议第五版对原 v6 同两篇均通过，修正 6 处位置/实际提及问题并补回 Spark 的 3 处旧提及；29 个旧提及位置均有新版重叠。新图 778 节点、1,581 边、623 次证据引用，写盘还原及 CSV 保真检查通过。历史失败与第三轮字符边界错误全部保留，整体语义 P/R/F1 仍未评估。见 [修复报告](research/qwen-mention-repair-report.json)。
+当前代码 `c7be724`，全套 226 项测试通过。当前分支 `codex/qwen-extraction`。后续只调用本地 Qwen，不需要用户提供法律 gold，原文/QA/模型输出/图谱只在本地忽略目录。
 
-最终修复在 `artifacts/qwen-extraction/mention-repair-v5/`，图和 CSV 分别在 `artifacts/graph/mention-repair-v5/` 与 `artifacts/neo4j/mention-repair-v5/`；没有覆盖 Neo4j 旧 524/994 展示。
+本轮先完成原两篇的有界提及修复：6 处位置/实际提及问题修正，Spark 的 3 处旧提及补回；两篇契约通过，623 次证据引用可回放。图 778 节点/1,581 边，写盘还原、CSV 保真及零调用离线修复重放通过；保留原失败与中间边界错误。见 [修复报告](research/qwen-mention-repair-report.json)。
 
-已启动新增 8 篇的独立串行运行 `artifacts/qwen-extraction/expansion8-v6/`；本轮终态见 report.json，若 completed=false 不要重复启动。输入重排清单与固定选样记录在 `artifacts/development-expansion-10/`，仍保留完整 36 篇分母。当前普通抽取默认仍是 v5，扩展调用显式用 v6；不会把局部修复或单篇通过当成全图谱语义验证。以下为分阶段历史，以本段和 progress.md 末节为最新。
+新增 8 篇 v6 首轮已完成：1 通过、5 校验拒收、2 截断；全量离线重放后接受候选不变。v7 两篇截断回归也已完成：均完整返回、未再枚举 Actor 编号，但分别仍有 16/3 处引用问题，继续拒收。所有推理均已结束，不存在待续的在途请求；不要重复启动旧目录。普通抽取默认仍为 v5，不因局部修复就切默认或自动扩量。
 
-新增 v7 主体内嵌提及草稿已通过 221 项工程测试，真实验证尚未开始。它针对扩展首篇在根级 Actor 数组中持续枚举 1,030 个编号的问题；不要把待验证修改写成成功。当前扩展批次仍用已冻结的 v6，不要中途替换协议或重复提交。
+累计 10 篇尝试、8 个登记组中 3 篇工程通过、7 篇仍拒收，另 26 篇未选中。合并通过候选为 997 节点/2,082 边、829 次证据引用；保存后还原、来源重验、CSV 保真通过。图与 CSV 在 `artifacts/graph/development10-v1/` 和 `artifacts/neo4j/development10-v1/`，尚未加载到 Neo4j，旧 524/994 展示不变。完整元数据见 [扩展报告](research/qwen-development-expansion-report.json)，原文/响应和派生候选不提交。
+
+当前下一步是根据固定开发失败完善有界引用修复，覆盖提及和事件属性；之后再扩量和考虑 OpenJev。整体语义 P/R/F1 仍不可报告。最新状态以本段、[进度末节](docs/progress.md) 与 [任务清单](docs/roadmap.md) 为准。以下保留来源与历史阶段证据，不将旧的运行中状态当作重试授权。
 
 当前仓库是 `no15438/judicial-ontology-kg`，与旧 `judicial-graphrag` 独立。不要把旧历史和旧系统整体导入，也不要重复创建仓库。
 
 最新用户决定（2026-10-04）：找出并修复抽取问题，后续使用本地模型服务。开发仍在 Mac，调用已有 spark-lan 上的 Qwen；不要修改模型服务或配置收费远程访问。此前已授权的北京百炼两篇试跑已经结束，后续没有新的付费授权。专用密钥仍保留在被忽略的 .env.local（权限 600），不打印、不提交。最新本地修复与运行记录见 [本地抽取](docs/qwen-extraction.md)，云端历史见 [百炼接入](docs/bailian-extraction.md)。
+
+## 来源与历史阶段记录
 
 已接续旧仓库 `d4614083e72e8d4f4d6543b818e1f8935634fec7` 及用户提供的 Drive 目录。当前云端支持 Python 3.12 的离线开发、测试和元数据核验；初始化入口为 `bash scripts/setup.sh`。
 
