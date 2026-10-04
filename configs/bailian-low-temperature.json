@@ -1,0 +1,13 @@
+{
+  "version": "bailian-extraction-v1",
+  "model": "qwen3.8-max-0902",
+  "max_input_reservation_tokens": 24576,
+  "max_output_tokens": 5632,
+  "temperature": 0.2,
+  "request_timeout_seconds": 300,
+  "budget_cny": "1.004096",
+  "input_cny_per_million": "12",
+  "output_cny_per_million": "36",
+  "max_documents": 2,
+  "limit_per_source": 1
+}

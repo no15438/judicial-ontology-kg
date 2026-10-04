@@ -144,6 +144,17 @@ def test_budget_is_reserved_before_requests_and_not_released_on_failure(workspac
     assert report["reserved_cny"] == "2.029824"
 
 
+def test_lower_temperature_passes_through_without_changing_source_or_contract(workspace):
+    config_path = workspace[2]
+    config = json.loads(config_path.read_text())
+    config["temperature"] = 0.2
+    config_path.write_text(json.dumps(config))
+    client = SimulatedClient()
+    report = run_bailian(*workspace, execute=True, client=client)
+    assert all(call["temperature"] == 0.2 for call in client.calls)
+    assert report["document_status_counts"]["accepted_empty"] == 2
+
+
 def test_interrupt_keeps_inflight_checkpoint(workspace):
     with pytest.raises(KeyboardInterrupt):
         run_bailian(*workspace, execute=True, client=SimulatedClient("interrupt"))

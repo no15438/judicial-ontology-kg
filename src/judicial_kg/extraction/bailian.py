@@ -141,7 +141,7 @@ def load_config(path: Path) -> dict:
         config["version"] != "bailian-extraction-v1"
         or config["model"] != MODEL
         or type(config["temperature"]) not in (int, float)
-        or config["temperature"] != 0.7
+        or not 0 <= config["temperature"] <= 1
         or config["input_cny_per_million"] != "12"
         or config["output_cny_per_million"] != "36"
     ):
