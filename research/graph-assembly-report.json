@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "purpose": "lossless_candidate_graph_development_not_semantic_evaluation",
+  "local_directory": "artifacts/graph/local-qwen-v1",
+  "report_sha256": "f21a5118e3ced5c8185274bbd9363dcb701003ee9feef7dc0de81cd739595bce",
+  "exit_code": 1,
+  "exit_code_reason": "34_expected_documents_missing_not_silently_excluded",
+  "run": {
+    "schema_version": 1,
+    "run_kind": "offline_candidate_graph_assembly_not_semantic_evaluation",
+    "completed": true,
+    "observed_at_utc": "2026-10-04T10:01:50.462156+00:00",
+    "graph_version": "0.1.0",
+    "diagnostic_version": "candidate-diagnostics-v1",
+    "ontology_version": "0.1.0",
+    "ontology_sha256": "9cd7869526f39b198be744f2c5155c27cdfaeb6e30d28cce56cd4f88d769eaf6",
+    "schema_sha256": "89ecad0ad208ab01d156d428a4b145a535a00c88e078dd36a80c16a6864084ec",
+    "code_commit": "be6f33811eb807cdc6a0452742aa97a8ac30d26c",
+    "worktree_dirty": false,
+    "code_sha256": {
+      "src/judicial_kg/__init__.py": "6850c172a2800707089289624c0729ab42e7049c43fe5861efbf5a5646df6c9b",
+      "src/judicial_kg/cli.py": "42132c82c7596e5641efe3460508ec64b8acce566e244f39856a15c59e253af5",
+      "src/judicial_kg/contracts.py": "188e14f00bdec073c049cd0666710fe453e740de242acb23db9490f47c3be1e4",
+      "src/judicial_kg/extraction/__init__.py": "3f19a4d2eabba0d385c8b5fa37502b46f3160cf43830b0629426f8a09c3134e2",
+      "src/judicial_kg/extraction/anchored.py": "2a08516caa96c04d9b93fb5f008fbb4a07614fa185ddc8c9dc0657036c333f82",
+      "src/judicial_kg/extraction/bailian.py": "9c5027dc50064f4b91a509e70d7ba14c8ccfffd48a11fadbc0eb52949099cbc5",
+      "src/judicial_kg/extraction/draft.py": "b5b0b2cb67b2f14a124e42f3740f16e9dababb760e5e1137442acbf7ad772aa1",
+      "src/judicial_kg/extraction/replay.py": "9ed45f94c98490e1ef9b949f2cef114b4c6c9569fad82cda21e4807646af857d",
+      "src/judicial_kg/extraction/run.py": "1fb7c18b4ab3828ffb599507efaec068b3152dc9dd93e26f492933ca35a855dc",
+      "src/judicial_kg/extraction/transport.py": "b52997d72edebe7cf5eb132e1afecdd3061f379e2a78b51b78024e80aeac2652",
+      "src/judicial_kg/extraction/typed.py": "06f5fc23c1f6a3d35ab0adaa6a923bcabcf0878e0a8965a6eaaa5c20836bb960",
+      "src/judicial_kg/graph/__init__.py": "032a9439d377b06902014b1edb83bd80092319a74e65edba614987eb6637a564",
+      "src/judicial_kg/graph/assembly.py": "033eb2fcecad69ed5a0eb27dfd2316eb97653424c36d94857d39e02a797feea5",
+      "src/judicial_kg/graph/diagnostics.py": "2b7da4c407fe4748141b0b4392eb3203307fd2eef4ebfbab24634d3fef2c767f",
+      "src/judicial_kg/graph/run.py": "7c647ba05ab3610a9fff54dbf6f5621e2aeed39562f286428484b8ccba8ea02f",
+      "src/judicial_kg/provenance.py": "19e1042bfc65aed40ad2c1d1d16162f390f705a0add1b053418a6a2d230f7758",
+      "src/judicial_kg/sources/__init__.py": "df86466f13948cd5f2218cc7a19db1bb4ee63a0105add5671ea669a9b4795951",
+      "src/judicial_kg/sources/appealcase.py": "64111809440239d3d2fe91ba5b1a523fc5a7b3ad4c300886f56bac9179ec0f9b",
+      "src/judicial_kg/sources/development.py": "8242b25ffd292a9a2e3a7bd601db678f7907e3ebdf43714408626c1304fd90e1",
+      "src/judicial_kg/sources/qa_inventory.py": "c66062a895d0118f9bdb72294ee917236c4126546df0e60470ce652be92bb2ec",
+      "src/judicial_kg/sources/records.py": "9d5d82d8606062be927a0627c618c0228f5a83ca8e7f1dba70effdf42fd5e736",
+      "src/judicial_kg/sources/spark.py": "e581af751aaf38d8965121fe2b3bab15fa3c7219096fbcac7ebb5083ad349e74",
+      "src/judicial_kg/sources/spark_replay.py": "23f892cb50b3b27183993c1d78b0503e684284530f495070b375eada1e3f8772",
+      "src/judicial_kg/sources/spark_scan.py": "e39e759068a78d2f11dc5acd5249ab4e2d668d8d0e1498eabf1414754b76994b",
+      "src/judicial_kg/validation.py": "0d9a663eed0a32dc9f30df38b9bf61c6c0a54459752387341a49b87203bd32b0",
+      "src/judicial_kg/validation_run.py": "f668c351da90ebbe656826f3ab10a8e6f6d955cb0b328f0417af0f51754fde0e"
+    },
+    "runtime": {
+      "python": "3.12.2",
+      "dependency_lock_sha256": "fd8149e21b03497c0cb89e04307db39b5ee27ab8907e307e395e3c4a6aab42f9"
+    },
+    "inputs": [
+      {
+        "kind": "documents",
+        "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+        "bytes": 302755
+      },
+      {
+        "kind": "documents",
+        "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+        "bytes": 428236
+      },
+      {
+        "kind": "candidates",
+        "sha256": "90d0a1fc1f9983a43ac62a4d729ca420ac2d0628f0b7cb57b748c47d432e226e",
+        "bytes": 212691
+      }
+    ],
+    "outputs": {
+      "diagnostics.json": "38d0249c06927c3c121981de78bd0af2f05c68a02a0fbeb147f09b57f1bb615e",
+      "graph.json": "a9d043311d4289acbd8dce7acca2a81786a340db20a4333d981715a16da09984",
+      "ledger.json": "fab5f9aeb5ce2fab9e4f8cea35ac822999a117174b710f67665b958b4167101b"
+    },
+    "requests_submitted": 0,
+    "validation": {
+      "expected_documents": 36,
+      "source_fields_verified": 156,
+      "attempts_total": 2,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 2,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 34,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 29,
+        "mentions": 29,
+        "contexts": 17,
+        "roles": 43,
+        "events": 22,
+        "statements": 56
+      },
+      "accepted_evidence_spans_replayed": 462,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false
+    },
+    "document_status_counts": {
+      "assembled_candidate": 2,
+      "missing": 34
+    },
+    "documents_assembled": 2,
+    "documents_assembly_failed": 0,
+    "nodes": 524,
+    "edges": 994,
+    "node_counts": {
+      "Actor": 29,
+      "Context": 17,
+      "Document": 2,
+      "Event": 22,
+      "EvidenceSpan": 326,
+      "Mention": 29,
+      "Role": 43,
+      "Statement": 56
+    },
+    "edge_counts": {
+      "about": 56,
+      "attributed_to": 11,
+      "contains": 196,
+      "denotes": 29,
+      "has_mention": 29,
+      "in_context": 121,
+      "participant": 47,
+      "role_of": 43,
+      "supported_by": 462
+    },
+    "assembled_documents_diagnostics": {
+      "assertion_evidence_characters": 1881,
+      "context_evidence_characters": 4967,
+      "literal_name_occurrences_without_mention": 85,
+      "mention_evidence_characters": 157,
+      "source_characters": 4967
+    },
+    "diagnostic_hint_counts": {
+      "joint_attribution_needs_review": 1,
+      "reported_material_in_finding_context": 1
+    },
+    "graph_canonical_sha256": "9ade523ad3c57ab4d67d58366a344750077dce0f80ead64e8df3710b1e88b55d",
+    "cross_document_identity_merges": 0,
+    "semantic_precision_recall_f1": null,
+    "gold_available": false,
+    "requires_user_legal_annotation": false,
+    "semantic_completeness": "not_assessed"
+  },
+  "upstream_replay": {
+    "report_sha256": "16d5c5a53a5ebb7177b7e5de51eccc4ac77dccb85727a0d136367582b9941e12",
+    "source_run_id": "295777abe98a4c28afdb84a2d0f9b3b1",
+    "candidates_hash_matches_saved_replay": true,
+    "original_model_responses_modified": false
+  },
+  "persisted_graph_restored_and_revalidated": true,
+  "restored_validation": {
+    "expected_documents": 36,
+    "source_fields_verified": 156,
+    "attempts_total": 2,
+    "attempts_rejected": 0,
+    "documents_accepted_candidate": 2,
+    "documents_accepted_empty": 0,
+    "documents_rejected": 0,
+    "documents_missing": 34,
+    "issue_counts": {},
+    "accepted_node_counts": {
+      "actors": 29,
+      "mentions": 29,
+      "contexts": 17,
+      "roles": 43,
+      "events": 22,
+      "statements": 56
+    },
+    "accepted_evidence_spans_replayed": 462,
+    "semantic_precision_recall_f1": null,
+    "gold_available": false,
+    "semantic_completeness": "not_assessed",
+    "requires_user_legal_annotation": false
+  },
+  "checks": {
+    "test_count": 184,
+    "ruff": true,
+    "format": true,
+    "reference_files_verified": 9,
+    "git_diff_check": true
+  },
+  "new_local_inference_requests": 0,
+  "new_cloud_inference_requests": 0,
+  "raw_text_or_model_outputs_committed": false,
+  "semantic_precision_recall_f1": null,
+  "remaining_limits": [
+    "joint_speaker_attribution_is_still_singular_in_current_contract",
+    "repeated_literal_name_occurrences_are_hints_not_verified_mentions_or_recall",
+    "court_findings_may_include_reported_material_not_independently_reviewed",
+    "no_cross_document_identity_resolution_or_fact_adjudication",
+    "34_of_36_expected_development_documents_not_extracted",
+    "no_independent_graph_gold_or_frozen_evaluation_split"
+  ],
+  "requires_user_legal_annotation": false
+}
