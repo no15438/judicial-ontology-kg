@@ -8,6 +8,8 @@
 
 已启动新增 8 篇的独立串行运行 `artifacts/qwen-extraction/expansion8-v6/`；本轮终态见 report.json，若 completed=false 不要重复启动。输入重排清单与固定选样记录在 `artifacts/development-expansion-10/`，仍保留完整 36 篇分母。当前普通抽取默认仍是 v5，扩展调用显式用 v6；不会把局部修复或单篇通过当成全图谱语义验证。以下为分阶段历史，以本段和 progress.md 末节为最新。
 
+新增 v7 主体内嵌提及草稿已通过 221 项工程测试，真实验证尚未开始。它针对扩展首篇在根级 Actor 数组中持续枚举 1,030 个编号的问题；不要把待验证修改写成成功。当前扩展批次仍用已冻结的 v6，不要中途替换协议或重复提交。
+
 当前仓库是 `no15438/judicial-ontology-kg`，与旧 `judicial-graphrag` 独立。不要把旧历史和旧系统整体导入，也不要重复创建仓库。
 
 最新用户决定（2026-10-04）：找出并修复抽取问题，后续使用本地模型服务。开发仍在 Mac，调用已有 spark-lan 上的 Qwen；不要修改模型服务或配置收费远程访问。此前已授权的北京百炼两篇试跑已经结束，后续没有新的付费授权。专用密钥仍保留在被忽略的 .env.local（权限 600），不打印、不提交。最新本地修复与运行记录见 [本地抽取](docs/qwen-extraction.md)，云端历史见 [百炼接入](docs/bailian-extraction.md)。

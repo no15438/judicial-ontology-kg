@@ -1189,5 +1189,38 @@
   },
   "semantic_precision_recall_f1": null,
   "requires_user_legal_annotation": false,
-  "raw_data_or_responses_committed": false
+  "raw_data_or_responses_committed": false,
+  "offline_replay": {
+    "local_directory": "artifacts/qwen-extraction/mention-repair-v5-replay",
+    "report_sha256": "7dc0c3179a1c377e0c8ba6d9516c34361814ce46e947cc300af14db4830a40a5",
+    "code_commit": "e7eecb5c5f87d07f5a9983c2c48a7e4ce906f294",
+    "worktree_dirty": false,
+    "requests_submitted": 0,
+    "accepted_candidates_match_saved": true,
+    "outcomes_match_saved": true,
+    "validation": {
+      "expected_documents": 36,
+      "source_fields_verified": 156,
+      "attempts_total": 2,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 2,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 34,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 30,
+        "mentions": 141,
+        "contexts": 24,
+        "roles": 47,
+        "events": 34,
+        "statements": 62
+      },
+      "accepted_evidence_spans_replayed": 623,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false
+    }
+  }
 }

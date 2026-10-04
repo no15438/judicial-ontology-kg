@@ -42,6 +42,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v4",
             "qwen-extraction-v5",
             "qwen-extraction-v6",
+            "qwen-extraction-v7",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
             "qwen-mention-repair-v3",
@@ -116,7 +117,7 @@ def run_extraction(
     root = root.resolve()
     output = safe_output(root, output)
     config = load_config(config_path)
-    from judicial_kg.extraction import anchored, contextual, draft, typed
+    from judicial_kg.extraction import actor_grounded, anchored, contextual, draft, typed
 
     if config["version"].startswith("qwen-mention-repair-") and protocol_override is None:
         raise ValueError("Mention repair requires verified source-run and baseline inputs")
@@ -127,6 +128,7 @@ def run_extraction(
             "qwen-extraction-v4": anchored,
             "qwen-extraction-v5": typed,
             "qwen-extraction-v6": contextual,
+            "qwen-extraction-v7": actor_grounded,
         }[config["version"]]
     )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))

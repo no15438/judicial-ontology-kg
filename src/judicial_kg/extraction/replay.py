@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from judicial_kg.contracts import COLLECTIONS, Contract
-from judicial_kg.extraction import contextual, typed
+from judicial_kg.extraction import actor_grounded, contextual, typed
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import completion_content
 from judicial_kg.sources.development import safe_output, write_json
@@ -20,9 +20,13 @@ def load_saved_run(root: Path, document_paths: list[Path], source_run: Path):
     root, source_run = root.resolve(), source_run.resolve()
     original_bytes = (source_run / "report.json").read_bytes()
     original = strict_json(original_bytes)
-    protocols = {"qwen-extraction-v5": typed, "qwen-extraction-v6": contextual}
+    protocols = {
+        "qwen-extraction-v5": typed,
+        "qwen-extraction-v6": contextual,
+        "qwen-extraction-v7": actor_grounded,
+    }
     if not original["completed"] or original["config"]["version"] not in protocols:
-        raise ValueError("Replay requires a completed v5 or v6 run")
+        raise ValueError("Replay requires a completed v5, v6 or v7 run")
     protocol = protocols[original["config"]["version"]]
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
     if original["ontology_version"] != contract.ontology["version"]:

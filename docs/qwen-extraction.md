@@ -1,6 +1,6 @@
 # 本地 Qwen 抽取
 
-实现位置为 `src/judicial_kg/extraction/`，继续使用开发版 `0.1.0` 本体与最终抽取契约。此阶段是本地模型候选抽取与工程验证，不是专家 gold 或图谱语义准确率评测。
+实现位置为 `src/judicial_kg/extraction/`，v5 使用开发版 `0.1.0`，v6/v7 使用 `0.2.0` 本体与最终抽取契约。此阶段是本地模型候选抽取与工程验证，不是专家 gold 或图谱语义准确率评测。
 
 ## 连接与运行限制
 
@@ -148,3 +148,12 @@ bash scripts/run.sh replay-qwen-mentions \
   --documents artifacts/source-development/spark-documents.json \
   --output artifacts/qwen-extraction/mention-repair-replay-new
 ```
+
+
+## v7 主体内嵌提及草稿（待实跑验证）
+
+新增 8 篇 v6 开发扩展的首篇在 12,288 输出 tokens 时截断。原始响应一直停留在根级 actors 数组，已枚举 1,030 个不同主体 ID，尚未进入 mentions 或 contexts。该响应不生成候选；不能将此失败当作普通正文过长并继续增加输出预算。
+
+`configs/qwen-actor-grounded.json` 显式启用 v7：每个 Actor 必须内嵌至少一个有原文选择器的 Mention，草稿不再分开输出根级 mentions。程序据所属 Actor 填写 mention.actor_id，随后走相同的 v6 严格编译及 0.2.0 最终契约。没有设置任意主体数量上限、自动合并或删除主体，也没有放宽证据和语境要求。保存响应可通过 `replay-qwen` 离线重放；现有局部提及修复命令仍只支持原 v6 草稿。
+
+221 项工程测试通过，包括嵌套草稿等价编译、空壳主体拒收、冲突身份拒收和保存运行离线回放。这仅验证程序；真实失败样本的 v7 重跑尚未开始，不能宣称编号枚举问题已解决。待当前固定 8 篇串行批次完成后，以原失败样本单篇验证，避免并行干扰或把局部修复当成新的独立样本。
