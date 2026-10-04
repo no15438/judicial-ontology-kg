@@ -115,6 +115,21 @@ def test_inverse_mentions_are_not_model_generated_or_silently_deduplicated():
         materialize(json.dumps(value), source(), contract, {})
 
 
+def test_legacy_grounding_reports_every_error_and_distinguishes_missing_text():
+    value = draft()
+    value["mentions"][0]["evidence"].update(quote="MISSING", occurrence=0)
+    value["mentions"].append(
+        {
+            **value["mentions"][0],
+            "id": "m2",
+            "evidence": {"field": "field", "quote": "A🙂", "occurrence": None},
+        }
+    )
+    with pytest.raises(DraftError) as raised:
+        materialize(json.dumps(value), source(), Contract.load(ROOT), {})
+    assert [i["code"] for i in raised.value.issues] == ["quote_missing", "quote_ambiguous"]
+
+
 def test_prompt_cannot_leak_qa_answers_or_reference_labels():
     msg = messages(source(), "instructions", draft_schema(Contract.load(ROOT)))
     assert "HIDDEN_QA" not in json.dumps(msg)

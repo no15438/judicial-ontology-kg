@@ -11,8 +11,9 @@ from judicial_kg.validation_run import strict_json
 
 
 class DraftError(ValueError):
-    def __init__(self, code: str, path: str = "/"):
+    def __init__(self, code: str, path: str = "/", issues=None):
         self.code, self.path = code, path
+        self.issues = issues if issues is not None else [{"code": code, "path": path}]
         super().__init__(code)
 
 
@@ -57,10 +58,12 @@ def resolve_quote(doc: dict, quote: dict) -> dict:
     while (cursor := text.find(needle, cursor)) != -1:
         starts.append(cursor)
         cursor += 1  # Include overlapping occurrences; Unicode code points, not bytes.
+    if not starts:
+        raise DraftError("quote_missing")
     occurrence = quote["occurrence"]
     if occurrence is None:
         if len(starts) != 1:
-            raise DraftError("quote_missing" if not starts else "quote_ambiguous")
+            raise DraftError("quote_ambiguous")
         occurrence = 0
     if type(occurrence) is not int or not 0 <= occurrence < len(starts):
         raise DraftError("quote_occurrence_invalid")
@@ -75,21 +78,36 @@ def materialize(content: str, doc: dict, contract: Contract, provenance: dict) -
         raise DraftError("draft_invalid_json") from None
     errors = list(Draft202012Validator(draft_schema(contract)).iter_errors(draft))
     if errors:
-        error = errors[0]
-        raise DraftError("draft_schema_invalid", "/" + "/".join(map(str, error.path)))
+        issues = [
+            {"code": "draft_schema_invalid", "path": "/" + "/".join(map(str, e.path))}
+            for e in errors
+        ]
+        raise DraftError("draft_schema_invalid", issues[0]["path"], issues)
     record = candidate_record(doc, provenance, [f["name"] for f in doc["fields"]])
+    grounding_issues = []
+
+    def resolve(value, path):
+        try:
+            return resolve_quote(doc, value)
+        except DraftError as error:
+            grounding_issues.append({"code": error.code, "path": path})
+            return None
+
     for key in COLLECTIONS:
         record[key] = copy.deepcopy(draft[key])
         if key == "actors":
             continue
         for index, node in enumerate(record[key]):
-            try:
-                if key == "mentions":
-                    node["evidence"] = resolve_quote(doc, node["evidence"])
-                else:
-                    node["evidence"] = [resolve_quote(doc, quote) for quote in node["evidence"]]
-            except DraftError as error:
-                raise DraftError(error.code, f"/{key}/{index}/evidence") from None
+            path = f"/{key}/{index}/evidence"
+            if key == "mentions":
+                node["evidence"] = resolve(node["evidence"], path)
+            else:
+                node["evidence"] = [
+                    resolve(value, f"{path}/{j}") for j, value in enumerate(node["evidence"])
+                ]
+    if grounding_issues:
+        first = grounding_issues[0]
+        raise DraftError(first["code"], first["path"], grounding_issues)
     seen = set()
     for mention in record["mentions"]:
         span = mention["evidence"]

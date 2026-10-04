@@ -346,7 +346,10 @@ def run_bailian(
         except (DraftError, ValueError, KeyError, TypeError, AttributeError) as error:
             code = error.code if isinstance(error, DraftError) else "protocol_invalid_response"
             outcome.update(
-                status=code, issues=[{"code": code, "path": getattr(error, "path", "/")}]
+                status=code,
+                issues=getattr(
+                    error, "issues", [{"code": code, "path": getattr(error, "path", "/")}]
+                ),
             )
             if code == "protocol_invalid_response":
                 halted = True  # An unaccounted response may still have incurred a charge.
