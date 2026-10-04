@@ -20,6 +20,10 @@ def draft_schema(contract: Contract) -> dict:
     schema = copy.deepcopy(contract.schema)
     schema["properties"] = {key: schema["properties"][key] for key in COLLECTIONS}
     schema["required"] = list(COLLECTIONS)
+    # The model supplies the forward mention->actor link only. Inverse IDs are
+    # deterministic bookkeeping and caused unbounded placeholder-ID generation.
+    del schema["$defs"]["actor"]["properties"]["mention_ids"]
+    schema["$defs"]["actor"]["required"].remove("mention_ids")
     schema["$defs"]["span"] = {
         "type": "object",
         "properties": {
@@ -86,4 +90,13 @@ def materialize(content: str, doc: dict, contract: Contract, provenance: dict) -
                     node["evidence"] = [resolve_quote(doc, quote) for quote in node["evidence"]]
             except DraftError as error:
                 raise DraftError(error.code, f"/{key}/{index}/evidence") from None
+    seen = set()
+    for mention in record["mentions"]:
+        span = mention["evidence"]
+        key = (mention["actor_id"], span["field"], span["start"], span["end"])
+        if key in seen:
+            raise DraftError("duplicate_mention_evidence", "/mentions")
+        seen.add(key)
+    for actor in record["actors"]:
+        actor["mention_ids"] = [m["id"] for m in record["mentions"] if m["actor_id"] == actor["id"]]
     return record

@@ -37,7 +37,7 @@ def source(index=0):
 
 def draft():
     return {
-        "actors": [{"id": "a", "actor_type": "unknown", "mention_ids": ["m"]}],
+        "actors": [{"id": "a", "actor_type": "unknown"}],
         "mentions": [
             {
                 "id": "m",
@@ -92,12 +92,27 @@ def test_materialization_fills_only_trusted_provenance_and_passes_contract():
     result = materialize(json.dumps(draft()), doc, contract, provenance)
     assert result["document_id"] == doc["document_id"]
     assert result["provenance"] == provenance
+    assert result["actors"][0]["mention_ids"] == ["m"]
     assert validate_record(result, doc, contract) == []
     polluted = draft() | {"reference_status": "gold"}
     with pytest.raises(DraftError, match="draft_schema_invalid"):
         materialize(json.dumps(polluted), doc, contract, provenance)
     with pytest.raises(DraftError, match="draft_invalid_json"):
         materialize("```json\n{}\n```", doc, contract, provenance)
+
+
+def test_inverse_mentions_are_not_model_generated_or_silently_deduplicated():
+    contract = Contract.load(ROOT)
+    value = draft()
+    value["actors"][0]["mention_ids"] = ["made_up"]
+    with pytest.raises(DraftError, match="draft_schema_invalid"):
+        materialize(json.dumps(value), source(), contract, {})
+    value = draft()
+    repeated = json.loads(json.dumps(value["mentions"][0]))
+    repeated["id"] = "m2"
+    value["mentions"].append(repeated)
+    with pytest.raises(DraftError, match="duplicate_mention_evidence"):
+        materialize(json.dumps(value), source(), contract, {})
 
 
 def test_prompt_cannot_leak_qa_answers_or_reference_labels():
@@ -175,7 +190,7 @@ def workspace(tmp_path, monkeypatch):
     for filename in (
         "ontology/private-lending-v0.1.json",
         "schemas/extraction-v0.1.schema.json",
-        "prompts/qwen-extraction-v2.txt",
+        "prompts/qwen-extraction-v3.txt",
         "configs/qwen-extraction.json",
         "uv.lock",
     ):

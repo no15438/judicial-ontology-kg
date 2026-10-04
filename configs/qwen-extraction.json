@@ -1,5 +1,5 @@
 {
-  "version": "qwen-extraction-v2",
+  "version": "qwen-extraction-v3",
   "ssh_host": "spark-lan",
   "port": 8003,
   "model": "qwen3.8-flash-next-iq4xs",

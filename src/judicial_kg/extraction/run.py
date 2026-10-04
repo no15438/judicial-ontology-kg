@@ -15,7 +15,7 @@ from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation import validate_record, validate_source
 from judicial_kg.validation_run import strict_json, validate_batch
 
-PROMPT_FILE = "prompts/qwen-extraction-v2.txt"
+PROMPT_FILE = "prompts/qwen-extraction-v3.txt"
 
 
 def load_config(path: Path) -> dict:
@@ -36,7 +36,7 @@ def load_config(path: Path) -> dict:
         if type(config[key]) is not int or not low <= config[key] <= high:
             raise ValueError(f"Invalid extraction config {key}")
     if (
-        config["version"] != "qwen-extraction-v2"
+        config["version"] != "qwen-extraction-v3"
         or not isinstance(config["model"], str)
         or not config["model"]
         or type(config["temperature"]) not in (int, float)
