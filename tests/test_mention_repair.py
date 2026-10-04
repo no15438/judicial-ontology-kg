@@ -78,8 +78,7 @@ def fixture():
                 "choice_id": "p0",
                 "action": "locate",
                 "duplicate_of": None,
-                "span_start": None,
-                "span_end": None,
+                "local_text": None,
                 "mention_kind": None,
                 "reason": "source",
             }
@@ -185,7 +184,7 @@ def saved_fixture(saved_workspace):
         "ontology/private-lending-v0.2.json",
         "schemas/extraction-v0.2.schema.json",
         "prompts/qwen-extraction-v6.txt",
-        "prompts/qwen-mention-repair-v3.txt",
+        "prompts/qwen-mention-repair-v4.txt",
     ):
         (root / name).write_bytes((ROOT / name).read_bytes())
     doc, draft, baseline, _, choices = fixture()
@@ -224,7 +223,7 @@ def saved_fixture(saved_workspace):
             }
         )
     )
-    config["version"] = "qwen-mention-repair-v3"
+    config["version"] = "qwen-mention-repair-v4"
     config_path.write_text(json.dumps(config))
     return root, docs, config_path, run, baseline_path, Client
 
@@ -281,8 +280,7 @@ def test_duplicates_require_explicit_same_actor_same_text_target():
                 "action": "duplicate",
                 "choice_id": None,
                 "duplicate_of": i["duplicate_targets"][0]["mention_id"],
-                "span_start": None,
-                "span_end": None,
+                "local_text": None,
                 "mention_kind": None,
                 "reason": "same metadata occurrence",
             }
@@ -317,12 +315,12 @@ def test_uncertain_choice_cannot_smuggle_a_location():
         apply_choices(draft, plan, choices, CONTRACT)
 
 
-@pytest.mark.parametrize("end", [2, 0, 999, True])
-def test_local_span_uses_original_unicode_characters_and_rejects_bad_bounds(end):
+@pytest.mark.parametrize("text", ["A🙂", "", "absent", True, "A"])
+def test_local_quote_is_unique_and_never_guesses_offsets(text):
     doc = document(
         "metadata",
         {"record_pointer": "/0"},
-        {"field": ("/0/f", "A🙂。")},
+        {"field": ("/0/f", "A🙂 AA。")},
         family_id="family:0",
         allocation="development_exposed",
     )
@@ -349,8 +347,7 @@ def test_local_span_uses_original_unicode_characters_and_rejects_bad_bounds(end)
                 "action": "local_span",
                 "choice_id": None,
                 "duplicate_of": None,
-                "span_start": 0,
-                "span_end": end,
+                "local_text": text,
                 "mention_kind": "description",
                 "reason": "metadata source substring",
             }
@@ -366,7 +363,7 @@ def test_local_span_uses_original_unicode_characters_and_rejects_bad_bounds(end)
             }
         ],
     }
-    if type(end) is not int or end != 2:
+    if text != "A🙂":
         with pytest.raises(DraftError):
             apply_choices(draft, plan, choices, CONTRACT)
         return

@@ -18,8 +18,8 @@ from judicial_kg.sources.development import write_json
 from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation_run import strict_json, validate_batch
 
-PROMPT_FILE = "prompts/qwen-mention-repair-v3.txt"
-VERSION = "qwen-mention-repair-v3"
+PROMPT_FILE = "prompts/qwen-mention-repair-v4.txt"
+VERSION = "qwen-mention-repair-v4"
 
 
 def occurrences(units, text):
@@ -90,11 +90,6 @@ def build_plan(doc, draft, baseline, contract):
             original_unit
             if original_unit and item["original_selector"]["text"] not in original_unit["text"]
             else None
-        )
-        item["character_choices"] = (
-            [{"position": i, "character": c} for i, c in enumerate(original_unit["text"])]
-            if item["original_unit"]
-            else []
         )
         item["choices"] = [
             p
@@ -169,8 +164,7 @@ def response_schema(contract):
                         "action": {"enum": ["locate", "local_span", "duplicate", "uncertain"]},
                         "choice_id": optional_string,
                         "duplicate_of": optional_string,
-                        "span_start": {"type": ["integer", "null"], "minimum": 0},
-                        "span_end": {"type": ["integer", "null"], "minimum": 0},
+                        "local_text": {"type": ["string", "null"], "minLength": 1, "maxLength": 64},
                         "mention_kind": nullable(contract.ontology["mention_kinds"]),
                         "reason": reason,
                     }
@@ -235,21 +229,21 @@ def apply_choices(draft, plan, choices, contract):
         decision = selected[item["item_id"]]
         if decision["action"] == "local_span":
             unit = item["original_unit"]
-            start, end = decision["span_start"], decision["span_end"]
+            quote = decision["local_text"]
             if (
                 unit is None
-                or type(start) is not int
-                or type(end) is not int
-                or not 0 <= start < end <= len(unit["text"])
-                or end - start > 64
+                or not isinstance(quote, str)
+                or not quote
+                or len(quote) > 64
                 or decision["mention_kind"] is None
                 or decision["choice_id"] is not None
                 or decision["duplicate_of"] is not None
             ):
                 raise DraftError("repair_local_span_invalid")
-            quote = unit["text"][start:end]
             positions = occurrences([unit], quote)
-            match = next(p for p in positions if p["start"] == unit["start"] + start)
+            if len(positions) != 1:
+                raise DraftError("repair_local_quote_not_unique")
+            match = positions[0]
             if any(
                 g["actor_id"] == item["actor_id"]
                 and g["field"] == match["field"]
@@ -264,7 +258,7 @@ def apply_choices(draft, plan, choices, contract):
             patched_positions.append(match)
             actions["explicit_local_substring_changed"] += 1
             continue
-        if any(decision[k] is not None for k in ("span_start", "span_end", "mention_kind")):
+        if any(decision[k] is not None for k in ("local_text", "mention_kind")):
             raise DraftError("repair_unused_local_span")
         if decision["action"] == "duplicate":
             targets = [
