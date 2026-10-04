@@ -31,6 +31,12 @@ def main() -> int:
     parser.add_argument("--candidates", type=Path)
     parser.add_argument("--config", type=Path)
     parser.add_argument("--source-run", type=Path)
+    parser.add_argument(
+        "--contract-version",
+        choices=["0.1.0", "0.2.0"],
+        default="0.1.0",
+        help="Contract for offline validation and graph assembly",
+    )
     parser.add_argument("--execute", action="store_true", help="Submit approved cloud requests")
     args = parser.parse_args()
     try:
@@ -40,7 +46,9 @@ def main() -> int:
 
             if not args.documents or args.candidates is None or args.output is None:
                 parser.error("assemble-graph requires --documents, --candidates and a new --output")
-            result = run_assembly(args.root, args.documents, args.candidates, args.output)
+            result = run_assembly(
+                args.root, args.documents, args.candidates, args.output, args.contract_version
+            )
             print(json.dumps(result, ensure_ascii=False, indent=2))
             validation = result["validation"]
             return int(
@@ -101,7 +109,9 @@ def main() -> int:
             if not args.documents or args.candidates is None:
                 parser.error("validate-extractions requires --documents and --candidates")
             output = args.output or args.root / "artifacts/contract-validation"
-            result = run_validation(args.root, args.documents, args.candidates, output)
+            result = run_validation(
+                args.root, args.documents, args.candidates, output, args.contract_version
+            )
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return int(bool(result["attempts_rejected"] or result["documents_missing"]))
         if args.command == "prepare-development":

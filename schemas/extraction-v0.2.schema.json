@@ -1,0 +1,559 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Judicial KG development extraction contract",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "0.2.0"
+    },
+    "ontology_version": {
+      "const": "0.2.0"
+    },
+    "document_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference_status": {
+      "const": "not_graph_gold"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "enum": [
+            "model",
+            "rule",
+            "upstream_label"
+          ]
+        },
+        "producer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "method",
+        "producer",
+        "version",
+        "run_id"
+      ],
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "processed_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "unprocessed_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "semantic_completeness": {
+          "const": "not_assessed"
+        }
+      },
+      "required": [
+        "processed_fields",
+        "unprocessed_fields",
+        "semantic_completeness"
+      ],
+      "additionalProperties": false
+    },
+    "actors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/actor"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "mentions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mention"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "contexts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/context"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/role"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "statements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/statement"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "document_id",
+    "family_id",
+    "reference_status",
+    "provenance",
+    "coverage",
+    "actors",
+    "mentions",
+    "contexts",
+    "roles",
+    "events",
+    "statements"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "span": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_pointer": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_space": {
+          "const": "decoded_published_field_unicode_codepoints"
+        }
+      },
+      "required": [
+        "document_id",
+        "field",
+        "field_sha256",
+        "source_pointer",
+        "start",
+        "end",
+        "quote",
+        "offset_space"
+      ],
+      "additionalProperties": false
+    },
+    "actor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "actor_type": {
+          "enum": [
+            "person",
+            "organization",
+            "court",
+            "unknown"
+          ]
+        },
+        "mention_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "actor_type",
+        "mention_ids"
+      ],
+      "additionalProperties": false
+    },
+    "mention": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "actor_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "kind": {
+          "enum": [
+            "name",
+            "pronoun",
+            "description"
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/span"
+        }
+      },
+      "required": [
+        "id",
+        "actor_id",
+        "kind",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "kind": {
+          "enum": [
+            "party_claim",
+            "party_defense",
+            "court_finding",
+            "court_reasoning",
+            "court_disposition",
+            "court_report",
+            "quoted_material",
+            "procedural_record",
+            "unknown"
+          ]
+        },
+        "parent_context_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/span"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "attributed_actor_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "parent_context_id",
+        "evidence",
+        "attributed_actor_ids"
+      ],
+      "additionalProperties": false
+    },
+    "role": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "actor_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "role": {
+          "enum": [
+            "plaintiff",
+            "defendant",
+            "third_party",
+            "appellant",
+            "appellee",
+            "lender",
+            "borrower",
+            "guarantor",
+            "agent",
+            "other"
+          ]
+        },
+        "context_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "polarity": {
+          "enum": [
+            "affirmed",
+            "negated",
+            "uncertain",
+            "conditional"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/span"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "actor_id",
+        "role",
+        "context_id",
+        "polarity",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "event_type": {
+          "enum": [
+            "loan_agreement",
+            "funds_transfer",
+            "repayment",
+            "guarantee",
+            "demand",
+            "litigation",
+            "other"
+          ]
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "actor_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "role": {
+                "enum": [
+                  "lender",
+                  "borrower",
+                  "transferor",
+                  "transferee",
+                  "guarantor",
+                  "claimant",
+                  "respondent",
+                  "other"
+                ]
+              }
+            },
+            "required": [
+              "actor_id",
+              "role"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "context_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "polarity": {
+          "enum": [
+            "affirmed",
+            "negated",
+            "uncertain",
+            "conditional"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/span"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "event_type",
+        "participants",
+        "context_id",
+        "polarity",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "statement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "subject_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "predicate": {
+          "enum": [
+            "principal_amount",
+            "transfer_amount",
+            "repayment_amount",
+            "interest_amount",
+            "outstanding_amount",
+            "interest_rate",
+            "event_date",
+            "repayment_deadline",
+            "legal_basis",
+            "other"
+          ]
+        },
+        "value": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "money",
+                "rate",
+                "date",
+                "text"
+              ]
+            },
+            "raw": {
+              "type": "string",
+              "minLength": 1
+            },
+            "normalized": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "unit": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "raw",
+            "normalized",
+            "unit"
+          ],
+          "additionalProperties": false
+        },
+        "context_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "polarity": {
+          "enum": [
+            "affirmed",
+            "negated",
+            "uncertain",
+            "conditional"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/span"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "subject_id",
+        "predicate",
+        "value",
+        "context_id",
+        "polarity",
+        "evidence"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

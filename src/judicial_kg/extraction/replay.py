@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from judicial_kg.contracts import COLLECTIONS, Contract
-from judicial_kg.extraction import typed
+from judicial_kg.extraction import contextual, typed
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import completion_content
 from judicial_kg.sources.development import safe_output, write_json
@@ -19,11 +19,15 @@ from judicial_kg.validation_run import strict_json, validate_batch
 def replay_completed(root: Path, document_paths: list[Path], source_run: Path, output: Path):
     root, source_run = root.resolve(), source_run.resolve()
     output = safe_output(root, output)
-    contract = Contract.load(root)
     original_bytes = (source_run / "report.json").read_bytes()
     original = strict_json(original_bytes)
-    if not original["completed"] or original["config"]["version"] != "qwen-extraction-v5":
-        raise ValueError("Replay requires a completed v5 run")
+    protocols = {"qwen-extraction-v5": typed, "qwen-extraction-v6": contextual}
+    if not original["completed"] or original["config"]["version"] not in protocols:
+        raise ValueError("Replay requires a completed v5 or v6 run")
+    protocol = protocols[original["config"]["version"]]
+    contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
+    if original["ontology_version"] != contract.ontology["version"]:
+        raise ValueError("Saved run contract and protocol disagree")
 
     def read_verified(name):
         if Path(name).name != name:
@@ -56,7 +60,7 @@ def replay_completed(root: Path, document_paths: list[Path], source_run: Path, o
         prefix = f"rpc-{call['rpc']:03}"
         request = read_verified(prefix + ".request.json")
         # Bind response order to the exact source payload, not just array position.
-        source = typed.messages(doc, "", {})[-1]
+        source = protocol.messages(doc, "", {})[-1]
         if request["path"] != call["path"] or request["body"]["messages"][-1] != source:
             raise ValueError("Saved request is not bound to this source document")
         responses.append(read_verified(prefix + ".response.bin"))
@@ -71,7 +75,7 @@ def replay_completed(root: Path, document_paths: list[Path], source_run: Path, o
         outcome = outcomes[doc["document_id"]]
         try:
             content, _ = completion_content(payload, original["config"]["model"])
-            record = typed.materialize(
+            record = protocol.materialize(
                 content,
                 doc,
                 contract,
@@ -125,8 +129,8 @@ def replay_completed(root: Path, document_paths: list[Path], source_run: Path, o
             str(p.relative_to(root)): sha256(p.read_bytes())
             for p in sorted((root / "src/judicial_kg").rglob("*.py"))
         },
-        "draft_schema_sha256": canonical_hash(typed.draft_schema(contract)),
-        "value_normalizer_version": typed.NORMALIZER_VERSION,
+        "draft_schema_sha256": canonical_hash(protocol.draft_schema(contract)),
+        "value_normalizer_version": protocol.NORMALIZER_VERSION,
         **contract.versions(),
         "validation": result["summary"],
         "outputs_sha256": {p.name: sha256(p.read_bytes()) for p in sorted(output.iterdir())},

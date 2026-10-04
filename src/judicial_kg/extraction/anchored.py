@@ -178,7 +178,9 @@ def materialize(content: str, doc: dict, contract, provenance: dict) -> dict:
         start = unit["start"] + starts[occurrence]
         return evidence_span(doc, unit["field"], start, start + len(needle))
 
-    record = candidate_record(doc, provenance, [f["name"] for f in doc["fields"]])
+    record = candidate_record(
+        doc, provenance, [f["name"] for f in doc["fields"]], contract.ontology["version"]
+    )
     record["actors"] = copy.deepcopy(draft["actors"])
     for index, mention in enumerate(draft["mentions"]):
         span = quote(mention["evidence"], f"/mentions/{index}/evidence")

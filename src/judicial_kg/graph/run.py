@@ -87,12 +87,18 @@ def assemble_batch(documents: list[dict], lines: list[str], contract: Contract) 
     }
 
 
-def run_assembly(root: Path, document_paths: list[Path], candidates: Path, output: Path) -> dict:
+def run_assembly(
+    root: Path,
+    document_paths: list[Path],
+    candidates: Path,
+    output: Path,
+    contract_version: str = "0.1.0",
+) -> dict:
     root = root.resolve()
     output = safe_output(root, output)
     if output.exists():
         raise ValueError("Graph export requires a new output directory; prior runs are immutable")
-    contract = Contract.load(root)
+    contract = Contract.load(root, contract_version)
     documents, inputs = [], []
     for path in document_paths:
         raw = path.read_bytes()

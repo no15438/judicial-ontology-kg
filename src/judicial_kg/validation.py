@@ -116,13 +116,26 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                 if actor and node["id"] not in actor["mention_ids"]:
                     issue("mention_actor_disagreement", path)
             elif key == "contexts":
-                attribution = node["attributed_actor_id"]
-                actor = reference(attribution, actors, path) if attribution is not None else None
-                if node["kind"] in ("party_claim", "party_defense") and (
-                    actor is None or actor["actor_type"] == "court"
+                if record["schema_version"] == "0.2.0":
+                    attributions = node["attributed_actor_ids"]
+                    attribution_path = path + "/attributed_actor_ids"
+                else:
+                    attribution = node["attributed_actor_id"]
+                    attributions = [] if attribution is None else [attribution]
+                    attribution_path = path + "/attributed_actor_id"
+                speakers = [
+                    reference(identifier, actors, f"{attribution_path}/{j}")
+                    for j, identifier in enumerate(attributions)
+                ]
+                party = node["kind"] in ("party_claim", "party_defense")
+                if party and (
+                    not speakers
+                    or any(actor is None or actor["actor_type"] == "court" for actor in speakers)
                 ):
                     issue("party_attribution_required", path)
-                if node["kind"].startswith("court_") and actor and actor["actor_type"] != "court":
+                if node["kind"].startswith("court_") and any(
+                    actor and actor["actor_type"] != "court" for actor in speakers
+                ):
                     issue("court_attribution_type", path)
                 parent_id = node["parent_context_id"]
                 if parent_id is not None:

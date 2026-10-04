@@ -22,6 +22,19 @@ REFERENCES = {
 }
 
 
+def references(record: dict, collection: str) -> dict:
+    """Select reference cardinality from the explicit record contract, never guess."""
+    version = record["schema_version"]
+    if version not in {"0.1.0", "0.2.0"} or record["ontology_version"] != version:
+        raise ValueError("Unsupported or inconsistent record version")
+    if collection == "contexts" and version == "0.2.0":
+        return {
+            "attributed_actor_ids": ("attributed_to", True),
+            "parent_context_id": ("within_context", False),
+        }
+    return REFERENCES[collection]
+
+
 def node_id(document_id: str, kind: str, local_id: str) -> str:
     # Hash a tuple rather than concatenating IDs with an ambiguous separator.
     return "n:" + canonical_hash([document_id, kind, local_id])
@@ -82,7 +95,7 @@ def project_records(records: list[dict]) -> dict:
             for index, original in enumerate(record[key]):
                 identifier = local[original["id"]]
                 properties = deepcopy(original)
-                for field, (relation, many) in REFERENCES[key].items():
+                for field, (relation, many) in references(record, key).items():
                     refs = properties.pop(field)
                     refs = refs if many else [] if refs is None else [refs]
                     for position, ref in enumerate(refs):
@@ -161,7 +174,7 @@ def restore_records(graph: dict) -> list[dict]:
                 for connection in (e for e in contained if e["properties"]["collection"] == key):
                     node = nodes[connection["target"]]
                     item = deepcopy(node["properties"])
-                    for field, (relation, many) in REFERENCES[key].items():
+                    for field, (relation, many) in references(record, key).items():
                         refs = [
                             nodes[e["target"]]["properties"]["id"]
                             for e in links(node["id"], relation)

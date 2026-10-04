@@ -110,14 +110,20 @@ def validate_batch(documents: list[dict], lines: list[str], contract: Contract) 
     }
 
 
-def run_validation(root: Path, document_paths: list[Path], candidates: Path, output: Path) -> dict:
+def run_validation(
+    root: Path,
+    document_paths: list[Path],
+    candidates: Path,
+    output: Path,
+    contract_version: str = "0.1.0",
+) -> dict:
     root = root.resolve()
     output = safe_output(root, output)
     inputs = [p.resolve() for p in [*document_paths, candidates]]
     destinations = [output / name for name in ("accepted.json", "ledger.json", "report.json")]
     if any(p in destinations for p in inputs):
         raise ValueError("Validation output must not overwrite an input")
-    contract = Contract.load(root)
+    contract = Contract.load(root, contract_version)
     documents, input_files = [], []
     for path in document_paths:
         raw = path.read_bytes()

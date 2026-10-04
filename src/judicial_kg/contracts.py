@@ -10,6 +10,10 @@ from judicial_kg.sources.records import canonical_hash
 
 ONTOLOGY_FILE = "ontology/private-lending-v0.1.json"
 SCHEMA_FILE = "schemas/extraction-v0.1.schema.json"
+CONTRACT_FILES = {
+    "0.1.0": (ONTOLOGY_FILE, SCHEMA_FILE),
+    "0.2.0": ("ontology/private-lending-v0.2.json", "schemas/extraction-v0.2.schema.json"),
+}
 COLLECTIONS = ("actors", "mentions", "contexts", "roles", "events", "statements")
 
 
@@ -83,6 +87,12 @@ def build_schema(ontology: dict) -> dict:
             **contextual,
         ),
     }
+    if ontology["version"] == "0.2.0":
+        context = definitions["context"]
+        del context["properties"]["attributed_actor_id"]
+        context["required"].remove("attributed_actor_id")
+        context["properties"]["attributed_actor_ids"] = array(identifier)
+        context["required"].append("attributed_actor_ids")
     schema = obj(
         schema_version={"const": ontology["version"]},
         ontology_version={"const": ontology["version"]},
@@ -112,9 +122,14 @@ class Contract:
     validator: Draft202012Validator
 
     @classmethod
-    def load(cls, root: Path):
-        ontology = json.loads((root / ONTOLOGY_FILE).read_text())
-        schema = json.loads((root / SCHEMA_FILE).read_text())
+    def load(cls, root: Path, version: str = "0.1.0"):
+        if version not in CONTRACT_FILES:
+            raise ValueError("Unsupported extraction contract version")
+        ontology_file, schema_file = CONTRACT_FILES[version]
+        ontology = json.loads((root / ontology_file).read_text())
+        schema = json.loads((root / schema_file).read_text())
+        if ontology["version"] != version:
+            raise ValueError("Ontology version differs from requested contract")
         if schema != build_schema(ontology):
             raise ValueError("Schema and ontology differ; regenerate the schema explicitly")
         Draft202012Validator.check_schema(schema)
@@ -128,11 +143,13 @@ class Contract:
         }
 
 
-def candidate_record(doc: dict, provenance: dict, processed_fields: list[str]) -> dict:
+def candidate_record(
+    doc: dict, provenance: dict, processed_fields: list[str], version: str = "0.1.0"
+) -> dict:
     """An empty candidate envelope, never evidence that extraction found no facts."""
     return {
-        "schema_version": "0.1.0",
-        "ontology_version": "0.1.0",
+        "schema_version": version,
+        "ontology_version": version,
         "document_id": doc["document_id"],
         "family_id": doc["family_id"],
         "reference_status": "not_graph_gold",

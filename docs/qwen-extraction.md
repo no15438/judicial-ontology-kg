@@ -82,3 +82,18 @@ v4 在干净提交 `334bb6f` 用本地 Qwen 重跑同两篇：均完整返回；
 v5 推理固定在 `793ed34`，两篇均完整返回；一篇通过，另一篇因四个正确但冗余的 kind 字段拒收。`cc72332` 修复兼容性后，原响应离线重放均通过，合计 29 个主体、22 个事件、56 条属性、462 个证据跨度；34 篇未选中仍缺失。5 条日期表达保留原文且 normalized=null。重放没有再次调用模型，不能算作独立样本。原失败与修复后结果分开保存在 [qwen-grounded-report.json](../research/qwen-grounded-report.json)，所有正文仍在忽略目录。165 项工程测试通过；语义准确率与完整性没有获得独立验证。
 
 后续候选图装配已实现：同两篇修复重放输出在 `be6f338` 无损装配为 524 节点和 994 边，并从写盘图还原原记录后重验全部 462 次证据引用。无新增推理；34 篇缺失仍在分母。新的重复字面出现及联合/转述归属诊断仅作为本地抽取改进线索，见 [候选图装配](graph-assembly.md)。
+
+## v6 归属与覆盖开发回归
+
+`configs/qwen-contextual.json` 显式启用 v6 / 契约 0.2.0；旧默认 v5 保留。新提示要求列出共同陈述者、不同位置的可确定提及，以及法院叙述中的独立引述语境。旧提示曾允许省略重复提及，因此旧 85 处字面出现线索不能归因于模型单独失误。
+
+程序仍不自动补 Mention、猜主体或重分语境。新轮温度保持 0.2，输出预留从 8192 调至 12288 以容纳更多提及；不是单因素对照或测速。运行前检查现有服务健康、模型与空闲状态，不修改服务。
+
+```bash
+bash scripts/run.sh extract-qwen --config configs/qwen-contextual.json \
+  --documents artifacts/source-development/appealcase-documents.json \
+  --documents artifacts/source-development/spark-documents.json \
+  --output artifacts/qwen-extraction/contextual-v1
+```
+
+新轮所有原始响应、失败和候选保留在新目录；完整 36 篇分母不变。联合归属、提及或嵌套数量增加本身不构成质量提升；仍需逐项依据原文检查并保留未解决疑点。

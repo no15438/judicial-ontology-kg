@@ -3,11 +3,12 @@
 import json
 from pathlib import Path
 
-from judicial_kg.contracts import ONTOLOGY_FILE, SCHEMA_FILE, build_schema
+from judicial_kg.contracts import CONTRACT_FILES, build_schema
 
 root = Path(__file__).resolve().parents[1]
-ontology = json.loads((root / ONTOLOGY_FILE).read_text())
-path = root / SCHEMA_FILE
-path.parent.mkdir(exist_ok=True)
-path.write_text(json.dumps(build_schema(ontology), ensure_ascii=False, indent=2) + "\n")
-print(SCHEMA_FILE)
+for ontology_file, schema_file in CONTRACT_FILES.values():
+    ontology = json.loads((root / ontology_file).read_text())
+    path = root / schema_file
+    path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(build_schema(ontology), ensure_ascii=False, indent=2) + "\n")
+    print(schema_file)

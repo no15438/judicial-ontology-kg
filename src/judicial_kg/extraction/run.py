@@ -36,7 +36,13 @@ def load_config(path: Path) -> dict:
         if type(config[key]) is not int or not low <= config[key] <= high:
             raise ValueError(f"Invalid extraction config {key}")
     if (
-        config["version"] not in {"qwen-extraction-v3", "qwen-extraction-v4", "qwen-extraction-v5"}
+        config["version"]
+        not in {
+            "qwen-extraction-v3",
+            "qwen-extraction-v4",
+            "qwen-extraction-v5",
+            "qwen-extraction-v6",
+        }
         or not isinstance(config["model"], str)
         or not config["model"]
         or type(config["temperature"]) not in (int, float)
@@ -99,14 +105,16 @@ def run_extraction(
 ) -> dict:
     root = root.resolve()
     output = safe_output(root, output)
-    config, contract = load_config(config_path), Contract.load(root)
-    from judicial_kg.extraction import anchored, draft, typed
+    config = load_config(config_path)
+    from judicial_kg.extraction import anchored, contextual, draft, typed
 
     protocol = {
         "qwen-extraction-v3": draft,
         "qwen-extraction-v4": anchored,
         "qwen-extraction-v5": typed,
+        "qwen-extraction-v6": contextual,
     }[config["version"]]
+    contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
     prompt_file = getattr(protocol, "PROMPT_FILE", PROMPT_FILE)
     prompt = (root / prompt_file).read_text()
     schema = protocol.draft_schema(contract)
