@@ -4,8 +4,10 @@ import http.client
 import json
 import os
 import re
+import ssl
 import stat
 import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -70,7 +72,19 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 class BailianClient:
     def __init__(self, key: str, endpoint: str):
         self._key, self.endpoint = key, base_url(endpoint)
-        self._opener = urllib.request.build_opener(NoRedirect())
+        context = ssl.create_default_context()
+        # Python.org macOS builds can lack a bundled CA file. Add the OS trust
+        # bundle without disabling verification or replacing explicit CA settings.
+        if (
+            sys.platform == "darwin"
+            and not os.environ.get("SSL_CERT_FILE")
+            and ssl.get_default_verify_paths().cafile is None
+            and Path("/etc/ssl/cert.pem").is_file()
+        ):
+            context.load_verify_locations(cafile="/etc/ssl/cert.pem")
+        self._opener = urllib.request.build_opener(
+            NoRedirect(), urllib.request.HTTPSHandler(context=context)
+        )
 
     def call(self, body: dict, timeout: int) -> Response:
         request = urllib.request.Request(
@@ -89,6 +103,13 @@ class BailianClient:
             return Response(None, error.partial, time.monotonic() - started, "transport_failed")
         except http.client.HTTPException:
             return Response(None, b"", time.monotonic() - started, "transport_failed")
+        except urllib.error.URLError as error:
+            code = (
+                "tls_verification_failed"
+                if isinstance(error.reason, ssl.SSLCertVerificationError)
+                else "transport_failed"
+            )
+            return Response(None, b"", time.monotonic() - started, code)
         except (OSError, ValueError):
             # Exception messages can contain transport details; do not log them or retry.
             return Response(None, b"", time.monotonic() - started, "transport_failed")
@@ -277,6 +298,7 @@ def run_bailian(
             (output / f"response-{index:03}.bin").write_bytes(response.raw)
             outcome.update(
                 http_status=response.status,
+                transport_error=response.error,
                 request_elapsed_seconds=response.elapsed_seconds,
                 response_sha256=sha256(response.raw),
             )

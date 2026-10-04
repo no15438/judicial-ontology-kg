@@ -2,6 +2,7 @@
 
 import http.client
 import json
+import ssl
 import subprocess
 import urllib.error
 from pathlib import Path
@@ -234,3 +235,14 @@ def test_partial_http_response_remains_a_failure():
     client._opener = Opener()
     result = client.call({"messages": []}, 10)
     assert result.error == "transport_failed" and result.raw == b"partial response"
+
+
+def test_tls_failure_is_classified_without_logging_key_or_exception_text():
+    class Opener:
+        def open(self, *args, **kwargs):
+            raise urllib.error.URLError(ssl.SSLCertVerificationError("private transport details"))
+
+    client = BailianClient("sk-unit-test-only", ENDPOINT)
+    client._opener = Opener()
+    result = client.call({"messages": []}, 10)
+    assert result.error == "tls_verification_failed" and result.raw == b""

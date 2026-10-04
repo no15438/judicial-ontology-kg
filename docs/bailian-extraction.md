@@ -31,3 +31,9 @@ bash scripts/run.sh extract-bailian --execute \
 完整原始响应、本地请求、候选及逐篇账本放在忽略目录；可提交的报告只有计数、哈希、版本、耗时和费用估算。全部 36 篇仍保留在分母，34 篇未选中的文书不被抹去。结构通过不等于语义正确；输出是模型候选，不是 gold。没有独立适用标注时，图谱语义 P/R/F1 保持缺失，不要求用户提供法律专家标注。
 
 官方依据：[模型与价格](https://help.aliyun.com/zh/model-studio/qwen3-8-max)、[兼容接口与温度](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions)、[JSON 输出](https://help.aliyun.com/zh/model-studio/qwen-structured-output)。
+
+## 本机 TLS 与恢复试跑
+
+首轮 pilot-v1 在 Python 缺少默认 CA 文件时发生传输失败，后续一篇未提交。只读无凭据诊断确认 `SSLCertVerificationError`；加载 macOS `/etc/ssl/cert.pem` 后，HTTPS 请求正常返回未认证 401。客户端仅在 macOS 缺少默认 CA 且没有显式 `SSL_CERT_FILE` 时增加系统 CA，证书验证保持开启。
+
+不覆盖原失败记录，也不自动重试。人工检查后使用 `configs/bailian-recovery.json` 发起同样两篇的恢复试跑：第一次失败调用的 2.029824 元预留仍计入本轮，剩余限额为 2.970176 元；恢复配置将输入预留收紧为 32,768 tokens（两篇的 UTF-8 检查均在范围内），每篇预留 0.98304 元，两篇共 1.96608 元。合并预留 3.995904 元，仍在用户本轮 5 元内。此处是长度和费用界限，不是已撤回的 8K/16K 测速实验。
