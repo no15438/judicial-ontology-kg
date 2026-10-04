@@ -1,13 +1,13 @@
 {
-  "version": "qwen-extraction-v3",
+  "version": "qwen-extraction-v5",
   "ssh_host": "spark-lan",
   "port": 8003,
   "model": "qwen3.8-flash-next-iq4xs",
   "context_tokens": 32768,
-  "max_output_tokens": 6144,
+  "max_output_tokens": 8192,
   "token_margin": 128,
   "request_timeout_seconds": 480,
-  "temperature": 0,
+  "temperature": 0.2,
   "seed": 42,
   "limit_per_source": 1,
   "max_documents": 2

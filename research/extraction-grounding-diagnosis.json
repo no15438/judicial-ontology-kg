@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "purpose": "offline_failure_diagnosis_no_new_inference",
+  "code_commit": "e24b0ca0857dc9e95f76c819c3bf9c1ce25074c9",
+  "old_responses_unmodified": true,
+  "old_cloud_runs": [
+    {
+      "local_response": "artifacts/bailian-extraction/pilot-v2/response-000.bin",
+      "response_sha256": "8db26cb98994e99ba20a9a6f10c343a4086b2992e4137eacc1952da29d4c67d3",
+      "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+      "temperature": 0.7,
+      "finish_reason": "stop",
+      "diagnosis_stage": "draft_grounding",
+      "issues": [
+        {
+          "code": "quote_ambiguous",
+          "path": "/mentions/2/evidence"
+        },
+        {
+          "code": "quote_ambiguous",
+          "path": "/roles/2/evidence/0"
+        }
+      ],
+      "later_contract_checks_completed": false
+    },
+    {
+      "local_response": "artifacts/bailian-extraction/pilot-v2/response-024.bin",
+      "response_sha256": "ab5140bad89a6a94fcd0d2b32b95ee525c2c2edac64c6339ccabf9950cd45505",
+      "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+      "temperature": 0.7,
+      "finish_reason": "stop",
+      "diagnosis_stage": "final_contract",
+      "issues": [
+        {
+          "code": "evidence_outside_context",
+          "path": "/roles/2"
+        },
+        {
+          "code": "evidence_outside_context",
+          "path": "/statements/10"
+        }
+      ],
+      "later_contract_checks_completed": true
+    },
+    {
+      "local_response": "artifacts/bailian-extraction/pilot-v3-low-temperature/response-000.bin",
+      "response_sha256": "a08ba0be7849f7e23bb9f22b4cfb746a54d271e2ee689190572578c048361996",
+      "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+      "temperature": 0.2,
+      "finish_reason": "stop",
+      "diagnosis_stage": "draft_grounding",
+      "issues": [
+        {
+          "code": "quote_missing",
+          "path": "/mentions/7/evidence"
+        }
+      ],
+      "later_contract_checks_completed": false
+    },
+    {
+      "local_response": "artifacts/bailian-extraction/pilot-v3-low-temperature/response-024.bin",
+      "response_sha256": "833da38096985f7e443f7db6c9a97a5aaec044f9a63d778cf5d3c64f58d84218",
+      "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+      "temperature": 0.2,
+      "finish_reason": "stop",
+      "diagnosis_stage": "final_contract",
+      "issues": [
+        {
+          "code": "evidence_outside_context",
+          "path": "/roles/0"
+        },
+        {
+          "code": "evidence_outside_context",
+          "path": "/roles/1"
+        },
+        {
+          "code": "evidence_outside_context",
+          "path": "/roles/2"
+        },
+        {
+          "code": "value_raw_not_in_evidence",
+          "path": "/statements/3/value/raw"
+        },
+        {
+          "code": "event_statement_context_mismatch",
+          "path": "/statements/11"
+        }
+      ],
+      "later_contract_checks_completed": true
+    }
+  ],
+  "issue_counts": {
+    "quote_ambiguous": 2,
+    "evidence_outside_context": 5,
+    "quote_missing": 1,
+    "value_raw_not_in_evidence": 1,
+    "event_statement_context_mismatch": 1
+  },
+  "source_unit_replay": {
+    "documents": 36,
+    "fields": 156,
+    "units": 6452,
+    "lossless_field_reconstruction": true
+  },
+  "findings": [
+    "repeated_quote_missing_disambiguation",
+    "name_quote_in_wrong_source_field",
+    "header_roles_outside_claim_or_hearing_context",
+    "legal_basis_excluded_from_disposition_context",
+    "amount_value_not_present_in_its_evidence",
+    "event_statement_uses_different_context"
+  ],
+  "remediation": [
+    "source_unit_ids_with_exact_substring_selectors",
+    "context_nested_roles_and_events",
+    "event_nested_statements_with_inherited_ids",
+    "raw_value_generated_only_from_verified_selector",
+    "all_grounding_errors_reported_without_relaxing_contract"
+  ],
+  "semantic_precision_recall_f1": null,
+  "gold_available": false,
+  "requires_user_legal_annotation": false
+}

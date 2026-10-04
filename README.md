@@ -23,7 +23,7 @@ bash scripts/run.sh verify-sources
 - [来源适配与开发验证](docs/source-development.md)：24 份 AppealCase 和 12 份 Spark 开发文书的可复跑入口，以及无用户人工 gold 的边界。
 - [最小本体与抽取契约](docs/ontology-contract.md)：开发版概念、证据/语境约束、逐篇失败账本及真实来源探针。
 - [本地 Qwen 抽取](docs/qwen-extraction.md)：局域网串行调用、版本化提示、引用定位、上下文预算与失败留档。
-- [百炼小批抽取](docs/bailian-extraction.md)：当前优先方式，固定云端 Qwen、两篇试抽取及费用预留。
+- [百炼小批抽取](docs/bailian-extraction.md)：已结束的云端试跑、固定模型与费用记录；后续按用户要求使用本地模型。
 - [新架构与迁移范围](docs/architecture.md)：模块边界与尚未实现的部分。
 - [云端环境](docs/cloud-environment.md)：启动方式、网络和 Spark 连接状态。
 - [本地开发](docs/local-development.md)：当前优先方式，Mac 直接通过局域网连接 Spark。

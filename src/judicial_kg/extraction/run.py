@@ -36,7 +36,7 @@ def load_config(path: Path) -> dict:
         if type(config[key]) is not int or not low <= config[key] <= high:
             raise ValueError(f"Invalid extraction config {key}")
     if (
-        config["version"] not in {"qwen-extraction-v3", "qwen-extraction-v4"}
+        config["version"] not in {"qwen-extraction-v3", "qwen-extraction-v4", "qwen-extraction-v5"}
         or not isinstance(config["model"], str)
         or not config["model"]
         or type(config["temperature"]) not in (int, float)
@@ -100,10 +100,14 @@ def run_extraction(
     root = root.resolve()
     output = safe_output(root, output)
     config, contract = load_config(config_path), Contract.load(root)
-    from judicial_kg.extraction import anchored, draft
+    from judicial_kg.extraction import anchored, draft, typed
 
-    protocol = anchored if config["version"] == "qwen-extraction-v4" else draft
-    prompt_file = anchored.PROMPT_FILE if protocol is anchored else PROMPT_FILE
+    protocol = {
+        "qwen-extraction-v3": draft,
+        "qwen-extraction-v4": anchored,
+        "qwen-extraction-v5": typed,
+    }[config["version"]]
+    prompt_file = getattr(protocol, "PROMPT_FILE", PROMPT_FILE)
     prompt = (root / prompt_file).read_text()
     schema = protocol.draft_schema(contract)
     documents, inputs = [], []
@@ -160,6 +164,7 @@ def run_extraction(
         "prompt_sha256": sha256(prompt.encode()),
         "prompt_file": prompt_file,
         "draft_schema_sha256": canonical_hash(schema),
+        "value_normalizer_version": getattr(protocol, "NORMALIZER_VERSION", None),
         **contract.versions(),
         "input_files": inputs,
         "expected_documents": len(documents),

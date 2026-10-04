@@ -206,6 +206,8 @@ def workspace(tmp_path, monkeypatch):
         "ontology/private-lending-v0.1.json",
         "schemas/extraction-v0.1.schema.json",
         "prompts/qwen-extraction-v3.txt",
+        "prompts/qwen-extraction-v4.txt",
+        "prompts/qwen-extraction-v5.txt",
         "configs/qwen-extraction.json",
         "uv.lock",
     ):
@@ -215,6 +217,7 @@ def workspace(tmp_path, monkeypatch):
     config_path = tmp_path / "configs/qwen-extraction.json"
     config = json.loads(config_path.read_text())
     config["limit_per_source"] = 2
+    config["version"] = "qwen-extraction-v3"
     config_path.write_text(json.dumps(config))
     docs_path = tmp_path / "documents.json"
     docs_path.write_text(json.dumps([source(i) for i in range(3)]))
@@ -274,12 +277,13 @@ class SimulatedClient:
 
 
 @pytest.mark.parametrize("missing_quote", [False, True])
-def test_local_runner_uses_anchored_protocol_and_keeps_all_issues(workspace, missing_quote):
+@pytest.mark.parametrize("version", ["v4", "v5"])
+def test_local_runner_uses_anchored_protocol_and_keeps_all_issues(
+    workspace, missing_quote, version
+):
     root, docs, config_path = workspace
-    prompt = root / "prompts/qwen-extraction-v4.txt"
-    prompt.write_bytes((ROOT / "prompts/qwen-extraction-v4.txt").read_bytes())
     config = json.loads(config_path.read_text())
-    config.update(version="qwen-extraction-v4", temperature=0.2)
+    config.update(version=f"qwen-extraction-{version}", temperature=0.2)
     config_path.write_text(json.dumps(config))
 
     class AnchoredClient(SimulatedClient):
@@ -309,7 +313,7 @@ def test_local_runner_uses_anchored_protocol_and_keeps_all_issues(workspace, mis
     report = run_extraction(
         root, [docs], config_path, root / "artifacts/anchored", AnchoredClient()
     )
-    assert report["prompt_file"] == "prompts/qwen-extraction-v4.txt"
+    assert report["prompt_file"] == f"prompts/qwen-extraction-{version}.txt"
     status = "draft_grounding_failed" if missing_quote else "accepted_candidate"
     assert report["document_status_counts"][status] == 2
     if missing_quote:

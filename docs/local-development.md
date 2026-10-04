@@ -23,13 +23,15 @@ bash scripts/check.sh
 
 接续提示：
 
-> 阅读 AGENTS.md、CODEX_HANDOFF.md、docs/progress.md、docs/source-development.md 和 docs/ontology-contract.md。继续使用本机 -current 工作树和 codex/qwen-extraction 分支，不重新创建仓库或导入旧系统。两类来源适配、开发小样、最小本体与抽取契约已实现，接续百炼小批抽取与保留语境的图谱装配。用户无法提供法律人工 gold，不以用户补标为前提；固定审核字段不能当 gold。不配置收费远程连接，不上传案件正文，不修改 Spark 服务。8K/16K 测速请求已撤回。
+> 阅读 AGENTS.md、CODEX_HANDOFF.md、docs/progress.md、docs/source-development.md 和 docs/ontology-contract.md。继续使用本机 -current 工作树和 codex/qwen-extraction 分支，不重新创建仓库或导入旧系统。两类来源适配、开发小样、最小本体与抽取契约已实现，后续使用 Spark 本地 Qwen，接续证据锚定抽取与保留语境的图谱装配。用户无法提供法律人工 gold，不以用户补标为前提；固定审核字段不能当 gold。不配置收费远程连接，不上传案件正文，不修改 Spark 服务。8K/16K 测速请求已撤回。
 
 ## Spark 与模型选择
 
 `spark-lan` / `192.168.1.116` 已于 2026-10-04 实测成功，返回主机名 `spark-f74d`。使用既有 SSH 配置，启用 `BatchMode=yes`、`StrictHostKeyChecking=yes` 和 10 秒连接超时；未更改密钥或主机信任。指定数据目录的盘点记录见 [标注审计](gold-data-audit.md)；连通性是本次观察，不保证未来运行仍可达。
 
-2026-10-04 用户决定优先使用阿里云百炼，暂停本地 Qwen 调参。专用密钥及北京业务空间 Base URL 位于当前工作树被忽略的 .env.local（权限 600），不得读出或提交。已批准固定 qwen3.8-max-0902 和两篇开发文书，首轮累计限额 5 元；后续扩批另定。见 [百炼抽取](bailian-extraction.md)。原始数据和 QA 仍留本机/Spark，仅已批准文书通过推理请求发送到百炼，不上传整个数据集或 GitHub。
+2026-10-04 用户最新要求后续使用本地模型服务，覆盖此前“百炼优先”的决定。当前使用已有 Spark 8003 的 `qwen3.8-flash-next-iq4xs`，运行前只读确认健康、模型、上下文和负载，不改变服务配置。抽取配置与来源片段协议见 [本地 Qwen 抽取](qwen-extraction.md)。
+
+此前百炼两篇、两轮付费试跑已结束，保留历史记录，不自动续费或扩批。专用密钥及北京业务空间 Base URL 仍在被忽略的 .env.local（权限 600），不得读出或提交。旧累计 5 元授权不等于后续云端调用授权。见 [百炼抽取](bailian-extraction.md)。原始数据和 QA 仍留本机/Spark，整个数据集从未上传 GitHub。
 
 本地执行不表示 Codex 助手本身完全离线：代码、数据处理和 SSH 在 Mac 执行，Codex 对话仍使用其产品服务。
 
