@@ -9,7 +9,7 @@ from judicial_kg.contracts import Contract
 from judicial_kg.graph.diagnostics import diagnose_record
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import sha256
-from judicial_kg.validation_run import validate_batch
+from judicial_kg.validation_run import strict_json, validate_batch
 
 
 def attribution(context):
@@ -35,6 +35,12 @@ runs = {}
 accepted = {}
 for label, path, version in [("before", args.before, "0.1.0"), ("after", args.after, "0.2.0")]:
     raw = path.read_bytes()
+    run_report_raw = (path.parent / "report.json").read_bytes()
+    run_report = strict_json(run_report_raw)
+    if not run_report["completed"]:
+        raise ValueError("Cannot compare an unfinished run")
+    if run_report["outputs_sha256"][path.name] != sha256(raw):
+        raise ValueError("Candidates do not match their saved run report")
     result = validate_batch(documents, raw.decode().splitlines(), Contract.load(root, version))
     accepted[label] = {r["document_id"]: r for r in result["accepted_records"]}
     rows = []
@@ -62,6 +68,9 @@ for label, path, version in [("before", args.before, "0.1.0"), ("after", args.af
         )
     runs[label] = {
         "candidate_sha256": sha256(raw),
+        "source_run_report_sha256": sha256(run_report_raw),
+        "source_run_status_counts": run_report["document_status_counts"],
+        "source_run_selected_outcomes": run_report["selected_outcomes"],
         "validation": result["summary"],
         "documents": rows,
     }
@@ -102,7 +111,9 @@ write_json(
             "Prompt, contract and output budget changed together; "
             "different counts are not accuracy or recall gains. "
             "Literal hints depend on names emitted in each run "
-            "and are not a fixed recall denominator."
+            "and are not a fixed recall denominator. "
+            "Candidate validation can mark an extraction failure as missing; "
+            "source-run outcomes retain the actual failure reason."
         ),
     },
 )
