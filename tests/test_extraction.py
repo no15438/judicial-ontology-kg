@@ -175,7 +175,7 @@ def workspace(tmp_path, monkeypatch):
     for filename in (
         "ontology/private-lending-v0.1.json",
         "schemas/extraction-v0.1.schema.json",
-        "prompts/qwen-extraction-v1.txt",
+        "prompts/qwen-extraction-v2.txt",
         "configs/qwen-extraction.json",
         "uv.lock",
     ):
@@ -223,6 +223,8 @@ class SimulatedClient:
         if path == "/tokenize":
             return response({"tokens": [1] * (30000 if self.mode == "oversize" else 100)})
         assert path == "/v1/chat/completions"
+        assert body["response_format"] == {"type": "json_object"}
+        assert "JSON Schema:" in body["messages"][0]["content"]
         if self.mode == "timeout":
             return Response(None, b"partial", 1, "ssh_timeout")
         if self.mode == "interrupt":
@@ -307,3 +309,16 @@ def test_invalid_config_and_blind_test_abort_before_network(workspace):
     with pytest.raises(ValueError, match="development"):
         run_extraction(root, [docs], config, root / "artifacts/run", client)
     assert client.paths == []
+
+
+def test_malformed_health_response_is_recorded_for_all_selected(workspace):
+    root, docs, config = workspace
+
+    class MalformedClient:
+        def call(self, path, body=None, timeout=15):
+            assert path == "/health"
+            return response([])
+
+    report = run_extraction(root, [docs], config, root / "artifacts/run", MalformedClient())
+    assert report["document_status_counts"] == {"not_selected": 1, "preflight_failed": 2}
+    assert report["requests_submitted"] == 0
