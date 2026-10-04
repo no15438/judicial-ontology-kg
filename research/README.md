@@ -10,6 +10,8 @@
 - `development-exposure.json`：从旧本地清单提取的 24 份 AppealCase 已曝光开发文书定位，只传递暴露事实，不采用旧实现或旧评测。
 - `source-development-report.json`：固定干净代码提交的两类来源适配、分组、样本选择与回放结果；只含哈希、定位键和统计，不含文书/QA 正文。复跑见 [来源开发](../docs/source-development.md)。
 - `ontology-contract-report.json`：干净代码 `806664d` 的三次契约 CLI 运行，记录两篇局部候选、36 篇完整分母与负向拒收探针的计数/退出码和输入输出哈希。候选由本会话模型编写，非 Qwen 基线或人工 gold；正文及标签不入库。见 [本体契约](../docs/ontology-contract.md)。
+- `qwen-extraction-report.json` / `bailian-extraction-report.json`：历史本地及百炼试跑，保留原失败、费用和版本，不覆盖为后续结果。
+- `extraction-grounding-diagnosis.json`：四份百炼原始响应的离线重放诊断、错误路径与哈希；36 篇/156 字段/6,452 个来源片段的逐字重建检查。没有新增云端调用，不含原文。
 
 两轮登记分别保留，避免静默覆盖版本差异；“20 项登记”不表示 20 个合格主数据集。当前判定见 [进度](../docs/progress.md)。
 

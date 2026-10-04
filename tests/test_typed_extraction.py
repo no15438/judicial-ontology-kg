@@ -69,6 +69,16 @@ def test_model_cannot_supply_inferred_dates_or_override_fixed_type():
             typed.materialize(json.dumps(value), source(), CONTRACT, PROVENANCE)
 
 
+def test_redundant_kind_is_accepted_only_when_it_agrees_with_ontology():
+    value, prop = typed_draft("legal_basis")
+    prop["value"]["kind"] = "text"
+    record = typed.materialize(json.dumps(value), source(), CONTRACT, PROVENANCE)
+    assert validate_record(record, source(), CONTRACT) == []
+    prop["value"]["kind"] = "money"
+    with pytest.raises(GroundingError):
+        typed.materialize(json.dumps(value), source(), CONTRACT, PROVENANCE)
+
+
 def test_other_retains_explicit_model_kind_and_source_matching_stays_strict():
     value, prop = typed_draft("other")
     with pytest.raises(GroundingError):

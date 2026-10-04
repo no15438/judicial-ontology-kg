@@ -20,6 +20,7 @@ def main() -> int:
             "validate-extractions",
             "extract-qwen",
             "extract-bailian",
+            "replay-qwen",
         ],
     )
     parser.add_argument("--root", type=Path, default=Path.cwd())
@@ -28,10 +29,23 @@ def main() -> int:
     parser.add_argument("--documents", type=Path, action="append")
     parser.add_argument("--candidates", type=Path)
     parser.add_argument("--config", type=Path)
+    parser.add_argument("--source-run", type=Path)
     parser.add_argument("--execute", action="store_true", help="Submit approved cloud requests")
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command == "replay-qwen":
+            from judicial_kg.extraction.replay import replay_completed
+
+            if not args.documents or args.source_run is None or args.output is None:
+                parser.error("replay-qwen requires --documents, --source-run and a new --output")
+            result = replay_completed(args.root, args.documents, args.source_run, args.output)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            accepted = sum(
+                result["document_status_counts"].get(k, 0)
+                for k in ("accepted_candidate", "accepted_empty")
+            )
+            return int(accepted != result["selected_documents"])
         if args.command in {"extract-qwen", "extract-bailian"}:
             from datetime import UTC, datetime
             from uuid import uuid4

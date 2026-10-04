@@ -30,9 +30,15 @@ def draft_schema(contract):
             {
                 "if": {"properties": {"predicate": {"const": "other"}}},
                 "then": {"properties": {"value": {"required": ["kind"]}}},
-                "else": {"properties": {"value": {"properties": {"kind": False}}}},
             }
         ]
+        for predicate, kind in contract.ontology["predicate_value_kinds"].items():
+            node["allOf"].append(
+                {
+                    "if": {"properties": {"predicate": {"const": predicate}}},
+                    "then": {"properties": {"value": {"properties": {"kind": {"const": kind}}}}},
+                }
+            )
     return schema
 
 
