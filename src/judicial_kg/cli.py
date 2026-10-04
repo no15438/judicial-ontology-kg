@@ -21,6 +21,7 @@ def main() -> int:
             "extract-qwen",
             "extract-bailian",
             "replay-qwen",
+            "repair-qwen-mentions",
             "assemble-graph",
         ],
     )
@@ -57,6 +58,24 @@ def main() -> int:
                     or validation["documents_missing"]
                     or result["documents_assembly_failed"]
                 )
+            )
+        if args.command == "repair-qwen-mentions":
+            from judicial_kg.extraction.mention_repair import run_repair
+
+            if not all((args.documents, args.source_run, args.candidates, args.output)):
+                parser.error("repair requires --documents, --source-run, --candidates and --output")
+            result = run_repair(
+                args.root,
+                args.documents,
+                args.source_run,
+                args.candidates,
+                args.config or args.root / "configs/qwen-mention-repair.json",
+                args.output,
+            )
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return int(
+                result["document_status_counts"].get("accepted_candidate", 0)
+                != result["selected_documents"]
             )
         if args.command == "replay-qwen":
             from judicial_kg.extraction.replay import replay_completed

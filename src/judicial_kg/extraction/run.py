@@ -42,6 +42,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v4",
             "qwen-extraction-v5",
             "qwen-extraction-v6",
+            "qwen-mention-repair-v1",
         }
         or not isinstance(config["model"], str)
         or not config["model"]
@@ -101,19 +102,29 @@ def usage_counts(response: dict) -> dict:
 
 
 def run_extraction(
-    root: Path, document_paths: list[Path], config_path: Path, output: Path, client=None
+    root: Path,
+    document_paths: list[Path],
+    config_path: Path,
+    output: Path,
+    client=None,
+    protocol_override=None,
 ) -> dict:
     root = root.resolve()
     output = safe_output(root, output)
     config = load_config(config_path)
     from judicial_kg.extraction import anchored, contextual, draft, typed
 
-    protocol = {
-        "qwen-extraction-v3": draft,
-        "qwen-extraction-v4": anchored,
-        "qwen-extraction-v5": typed,
-        "qwen-extraction-v6": contextual,
-    }[config["version"]]
+    if config["version"] == "qwen-mention-repair-v1" and protocol_override is None:
+        raise ValueError("Mention repair requires verified source-run and baseline inputs")
+    protocol = (
+        protocol_override
+        or {
+            "qwen-extraction-v3": draft,
+            "qwen-extraction-v4": anchored,
+            "qwen-extraction-v5": typed,
+            "qwen-extraction-v6": contextual,
+        }[config["version"]]
+    )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
     prompt_file = getattr(protocol, "PROMPT_FILE", PROMPT_FILE)
     prompt = (root / prompt_file).read_text()
@@ -138,9 +149,13 @@ def run_extraction(
         ):
             selected.append(index)
             per_source[doc["dataset"]] += 1
+    if protocol_override is not None:
+        protocol.check_selection([documents[i] for i in selected], config)
     client = client or SparkClient(config["ssh_host"], config["port"])
     # Never overwrite an earlier trial, including a failed or interrupted trial.
     output.mkdir(parents=True, exist_ok=False)
+    if protocol_override is not None:
+        protocol.save_plan(output)
     run_id = uuid4().hex
     outcomes = [
         {
@@ -183,11 +198,16 @@ def run_extraction(
         "semantic_precision_recall_f1": None,
         "requires_user_legal_annotation": False,
     }
+    if protocol_override is not None:
+        metadata["run_kind"] = "local_qwen_bounded_mention_repair_not_gold"
+        metadata["repair_lineage"] = protocol.lineage
     write_json(output / "selected-documents.json", [documents[i] for i in selected])
     write_json(output / "config.json", config)
     (output / "prompt.txt").write_text(prompt)
 
     def checkpoint():
+        if protocol_override is not None:
+            metadata["repair_decision_counts"] = protocol.decision_counts
         write_json(output / "outcomes.json", outcomes)
         metadata["outcomes_sha256"] = sha256((output / "outcomes.json").read_bytes())
         metadata["selected_outcomes"] = [o.copy() for o in outcomes if o["selected"]]

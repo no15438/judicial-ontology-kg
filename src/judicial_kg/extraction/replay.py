@@ -16,9 +16,8 @@ from judicial_kg.validation import validate_record
 from judicial_kg.validation_run import strict_json, validate_batch
 
 
-def replay_completed(root: Path, document_paths: list[Path], source_run: Path, output: Path):
+def load_saved_run(root: Path, document_paths: list[Path], source_run: Path):
     root, source_run = root.resolve(), source_run.resolve()
-    output = safe_output(root, output)
     original_bytes = (source_run / "report.json").read_bytes()
     original = strict_json(original_bytes)
     protocols = {"qwen-extraction-v5": typed, "qwen-extraction-v6": contextual}
@@ -64,6 +63,15 @@ def replay_completed(root: Path, document_paths: list[Path], source_run: Path, o
         if request["path"] != call["path"] or request["body"]["messages"][-1] != source:
             raise ValueError("Saved request is not bound to this source document")
         responses.append(read_verified(prefix + ".response.bin"))
+    return original_bytes, original, protocol, contract, docs, inputs, selected, calls, responses
+
+
+def replay_completed(root: Path, document_paths: list[Path], source_run: Path, output: Path):
+    root = root.resolve()
+    output = safe_output(root, output)
+    (original_bytes, original, protocol, contract, docs, inputs, selected, calls, responses) = (
+        load_saved_run(root, document_paths, source_run)
+    )
     # Validate all lineage inputs before creating any derived output.
     output.mkdir(parents=True, exist_ok=False)
     outcomes = {
