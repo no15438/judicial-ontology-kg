@@ -82,18 +82,31 @@ for document_id, record in accepted["before"].items():
     locations = {(x["field"], x["start"], x["end"]) for x in baseline_hints}
     current = accepted["after"].get(document_id)
     matched = None
+    old_mentions_without_overlap = None
+    old_locations = {
+        (m["evidence"]["field"], m["evidence"]["start"], m["evidence"]["end"])
+        for m in record["mentions"]
+    }
     if current is not None:
         mention_locations = {
             (m["evidence"]["field"], m["evidence"]["start"], m["evidence"]["end"])
             for m in current["mentions"]
         }
         matched = len(locations & mention_locations)
+        old_mentions_without_overlap = sum(
+            not any(
+                f == new_f and s < new_e and e > new_s for new_f, new_s, new_e in mention_locations
+            )
+            for f, s, e in old_locations
+        )
     fixed_literal_comparison.append(
         {
             "document_id": document_id,
             "baseline_literal_hint_locations": len(locations),
             "after_has_accepted_candidate": current is not None,
             "exact_locations_with_after_mention": matched,
+            "baseline_mention_locations": len(old_locations),
+            "baseline_mentions_without_any_after_overlap": old_mentions_without_overlap,
             "interpretation": "Exact location only; actor identity and true mention not judged",
         }
     )

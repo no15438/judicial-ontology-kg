@@ -2,6 +2,10 @@
 
 核对日期：2026-10-04，Australia/Sydney。
 
+当前最新：Google 项目任务文档与新仓库 Issues #1–13 已更新。0.2.0 多陈述者契约和新旧图谱兼容已实现，194 项测试通过。`47cfa9e` 上的本地 v6 同两篇回归为 1 通过、1 定位失败、34 未选中；没有新增云端调用。下一步先修复 6 处引用定位问题与 3 处旧提及未保留，暂不扩批，默认仍是 v5。详见 [最新回归报告](research/qwen-contextual-report.json) 和 progress.md 末节。
+
+新输出 `artifacts/qwen-extraction/contextual-v1/`；通过的 1 篇图在 `artifacts/graph/contextual-v1/`，204 节点、431 边、168 次证据引用。Neo4j CSV 已独立导出至 `artifacts/neo4j/contextual-v1/`，逐条 payload 校验通过，未加载到 Neo4j。原 524/994 快照保持不变。失败响应不改写，不自动迁移旧记录或补归属。以下为分阶段历史与开发约束，以本段和 progress.md 末节为最新状态。
+
 当前仓库是 `no15438/judicial-ontology-kg`，与旧 `judicial-graphrag` 独立。不要把旧历史和旧系统整体导入，也不要重复创建仓库。
 
 最新用户决定（2026-10-04）：找出并修复抽取问题，后续使用本地模型服务。开发仍在 Mac，调用已有 spark-lan 上的 Qwen；不要修改模型服务或配置收费远程访问。此前已授权的北京百炼两篇试跑已经结束，后续没有新的付费授权。专用密钥仍保留在被忽略的 .env.local（权限 600），不打印、不提交。最新本地修复与运行记录见 [本地抽取](docs/qwen-extraction.md)，云端历史见 [百炼接入](docs/bailian-extraction.md)。
@@ -31,11 +35,11 @@
 
 本机工作树：`/Users/no15438/Documents/Codex/2026-10-02/new-chat-5/judicial-ontology-kg-current`，当前分支 `codex/qwen-extraction`，继承已推送的本体契约分支与来源分支。原同名目录 `judicial-ontology-kg` 是无共同祖先的旧历史 `2eb9811`，保留恢复用途；继续工作使用 `-current` 目录。原始发布物位于 `data/raw/appealcase/`，选中正文位于 `artifacts/source-development/`，契约探针位于 `artifacts/contract-probe/`，均被 Git 忽略。
 
-最新本地 `bash scripts/check.sh` 通过：184 项测试、Ruff、格式、9 份来源参考哈希与 Git 空白检查。来源适配运行固定于干净代码提交 `422f219`。入口 `bash scripts/run.sh prepare-development`；新命令 `validate-extractions` 见本体契约文档。单元测试不是语义图谱质量；真实模型试跑另行记录。8K/16K 测速消息已被用户撤回，本项目未做测速。
+最新本地 `bash scripts/check.sh` 通过：194 项测试、Ruff、格式、9 份来源参考哈希与 Git 空白检查。来源适配运行固定于干净代码提交 `422f219`。入口 `bash scripts/run.sh prepare-development`；新命令 `validate-extractions` 见本体契约文档。单元测试不是语义图谱质量；真实模型试跑另行记录。8K/16K 测速消息已被用户撤回，本项目未做测速。
 
 2026-10-04 10:20（悉尼）定时接续时，确认“测试 Spark 并发上限”任务已完成，且 Spark 8003/8002 健康、运行及排队数均为零，才恢复开发；等待用自动化 `automation-2` 已暂停，避免重复启动。本轮没有推理请求，也未变更 Spark 服务。后续访问仍需以实际服务状态为准。
 
-Drive 中的《01 开发进度与复现入口｜Codex》经原生文档读取确认为空白，不可据标题推断完成进度。Drive 原资料没有被修改。
+Drive 中的《01 开发进度与复现入口｜Codex》接续初期为空白；现已按用户要求写入任务与实际进度，并经原生接口回读验证。原研究资料未改写。
 
 本地 Qwen v1/v2 共四次调用均输出截断，没有接受候选；更换 JSON 解码后仍出现编号循环。v3 代码在 77e67c8 将反向提及索引交给程序，但用户改用云端后没有本地实跑，不能宣称已解决循环，更不能归因于温度。固定失败记录见 research/qwen-extraction-report.json。云端温度 0.7 是默认配置，不是对照实验证据。
 

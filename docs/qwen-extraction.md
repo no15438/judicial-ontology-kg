@@ -97,3 +97,20 @@ bash scripts/run.sh extract-qwen --config configs/qwen-contextual.json \
 ```
 
 新轮所有原始响应、失败和候选保留在新目录；完整 36 篇分母不变。联合归属、提及或嵌套数量增加本身不构成质量提升；仍需逐项依据原文检查并保留未解决疑点。
+
+## v6 两篇回归结果
+
+固定 `47cfa9e` 的两次调用均完整返回：1 篇通过、1 篇因 6 处提及定位问题拒收。36 篇分母保留 34 未选中。通过文书的 16 处旧重复名称线索都有新版对应，但另有 3 处旧提及没有新版重叠提及；不宣称整体覆盖提高。失败草稿中的双主体和嵌套引述不是已接受成果。详见 [报告](../research/qwen-contextual-report.json)。默认 v5 保持不变。
+
+只读比较命令会先验证候选和原运行哈希、逐篇来源，再同时保留抽取失败状态与下游缺失数量。输出只写新的本地忽略路径：
+
+```sh
+PYTHONPATH=src .venv/bin/python scripts/inspect_contextual_run.py \
+  --before artifacts/qwen-extraction/typed-v1-replay/candidates.jsonl \
+  --after artifacts/qwen-extraction/contextual-v1/candidates.jsonl \
+  --documents artifacts/source-development/appealcase-documents.json \
+  --documents artifacts/source-development/spark-documents.json \
+  --output artifacts/qwen-extraction/contextual-comparison-new.json
+```
+
+新 0.2.0 候选离线装配须显式传 `assemble-graph --contract-version 0.2.0`；本轮 1 篇生成 204 节点/431 边，168 次证据还原。未修改旧 Neo4j 图。下一步处理重复引用序号、片段定位漂移及旧提及未保留，再决定扩批。
