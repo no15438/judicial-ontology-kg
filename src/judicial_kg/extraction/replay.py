@@ -1,4 +1,4 @@
-"""Offline recompilation of complete saved v5 runs; never submit model requests."""
+"""Offline recompilation of complete saved v5-v8 runs; no model requests."""
 
 import json
 import subprocess

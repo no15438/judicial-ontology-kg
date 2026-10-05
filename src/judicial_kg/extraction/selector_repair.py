@@ -313,7 +313,7 @@ def prepare_repair(root, document_paths, specification):
             "specification_sha256": sha256(specs_raw),
             "sources": lineage,
             "draft_representation": (
-                "v6 flat draft; v7 nesting flattened and matching redundant types removed; "
+                "v6 flat draft; v7/v8 nesting flattened and matching redundant types removed; "
                 "original responses remain immutable"
             ),
             "baseline_used": False,
