@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from judicial_kg.contracts import Contract
 from judicial_kg.extraction import (
+    checked_forms,
     collective_mentions,
     context_delta,
     context_ids,
@@ -95,6 +96,7 @@ def _run(
         24: typed_owner,
         25: collective_mentions,
         26: grouped_mentions,
+        27: checked_forms,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
@@ -283,6 +285,13 @@ def _run(
             error.code if isinstance(error, DraftError) else "protocol_invalid_response"
         )
         report["issues"] = getattr(error, "issues", [])
+    if version >= 27:
+        report["model_correction_calls"] = sum(
+            s["stage"].endswith("-repair-1") for s in report["stages"]
+        )
+        report["first_pass_accepted"] = (
+            candidate is not None and report["model_correction_calls"] == 0
+        )
     save("accepted", [] if candidate is None else [candidate])
     report["completed"] = True
     report["outputs_sha256"] = {

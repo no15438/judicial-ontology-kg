@@ -284,9 +284,81 @@
         "not_attempted",
         "not_attempted"
       ]
+    },
+    {
+      "run_id": "e2a6f706-4f9a-4a0d-b897-82e630a2aba4",
+      "code_commit": "8eb89845b5babae2ecfc0b6be48df0db9687dfc3",
+      "worktree_dirty": false,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "duplicate_mention_evidence",
+          "path": "/mentions/50"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 27,
+      "observed_cost_cny": "2.326164",
+      "budget_committed_cny": "2.326164",
+      "prior_committed_cny": "7.786752",
+      "version": 25,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 195.796,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
+    },
+    {
+      "run_id": "120837b4-46ce-4e27-b64d-4d11d258ebd6",
+      "code_commit": "b1dcbe95ac747d006e82518e855411ea65d6b465",
+      "worktree_dirty": false,
+      "status": "span_proposals_unresolved",
+      "issues": [
+        {
+          "code": "span_proposals_unresolved",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 21,
+      "observed_cost_cny": "1.785492",
+      "budget_committed_cny": "1.785492",
+      "prior_committed_cny": "10.112916",
+      "version": 26,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 139.665,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
     }
   ],
-  "cumulative_estimated_cny": "7.786752",
+  "cumulative_estimated_cny": "11.898408",
   "authorized_cumulative_cap_cny": "200",
   "semantic_precision_recall_f1": null,
   "gold_available": false,
