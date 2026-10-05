@@ -356,9 +356,148 @@
         "not_attempted",
         "not_attempted"
       ]
+    },
+    {
+      "run_id": "502df5a3-b372-43a1-afad-1341568c706d",
+      "code_commit": "ecfb8299c3761bb987cbf1991ef18188cf3aa0a5",
+      "worktree_dirty": false,
+      "status": "form_replacement_not_in_source",
+      "issues": [
+        {
+          "code": "form_replacement_not_in_source",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 21,
+      "observed_cost_cny": "1.733400",
+      "budget_committed_cny": "1.733400",
+      "prior_committed_cny": "11.898408",
+      "model_correction_calls": 1,
+      "first_pass_accepted": false,
+      "version": 27,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 143.203,
+      "context_stage_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
+    },
+    {
+      "run_id": "03b15df0-99cc-4fd8-9a91-ae0ae99daf47",
+      "code_commit": "2b8aa261c2d57bab0f165db0c75cedac279d7acb",
+      "worktree_dirty": false,
+      "status": "span_proposals_unresolved",
+      "issues": [
+        {
+          "code": "span_proposals_unresolved",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 21,
+      "observed_cost_cny": "1.840644",
+      "budget_committed_cny": "1.840644",
+      "prior_committed_cny": "13.631808",
+      "model_correction_calls": 0,
+      "first_pass_accepted": false,
+      "version": 28,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 159.609,
+      "context_stage_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
+    },
+    {
+      "run_id": "78b578e9-6ba1-4a1f-a955-a482de51c637",
+      "code_commit": "95b1392d8eac01a6e6c95354ca728939a2aa92d0",
+      "worktree_dirty": false,
+      "status": "inventory_unresolved",
+      "issues": [
+        {
+          "code": "inventory_unresolved",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 2,
+      "observed_cost_cny": "0.281988",
+      "budget_committed_cny": "0.281988",
+      "prior_committed_cny": "15.472452",
+      "model_correction_calls": 0,
+      "first_pass_accepted": false,
+      "version": 29,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 32.499
+    },
+    {
+      "run_id": "083f6e2d-d423-4a6d-8daa-81d53d22d3e9",
+      "code_commit": "4153c04ac9c1f37839a47d0a5e92ee5bc0d484e3",
+      "worktree_dirty": false,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/forms"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 39,
+      "observed_cost_cny": "4.198152",
+      "budget_committed_cny": "4.198152",
+      "prior_committed_cny": "15.754440",
+      "model_correction_calls": 1,
+      "first_pass_accepted": false,
+      "version": 30,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 398.625,
+      "context_stage_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted"
+      ]
     }
   ],
-  "cumulative_estimated_cny": "11.898408",
+  "cumulative_estimated_cny": "19.952592",
   "authorized_cumulative_cap_cny": "200",
   "semantic_precision_recall_f1": null,
   "gold_available": false,

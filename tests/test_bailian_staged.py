@@ -12,7 +12,9 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
-@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30])
+@pytest.mark.parametrize(
+    "version", [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+)
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
 def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
@@ -33,7 +35,7 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
             self.count += 1
             if failure == "http":
                 return cloud.Response(503, b"{}", 0.01)
-            if version == 30 and n == 2:
+            if version >= 30 and n == 2:
                 return response(
                     {
                         "model": cloud.MODEL,
@@ -43,7 +45,7 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                         "usage": {"prompt_tokens": 100, "completion_tokens": 100},
                     }
                 )
-            if version == 30 and n > 2:
+            if version >= 30 and n > 2:
                 n -= 1
             payload = json.loads(request["messages"][-1]["content"])
             if n == 0:
@@ -164,7 +166,7 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
         result["requests_submitted"]
         == {
             None: 12
-            if version == 30
+            if version >= 30
             else 11
             if version >= 23
             else 10

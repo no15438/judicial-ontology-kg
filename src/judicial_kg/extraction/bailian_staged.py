@@ -22,6 +22,7 @@ from judicial_kg.extraction import (
     owner_first,
     space_inventory,
     typed_owner,
+    unique_forms,
     value_stage,
 )
 from judicial_kg.extraction import compact_inventory as protocol
@@ -110,6 +111,7 @@ def _run(
         28: fragment_repairs,
         29: described_actors,
         30: augmented_inventory,
+        31: unique_forms,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
