@@ -261,8 +261,9 @@ def prepare_repair(root, document_paths, specification):
             "qwen-extraction-v6",
             "qwen-extraction-v7",
             "qwen-extraction-v8",
+            "qwen-extraction-v9",
         }:
-            raise ValueError("Selector repair requires a completed v6, v7 or v8 source run")
+            raise ValueError("Selector repair requires a completed v6-v9 source run")
         if {d["document_id"]: d for d in source_docs} != all_docs:
             raise ValueError("Source runs and repair must retain the same full denominator")
         targets = spec["document_ids"]
@@ -313,7 +314,7 @@ def prepare_repair(root, document_paths, specification):
             "specification_sha256": sha256(specs_raw),
             "sources": lineage,
             "draft_representation": (
-                "v6 flat draft; v7/v8 nesting flattened and matching redundant types removed; "
+                "v6 flat draft; v7-v9 nesting flattened and matching redundant types removed; "
                 "original responses remain immutable"
             ),
             "baseline_used": False,

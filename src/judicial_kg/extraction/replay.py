@@ -1,4 +1,4 @@
-"""Offline recompilation of complete saved v5-v8 runs; no model requests."""
+"""Offline recompilation of complete saved v5-v9 runs; no model requests."""
 
 import json
 import subprocess
@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from judicial_kg.contracts import COLLECTIONS, Contract
-from judicial_kg.extraction import actor_grounded, contextual, preventive, typed
+from judicial_kg.extraction import actor_grounded, constrained, contextual, preventive, typed
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import completion_content
 from judicial_kg.sources.development import safe_output, write_json
@@ -25,9 +25,10 @@ def load_saved_run(root: Path, document_paths: list[Path], source_run: Path):
         "qwen-extraction-v6": contextual,
         "qwen-extraction-v7": actor_grounded,
         "qwen-extraction-v8": preventive,
+        "qwen-extraction-v9": constrained,
     }
     if not original["completed"] or original["config"]["version"] not in protocols:
-        raise ValueError("Replay requires a completed v5, v6, v7 or v8 run")
+        raise ValueError("Replay requires a completed v5-v9 run")
     protocol = protocols[original["config"]["version"]]
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
     if original["ontology_version"] != contract.ontology["version"]:
@@ -67,6 +68,10 @@ def load_saved_run(root: Path, document_paths: list[Path], source_run: Path):
         source = protocol.messages(doc, "", {})[-1]
         if request["path"] != call["path"] or request["body"]["messages"][-1] != source:
             raise ValueError("Saved request is not bound to this source document")
+        if hasattr(protocol, "response_format") and request["body"].get(
+            "response_format"
+        ) != protocol.response_format(doc, protocol.draft_schema(contract)):
+            raise ValueError("Saved request generation schema is not bound to source and contract")
         responses.append(read_verified(prefix + ".response.bin"))
     return original_bytes, original, protocol, contract, docs, inputs, selected, calls, responses
 

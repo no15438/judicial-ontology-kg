@@ -31,8 +31,11 @@ def report():
     }
 
 
-def test_denominator_includes_preflight_failure_without_request():
-    r = summarize(report())
+@pytest.mark.parametrize("version", ["qwen-extraction-v8", "qwen-extraction-v9"])
+def test_denominator_includes_preflight_failure_without_request(version):
+    source = report()
+    source["config"]["version"] = version
+    r = summarize(source)
     assert r["first_pass_candidate_rate"] == 1 / 3
     assert r["first_pass_failed"] == 2 and r["requests_submitted"] == 2
     assert r["not_selected"] == 33 and r["post_repair_candidate_accepted"] is None

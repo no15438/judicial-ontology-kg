@@ -58,7 +58,9 @@ def test_actor_shells_and_conflicting_identity_are_rejected(change):
         actor_grounded.materialize(json.dumps(new), source(), CONTRACT, PROVENANCE)
 
 
-@pytest.mark.parametrize("version", ["qwen-extraction-v7", "qwen-extraction-v8"])
+@pytest.mark.parametrize(
+    "version", ["qwen-extraction-v7", "qwen-extraction-v8", "qwen-extraction-v9"]
+)
 def test_actor_grounded_run_and_saved_replay(workspace, version):  # noqa: F811
     root, docs, config_path = workspace
     for name in (
@@ -66,6 +68,7 @@ def test_actor_grounded_run_and_saved_replay(workspace, version):  # noqa: F811
         "schemas/extraction-v0.2.schema.json",
         "prompts/qwen-extraction-v7.txt",
         "prompts/qwen-extraction-v8.txt",
+        "prompts/qwen-extraction-v9.txt",
     ):
         (root / name).write_bytes((ROOT / name).read_bytes())
     docs.write_text(json.dumps([source()]))
@@ -76,6 +79,13 @@ def test_actor_grounded_run_and_saved_replay(workspace, version):  # noqa: F811
     class Client(SimulatedClient):
         def call(self, path, body=None, timeout=15):
             if path == "/v1/chat/completions":
+                if version.endswith("v9"):
+                    assert "schema" in body["response_format"]
+                    assert body["response_format"]["schema"]["$defs"]["selector"]["properties"][
+                        "unit_id"
+                    ]["enum"]
+                else:
+                    assert body["response_format"] == {"type": "json_object"}
                 self.paths.append(path)
                 return response(
                     {

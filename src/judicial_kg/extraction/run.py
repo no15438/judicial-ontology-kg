@@ -44,6 +44,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v6",
             "qwen-extraction-v7",
             "qwen-extraction-v8",
+            "qwen-extraction-v9",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
             "qwen-mention-repair-v3",
@@ -126,6 +127,7 @@ def run_extraction(
     from judicial_kg.extraction import (
         actor_grounded,
         anchored,
+        constrained,
         contextual,
         draft,
         preventive,
@@ -145,6 +147,7 @@ def run_extraction(
             "qwen-extraction-v6": contextual,
             "qwen-extraction-v7": actor_grounded,
             "qwen-extraction-v8": preventive,
+            "qwen-extraction-v9": constrained,
         }[config["version"]]
     )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
@@ -317,6 +320,9 @@ def run_extraction(
                     "chat_template_kwargs": {"enable_thinking": False},
                     "response_format": {"type": "json_object"},
                 }
+                if hasattr(protocol, "response_format"):
+                    request["response_format"] = protocol.response_format(doc, schema)
+                    outcome["response_format_sha256"] = canonical_hash(request["response_format"])
                 template = call(
                     "/apply-template",
                     {

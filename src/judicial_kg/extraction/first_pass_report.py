@@ -7,10 +7,11 @@ def summarize(report):
     if (
         report.get("completed") is not True
         or report.get("run_kind") != "local_qwen_development_extraction_not_gold"
-        or report.get("config", {}).get("version") != "qwen-extraction-v8"
+        or report.get("config", {}).get("version")
+        not in {"qwen-extraction-v8", "qwen-extraction-v9"}
         or "repair_lineage" in report
     ):
-        raise ValueError("First-pass summary requires a completed fresh v8 run")
+        raise ValueError("First-pass summary requires a completed fresh v8 or v9 run")
     outcomes = report["selected_outcomes"]
     selected = report["selected_documents"]
     expected = report["expected_documents"]
