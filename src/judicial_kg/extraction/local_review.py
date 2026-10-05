@@ -119,7 +119,7 @@ def response_schema():
     }
 
 
-def apply_choices(draft, plan, choices):
+def stage_choices(draft, plan, choices):
     if canonical_hash(draft) != plan["draft_sha256"]:
         raise ValueError("Local review differs from frozen draft")
     if list(Draft202012Validator(response_schema()).iter_errors(choices)):
@@ -168,8 +168,6 @@ def apply_choices(draft, plan, choices):
                         "status": "explicit_model_rejection_not_gold",
                     }
                 )
-    if pending:
-        raise GroundingError(pending)
     # Preserve ordering/paths while validating updates; removals happen last.
     restored = copy.deepcopy(patched)
     restored["mentions"] = copy.deepcopy(draft["mentions"])
@@ -193,6 +191,13 @@ def apply_choices(draft, plan, choices):
             or references(patched["contexts"], r["original_assertion"]["id"])
         ):
             raise DraftError("local_review_actor_is_referenced")
+    return patched, rejected, pending
+
+
+def apply_choices(draft, plan, choices):
+    patched, rejected, pending = stage_choices(draft, plan, choices)
+    if pending:
+        raise GroundingError(pending)
     return patched, rejected
 
 

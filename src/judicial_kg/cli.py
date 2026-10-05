@@ -30,6 +30,8 @@ def main() -> int:
             "assemble-graph",
             "stage-qwen-selectors",
             "repair-qwen-local",
+            "repair-qwen-actor-type",
+            "replay-qwen-actor-type",
             "replay-qwen-local",
         ],
     )
@@ -39,6 +41,7 @@ def main() -> int:
     parser.add_argument("--documents", type=Path, action="append")
     parser.add_argument("--candidates", type=Path)
     parser.add_argument("--config", type=Path)
+    parser.add_argument("--local-run", type=Path)
     parser.add_argument("--source-run", type=Path)
     parser.add_argument("--repair-run", type=Path)
     parser.add_argument("--repair-spec", type=Path)
@@ -52,6 +55,43 @@ def main() -> int:
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command in {"repair-qwen-actor-type", "replay-qwen-actor-type"}:
+            from judicial_kg.extraction import actor_type_review
+
+            if not all(
+                (args.documents, args.repair_spec, args.source_run, args.local_run, args.output)
+            ):
+                parser.error(
+                    "actor type review requires documents, spec, selector/local source runs, output"
+                )
+            if args.command.startswith("replay-"):
+                if args.repair_run is None:
+                    parser.error("actor type replay requires repair-run")
+                result = actor_type_review.replay_repair(
+                    args.root,
+                    args.documents,
+                    args.repair_spec,
+                    args.source_run,
+                    args.local_run,
+                    args.repair_run,
+                    args.output,
+                )
+                failed = not (
+                    result["accepted_candidates_match_saved"] and result["outcomes_match_saved"]
+                )
+            else:
+                result = actor_type_review.run_repair(
+                    args.root,
+                    args.documents,
+                    args.repair_spec,
+                    args.source_run,
+                    args.local_run,
+                    args.config or args.root / "configs/qwen-actor-type-review-v1.json",
+                    args.output,
+                )
+                failed = any(o["issues"] for o in result["selected_outcomes"])
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return int(failed)
         if args.command == "stage-qwen-selectors":
             from judicial_kg.extraction.selector_stage import prepare_stages
 
