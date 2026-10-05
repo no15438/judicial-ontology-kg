@@ -23,6 +23,8 @@ def main() -> int:
             "replay-qwen",
             "repair-qwen-mentions",
             "replay-qwen-mentions",
+            "repair-qwen-selectors",
+            "replay-qwen-selectors",
             "assemble-graph",
         ],
     )
@@ -34,6 +36,7 @@ def main() -> int:
     parser.add_argument("--config", type=Path)
     parser.add_argument("--source-run", type=Path)
     parser.add_argument("--repair-run", type=Path)
+    parser.add_argument("--repair-spec", type=Path)
     parser.add_argument(
         "--contract-version",
         choices=["0.1.0", "0.2.0"],
@@ -44,6 +47,34 @@ def main() -> int:
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command in {"repair-qwen-selectors", "replay-qwen-selectors"}:
+            from judicial_kg.extraction.selector_repair import replay_repair, run_repair
+
+            if not all((args.documents, args.repair_spec, args.output)):
+                parser.error("selector repair requires documents, repair-spec and new output")
+            if args.command == "replay-qwen-selectors":
+                if args.repair_run is None:
+                    parser.error("selector replay requires repair-run")
+                result = replay_repair(
+                    args.root, args.documents, args.repair_spec, args.repair_run, args.output
+                )
+                successful = (
+                    result["accepted_candidates_match_saved"] and result["outcomes_match_saved"]
+                )
+            else:
+                result = run_repair(
+                    args.root,
+                    args.documents,
+                    args.repair_spec,
+                    args.config or args.root / "configs/qwen-selector-repair-v1.json",
+                    args.output,
+                )
+                successful = (
+                    result["document_status_counts"].get("accepted_candidate", 0)
+                    == result["selected_documents"]
+                )
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return int(not successful)
         if args.command == "assemble-graph":
             from judicial_kg.graph.run import run_assembly
 

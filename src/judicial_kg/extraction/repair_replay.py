@@ -17,14 +17,18 @@ from judicial_kg.validation_run import strict_json, validate_batch
 
 
 def replay_repairs(root, document_paths, source_run, baseline, saved_repair, output):
+    protocol = prepare_repair(root, document_paths, source_run, baseline)
+    return replay_prepared(root, document_paths, saved_repair, output, protocol, VERSION)
+
+
+def replay_prepared(root, document_paths, saved_repair, output, protocol, version):
     root = root.resolve()
     output = safe_output(root, output)
     if output.exists():
         raise ValueError("Repair replay requires a new output directory")
-    protocol = prepare_repair(root, document_paths, source_run, baseline)
     original_raw = (saved_repair / "report.json").read_bytes()
     original = strict_json(original_raw)
-    if not original["completed"] or original["config"]["version"] != VERSION:
+    if not original["completed"] or original["config"]["version"] != version:
         raise ValueError("Replay requires a completed current-version repair run")
     if original["repair_lineage"] != protocol.lineage:
         raise ValueError("Repair replay source lineage mismatch")

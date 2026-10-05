@@ -19,8 +19,7 @@ def draft_schema(contract):
     return typed.draft_schema(contract)
 
 
-def materialize(content, doc, contract, provenance):
-    draft_schema(contract)
+def unpack_draft(content):
     try:
         draft = strict_json(content)
     except (ValueError, TypeError):
@@ -51,4 +50,11 @@ def materialize(content, doc, contract, provenance):
                     ]
                 )
             del mention["actor_type"]
-    return typed.materialize(json.dumps(draft, ensure_ascii=False), doc, contract, provenance)
+    return draft
+
+
+def materialize(content, doc, contract, provenance):
+    draft_schema(contract)
+    return typed.materialize(
+        json.dumps(unpack_draft(content), ensure_ascii=False), doc, contract, provenance
+    )

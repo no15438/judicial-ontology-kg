@@ -48,6 +48,7 @@ def load_config(path: Path) -> dict:
             "qwen-mention-repair-v3",
             "qwen-mention-repair-v4",
             "qwen-mention-repair-v5",
+            "qwen-selector-repair-v1",
         }
         or not isinstance(config["model"], str)
         or not config["model"]
@@ -119,8 +120,8 @@ def run_extraction(
     config = load_config(config_path)
     from judicial_kg.extraction import actor_grounded, anchored, contextual, draft, typed
 
-    if config["version"].startswith("qwen-mention-repair-") and protocol_override is None:
-        raise ValueError("Mention repair requires verified source-run and baseline inputs")
+    if "-repair-" in config["version"] and protocol_override is None:
+        raise ValueError("Repair requires verified immutable source-run inputs")
     protocol = (
         protocol_override
         or {
@@ -148,7 +149,16 @@ def run_extraction(
     for doc in documents:
         validate_source(doc)
     selected, per_source = [], Counter()
-    for index, doc in enumerate(documents):
+    wanted = getattr(protocol_override, "selection_ids", None)
+    if wanted is None:
+        indices = range(len(documents))
+    else:
+        by_id = {d["document_id"]: i for i, d in enumerate(documents)}
+        if len(set(wanted)) != len(wanted) or any(key not in by_id for key in wanted):
+            raise ValueError("Repair target IDs must be unique and present in the full inputs")
+        indices = [by_id[key] for key in wanted]
+    for index in indices:
+        doc = documents[index]
         if (
             len(selected) < config["max_documents"]
             and per_source[doc["dataset"]] < config["limit_per_source"]
@@ -205,7 +215,9 @@ def run_extraction(
         "requires_user_legal_annotation": False,
     }
     if protocol_override is not None:
-        metadata["run_kind"] = "local_qwen_bounded_mention_repair_not_gold"
+        metadata["run_kind"] = getattr(
+            protocol, "RUN_KIND", "local_qwen_bounded_mention_repair_not_gold"
+        )
         metadata["repair_lineage"] = protocol.lineage
     write_json(output / "selected-documents.json", [documents[i] for i in selected])
     write_json(output / "config.json", config)
