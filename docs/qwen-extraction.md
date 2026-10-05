@@ -307,3 +307,5 @@ v11配置为`configs/qwen-extraction-v11-pilot.json`；使用相同完整清单�
 ## 契约0.3的v12试验
 
 配置configs/qwen-extraction-v12-pilot.json；完整输入清单在artifacts/scoped-v12/，输出使用全新artifacts/qwen-extraction/fresh-scoped-v12-spark439，回放使用该路径加-replay。extract-qwen/replay-qwen参数形状不变；离线验证/图装配须明确--contract-version 0.3.0。旧候选不得自动补assertion_evidence来冒充升级。范围、实现和限制见[语境来源分离](scoped-contexts.md)。
+
+v13独立配置configs/qwen-extraction-v13-pilot.json沿用0.3契约和直接范围生成，只对同Actor/kind/精确选择器的已校验Mention回声输出保存复用回执；旧v12重复拒收结果保留。header-diagnostics在直接court_finding范围内保存当事人报告用语坐标提示，不自动改语境、状态或法律标签。所有原RPC/阶段草稿/复用回执均加入哈希及零调用回放，先单篇验证、不扩量。

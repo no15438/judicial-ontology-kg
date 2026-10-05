@@ -116,14 +116,16 @@ def body_messages(doc, prompt, catalog, context, schema):
     return result
 
 
-def extract(doc, prompt, contract, provenance, infer, save):
+def extract(doc, prompt, contract, provenance, infer, save, *, merge=None, on_header=None):
     schema = draft_schema(contract)
     header = strict_json(
         infer(messages(doc, prompt, schema), response_format(doc, schema), "header")
     )
     save("header-draft", header)
     context_first.check_schema(header, schema)
-    compile_checked(header, doc, contract, provenance)
+    header_record = compile_checked(header, doc, contract, provenance)
+    if on_header is not None:
+        on_header(header_record, doc, save)
     plan = {
         "header_sha256": canonical_hash(header),
         "source_units_total": len(source_units(doc)),
@@ -164,7 +166,11 @@ def extract(doc, prompt, contract, provenance, infer, save):
             )
             save(f"body-{index:03}-draft", body)
             context_first.check_schema(body, schema)
-            proposed = identity_first.merge_body(combined, index, body, namespace="v12")
+            proposed = (
+                merge(combined, index, body, save)
+                if merge is not None
+                else identity_first.merge_body(combined, index, body, namespace="v12")
+            )
             # Namespacing is mechanical; no old candidate, context or source is rewritten.
             compile_checked(proposed, doc, contract, provenance)
             combined = proposed
