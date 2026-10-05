@@ -9,7 +9,7 @@ from uuid import uuid4
 
 from judicial_kg.contracts import Contract
 from judicial_kg.extraction import compact_inventory as protocol
-from judicial_kg.extraction import context_delta, context_ids, space_inventory
+from judicial_kg.extraction import context_delta, context_ids, mention_stage, space_inventory
 from judicial_kg.extraction.bailian import MODEL, PRICE_SOURCE, BailianClient, credentials
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import completion_content, extraction_lock, usage_counts
@@ -72,9 +72,13 @@ def _run(
     budget_cny=None,
 ):
     root = root.resolve()
-    selected_protocol = {16: protocol, 17: space_inventory, 18: context_delta, 19: context_ids}[
-        version
-    ]
+    selected_protocol = {
+        16: protocol,
+        17: space_inventory,
+        18: context_delta,
+        19: context_ids,
+        20: mention_stage,
+    }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
         budget = Decimal(budget_cny)

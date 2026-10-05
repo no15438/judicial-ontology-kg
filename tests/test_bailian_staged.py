@@ -12,7 +12,7 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
-@pytest.mark.parametrize("version", [16, 17, 18, 19])
+@pytest.mark.parametrize("version", [16, 17, 18, 19, 20])
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
 def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
@@ -56,6 +56,28 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                     c["attributed_actor_ids"] = ["a"]
                 if version >= 18:
                     value.pop("actors")
+            elif version == 20:
+                phase = (n - 3) % 3
+                if phase == 0:
+                    value = {"forms": ["A🙂"] if n == 3 else []}
+                elif phase == 1:
+                    catalog = payload["catalog"]
+                    spans = (
+                        catalog["proposal_ledger"][0]["span_ids"] if catalog["proposals"] else []
+                    )
+                    value = {
+                        "catalog_sha256": catalog["catalog_sha256"],
+                        "mentions": [{"span_id": spans[0], "actor_id": "a", "kind": "name"}]
+                        if spans
+                        else [],
+                        "proposal_decisions": [
+                            {"proposal_id": "p0", "action": "select", "span_ids": spans[:1]}
+                        ]
+                        if spans
+                        else [],
+                    }
+                else:
+                    value = {"roles": [], "events": [], "statements": []}
             elif n in (3, 5):
                 value = {"forms": []}
             else:
@@ -88,7 +110,13 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
     assert result["status"] == expected
     assert (
         result["requests_submitted"]
-        == {None: 7, "unresolved": 2, "missing_usage": 1, "http": 1, "budget": 0}[failure]
+        == {
+            None: 9 if version == 20 else 7,
+            "unresolved": 2,
+            "missing_usage": 1,
+            "http": 1,
+            "budget": 0,
+        }[failure]
     )
     assert Decimal(result["budget_committed_cny"]) <= Decimal(cloud.CONFIG["budget_cny"])
     if failure in ("http", "missing_usage"):
