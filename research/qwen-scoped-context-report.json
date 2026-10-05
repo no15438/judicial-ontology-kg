@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "run_kind": "scoped_contract_and_staged_development_regression_not_gold",
+  "contract_version": "0.3.0",
+  "expected_documents": 36,
+  "same_exposed_document_reused": true,
+  "independent_test_documents": 0,
+  "historical_v8_first_pass": {
+    "selected": 10,
+    "accepted": 3,
+    "rejected": 6,
+    "truncated": 1
+  },
+  "historical_post_repair_fixed10_snapshot": {
+    "accepted": 7,
+    "unresolved": 3,
+    "not_selected": 26,
+    "unchanged": true
+  },
+  "runs": [
+    {
+      "protocol": "qwen-extraction-v12",
+      "run_id": "da42d22790a54ad2aa46bc1c93a1b200",
+      "code_commit": "7b93d94bef7898dca73bc9b2a7da94fb2c7886f6",
+      "worktree_dirty": false,
+      "run_path": "artifacts/qwen-extraction/fresh-scoped-v12-spark439",
+      "report_sha256": "337262463b2cd3b8da7d980d1dfcbca024718fc2eca6248d40d423e86eb716b5",
+      "selected_documents": 1,
+      "document_status_counts": {
+        "draft_grounding_failed": 1,
+        "not_selected": 35
+      },
+      "requests_submitted": 2,
+      "request_elapsed_seconds": 227.3322337490099,
+      "selected_outcomes": [
+        {
+          "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "duplicate_mention_evidence",
+              "path": "/mentions/2"
+            },
+            {
+              "code": "duplicate_mention_evidence",
+              "path": "/mentions/4"
+            },
+            {
+              "code": "duplicate_mention_evidence",
+              "path": "/mentions/6"
+            }
+          ],
+          "stages": [
+            {
+              "stage": "header",
+              "status": "response_complete",
+              "messages_sha256": "cfa92ef1d233f8a6cbb242b99be8795733b3d58ed95a1e5b667de3633b3ca16e",
+              "response_format_sha256": "66f3198c7f01aff0cf3c167b82114a0e3813a176cc5e2c68cf91f393900c0682",
+              "input_tokens": 6502,
+              "completion_rpc": 7,
+              "request_elapsed_seconds": 145.56246566600748,
+              "usage": {
+                "prompt_tokens": 6502,
+                "completion_tokens": 3484,
+                "total_tokens": 9986
+              }
+            },
+            {
+              "stage": "body-000",
+              "status": "response_complete",
+              "messages_sha256": "9d3641dcd5385a862e305ea251d3418d9192de2871aee69662910a1eebf32e1b",
+              "response_format_sha256": "d7de0d5bcfb402cf2c687a51e00e1e22c5c5b11f1bcca449b322dba4971f39e0",
+              "input_tokens": 5336,
+              "completion_rpc": 11,
+              "request_elapsed_seconds": 81.76976808300242,
+              "usage": {
+                "prompt_tokens": 5336,
+                "completion_tokens": 1934,
+                "total_tokens": 7270
+              }
+            }
+          ],
+          "response_format_sha256": "d7de0d5bcfb402cf2c687a51e00e1e22c5c5b11f1bcca449b322dba4971f39e0",
+          "input_tokens": 11838,
+          "request_elapsed_seconds": 227.3322337490099,
+          "usage": {
+            "prompt_tokens": 11838,
+            "completion_tokens": 5418,
+            "total_tokens": 17256
+          }
+        }
+      ],
+      "header_contract_passed": true,
+      "header_source_units_total": 118,
+      "header_unassigned_source_units": 0,
+      "actors": 9,
+      "contexts": 9,
+      "context_stage_status_counts": {
+        "failed": 1,
+        "not_attempted": 8
+      },
+      "exact_grounded_mention_reuse_receipts": 0,
+      "direct_attribution_review_hint_count": 2,
+      "hint_source": "offline_read_only_diagnostic_of_saved_header",
+      "offline_replay": {
+        "requests_submitted": 0,
+        "outcomes_and_candidates_equal": true,
+        "phase_artifacts_equal": true,
+        "phase_artifacts_verified": 3
+      }
+    },
+    {
+      "protocol": "qwen-extraction-v13",
+      "run_id": "d73d3a560f3a494b829a1313c17e1068",
+      "code_commit": "8ba1e8c2d18bab98f07dca2af48b1c0abb8014db",
+      "worktree_dirty": false,
+      "run_path": "artifacts/qwen-extraction/fresh-scoped-v13-spark439",
+      "report_sha256": "3441db4e94814f5cedaebe0fa28d0571612f08352d4f6e83e1c3c4f41d35a36a",
+      "selected_documents": 1,
+      "document_status_counts": {
+        "draft_grounding_failed": 1,
+        "not_selected": 35
+      },
+      "requests_submitted": 4,
+      "request_elapsed_seconds": 349.770607708022,
+      "selected_outcomes": [
+        {
+          "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/20/evidence"
+            }
+          ],
+          "stages": [
+            {
+              "stage": "header",
+              "status": "response_complete",
+              "messages_sha256": "57a0c127232ca2d20feb0ec4ac73801be7ab840a1326e3b6d4290fb26365cbae",
+              "response_format_sha256": "66f3198c7f01aff0cf3c167b82114a0e3813a176cc5e2c68cf91f393900c0682",
+              "input_tokens": 6630,
+              "completion_rpc": 7,
+              "request_elapsed_seconds": 152.58809412500705,
+              "usage": {
+                "prompt_tokens": 6630,
+                "completion_tokens": 3655,
+                "total_tokens": 10285
+              }
+            },
+            {
+              "stage": "body-000",
+              "status": "response_complete",
+              "messages_sha256": "651f5f3fe8382a7208ddd7d0bee27fc475f44b5f83cfd423cec7d035fdeb999d",
+              "response_format_sha256": "a5ef2f480a5b2a88ad49baeb9ea2c072dcd03eac64e967ea30a4c03e7e84c9bf",
+              "input_tokens": 5545,
+              "completion_rpc": 11,
+              "request_elapsed_seconds": 78.33493462501792,
+              "usage": {
+                "prompt_tokens": 5545,
+                "completion_tokens": 1839,
+                "total_tokens": 7384
+              }
+            },
+            {
+              "stage": "body-001",
+              "status": "response_complete",
+              "messages_sha256": "2cf8a80e68315afc5e12ae7d6405f1c4452fdaa6eabb945ede63d762c2ae665e",
+              "response_format_sha256": "a59566b0f1e7e8a9074de1d7efad3214c949aa518744e3b21a169442ac9fd5c8",
+              "input_tokens": 4853,
+              "completion_rpc": 15,
+              "request_elapsed_seconds": 36.94925991698983,
+              "usage": {
+                "prompt_tokens": 4853,
+                "completion_tokens": 803,
+                "total_tokens": 5656
+              }
+            },
+            {
+              "stage": "body-002",
+              "status": "response_complete",
+              "messages_sha256": "4bbd747c82aceb5a3e99074130df9e480b35f520bd825c43970095b603aa397b",
+              "response_format_sha256": "d8d0341c09ce57793f74e9ab16d3715b25de1eaf6c75b73013cf7dc5cfe0c0bf",
+              "input_tokens": 5248,
+              "completion_rpc": 19,
+              "request_elapsed_seconds": 81.8983190410072,
+              "usage": {
+                "prompt_tokens": 5248,
+                "completion_tokens": 1941,
+                "total_tokens": 7189
+              }
+            }
+          ],
+          "response_format_sha256": "d8d0341c09ce57793f74e9ab16d3715b25de1eaf6c75b73013cf7dc5cfe0c0bf",
+          "input_tokens": 22276,
+          "request_elapsed_seconds": 349.770607708022,
+          "usage": {
+            "prompt_tokens": 22276,
+            "completion_tokens": 8238,
+            "total_tokens": 30514
+          }
+        }
+      ],
+      "header_contract_passed": true,
+      "header_source_units_total": 118,
+      "header_unassigned_source_units": 0,
+      "actors": 11,
+      "contexts": 9,
+      "context_stage_status_counts": {
+        "failed": 1,
+        "not_attempted": 6,
+        "validated": 2
+      },
+      "exact_grounded_mention_reuse_receipts": 1,
+      "direct_attribution_review_hint_count": 2,
+      "hint_source": "saved_new_header_diagnostics",
+      "offline_replay": {
+        "requests_submitted": 0,
+        "outcomes_and_candidates_equal": true,
+        "phase_artifacts_equal": true,
+        "phase_artifacts_verified": 9
+      }
+    }
+  ],
+  "total_requests_submitted": 6,
+  "total_request_elapsed_seconds": 577.1028414570319,
+  "new_whole_documents_accepted": 0,
+  "engineering_checks": {
+    "tests_passed": 408,
+    "ruff_and_format_passed": true,
+    "source_reference_files_verified": 9,
+    "legacy_contract_schemas_preserved": true,
+    "enclosing_and_assertion_graph_roundtrip_tested": true,
+    "raw_runs_and_failed_outputs_preserved": true
+  },
+  "offline_v12_merge_rehearsal": {
+    "fresh_model_calls": 0,
+    "whole_run_replayed": false,
+    "reused_exact_anchors": 3,
+    "header_and_first_body_compilation_passed": true
+  },
+  "remaining_v13_source_location_failure": {
+    "issue_code": "quote_missing_in_unit",
+    "failed_body": "body-002",
+    "exact_literal_options_in_frozen_direct_scope": 6,
+    "automatically_selected_position": false
+  },
+  "remaining_attribution_risk": {
+    "party_reporting_cues_in_direct_finding": 2,
+    "heuristic_hints_not_legal_labels": true,
+    "candidate_automatically_relabelled": false
+  },
+  "new_graph_generated": false,
+  "neo4j_changed": false,
+  "default_changed": false,
+  "sample_expanded": false,
+  "cloud_calls": 0,
+  "service_restarted_or_modified": false,
+  "gold_available": false,
+  "requires_user_legal_annotation": false,
+  "semantic_precision_recall_f1": null,
+  "next_work": [
+    "Bind local Mention generation or bounded correction to frozen exact source-position options; do not auto-select one of six matching occurrences.",
+    "Version a source-bound review of reported party assertions before freezing direct court_finding scope; preserve original source and decisions.",
+    "Rerun this exposed failure after targeted changes, then 026b/442c; expand only after stable whole-document engineering checks and explicit grouping."
+  ]
+}

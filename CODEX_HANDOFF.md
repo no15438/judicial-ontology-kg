@@ -1,18 +1,14 @@
-> 本轮新增契约0.3/v12：包围范围与直接断言来源分离，见 docs/scoped-contexts.md 和进度末节。历史0.2/v10/v11保留；真实v12结果以新运行报告为准。
-
-> 新首轮分阶段设计与两轮真实失败见 docs/experiment-feedback.md、research/qwen-context-first-report.json 和 docs/progress.md 最后节。v10/v11 仅为独立小样本协议试验，历史 v8 3/10 与修复后7/10分别保留；最新真实结果以对应新运行报告为准。
-
 # 新仓库交接
 
-核对日期：2026-10-05，Australia/Sydney。
+核对日期：2026-10-05，Australia/Sydney。当前分支 `codex/qwen-extraction`，使用 `judicial-ontology-kg-current`。
 
-当前分支 `codex/qwen-extraction`。全套 361 项测试及 check.sh 通过。最新本轮修复：独立落款语境审核、选择器 v3 原文字段解耦、逐篇无效决定隔离、仓库运行互斥和忙碌跳过的零调用回放。后续只调用本地 Qwen，不要求用户法律 gold。原文/QA/模型输出/图谱在忽略目录，并按用户授权上传现有 Google 项目文件夹；GitHub 仅代码与元数据，密钥不上传。
+当前新增契约0.3：Context包围范围与直接断言来源分离，父子包含、引用隔离、完整分区和图中covers/assertion_source均已实现。v12/v13在同一已阅Spark4396原文上新抽，不输入旧候选/QA/修复答案；全套408项测试及Ruff/格式/项目检查通过。代码提交7b93d94、8ba1e8c，真实运行均始于干净工作树。设计见docs/scoped-contexts.md，公开结果research/qwen-scoped-context-report.json。
 
-本轮所有推理已结束：v8 原首轮仍为固定 10 篇 3 通过、6 拒收、1 截断。当前累计 7 候选工程接受、3 未解决、26 未选中，完整分母 36。独立落款审核将两角色原样迁入一个新的程序语境，原范围/角色/引用不变；此前截断样本 v9 重抽完整返回但仍因重复提及定位未通过。其余修复新增两篇接受，不以旧修复 10 篇替代本轮结果。
+v12头部9主体/9语境覆盖118原文单元且通过完整范围校验，但首子阶段3条重复身份锚点导致拒收。v13只复用同Actor/kind/精确选择器的已校验提及并保存原响应和别名回执；新实跑前2子语境通过，复用1条既有提及，第三子语境因quote_missing_in_unit拒收。该文字在其直接范围有6个位置选项，不能自动选择。后6语境未尝试，不发布半篇。两轮共6次577.103秒请求耗时；各35篇未选中，零调用回放候选/状态/全部阶段文件一致。
 
-新 7 篇图：2,505 节点/4,843 边、2,067 次证据引用，位于 artifacts/graph/fresh-first-pass-post-scope-round，CSV 在 artifacts/neo4j/fresh-first-pass-post-scope-round；原文校验、无损还原和 CSV payload 一致，尚未载入 Neo4j。所有八个新运行的零调用回放一致；一次 service_busy 跳过由保存的负载回执验证，无伪造模型响应。两运行曾重叠提交，此偏差单独留档，随后加入仓库进程锁，并单独补跑被跳过的一篇。
+尚未解决：直接court_finding内仍有2条当事人报告用语提示；这是来源规则线索，不能当法律gold或自动改kind。下一步先将增量Mention定位绑定有限原文位置选项，再做来源受限的头部归属复核，之后同篇重抽；026b/442c及扩量后置。默认v5不切换，无付费调用、不修改Spark服务，不要求用户法律标注。
 
-剩余三篇：AppealCase 026b… 的局部复核仍无法唯一定位；AppealCase 442c… 的一个事件混用法院说理/裁判结果证据；Spark 4396… 的位置修复文字仍不唯一。先逐项核验与版本化有界修复，必要时固定语境后重抽子记录，不自动扩大范围或删除证据换通过；该分阶段首轮尚未实现。暂不扩量，不切默认 v5，不重复已完成目录。automation-2 保持暂停，不重启服务。完整元数据见 research/qwen-context-scope-regression-report.json。
+历史v8首轮固定10篇仍3通过/6拒收/1截断；旧修复快照7通过/3未解决/26未选中保留，完整36篇分母不变。旧7篇图2505节点/4843边、2067次证据引用仍在artifacts/graph/fresh-first-pass-post-scope-round，本轮没有新接受图/没有导入Neo4j，Desktop旧524/994不变。语义P/R/F1仍null。原文/QA/模型输出/图谱只在忽略目录与用户授权现有Drive文件夹，绝不进Git，密钥不上传；automation-2继续暂停。
 
 此前固定 10 篇经多轮有界修复后工程通过，图为 3,843 节点/7,631 边、3,183 次证据引用，位于 `artifacts/graph/development10-v5/`；不是本轮首轮结果。Neo4j 尚未切换该快照，旧 524/994 展示不变。历史首轮拒收、截断和修复中间结果全部保留。普通抽取默认仍为 v5，不自动扩量或切默认。
 
