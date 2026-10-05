@@ -1,6 +1,8 @@
 # 新仓库交接
 
-核对日期：2026-10-05，Australia/Sydney。当前分支 `codex/qwen-extraction`，使用 `judicial-ontology-kg-current`。
+核对日期：2026-10-05，Australia/Sydney。当前分支 `codex/jev-shadow-evaluation`（从 `600fe87` 新建；原分支保留），使用 `judicial-ontology-kg-current`。
+
+**新增授权工作**：先在新分支实现并评测 [OpenJev 影子对照](docs/jev-shadow-evaluation.md)，所有旧候选不变；主流程 M1–M4 尚待实现。
 
 **当前执行计划**：[工程改进计划](docs/engineering-improvement-plan.md)。按 M1 原文位置接口 → M2 冻结前归属复核 → M3 阶段恢复与修复预算 → M4 三篇/固定十篇完整验收推进。M1–M4 均待实施，本轮只完成计划；首个交付物为 M1 代码与离线回归。历史章节的“下一步”不覆盖此顺序。
 

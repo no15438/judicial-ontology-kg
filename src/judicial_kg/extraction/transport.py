@@ -62,7 +62,16 @@ class SparkClient:
         }
         if path not in allowed or not 0 < timeout <= 900:
             raise ValueError("Unsupported request route or timeout")
-        request = {"port": self.port, "path": path, "body": body, "timeout": timeout}
+        return self._request(path, body, timeout)
+
+    def _request(self, path, body, timeout, *, port=None):
+        """Shared stdin bridge; public clients enforce their own fixed route allowlists."""
+        request = {
+            "port": self.port if port is None else port,
+            "path": path,
+            "body": body,
+            "timeout": timeout,
+        }
         command = [
             "ssh",
             "-T",
