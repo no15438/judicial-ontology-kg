@@ -1,0 +1,81 @@
+{
+  "code_commit": "cc849ba1fab4dcd86b2582d4851874fb3790db65",
+  "worktree_dirty": false,
+  "completed": true,
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "requests_submitted": 1,
+  "selected_outcomes": [
+    {
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "selected": true,
+      "status": "accepted_candidate",
+      "issues": [],
+      "input_tokens": 7601,
+      "request_elapsed_seconds": 12.676952959009213,
+      "usage": {
+        "prompt_tokens": 7601,
+        "completion_tokens": 100,
+        "total_tokens": 7701
+      }
+    }
+  ],
+  "document_status_counts": {
+    "accepted_candidate": 1,
+    "not_selected": 35
+  },
+  "repair_decision_counts": {
+    "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82": {
+      "actor_types_corrected": 1
+    }
+  },
+  "prompt_sha256": "1a10552add8e0048a7373f3c59a9ddbf8d86bcea030ddfda30b3a9aa489a31a0",
+  "input_files": [
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    },
+    {
+      "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+      "bytes": 428236
+    }
+  ],
+  "schema_version": 1,
+  "protocol_version": "qwen-actor-type-review-v1",
+  "source_report_sha256": "689b7f0d702240c3598eebcf8dfb0bd6d6d223930092587b7d94f679e5096e15",
+  "model_request_seconds": 12.677,
+  "offline_replay": {
+    "requests_submitted": 0,
+    "accepted_candidates_match_saved": true,
+    "outcomes_match_saved": true
+  },
+  "parent_rejected_ledger_replay_identical": true,
+  "new_accepted_candidates": 1,
+  "aggregate_development_status": {
+    "attempted_unique_documents": 10,
+    "accepted": 9,
+    "rejected": 1,
+    "not_selected": 26
+  },
+  "graph": {
+    "nodes": 3200,
+    "edges": 6464,
+    "documents_assembled": 9,
+    "documents_assembly_failed": 0,
+    "graph_canonical_sha256": "e19a4af7cfed2e11e2842166c48d76ff48d59c75de155ca46409cdc34361c805"
+  },
+  "evidence_references_replayed": 2708,
+  "csv_payloads_match_graph": true,
+  "neo4j_loaded": false,
+  "tests_passed": 288,
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false,
+  "model": "qwen3.8-flash-next-iq4xs",
+  "temperature": 0.2,
+  "seed": 42,
+  "graph_worktree_dirty": true,
+  "graph_code_commit": "cc849ba1fab4dcd86b2582d4851874fb3790db65",
+  "graph_code_files_match_recorded_commit": true,
+  "graph_reproducibility_note": "Only prior local-review result metadata was uncommitted; every source file hash matches the recorded commit."
+}

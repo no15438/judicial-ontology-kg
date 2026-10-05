@@ -1,0 +1,154 @@
+{
+  "run_kind": "local_qwen_staged_assertion_review_not_gold",
+  "code_commit": "bd275e002f82ef13682c88cd650de230df888df2",
+  "worktree_dirty": false,
+  "completed": true,
+  "expected_documents": 36,
+  "selected_documents": 4,
+  "requests_submitted": 4,
+  "selected_outcomes": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "selected": true,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "local_review_uncertain",
+          "path": "/property/s2"
+        }
+      ],
+      "input_tokens": 24904,
+      "request_elapsed_seconds": 59.12509395802044,
+      "usage": {
+        "prompt_tokens": 24904,
+        "completion_tokens": 633,
+        "total_tokens": 25537
+      }
+    },
+    {
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "selected": true,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "local_review_uncertain",
+          "path": "/context/c8"
+        },
+        {
+          "code": "local_review_uncertain",
+          "path": "/context/c9"
+        },
+        {
+          "code": "local_review_uncertain",
+          "path": "/context/c10"
+        }
+      ],
+      "input_tokens": 24994,
+      "request_elapsed_seconds": 58.66309312498197,
+      "usage": {
+        "prompt_tokens": 24994,
+        "completion_tokens": 617,
+        "total_tokens": 25611
+      }
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "selected": true,
+      "status": "accepted_candidate",
+      "issues": [],
+      "input_tokens": 9452,
+      "request_elapsed_seconds": 18.99276287498651,
+      "usage": {
+        "prompt_tokens": 9452,
+        "completion_tokens": 204,
+        "total_tokens": 9656
+      }
+    },
+    {
+      "document_id": "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+      "selected": true,
+      "status": "accepted_candidate",
+      "issues": [],
+      "input_tokens": 11928,
+      "request_elapsed_seconds": 17.460452083003474,
+      "usage": {
+        "prompt_tokens": 11928,
+        "completion_tokens": 97,
+        "total_tokens": 12025
+      }
+    }
+  ],
+  "document_status_counts": {
+    "accepted_candidate": 2,
+    "draft_grounding_failed": 2,
+    "not_selected": 32
+  },
+  "repair_decision_counts": {
+    "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998": {
+      "context": 0,
+      "mention": 2,
+      "property": 0,
+      "actor": 0
+    },
+    "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49": {
+      "context": 0,
+      "mention": 0,
+      "property": 0,
+      "actor": 1
+    }
+  },
+  "prompt_sha256": "f9b650ef13d0225f1e6120a063bf9aea41c32a3b76850995d95ee79497a3aac5",
+  "input_files": [
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    },
+    {
+      "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+      "bytes": 428236
+    }
+  ],
+  "schema_version": 1,
+  "protocol_version": "qwen-local-review-v1",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "temperature": 0.2,
+  "seed": 42,
+  "source_report_sha256": "f8ef941bc8880d4a5f5cdcd0d65210fef9d39f68dedeaecf7448f4b500033efb",
+  "model_request_seconds": 154.241,
+  "offline_replay": {
+    "requests_submitted": 0,
+    "accepted_candidates_match_saved": true,
+    "outcomes_match_saved": true
+  },
+  "staged_selector_decisions": {
+    "version": "selector-stage-v1",
+    "requests_submitted": 0,
+    "expected_documents": 36,
+    "selected_documents": 5,
+    "document_status_counts": {
+      "unresolved": 4,
+      "validated_parent_candidate": 1
+    },
+    "parent_report_sha256": "16ea1b9e13b35cceb991207ab1b8432e1624385130c759583a6ecbece18c3ca5",
+    "parent_replay_verified": true,
+    "resolved_decisions": 18,
+    "pending_decisions": 15,
+    "stages_sha256": "207748998088b27af49661912d8a5e9413c9c229c14f0a90fcd69cf78e1ec9b9",
+    "semantic_precision_recall_f1": null
+  },
+  "new_accepted_candidates": 2,
+  "aggregate_at_end_of_local_round": {
+    "accepted": 8,
+    "rejected": 2,
+    "not_selected": 26
+  },
+  "tests": {
+    "passed": 288,
+    "new_tests_this_turn": 29,
+    "at_original_run": 279
+  },
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false,
+  "rejected_assertions_replay_identical": true
+}
