@@ -10,7 +10,7 @@ flowchart LR
     C --> D[结构、证据与语境校验]
     D --> E[文书内候选图装配与无损还原]
     D --> H[逐篇失败与拒收账本]
-    H -.指定提及问题.-> R[有界模型决策与派生草稿]
+    H -.冻结的定位/归属/范围问题.-> R[有界模型决策与派生草稿]
     R --> D
     E --> N[本地 Neo4j 快照]
     B --> G[声明覆盖范围的参考资料；独立 gold 缺失]
@@ -46,3 +46,8 @@ flowchart LR
 生成约束现分两层：v9将结构Schema及当前来源片段ID用于服务端解码，唯一性与条件规则仍本地严格校验；选择器/局部复核v2另按冻结目录限制项目ID、数量和短理由。生成约束不能保证来源文字、主体指代或归属正确，模型语义及动作/理由一致性仍可能失败。每次修复保存不支持断言的明确拒绝账本，并在接受前完整回放来源。实跑结果与剩余卡点见research/qwen-fresh-followup-repair-report.json，默认v5未更换。
 
 服务端能力依据：[llama.cpp服务接口](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md)、[JSON Schema语法及限制](https://github.com/ggml-org/llama.cpp/blob/master/grammars/README.md)。本轮实际请求与响应另有独立哈希，文档能力不能替代本机端到端验证。
+
+
+新增 context_scope_review 为完整草稿的子记录范围提供冻结目录审核：只迁入同类型/同陈述者/同父语境的证据完整目标，或把有定位姓名的程序落款人员角色独立成程序语境；全部原断言和证据保持不变，原语境不扩大。选择器v3避免原文字段继承选项ID枚举；旧v2保留可回放。无效决定按文书隔离，不自动改为不确定；仓库进程锁覆盖本地运行预检和推理，外部调用仍由负载检查防护。实际新结果见research/qwen-context-scope-regression-report.json。
+
+剩余事件混用说理与裁判结果证据尚未修复。按固定语境分阶段抽子记录是后续方案，当前并未实施；不把有界后处理的接受率当首轮改进或语义质量。
