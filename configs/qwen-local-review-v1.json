@@ -9,6 +9,6 @@
   "request_timeout_seconds": 750,
   "temperature": 0.2,
   "seed": 42,
-  "limit_per_source": 1,
+  "limit_per_source": 2,
   "max_documents": 4
 }

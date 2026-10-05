@@ -122,7 +122,9 @@ def run_extraction(
     config = load_config(config_path)
     from judicial_kg.extraction import actor_grounded, anchored, contextual, draft, typed
 
-    if "-repair-" in config["version"] and protocol_override is None:
+    if (
+        "-repair-" in config["version"] or "-review-" in config["version"]
+    ) and protocol_override is None:
         raise ValueError("Repair requires verified immutable source-run inputs")
     protocol = (
         protocol_override
