@@ -1,0 +1,80 @@
+{
+  "run_kind": "offline_previous_repaired_snapshot_participant_hints_not_gold",
+  "model_requests": 0,
+  "graph_sha256": "2cf97d69a05da8246e69c649df290ee7196603cd535ebe95f9dc1de93cb0118a",
+  "records_source_revalidated": 10,
+  "event_counts": {
+    "litigation": 21,
+    "loan_agreement": 46,
+    "funds_transfer": 22,
+    "other": 26,
+    "repayment": 22,
+    "guarantee": 9,
+    "demand": 5
+  },
+  "hint_counts": {
+    "participant_pair_incomplete": 5
+  },
+  "candidate_modified": false,
+  "semantic_precision_recall_f1": null,
+  "documents": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "event_count": 13,
+      "hint_counts": {}
+    },
+    {
+      "document_id": "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+      "event_count": 23,
+      "hint_counts": {
+        "participant_pair_incomplete": 4
+      }
+    },
+    {
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "event_count": 20,
+      "hint_counts": {}
+    },
+    {
+      "document_id": "appealcase:6c2f27fa07e45ca57c315183a4d9bdf3675ebf3f699ad4be467687f47996bb00",
+      "event_count": 12,
+      "hint_counts": {}
+    },
+    {
+      "document_id": "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+      "event_count": 24,
+      "hint_counts": {
+        "participant_pair_incomplete": 1
+      }
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "event_count": 13,
+      "hint_counts": {}
+    },
+    {
+      "document_id": "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+      "event_count": 15,
+      "hint_counts": {}
+    },
+    {
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "event_count": 14,
+      "hint_counts": {}
+    },
+    {
+      "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+      "event_count": 10,
+      "hint_counts": {}
+    },
+    {
+      "document_id": "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+      "event_count": 7,
+      "hint_counts": {}
+    }
+  ],
+  "observed_at_utc": "2026-10-05T05:45:15.880196+00:00",
+  "code_commit": "a0c09e2577202ff0cf148ef9d40ea5f83fcc6721",
+  "diagnostic_version": "event-participant-diagnostics-v1",
+  "interpretation": "Each hint needs review; missing roles need not be extraction errors. No direction inferred across events or contexts."
+}
