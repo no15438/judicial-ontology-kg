@@ -1,8 +1,10 @@
 """Serial, bounded local-Qwen development runs with an explicit outcome per source."""
 
+import fcntl
 import json
 import subprocess
 from collections import Counter
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
@@ -117,7 +119,30 @@ def usage_counts(response: dict) -> dict:
     return numeric
 
 
-def run_extraction(
+@contextmanager
+def extraction_lock(root):
+    """Serialize local runners in this checkout, including preflight and failure exits."""
+    folder = root.resolve() / "local"
+    folder.mkdir(parents=True, exist_ok=True)
+    with (folder / "qwen-extraction.lock").open("a") as handle:
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise ValueError(
+                "Another Qwen extraction run holds this repository's service lock"
+            ) from None
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
+def run_extraction(root, document_paths, config_path, output, client=None, protocol_override=None):
+    with extraction_lock(root):
+        return _run_extraction(root, document_paths, config_path, output, client, protocol_override)
+
+
+def _run_extraction(
     root: Path,
     document_paths: list[Path],
     config_path: Path,
@@ -231,6 +256,7 @@ def run_extraction(
         "expected_documents": len(documents),
         "selected_documents": len(selected),
         "requests_submitted": 0,
+        "serial_service_guard": "repository_process_lock",
         "model_weight_hash_verified": False,
         "gold_available": False,
         "semantic_precision_recall_f1": None,

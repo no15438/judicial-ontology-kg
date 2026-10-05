@@ -399,3 +399,19 @@ def test_malformed_health_response_is_recorded_for_all_selected(workspace):
     report = run_extraction(root, [docs], config, root / "artifacts/run", MalformedClient())
     assert report["document_status_counts"] == {"not_selected": 1, "preflight_failed": 2}
     assert report["requests_submitted"] == 0
+
+
+def test_service_lock_blocks_other_runner_before_output_or_rpc_and_releases_on_error(workspace):
+    from judicial_kg.extraction.run import extraction_lock
+
+    root, docs, config = workspace
+    client = SimulatedClient()
+    with extraction_lock(root):
+        with pytest.raises(ValueError, match="service lock"):
+            run_extraction(root, [docs], config, root / "artifacts/blocked", client)
+    assert client.paths == [] and not (root / "artifacts/blocked").exists()
+    with pytest.raises(RuntimeError):
+        with extraction_lock(root):
+            raise RuntimeError("metadata exception")
+    with extraction_lock(root):
+        pass
