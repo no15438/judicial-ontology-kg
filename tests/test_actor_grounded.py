@@ -58,17 +58,19 @@ def test_actor_shells_and_conflicting_identity_are_rejected(change):
         actor_grounded.materialize(json.dumps(new), source(), CONTRACT, PROVENANCE)
 
 
-def test_actor_grounded_run_and_saved_replay(workspace):  # noqa: F811
+@pytest.mark.parametrize("version", ["qwen-extraction-v7", "qwen-extraction-v8"])
+def test_actor_grounded_run_and_saved_replay(workspace, version):  # noqa: F811
     root, docs, config_path = workspace
     for name in (
         "ontology/private-lending-v0.2.json",
         "schemas/extraction-v0.2.schema.json",
         "prompts/qwen-extraction-v7.txt",
+        "prompts/qwen-extraction-v8.txt",
     ):
         (root / name).write_bytes((ROOT / name).read_bytes())
     docs.write_text(json.dumps([source()]))
     c = json.loads(config_path.read_text())
-    c["version"] = "qwen-extraction-v7"
+    c["version"] = version
     config_path.write_text(json.dumps(c))
 
     class Client(SimulatedClient):

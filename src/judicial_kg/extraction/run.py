@@ -43,6 +43,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v5",
             "qwen-extraction-v6",
             "qwen-extraction-v7",
+            "qwen-extraction-v8",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
             "qwen-mention-repair-v3",
@@ -122,7 +123,14 @@ def run_extraction(
     root = root.resolve()
     output = safe_output(root, output)
     config = load_config(config_path)
-    from judicial_kg.extraction import actor_grounded, anchored, contextual, draft, typed
+    from judicial_kg.extraction import (
+        actor_grounded,
+        anchored,
+        contextual,
+        draft,
+        preventive,
+        typed,
+    )
 
     if (
         "-repair-" in config["version"] or "-review-" in config["version"]
@@ -136,6 +144,7 @@ def run_extraction(
             "qwen-extraction-v5": typed,
             "qwen-extraction-v6": contextual,
             "qwen-extraction-v7": actor_grounded,
+            "qwen-extraction-v8": preventive,
         }[config["version"]]
     )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))

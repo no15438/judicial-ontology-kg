@@ -172,7 +172,9 @@ def test_local_span_only_unique_in_original_unit(text, valid):
             apply_choices(draft, plan, choices)
 
 
-@pytest.mark.parametrize("version", ["qwen-extraction-v6", "qwen-extraction-v7"])
+@pytest.mark.parametrize(
+    "version", ["qwen-extraction-v6", "qwen-extraction-v7", "qwen-extraction-v8"]
+)
 def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(workspace, version):  # noqa: F811
     root, docs, config = workspace
     for name in [
@@ -180,6 +182,7 @@ def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(work
         "schemas/extraction-v0.2.schema.json",
         "prompts/qwen-extraction-v6.txt",
         "prompts/qwen-extraction-v7.txt",
+        "prompts/qwen-extraction-v8.txt",
         "prompts/qwen-selector-repair-v1.txt",
     ]:
         (root / name).write_bytes((ROOT / name).read_bytes())
@@ -189,7 +192,7 @@ def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(work
     cfg.update(version=version, max_documents=1)
     config.write_text(json.dumps(cfg))
     saved_draft = copy.deepcopy(draft)
-    if version.endswith("v7"):
+    if version.endswith(("v7", "v8")):
         mentions = saved_draft.pop("mentions")
         for actor in saved_draft["actors"]:
             actor["mentions"] = [

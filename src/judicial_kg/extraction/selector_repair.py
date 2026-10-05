@@ -257,8 +257,12 @@ def prepare_repair(root, document_paths, specification):
         raw, original, protocol, _, source_docs, _, selected, calls, responses = load_saved_run(
             root, [root / p for p in spec["documents"]], root / spec["source_run"]
         )
-        if original["config"]["version"] not in {"qwen-extraction-v6", "qwen-extraction-v7"}:
-            raise ValueError("Selector repair requires a completed v6 or v7 source run")
+        if original["config"]["version"] not in {
+            "qwen-extraction-v6",
+            "qwen-extraction-v7",
+            "qwen-extraction-v8",
+        }:
+            raise ValueError("Selector repair requires a completed v6, v7 or v8 source run")
         if {d["document_id"]: d for d in source_docs} != all_docs:
             raise ValueError("Source runs and repair must retain the same full denominator")
         targets = spec["document_ids"]
@@ -280,7 +284,7 @@ def prepare_repair(root, document_paths, specification):
             content, _ = completion_content(response, original["config"]["model"])
             draft = (
                 actor_grounded.unpack_draft(content, contract)
-                if protocol is actor_grounded
+                if getattr(protocol, "unpack_draft", None) is actor_grounded.unpack_draft
                 else contextual.unpack_draft(content)
             )
             drafts[key] = draft
