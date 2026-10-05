@@ -118,7 +118,7 @@ def compile_inventory(doc, catalog, result, contract, provenance):
     }
 
 
-def generate_header(doc, prompt, contract, provenance, infer, save):
+def generate_header(doc, prompt, contract, provenance, infer, save, *, request_view=None):
     forms_schema = obj(
         {
             "forms": {
@@ -156,6 +156,10 @@ def generate_header(doc, prompt, contract, provenance, infer, save):
     )
     save("inventory-catalog", catalog)
     schema = inventory_schema(catalog, contract)
+    view, aliases = catalog, None
+    if request_view is not None:
+        schema, view, aliases = request_view(catalog, schema)
+        save("inventory-aliases", {"catalog_sha256": canonical_hash(catalog), "aliases": aliases})
     messages = [
         {
             "role": "system",
@@ -171,11 +175,18 @@ def generate_header(doc, prompt, contract, provenance, infer, save):
         {
             "role": "user",
             "content": json.dumps(
-                {"source_units": source_units(doc), "catalog": catalog}, ensure_ascii=False
+                {"source_units": source_units(doc), "catalog": view}, ensure_ascii=False
             ),
         },
     ]
     selection = strict_json(infer(messages, response_format(doc, schema), "inventory-select"))
+    if aliases is not None:
+        save("inventory-wire-selection", selection)
+        context_first.check_schema(selection, schema)
+        selection = copy.deepcopy(selection)
+        for row in selection["actors"] + selection["decisions"]:
+            if row["span_id"] is not None:
+                row["span_id"] = aliases[row["span_id"]]
     save("inventory-selection", selection)
     inventory = compile_inventory(doc, catalog, selection, contract, provenance)
     save("inventory-compiled", inventory)

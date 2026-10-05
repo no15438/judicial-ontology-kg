@@ -1,0 +1,17 @@
+{
+  "experiment": "fresh-inventory-v15-spark439",
+  "code_commit": "539a4533a0f99f863edac6bb877bab055369c1f9",
+  "worktree_dirty": false,
+  "requests_submitted": 1,
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "status": "context_over_budget",
+  "proposed_forms": 21,
+  "catalog_positions": 56,
+  "blocked_stage_input_tokens": 33102,
+  "request_elapsed_seconds": 12.135,
+  "replay_verified": true,
+  "new_graph": false,
+  "semantic_precision_recall_f1": null
+}

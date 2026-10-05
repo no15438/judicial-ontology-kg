@@ -21,7 +21,7 @@ from judicial_kg.sources.records import canonical_hash
 def selection(catalog):
     span = catalog["proposal_ledger"][0]["span_ids"][0]
     return {
-        "catalog_sha256": canonical_hash(catalog),
+        "catalog_sha256": catalog.get("catalog_sha256", canonical_hash(catalog)),
         "actors": [{"id": "a", "actor_type": "person", "span_id": span}],
         "decisions": [{"proposal_id": "p0", "actor_id": "a", "span_id": span}],
     }
@@ -65,17 +65,18 @@ def test_unresolved_proposal_is_not_discarded_or_forced_to_an_actor():
     assert not result["semantic_identity_verified"]
 
 
+@pytest.mark.parametrize("version", [15, 16])
 @pytest.mark.parametrize("failure", [None, "unresolved", "header_mutated"])
-def test_fresh_inventory_runner_replay(workspace, failure):  # noqa: F811
+def test_fresh_inventory_runner_replay(workspace, failure, version):  # noqa: F811
     root, docs, config = prepare(workspace)
     for name in [
         "ontology/private-lending-v0.3.json",
         "schemas/extraction-v0.3.schema.json",
-        protocol.PROMPT_FILE,
+        f"prompts/qwen-extraction-v{version}.txt",
     ]:
         (root / name).write_bytes((ROOT / name).read_bytes())
     cfg = json.loads(config.read_text())
-    cfg["version"] = "qwen-extraction-v15"
+    cfg["version"] = f"qwen-extraction-v{version}"
     config.write_text(json.dumps(cfg))
 
     class Client(SimulatedClient):
@@ -137,3 +138,21 @@ def test_fresh_inventory_runner_replay(workspace, failure):  # noqa: F811
     replay = replay_completed(root, [docs], run, root / "artifacts/replay")
     assert replay["requests_submitted"] == 0
     assert replay["outcome_and_candidate_equality_verified"]
+
+
+def test_compact_aliases_preserve_every_position_and_full_catalog_hash():
+    from judicial_kg.extraction.compact_inventory import compact_view
+
+    c = catalog()
+    before = canonical_hash(c)
+    schema, view, aliases = compact_view(c, protocol.inventory_schema(c, CONTRACT))
+    assert canonical_hash(c) == before == view["catalog_sha256"]
+    assert len(aliases) == len(c["entries"])
+    for entry, full in zip(view["entries"], c["entries"], strict=True):
+        assert aliases[entry["span_id"]] == full["span_id"]
+        assert {k: entry[k] for k in full["selector"]} == full["selector"]
+    assert len(json.dumps(view)) < len(json.dumps(c))
+    bad = selection(view)
+    bad["actors"][0]["span_id"] = c["entries"][0]["span_id"]
+    with pytest.raises(DraftError):
+        protocol.context_first.check_schema(bad, schema)
