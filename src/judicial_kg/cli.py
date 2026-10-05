@@ -25,6 +25,8 @@ def main() -> int:
             "replay-qwen-mentions",
             "repair-qwen-selectors",
             "replay-qwen-selectors",
+            "repair-qwen-attribution",
+            "replay-qwen-attribution",
             "assemble-graph",
         ],
     )
@@ -47,26 +49,43 @@ def main() -> int:
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
-        if args.command in {"repair-qwen-selectors", "replay-qwen-selectors"}:
-            from judicial_kg.extraction.selector_repair import replay_repair, run_repair
+        if args.command in {
+            "repair-qwen-selectors",
+            "replay-qwen-selectors",
+            "repair-qwen-attribution",
+            "replay-qwen-attribution",
+        }:
+            from judicial_kg.extraction import attribution_repair, selector_repair
+
+            attribution = args.command.endswith("attribution")
+            module = attribution_repair if attribution else selector_repair
+            if attribution and args.source_run is None:
+                parser.error("attribution repair requires parent selector source-run")
+            extra = [args.source_run] if attribution else []
 
             if not all((args.documents, args.repair_spec, args.output)):
                 parser.error("selector repair requires documents, repair-spec and new output")
-            if args.command == "replay-qwen-selectors":
+            if args.command.startswith("replay-"):
                 if args.repair_run is None:
                     parser.error("selector replay requires repair-run")
-                result = replay_repair(
-                    args.root, args.documents, args.repair_spec, args.repair_run, args.output
+                result = module.replay_repair(
+                    args.root,
+                    args.documents,
+                    args.repair_spec,
+                    *extra,
+                    args.repair_run,
+                    args.output,
                 )
                 successful = (
                     result["accepted_candidates_match_saved"] and result["outcomes_match_saved"]
                 )
             else:
-                result = run_repair(
+                result = module.run_repair(
                     args.root,
                     args.documents,
                     args.repair_spec,
-                    args.config or args.root / "configs/qwen-selector-repair-v1.json",
+                    *extra,
+                    args.config or args.root / ("configs/" + module.VERSION + ".json"),
                     args.output,
                 )
                 successful = (
