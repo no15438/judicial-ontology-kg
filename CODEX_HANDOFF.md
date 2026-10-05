@@ -2,9 +2,11 @@
 
 核对日期：2026-10-05，Australia/Sydney。当前分支 `codex/jev-shadow-evaluation`（从 `600fe87` 新建；原分支保留），使用 `judicial-ontology-kg-current`。
 
+**最新真实推理**：v14从干净`1ce6e73`重新抽取Spark4396，3次229.489秒，首轮0/1接受、35未选中。首语境位置目录正常工作，但事务所形式缺少冻结Actor，明确未决拒收；后8语境未尝试。451项测试、零调用回放通过。下一步先做冻结前的新主体提议与重校验，再同篇完整实跑；详见[本轮记录](research/qwen-span-v14-report.json)。
+
 **新增授权工作**：新分支 [OpenJev 影子对照](docs/jev-shadow-evaluation.md) 已实现并完成36次真实请求：9语境、Qwen/Jev反序稳定各8/9，4项待复核；零调用回放通过，431项测试。Jev保持影子模式，不自动改候选；主流程M1–M4及完整端到端对照尚待实现。
 
-**当前执行计划**：[工程改进计划](docs/engineering-improvement-plan.md)。按 M1 原文位置接口 → M2 冻结前归属复核 → M3 阶段恢复与修复预算 → M4 三篇/固定十篇完整验收推进。M1的[位置目录/生成Schema/编译基础模块](docs/span-catalog.md)已实现并通过真实6位置零调用回归；下一步接入新版本生成器和运行回放。属性值、完整首轮协议及M2–M4仍未完成。历史章节的“下一步”不覆盖此顺序。
+**当前执行计划**：[工程改进计划](docs/engineering-improvement-plan.md)。按 M1 原文位置接口 → M2 冻结前归属复核 → M3 阶段恢复与修复预算 → M4 三篇/固定十篇完整验收推进。M1的[位置目录/生成Schema/编译基础模块](docs/span-catalog.md)已实现并通过真实6位置零调用回归；v14生成器与运行回放已接入，真实首轮因冻结主体缺项拒收。下一步优先冻结前主体补全；属性值、整篇首轮稳定性及M2–M4仍未完成。历史章节的“下一步”不覆盖此顺序。
 
 当前新增契约0.3：Context包围范围与直接断言来源分离，父子包含、引用隔离、完整分区和图中covers/assertion_source均已实现。v12/v13在同一已阅Spark4396原文上新抽，不输入旧候选/QA/修复答案；全套408项测试及Ruff/格式/项目检查通过。代码提交7b93d94、8ba1e8c，真实运行均始于干净工作树。设计见docs/scoped-contexts.md，公开结果research/qwen-scoped-context-report.json。
 

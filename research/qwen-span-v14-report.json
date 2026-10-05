@@ -1,0 +1,99 @@
+{
+  "experiment": "fresh-span-v14-spark439",
+  "code_commit": "1ce6e73551dbb486498f8e414e4ed90e274311b0",
+  "worktree_dirty": false,
+  "config": {
+    "version": "qwen-extraction-v14",
+    "ssh_host": "spark-lan",
+    "port": 8003,
+    "model": "qwen3.8-flash-next-iq4xs",
+    "context_tokens": 32768,
+    "max_output_tokens": 8192,
+    "token_margin": 128,
+    "request_timeout_seconds": 900,
+    "temperature": 0.2,
+    "seed": 42,
+    "limit_per_source": 1,
+    "max_documents": 1
+  },
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "accepted_documents": 0,
+  "status": "span_proposals_unresolved",
+  "requests_submitted": 3,
+  "request_elapsed_seconds": 229.489,
+  "usage": {
+    "prompt_tokens": 18019,
+    "completion_tokens": 5221,
+    "total_tokens": 23240
+  },
+  "stages": [
+    {
+      "name": "header",
+      "elapsed_seconds": 145.512,
+      "usage": {
+        "prompt_tokens": 6706,
+        "completion_tokens": 3490,
+        "total_tokens": 10196
+      }
+    },
+    {
+      "name": "body-000-forms",
+      "elapsed_seconds": 4.609,
+      "usage": {
+        "prompt_tokens": 1044,
+        "completion_tokens": 68,
+        "total_tokens": 1112
+      }
+    },
+    {
+      "name": "body-000-select",
+      "elapsed_seconds": 79.368,
+      "usage": {
+        "prompt_tokens": 10269,
+        "completion_tokens": 1663,
+        "total_tokens": 11932
+      }
+    }
+  ],
+  "header": {
+    "actors": 9,
+    "contexts": 9,
+    "unassigned_source_units": 0,
+    "organization_actors": 0,
+    "direct_finding_review_hints": 2
+  },
+  "first_body": {
+    "proposed_forms": 8,
+    "catalog_positions": 9,
+    "unmatched_proposals": 0,
+    "selected_mentions": 8,
+    "selected_proposals": 7,
+    "unresolved_proposals": 1,
+    "status": "unresolved",
+    "whole_body_validated": false
+  },
+  "remaining_contexts_not_attempted": 8,
+  "replay": {
+    "requests_submitted": 0,
+    "outcome_and_candidate_equality_verified": true
+  },
+  "diagnosis": {
+    "blocking": "A source-matched organization form has no organization Actor in the frozen fresh header; the model marked it uncertain.",
+    "additional_review": "One location-resolved description is an address-shaped header seed; correct coordinates do not establish a valid person Mention.",
+    "comparison_limit": "Stopped at first context; old third-context six-position failure was not reached. No claim of end-to-end improvement."
+  },
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false,
+  "new_graph": false,
+  "raw_data_location": "local ignored artifacts only",
+  "artifact_sha256": {
+    "report.json": "7e1eaf89442ac31724e69e12836f518ca00072906ed4db2813d62f4e79bdfcf1",
+    "outcomes.json": "b82757af330592c5c624dd476b94f99eb4da81f6065eebd8f646918e4257d427",
+    "stage-000-header-draft.json": "28bda545b179ae23fcfd1ad99b6db82cd2a07da09d6bf7507e0710a7eb93d8d3",
+    "stage-000-body-000-span-catalog.json": "e4f11331265b594f089a8c1b98d3278518bf718adae84cdf79bf59d61801607f",
+    "stage-000-body-000-span-selection.json": "3505ec7d9ca7c813a2f7fe7d177b019d8a71a23100c5e8de7624933e7b2e174d",
+    "stage-000-body-000-span-compiled.json": "8ee0682d48ff699502d264b4f3d7d5d51ed92f2f92f6de28a0f94804ba147ea7"
+  }
+}
