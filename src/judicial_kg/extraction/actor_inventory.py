@@ -128,6 +128,7 @@ def generate_header(
     *,
     request_view=None,
     catalog_builder=span_catalog.build_catalog,
+    context_only=False,
 ):
     forms_schema = obj(
         {
@@ -203,15 +204,37 @@ def generate_header(
     if inventory["unresolved_proposals"]:
         raise DraftError("inventory_unresolved")
     schema = draft_schema(contract)
-    schema["properties"]["actors"] = {"const": inventory["actors"]}
-    messages = scoped.messages(doc, prompt, schema)
-    messages[0]["content"] += (
-        "\n主体目录已经过原文位置核对，本阶段只划分语境。actors必须逐字复制Schema中的const，"
-        "不增删、不改主体/类型/锚点；本阶段不修复目录。陈述归属只能引用这些主体。"
-    )
-    header = strict_json(infer(messages, response_format(doc, schema), "header"))
-    save("inventory-bound-header", header)
-    context_first.check_schema(header, schema)
+    if context_only:
+        del schema["properties"]["actors"]
+        schema["required"].remove("actors")
+        actor_ids = [a["id"] for a in inventory["actors"]]
+        schema["$defs"]["context"]["properties"]["attributed_actor_ids"]["items"] = {
+            "type": "string",
+            "enum": actor_ids,
+        }
+        messages = scoped.messages(doc, prompt, schema)
+        payload = strict_json(messages[-1]["content"])
+        payload["actor_catalog"] = inventory["actors"]
+        messages[-1]["content"] = json.dumps(payload, ensure_ascii=False)
+        messages[0]["content"] += (
+            "\n本阶段只输出contexts，不输出actors、不重复生成身份锚点。"
+            "主体由程序无损保留，只能引用actor_catalog中的ID。"
+        )
+        delta = strict_json(infer(messages, response_format(doc, schema), "header"))
+        save("context-delta", delta)
+        context_first.check_schema(delta, schema)
+        header = {"actors": copy.deepcopy(inventory["actors"]), **delta}
+        save("inventory-bound-header", header)
+    else:
+        schema["properties"]["actors"] = {"const": inventory["actors"]}
+        messages = scoped.messages(doc, prompt, schema)
+        messages[0]["content"] += (
+            "\n主体目录已经过原文位置核对，本阶段只划分语境。actors必须逐字复制Schema中的const，"
+            "不增删、不改主体/类型/锚点；本阶段不修复目录。陈述归属只能引用这些主体。"
+        )
+        header = strict_json(infer(messages, response_format(doc, schema), "header"))
+        save("inventory-bound-header", header)
+        context_first.check_schema(header, schema)
     return header
 
 

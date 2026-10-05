@@ -12,7 +12,7 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
-@pytest.mark.parametrize("version", [16, 17])
+@pytest.mark.parametrize("version", [16, 17, 18])
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
 def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
@@ -47,9 +47,15 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                     request["messages"][0]["content"].split("只输出JSON，遵守本阶段Schema：\n")[-1]
                 )
                 value = fixtures()
-                value["actors"] = schema["properties"]["actors"]["const"]
+                value["actors"] = (
+                    payload["actor_catalog"]
+                    if version == 18
+                    else schema["properties"]["actors"]["const"]
+                )
                 for c in value["contexts"]:
                     c["attributed_actor_ids"] = ["a"]
+                if version == 18:
+                    value.pop("actors")
             elif n in (3, 5):
                 value = {"forms": []}
             else:

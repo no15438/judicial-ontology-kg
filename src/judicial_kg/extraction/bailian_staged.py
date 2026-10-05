@@ -9,7 +9,7 @@ from uuid import uuid4
 
 from judicial_kg.contracts import Contract
 from judicial_kg.extraction import compact_inventory as protocol
-from judicial_kg.extraction import space_inventory
+from judicial_kg.extraction import context_delta, space_inventory
 from judicial_kg.extraction.bailian import MODEL, PRICE_SOURCE, BailianClient, credentials
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import completion_content, extraction_lock, usage_counts
@@ -37,7 +37,15 @@ def cost(input_tokens, output_tokens):
 
 
 def run_cloud(
-    root, paths, output, *, client=None, replay_origin=None, version=16, previous_runs=()
+    root,
+    paths,
+    output,
+    *,
+    client=None,
+    replay_origin=None,
+    version=16,
+    previous_runs=(),
+    budget_cny=None,
 ):
     with extraction_lock(root):
         return _run(
@@ -48,13 +56,29 @@ def run_cloud(
             replay_origin=replay_origin,
             version=version,
             previous_runs=previous_runs,
+            budget_cny=budget_cny,
         )
 
 
-def _run(root, paths, output, *, client=None, replay_origin=None, version=16, previous_runs=()):
+def _run(
+    root,
+    paths,
+    output,
+    *,
+    client=None,
+    replay_origin=None,
+    version=16,
+    previous_runs=(),
+    budget_cny=None,
+):
     root = root.resolve()
-    selected_protocol = {16: protocol, 17: space_inventory}[version]
+    selected_protocol = {16: protocol, 17: space_inventory, 18: context_delta}[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
+    if budget_cny is not None:
+        budget = Decimal(budget_cny)
+        if not budget.is_finite() or not 0 < budget <= 200:
+            raise ValueError("Budget must be positive and at most authorized 200 CNY")
+        config["budget_cny"] = str(budget)
     lineage, prior = [], Decimal(0)
     for path in previous_runs:
         path = path.resolve()
@@ -70,7 +94,7 @@ def _run(root, paths, output, *, client=None, replay_origin=None, version=16, pr
                 "committed_cny": saved["budget_committed_cny"],
             }
         )
-    if len({x["path"] for x in lineage}) != len(lineage) or prior > Decimal(CONFIG["budget_cny"]):
+    if len({x["path"] for x in lineage}) != len(lineage) or prior > Decimal(config["budget_cny"]):
         raise ValueError("Invalid prior budget lineage")
     for path in previous_runs:
         parent = strict_json((path / "report.json").read_bytes())
@@ -165,7 +189,7 @@ def _run(root, paths, output, *, client=None, replay_origin=None, version=16, pr
             row["status"] = "input_budget_exceeded"
             checkpoint()
             raise DraftError(row["status"])
-        if prior + committed + reservation > Decimal(CONFIG["budget_cny"]):
+        if prior + committed + reservation > Decimal(config["budget_cny"]):
             row["status"] = "cost_budget_exceeded"
             checkpoint()
             raise DraftError(row["status"])
@@ -253,6 +277,7 @@ def replay_cloud(root, paths, source_run, output):
     if not original["completed"] or original["config"] != {
         **CONFIG,
         "version": f"bailian-staged-v{version}",
+        "budget_cny": original["config"]["budget_cny"],
     }:
         raise ValueError("Incomplete or changed cloud configuration")
     for name, digest in original["outputs_sha256"].items():
@@ -288,6 +313,7 @@ def replay_cloud(root, paths, source_run, output):
         client=client,
         replay_origin=original,
         version=version,
+        budget_cny=original["config"]["budget_cny"],
         previous_runs=[root / x["path"] for x in original.get("budget_lineage", [])],
     )
     if result.get("budget_lineage", []) != original.get("budget_lineage", []):
