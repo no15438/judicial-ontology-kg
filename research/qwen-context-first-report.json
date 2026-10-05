@@ -69,12 +69,78 @@
         "requests_submitted": 0,
         "equal": true
       }
+    },
+    {
+      "protocol": "qwen-extraction-v11",
+      "run_id": "97a28389c8de40a08bf371925a10b791",
+      "code_commit": "179972679504762d9c04a86a3cf3f8b0d44e71a1",
+      "worktree_dirty": false,
+      "selected_documents": 1,
+      "document_status_counts": {
+        "contract_rejected": 1,
+        "not_selected": 35
+      },
+      "requests_submitted": 1,
+      "request_elapsed_seconds": 55.87831770902267,
+      "selected_outcomes": [
+        {
+          "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+          "selected": true,
+          "status": "contract_rejected",
+          "issues": [
+            {
+              "code": "context_outside_parent",
+              "path": "/contexts/5"
+            }
+          ],
+          "stages": [
+            {
+              "stage": "header",
+              "status": "response_complete",
+              "messages_sha256": "73dea83e2fa820131c278cc4199c1cb7e2d18d7c5c5eec5e06d6d971dbdf0a81",
+              "response_format_sha256": "c8daba39de85d8e238cbe8f5652d5790b13a1b22151a87af3e4771dbe9e27bee",
+              "input_tokens": 7390,
+              "completion_rpc": 7,
+              "request_elapsed_seconds": 55.87831770902267,
+              "usage": {
+                "prompt_tokens": 7390,
+                "completion_tokens": 1230,
+                "total_tokens": 8620
+              }
+            }
+          ],
+          "response_format_sha256": "c8daba39de85d8e238cbe8f5652d5790b13a1b22151a87af3e4771dbe9e27bee",
+          "input_tokens": 7390,
+          "request_elapsed_seconds": 55.87831770902267,
+          "usage": {
+            "prompt_tokens": 7390,
+            "completion_tokens": 1230,
+            "total_tokens": 8620
+          }
+        }
+      ],
+      "report_sha256": "6080380bc673c5494ea1d3e7bd6363d4b260593e670ce7bb1dd7164248da8488",
+      "offline_replay": {
+        "requests_submitted": 0,
+        "equal": true
+      },
+      "identity_anchors_source_grounded": true,
+      "complete_header_contract_passed": false,
+      "context_bodies_attempted": 0
     }
   ],
-  "engineering_lesson": "Complete JSON and integer occurrence do not ensure local Mention text; v11 separates representative identity anchors from source-local mention completion.",
+  "engineering_lesson": "V10 copied unsupported local names. V11 representative identity anchors are grounded, but a quoted child scope is entirely outside its declared parent. No containing alternative parent exists in the draft. Next design must distinguish structural enclosing coverage from assertion-local source scope, without widening saved contexts or promoting quotes.",
   "semantic_precision_recall_f1": null,
   "gold_available": false,
   "requires_user_legal_annotation": false,
   "new_default_enabled": false,
-  "expanded_samples": false
+  "expanded_samples": false,
+  "total_requests_submitted": 2,
+  "total_request_elapsed_seconds": 169.79657712602057,
+  "new_whole_document_accepted": 0,
+  "next_work": [
+    "Version a header representation distinguishing enclosing coverage and directly asserted evidence; explicitly declare nested quoted material, then freeze validated scope before child generation.",
+    "Test parent coverage and quotation exclusion independently; preserve original failure and avoid automatic widening.",
+    "Rerun the same exposed failure before 026b/442c and any expansion."
+  ]
 }
