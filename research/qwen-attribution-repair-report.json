@@ -1,0 +1,99 @@
+{
+  "run_kind": "local_qwen_bounded_attribution_review_not_gold",
+  "code_commit": "33e347f54d8c3221ce3f51cb58fa314ffbbacae1",
+  "worktree_dirty": false,
+  "completed": true,
+  "expected_documents": 36,
+  "selected_documents": 2,
+  "requests_submitted": 2,
+  "document_status_counts": {
+    "accepted_candidate": 2,
+    "not_selected": 34
+  },
+  "selected_outcomes": [
+    {
+      "document_id": "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+      "selected": true,
+      "status": "accepted_candidate",
+      "issues": [],
+      "input_tokens": 7914,
+      "request_elapsed_seconds": 16.06847112500691,
+      "usage": {
+        "prompt_tokens": 7914,
+        "completion_tokens": 171,
+        "total_tokens": 8085
+      }
+    },
+    {
+      "document_id": "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+      "selected": true,
+      "status": "accepted_candidate",
+      "issues": [],
+      "input_tokens": 5846,
+      "request_elapsed_seconds": 18.64512125001056,
+      "usage": {
+        "prompt_tokens": 5846,
+        "completion_tokens": 302,
+        "total_tokens": 6148
+      }
+    }
+  ],
+  "repair_decision_counts": {
+    "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d": {
+      "contexts_reclassified": 2,
+      "unsupported_assertions_rejected": 0
+    },
+    "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa": {
+      "contexts_reclassified": 0,
+      "unsupported_assertions_rejected": 3
+    }
+  },
+  "prompt_sha256": "803c300a317efbe4582402a7bd2fa5b47fd64891487d4ad1e8b6cbab16545e5d",
+  "input_files": [
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    },
+    {
+      "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+      "bytes": 428236
+    }
+  ],
+  "schema_version": 1,
+  "protocol_version": "qwen-attribution-repair-v1",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "temperature": 0.2,
+  "seed": 42,
+  "model_request_seconds": 34.714,
+  "source_report_sha256": "49ee89f4f0d7a7beab1feee119392be073e0b25239db0076ffc3e20784a2c132",
+  "offline_replay": {
+    "requests_submitted": 0,
+    "accepted_candidates_match_saved": true,
+    "outcomes_match_saved": true
+  },
+  "rejected_assertion_ledger_replay_identical": true,
+  "new_accepted_candidates": 2,
+  "aggregate_development_status": {
+    "attempted_unique_documents": 10,
+    "accepted": 5,
+    "rejected": 5,
+    "not_selected": 26
+  },
+  "graph": {
+    "nodes": 1602,
+    "edges": 3211,
+    "documents_assembled": 5,
+    "documents_assembly_failed": 0,
+    "graph_canonical_sha256": "0b77d0daa2967b805f5f89e3e65323598612436bdb15499b2fb5b77e1bfe7d07"
+  },
+  "evidence_references_replayed": 1335,
+  "csv_payloads_match_graph": true,
+  "neo4j_loaded": false,
+  "tests": {
+    "passed": 259,
+    "new_attribution_tests": 16
+  },
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false
+}

@@ -167,3 +167,25 @@ bash scripts/run.sh replay-qwen-mentions \
 ## 十篇开发范围的当前结论
 
 新增 8 篇 v6 首轮为 1 通过、5 拒收、2 截断；两篇截断经 v7 完整返回后仍有定位问题。加上已修复的原两篇，当前 10 篇里 3 篇工程通过、7 篇拒收，余下 26 篇保持未选中。全部失败保留，默认 v5 不自动升级。合并的 3 篇候选图为 997 节点、2,082 边、829 次证据引用，来源和 CSV 保真验证通过，不是同协议的语义性能基线。下一步扩展有界引用修复到没有旧候选的新文书及事件属性，先验证固定失败清单，再考虑扩量。见 [扩展元数据](../research/qwen-development-expansion-report.json)。
+
+## 有界语境与不支持提及复核（最新）
+
+代码33e347f实现独立归属复核协议；df92b17补齐属性定位错误不进入主体复核的边界。全套259项测试、Ruff/格式、9项参考哈希与diff检查通过，新增16项测试。原文、Actor、金额、事件、极性、归属主体和语境范围不可改；只可有限调整语境类别，或明确拒绝目录中无原文支持的姓名提及。原提及及模型理由保留独立rejected-assertions账本；uncertain仍拒收，模型拒绝不等于gold。
+
+同两篇真实本地回归在干净33e347f完成：2次调用、温度0.2/seed42，累计34.714秒；AppealCase两处语境重新分类，Spark三处不支持提及明确拒绝并留档。两篇完整契约均通过、506次证据引用回放。离线重放0调用，候选、状态与拒绝账本完全一致；原始草稿/响应不改写。累计10篇尝试中5通过/5拒收/26未选中。
+
+5篇候选合并装配为1602节点/3211边、1335次证据引用；写盘还原、来源重验和CSV逐条payload保真通过。artifacts/graph/development10-v2和artifacts/neo4j/development10-v2仅本地导出，未加载Neo4j。装配缺失31篇=5篇当前拒收+26篇未选中，抽取历史失败不从分母消失。公共结果research/qwen-attribution-repair-report.json。
+
+接着修复剩余5篇已曝光失败文书：原v6/v7响应固定，明确选择且完整36篇分母，有限位置修复先行；若仍失败，按新错误分层处理，不自动换主体、扩大语境或新增案件。该批是否完成以新运行报告为准，不重复启动在途目录。无需用户法律gold，语义P/R/F1保持缺失。
+
+复现（每次使用新的output目录）：
+```bash
+bash scripts/run.sh repair-qwen-attribution \
+ --documents artifacts/source-development/appealcase-documents.json \
+ --documents artifacts/source-development/spark-documents.json \
+ --repair-spec artifacts/next-round-audit-v1/pilot-spec.json \
+ --source-run artifacts/qwen-extraction/selector-repair-pilot-v1 \
+ --config configs/qwen-attribution-repair-v1.json \
+ --output artifacts/qwen-extraction/attribution-repair-pilot-v1
+```
+离线使用replay-qwen-attribution、相同来源/spec，并指定--repair-run和新的--output；不会调用模型。
