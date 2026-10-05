@@ -16,6 +16,7 @@ from judicial_kg.extraction import (
     mention_stage,
     owner_first,
     space_inventory,
+    typed_owner,
     value_stage,
 )
 from judicial_kg.extraction.bailian import MODEL, PRICE_SOURCE, BailianClient, credentials
@@ -89,6 +90,7 @@ def _run(
         21: value_stage,
         22: evidence_first,
         23: owner_first,
+        24: typed_owner,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:

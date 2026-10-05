@@ -12,7 +12,7 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
-@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21, 22, 23])
+@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21, 22, 23, 24])
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
 def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
@@ -68,7 +68,7 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                     ],
                 }
             elif version >= 20:
-                phase = (n - 3 - int(version == 21 and n > 6)) % (4 if version == 23 else 3)
+                phase = (n - 3 - int(version == 21 and n > 6)) % (4 if version >= 23 else 3)
                 if phase == 0:
                     value = {"forms": ["A🙂"] if n == 3 else []}
                 elif phase == 1:
@@ -141,7 +141,7 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
     assert (
         result["requests_submitted"]
         == {
-            None: 11 if version == 23 else 10 if version == 21 else 9 if version >= 20 else 7,
+            None: 11 if version >= 23 else 10 if version == 21 else 9 if version >= 20 else 7,
             "unresolved": 2,
             "missing_usage": 1,
             "http": 1,
