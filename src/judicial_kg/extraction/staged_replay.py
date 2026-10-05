@@ -9,6 +9,7 @@ from judicial_kg.extraction import (
     compact_inventory,
     context_delta,
     context_first,
+    context_ids,
     identity_first,
     scoped,
     scoped_incremental,
@@ -36,6 +37,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v16",
         "qwen-extraction-v17",
         "qwen-extraction-v18",
+        "qwen-extraction-v19",
     }:
         raise ValueError("Staged replay requires a complete staged run")
     protocol = {
@@ -48,6 +50,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v16": compact_inventory,
         "qwen-extraction-v17": space_inventory,
         "qwen-extraction-v18": context_delta,
+        "qwen-extraction-v19": context_ids,
     }[original["config"]["version"]]
     # Verify every artifact before deriving output, including failed/unused phases.
     verified = {}

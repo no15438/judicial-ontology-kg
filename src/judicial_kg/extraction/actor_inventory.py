@@ -118,6 +118,41 @@ def compile_inventory(doc, catalog, result, contract, provenance):
     }
 
 
+def canonical_context_ids(delta, actors, save):
+    """Mechanical IDs only: preserve scope, ownership and all source claims exactly."""
+    ids = [c["id"] for c in delta["contexts"]]
+    if len(set(ids)) != len(ids):
+        raise DraftError("duplicate_context_id")
+    if any(
+        c["parent_context_id"] is not None and c["parent_context_id"] not in ids
+        for c in delta["contexts"]
+    ):
+        raise DraftError("unknown_parent_context")
+    used = {a["id"] for a in actors} | {m["id"] for a in actors for m in a["mentions"]}
+    mapping = {}
+    for i, old in enumerate(ids):
+        new = "ctx_" + canonical_hash({"position": i, "original_id": old})[:32]
+        while new in used:
+            new = "ctx_" + canonical_hash(new)[:32]
+        used.add(new)
+        mapping[old] = new
+    result = copy.deepcopy(delta)
+    for c in result["contexts"]:
+        c["id"] = mapping[c["id"]]
+        if c["parent_context_id"] is not None:
+            c["parent_context_id"] = mapping[c["parent_context_id"]]
+    save(
+        "context-id-map",
+        {
+            "mapping": mapping,
+            "before_sha256": canonical_hash(delta),
+            "after_sha256": canonical_hash(result),
+            "semantic_changes": False,
+        },
+    )
+    return result
+
+
 def generate_header(
     doc,
     prompt,
@@ -129,6 +164,7 @@ def generate_header(
     request_view=None,
     catalog_builder=span_catalog.build_catalog,
     context_only=False,
+    context_ids=False,
 ):
     forms_schema = obj(
         {
@@ -212,6 +248,15 @@ def generate_header(
             "type": "string",
             "enum": actor_ids,
         }
+        if context_ids:
+            schema["$defs"]["context"]["properties"]["id"] = {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+            }
+            schema["$defs"]["context"]["properties"]["parent_context_id"] = {
+                "anyOf": [{"type": "null"}, {"type": "string", "minLength": 1, "maxLength": 128}]
+            }
         messages = scoped.messages(doc, prompt, schema)
         payload = strict_json(messages[-1]["content"])
         payload["actor_catalog"] = inventory["actors"]
@@ -223,6 +268,8 @@ def generate_header(
         delta = strict_json(infer(messages, response_format(doc, schema), "header"))
         save("context-delta", delta)
         context_first.check_schema(delta, schema)
+        if context_ids:
+            delta = canonical_context_ids(delta, inventory["actors"], save)
         header = {"actors": copy.deepcopy(inventory["actors"]), **delta}
         save("inventory-bound-header", header)
     else:
