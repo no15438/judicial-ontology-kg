@@ -47,6 +47,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v7",
             "qwen-extraction-v8",
             "qwen-extraction-v9",
+            "qwen-extraction-v10",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
             "qwen-mention-repair-v3",
@@ -149,6 +150,7 @@ def _run_extraction(
     output: Path,
     client=None,
     protocol_override=None,
+    replay_origin=None,
 ) -> dict:
     root = root.resolve()
     output = safe_output(root, output)
@@ -157,6 +159,7 @@ def _run_extraction(
         actor_grounded,
         anchored,
         constrained,
+        context_first,
         contextual,
         draft,
         preventive,
@@ -177,6 +180,7 @@ def _run_extraction(
             "qwen-extraction-v7": actor_grounded,
             "qwen-extraction-v8": preventive,
             "qwen-extraction-v9": constrained,
+            "qwen-extraction-v10": context_first,
         }[config["version"]]
     )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
@@ -219,7 +223,7 @@ def _run_extraction(
     output.mkdir(parents=True, exist_ok=False)
     if protocol_override is not None:
         protocol.save_plan(output)
-    run_id = uuid4().hex
+    run_id = replay_origin["run_id"] if replay_origin else uuid4().hex
     outcomes = [
         {
             "document_id": d["document_id"],
@@ -349,65 +353,119 @@ def _run_extraction(
                 continue
             checkpoint()
             try:
-                if busy(call("/metrics").raw.decode()):
-                    raise DraftError("service_busy")
-                request = {
-                    "model": config["model"],
-                    "messages": protocol.messages(doc, prompt, schema),
-                    "max_tokens": config["max_output_tokens"],
-                    "temperature": config["temperature"],
-                    "seed": config["seed"],
-                    "stream": False,
-                    "cache_prompt": False,
-                    "chat_template_kwargs": {"enable_thinking": False},
-                    "response_format": {"type": "json_object"},
+
+                def infer(stage_messages, stage_format, stage_key=None, outcome=outcome):
+                    receipt = {"stage": stage_key, "status": "pending"}
+                    if stage_key is not None:
+                        outcome.setdefault("stages", []).append(receipt)
+                    try:
+                        if busy(call("/metrics").raw.decode()):
+                            raise DraftError("service_busy")
+                        request = {
+                            "model": config["model"],
+                            "messages": stage_messages,
+                            "max_tokens": config["max_output_tokens"],
+                            "temperature": config["temperature"],
+                            "seed": config["seed"],
+                            "stream": False,
+                            "cache_prompt": False,
+                            "chat_template_kwargs": {"enable_thinking": False},
+                            "response_format": stage_format,
+                        }
+                        if stage_key is not None:
+                            receipt["messages_sha256"] = canonical_hash(stage_messages)
+                            receipt["response_format_sha256"] = canonical_hash(stage_format)
+                        if "schema" in stage_format:
+                            outcome["response_format_sha256"] = canonical_hash(stage_format)
+                        template = call(
+                            "/apply-template",
+                            {
+                                "messages": request["messages"],
+                                "chat_template_kwargs": request["chat_template_kwargs"],
+                            },
+                        ).json()
+                        tokenized = call(
+                            "/tokenize",
+                            {
+                                "content": template["prompt"],
+                                "add_special": False,
+                                "parse_special": True,
+                            },
+                        ).json()
+                        tokens = tokenized.get("tokens")
+                        if (
+                            not isinstance(tokens, list)
+                            or not tokens
+                            or any(type(t) is not int for t in tokens)
+                        ):
+                            raise DraftError("tokenizer_invalid_response")
+                        outcome["input_tokens"] = len(tokens)
+                        if stage_key is not None:
+                            receipt["input_tokens"] = len(tokens)
+                        if (
+                            len(tokens) + config["max_output_tokens"] + config["token_margin"]
+                            > config["context_tokens"]
+                        ):
+                            raise DraftError("context_over_budget")
+                        outcome["status"] = "in_flight"
+                        metadata["requests_submitted"] += 1
+                        checkpoint()
+                        if stage_key is not None:
+                            receipt["completion_rpc"] = rpc_number + 1
+                        response = call(
+                            "/v1/chat/completions", request, config["request_timeout_seconds"]
+                        )
+                        outcome["request_elapsed_seconds"] = (
+                            outcome.get("request_elapsed_seconds", 0) + response.elapsed_seconds
+                            if stage_key is not None
+                            else response.elapsed_seconds
+                        )
+                        if stage_key is not None:
+                            receipt["request_elapsed_seconds"] = response.elapsed_seconds
+                        payload = response.json()
+                        outcome["usage"] = usage_counts(payload)
+                        if stage_key is not None:
+                            receipt["usage"] = usage_counts(payload)
+                        content, _ = completion_content(payload, config["model"])
+                        receipt["status"] = "response_complete"
+                        return content
+                    except (DraftError, ValueError, KeyError, TypeError, AttributeError) as error:
+                        receipt["status"] = (
+                            error.code
+                            if isinstance(error, DraftError)
+                            else "protocol_invalid_response"
+                        )
+                        raise
+                    finally:
+                        checkpoint()
+
+                provenance = {
+                    "method": "model",
+                    "producer": config["model"],
+                    "version": metadata["service_snapshot"]["models_sha256"],
+                    "run_id": run_id,
                 }
-                if hasattr(protocol, "response_format"):
-                    request["response_format"] = protocol.response_format(doc, schema)
-                    outcome["response_format_sha256"] = canonical_hash(request["response_format"])
-                template = call(
-                    "/apply-template",
-                    {
-                        "messages": request["messages"],
-                        "chat_template_kwargs": request["chat_template_kwargs"],
-                    },
-                ).json()
-                tokenized = call(
-                    "/tokenize",
-                    {"content": template["prompt"], "add_special": False, "parse_special": True},
-                ).json()
-                tokens = tokenized.get("tokens")
-                if (
-                    not isinstance(tokens, list)
-                    or not tokens
-                    or any(type(t) is not int for t in tokens)
-                ):
-                    raise DraftError("tokenizer_invalid_response")
-                outcome["input_tokens"] = len(tokens)
-                if (
-                    len(tokens) + config["max_output_tokens"] + config["token_margin"]
-                    > config["context_tokens"]
-                ):
-                    raise DraftError("context_over_budget")
-                outcome["status"] = "in_flight"
-                metadata["requests_submitted"] += 1
-                checkpoint()
-                response = call("/v1/chat/completions", request, config["request_timeout_seconds"])
-                outcome["request_elapsed_seconds"] = response.elapsed_seconds
-                payload = response.json()
-                outcome["usage"] = usage_counts(payload)
-                content, _ = completion_content(payload, config["model"])
-                record = protocol.materialize(
-                    content,
-                    doc,
-                    contract,
-                    {
-                        "method": "model",
-                        "producer": config["model"],
-                        "version": metadata["service_snapshot"]["models_sha256"],
-                        "run_id": run_id,
-                    },
-                )
+                if config["version"] == "qwen-extraction-v10":
+
+                    def save_stage(name, value, index=index):
+                        write_json(output / f"stage-{index:03}-{name}.json", value)
+
+                    record = protocol.extract(doc, prompt, contract, provenance, infer, save_stage)
+                    outcome["input_tokens"] = sum(
+                        s.get("input_tokens", 0) for s in outcome["stages"]
+                    )
+                    outcome["usage"] = {
+                        k: sum(s.get("usage", {}).get(k, 0) for s in outcome["stages"])
+                        for k in ("prompt_tokens", "completion_tokens", "total_tokens")
+                    }
+                else:
+                    fmt = (
+                        protocol.response_format(doc, schema)
+                        if hasattr(protocol, "response_format")
+                        else {"type": "json_object"}
+                    )
+                    content = infer(protocol.messages(doc, prompt, schema), fmt)
+                    record = protocol.materialize(content, doc, contract, provenance)
                 issues = validate_record(record, doc, contract)
                 write_json(output / f"candidate-{index:03}.json", record)
                 records.append(record)
@@ -431,6 +489,12 @@ def _run_extraction(
                 halted = (
                     code == "transport_failed"
                 )  # An uncertain timeout may leave a request in flight.
+            if "stages" in outcome:
+                outcome["input_tokens"] = sum(s.get("input_tokens", 0) for s in outcome["stages"])
+                outcome["usage"] = {
+                    k: sum(s.get("usage", {}).get(k, 0) for s in outcome["stages"])
+                    for k in ("prompt_tokens", "completion_tokens", "total_tokens")
+                }
             checkpoint()
     lines = [json.dumps(r, ensure_ascii=False) for r in records]
     (output / "candidates.jsonl").write_text("".join(line + "\n" for line in lines))

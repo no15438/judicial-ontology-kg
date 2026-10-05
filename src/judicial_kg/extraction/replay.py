@@ -77,6 +77,13 @@ def load_saved_run(root: Path, document_paths: list[Path], source_run: Path):
 
 
 def replay_completed(root: Path, document_paths: list[Path], source_run: Path, output: Path):
+    if (
+        strict_json((source_run / "report.json").read_bytes())["config"]["version"]
+        == "qwen-extraction-v10"
+    ):
+        from judicial_kg.extraction.staged_replay import replay_completed as replay_staged
+
+        return replay_staged(root, document_paths, source_run, output)
     root = root.resolve()
     output = safe_output(root, output)
     (original_bytes, original, protocol, contract, docs, inputs, selected, calls, responses) = (

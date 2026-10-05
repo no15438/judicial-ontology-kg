@@ -1,3 +1,5 @@
+> 新首轮分阶段设计见 docs/experiment-feedback.md 和 docs/progress.md 最后节。v10 仅为独立小样本协议试验，历史 v8 3/10 与修复后7/10分别保留；最新真实结果以对应新运行报告为准。
+
 # 新仓库交接
 
 核对日期：2026-10-05，Australia/Sydney。
