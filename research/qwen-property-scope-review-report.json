@@ -1,0 +1,92 @@
+{
+  "code_commit": "8bcd0870901bbb52911acc99d8474b14c0c900a2",
+  "worktree_dirty": false,
+  "completed": true,
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "requests_submitted": 1,
+  "selected_outcomes": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "selected": true,
+      "status": "accepted_candidate",
+      "issues": [],
+      "input_tokens": 28828,
+      "request_elapsed_seconds": 42.28260216600029,
+      "usage": {
+        "prompt_tokens": 28828,
+        "completion_tokens": 163,
+        "total_tokens": 28991
+      }
+    }
+  ],
+  "document_status_counts": {
+    "accepted_candidate": 1,
+    "not_selected": 35
+  },
+  "repair_decision_counts": {
+    "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8": {
+      "context": 0,
+      "mention": 0,
+      "property": 1,
+      "actor": 0
+    }
+  },
+  "prompt_sha256": "a8783d7fa00efc85474d61d25918523222fd958e92ddfd308ca30602c032223d",
+  "input_files": [
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    },
+    {
+      "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+      "bytes": 428236
+    }
+  ],
+  "schema_version": 1,
+  "protocol_version": "qwen-property-scope-review-v1",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "temperature": 0.2,
+  "seed": 42,
+  "source_report_sha256": "86b0ba669c93a0e646824a2c4950897273eb9989becf1129ed5c28d374bd8618",
+  "model_request_seconds": 42.283,
+  "offline_replay": {
+    "requests_submitted": 0,
+    "accepted_candidates_match_saved": true,
+    "outcomes_match_saved": true
+  },
+  "rejected_ledger_replay_identical": true,
+  "preflight_failed_without_inference": {
+    "requests_submitted": 0,
+    "document_status_counts": {
+      "context_over_budget": 1,
+      "not_selected": 35
+    },
+    "input_tokens": 28828,
+    "reserved_output_tokens": 4096
+  },
+  "actual_output_limit": 1024,
+  "new_accepted_candidates": 1,
+  "aggregate_development_status": {
+    "attempted_unique_documents": 10,
+    "accepted": 10,
+    "rejected": 0,
+    "not_selected": 26
+  },
+  "court_context_preserved_exactly": true,
+  "unsupported_party_property_explicitly_retained_in_rejection_ledger": true,
+  "graph": {
+    "nodes": 3843,
+    "edges": 7631,
+    "documents_assembled": 10,
+    "documents_assembly_failed": 0,
+    "graph_canonical_sha256": "c6b83345e0d17cfc58d6681646d0a78764bf83afd064d38bba2b6d7793123102"
+  },
+  "evidence_references_replayed": 3183,
+  "csv_payloads_match_graph": true,
+  "neo4j_loaded": false,
+  "tests_passed": 293,
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false
+}
