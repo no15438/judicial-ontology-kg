@@ -1,0 +1,148 @@
+{
+  "run_kind": "same_exposed_document_protocol_development_not_paired_semantic_evaluation",
+  "versions": [
+    {
+      "run_id": "923b65e5-a610-4d1e-bfc8-ca51d4626712",
+      "code_commit": "9ba494a6f30cc419f8a0e1a6adeac307d4d31951",
+      "worktree_dirty": false,
+      "status": "inventory_unresolved",
+      "issues": [
+        {
+          "code": "inventory_unresolved",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 2,
+      "observed_cost_cny": "0.210684",
+      "budget_committed_cny": "0.210684",
+      "prior_committed_cny": null,
+      "version": 16,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 18.384
+    },
+    {
+      "run_id": "0cba550f-fd79-4715-8dd1-c224cf53c0d5",
+      "code_commit": "57504877ae56e179f1013a707f6d29e21943dbd5",
+      "worktree_dirty": false,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/actors"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 3,
+      "observed_cost_cny": "0.487428",
+      "budget_committed_cny": "0.487428",
+      "prior_committed_cny": "0.210684",
+      "version": 17,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 80.315
+    },
+    {
+      "run_id": "1923f918-19e9-4bae-94fc-cfab893cc4ee",
+      "code_commit": "64c6c4f5998915d549010d5b3ad83ee17a63be87",
+      "worktree_dirty": false,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/contexts/6/id"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 3,
+      "observed_cost_cny": "0.426720",
+      "budget_committed_cny": "0.426720",
+      "prior_committed_cny": "0.698112",
+      "version": 18,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 42.197
+    },
+    {
+      "run_id": "444a294f-5a86-4b85-a463-bc692282b177",
+      "code_commit": "593dee1c03a87ac5fba6f735381e142cdc36ad45",
+      "worktree_dirty": false,
+      "status": "span_proposals_unresolved",
+      "issues": [
+        {
+          "code": "span_proposals_unresolved",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 5,
+      "observed_cost_cny": "0.643728",
+      "budget_committed_cny": "0.643728",
+      "prior_committed_cny": "1.124832",
+      "version": 19,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 65.273
+    },
+    {
+      "run_id": "a8ec487d-2589-4fe7-871d-d3a4b26e888a",
+      "code_commit": "6cd21db32056471b35200a4b303fca62295bafe5",
+      "worktree_dirty": false,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "quote_missing_in_unit",
+          "path": "/contexts/1/events/2/statements/0/value/source"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 9,
+      "observed_cost_cny": "0.762828",
+      "budget_committed_cny": "0.762828",
+      "prior_committed_cny": "1.768560",
+      "version": 20,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 158.015
+    },
+    {
+      "run_id": "cc2205b2-0090-4153-b0a3-5be0853d7f88",
+      "code_commit": "09e3d04c9d9115910878010ba4a9b516e5a46795",
+      "worktree_dirty": false,
+      "status": "value_proposals_unresolved",
+      "issues": [
+        {
+          "code": "value_proposals_unresolved",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 13,
+      "observed_cost_cny": "1.005888",
+      "budget_committed_cny": "1.005888",
+      "prior_committed_cny": "2.531388",
+      "version": 21,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 119.22
+    }
+  ],
+  "cumulative_estimated_cny": "3.537276",
+  "authorized_cumulative_cap_cny": "200",
+  "semantic_precision_recall_f1": null,
+  "gold_available": false,
+  "raw_documents_or_responses_included": false
+}
