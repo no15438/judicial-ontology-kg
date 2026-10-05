@@ -25,14 +25,22 @@ REFERENCES = {
 def references(record: dict, collection: str) -> dict:
     """Select reference cardinality from the explicit record contract, never guess."""
     version = record["schema_version"]
-    if version not in {"0.1.0", "0.2.0"} or record["ontology_version"] != version:
+    if version not in {"0.1.0", "0.2.0", "0.3.0"} or record["ontology_version"] != version:
         raise ValueError("Unsupported or inconsistent record version")
-    if collection == "contexts" and version == "0.2.0":
+    if collection == "contexts" and version in {"0.2.0", "0.3.0"}:
         return {
             "attributed_actor_ids": ("attributed_to", True),
             "parent_context_id": ("within_context", False),
         }
     return REFERENCES[collection]
+
+
+def evidence_fields(record, collection):
+    if collection == "actors":
+        return {}
+    if collection == "contexts" and record["schema_version"] == "0.3.0":
+        return {"evidence": "covers", "assertion_evidence": "assertion_source"}
+    return {"evidence": "supported_by"}
 
 
 def node_id(document_id: str, kind: str, local_id: str) -> str:
@@ -109,8 +117,8 @@ def project_records(records: list[dict]) -> dict:
                             position,
                             role=participant["role"],
                         )
-                if key != "actors":
-                    evidence = properties.pop("evidence")
+                for field, relation in evidence_fields(record, key).items():
+                    evidence = properties.pop(field)
                     spans = [evidence] if key == "mentions" else evidence
                     for position, span in enumerate(spans):
                         evidence_id = node_id(doc_id, "EvidenceSpan", canonical_hash(span))
@@ -124,7 +132,7 @@ def project_records(records: list[dict]) -> dict:
                                     "properties": deepcopy(span),
                                 }
                             )
-                        edge(identifier, "supported_by", evidence_id, position)
+                        edge(identifier, relation, evidence_id, position)
                 add_node(
                     {
                         "id": identifier,
@@ -190,14 +198,14 @@ def restore_records(graph: dict) -> list[dict]:
                             }
                             for e in links(node["id"], "participant")
                         ]
-                    if key != "actors":
+                    for field, relation in evidence_fields(record, key).items():
                         spans = [
                             deepcopy(nodes[e["target"]]["properties"])
-                            for e in links(node["id"], "supported_by")
+                            for e in links(node["id"], relation)
                         ]
                         if key == "mentions" and len(spans) != 1:
                             raise ValueError("Mention must have exactly one evidence span")
-                        item["evidence"] = spans[0] if key == "mentions" else spans
+                        item[field] = spans[0] if key == "mentions" else spans
                     record[key].append(item)
             records.append(record)
         # Reprojection catches omitted/unused nodes, unsupported edges, wrong types,

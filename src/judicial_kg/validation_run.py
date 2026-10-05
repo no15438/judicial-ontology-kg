@@ -96,7 +96,9 @@ def validate_batch(documents: list[dict], lines: list[str], contract: Contract) 
                 key: sum(len(r[key]) for r in accepted) for key in COLLECTIONS
             },
             "accepted_evidence_spans_replayed": sum(
-                1 if key == "mentions" else len(node["evidence"])
+                1
+                if key == "mentions"
+                else len(node["evidence"]) + len(node.get("assertion_evidence", []))
                 for record in accepted
                 for key in COLLECTIONS
                 if key != "actors"

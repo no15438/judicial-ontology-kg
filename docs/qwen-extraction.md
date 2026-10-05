@@ -302,3 +302,8 @@ bash scripts/run.sh replay-qwen \
 输出目录必须全新。每篇 `stages` 逐阶段保存预算、请求 Schema/message 哈希、响应 RPC、使用量和状态；`stage-*-stage-plan.json` 区分失败、已校验和未尝试语境，记录未分配片段。回放仅读取原运行回执，逐次重建请求，比较中间产物及最终候选，不调用模型。新版本的少量成功不改写原 v8 首轮 3/10 或旧修复后 7/10。
 
 v11配置为`configs/qwen-extraction-v11-pilot.json`；使用相同完整清单、全新输出目录`artifacts/qwen-extraction/fresh-identity-first-v11-spark439`及其`-replay`目录。每主体一条身份锚点，子阶段新增本语境Mention。真实试跑仍因父子语境不包含而拒收，未调用子阶段，不代表整篇已能抽取成功。下一轮的包围范围/直接断言范围分离尚待实现。
+
+
+## 契约0.3的v12试验
+
+配置configs/qwen-extraction-v12-pilot.json；完整输入清单在artifacts/scoped-v12/，输出使用全新artifacts/qwen-extraction/fresh-scoped-v12-spark439，回放使用该路径加-replay。extract-qwen/replay-qwen参数形状不变；离线验证/图装配须明确--contract-version 0.3.0。旧候选不得自动补assertion_evidence来冒充升级。范围、实现和限制见[语境来源分离](scoped-contexts.md)。

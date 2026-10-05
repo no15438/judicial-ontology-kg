@@ -13,6 +13,7 @@ SCHEMA_FILE = "schemas/extraction-v0.1.schema.json"
 CONTRACT_FILES = {
     "0.1.0": (ONTOLOGY_FILE, SCHEMA_FILE),
     "0.2.0": ("ontology/private-lending-v0.2.json", "schemas/extraction-v0.2.schema.json"),
+    "0.3.0": ("ontology/private-lending-v0.3.json", "schemas/extraction-v0.3.schema.json"),
 }
 COLLECTIONS = ("actors", "mentions", "contexts", "roles", "events", "statements")
 
@@ -87,12 +88,16 @@ def build_schema(ontology: dict) -> dict:
             **contextual,
         ),
     }
-    if ontology["version"] == "0.2.0":
+    if ontology["version"] in {"0.2.0", "0.3.0"}:
         context = definitions["context"]
         del context["properties"]["attributed_actor_id"]
         context["required"].remove("attributed_actor_id")
         context["properties"]["attributed_actor_ids"] = array(identifier)
         context["required"].append("attributed_actor_ids")
+    if ontology["version"] == "0.3.0":
+        context = definitions["context"]
+        context["properties"]["assertion_evidence"] = array({"$ref": "#/$defs/span"})
+        context["required"].append("assertion_evidence")
     schema = obj(
         schema_version={"const": ontology["version"]},
         ontology_version={"const": ontology["version"]},

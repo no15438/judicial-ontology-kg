@@ -57,7 +57,7 @@ def body_messages(doc, prompt, catalog, context, schema):
     return result
 
 
-def merge_body(combined, index, body):
+def merge_body(combined, index, body, namespace="v11"):
     body = copy.deepcopy(body)
     mentions = body.pop("mentions")
     # One local ID namespace includes mentions and assertions; reject collisions.
@@ -65,11 +65,11 @@ def merge_body(combined, index, body):
     nodes.extend(s for e in body["events"] for s in e["statements"])
     if len({n["id"] for n in nodes}) != len(nodes):
         raise GroundingError([{"code": "duplicate_child_id", "path": "/"}])
-    result = base.merge_body(combined, index, body, namespace="v11")
+    result = base.merge_body(combined, index, body, namespace=namespace)
     actors = {a["id"]: a for a in result["actors"]}
     for mention in mentions:
         actor_id = mention.pop("actor_id")
-        mention["id"] = f"v11_b{index}_{mention['id']}"
+        mention["id"] = f"{namespace}_b{index}_{mention['id']}"
         actors[actor_id]["mentions"].append(mention)
     return result
 

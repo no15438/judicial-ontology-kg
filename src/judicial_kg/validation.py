@@ -94,6 +94,28 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
             for parent in enclosing
         )
 
+    scoped = record["schema_version"] == "0.3.0"
+    children = {
+        identifier: [c for c in record["contexts"] if c["parent_context_id"] == identifier]
+        for identifier in contexts
+    }
+
+    def overlap(a, b):
+        return a["field"] == b["field"] and max(a["start"], b["start"]) < min(a["end"], b["end"])
+
+    def union_covers(span, sources):
+        # Test a declared envelope against exact spans; never fill gaps or widen it.
+        end = span["start"]
+        for source in sorted(sources, key=lambda s: s["start"]):
+            if source["field"] != span["field"] or source["end"] <= end:
+                continue
+            if source["start"] > end:
+                return False
+            end = max(end, source["end"])
+            if end >= span["end"]:
+                return True
+        return False
+
     for key in COLLECTIONS:
         for i, node in enumerate(record[key]):
             path = f"/{key}/{i}"
@@ -106,6 +128,24 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                         issue("evidence_mismatch", f"{path}/evidence/{j}")
                     if span["field"] not in processed:
                         issue("evidence_in_unprocessed_field", path)
+            if scoped and key == "contexts":
+                direct = node["assertion_evidence"]
+                for j, span in enumerate(direct):
+                    try:
+                        verify_evidence(doc, span)
+                    except (ValueError, KeyError, TypeError):
+                        issue("evidence_mismatch", f"{path}/assertion_evidence/{j}")
+                    if span["field"] not in processed:
+                        issue("evidence_in_unprocessed_field", path + "/assertion_evidence")
+                    if not contained(span, spans):
+                        issue("assertion_outside_enclosing_scope", path + "/assertion_evidence")
+                nested = [s for c in children[node["id"]] for s in c["evidence"]]
+                if any(overlap(a, b) for a in direct for b in nested):
+                    issue("assertion_overlaps_child_scope", path + "/assertion_evidence")
+                if not children[node["id"]] and not direct:
+                    issue("leaf_context_without_assertion_scope", path)
+                if not all(union_covers(span, direct + nested) for span in spans):
+                    issue("enclosing_scope_not_partitioned", path)
             if key == "actors":
                 for mid in node["mention_ids"]:
                     mention = reference(mid, mentions, f"{path}/mention_ids")
@@ -116,7 +156,7 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                 if actor and node["id"] not in actor["mention_ids"]:
                     issue("mention_actor_disagreement", path)
             elif key == "contexts":
-                if record["schema_version"] == "0.2.0":
+                if record["schema_version"] in {"0.2.0", "0.3.0"}:
                     attributions = node["attributed_actor_ids"]
                     attribution_path = path + "/attributed_actor_ids"
                 else:
@@ -151,8 +191,18 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                     parent_id = contexts[parent_id]["parent_context_id"]
             else:
                 context = reference(node["context_id"], contexts, f"{path}/context_id")
-                if context and not all(contained(s, context["evidence"]) for s in spans):
-                    issue("evidence_outside_context", path)
+                scope = (
+                    (context["assertion_evidence"] if scoped else context["evidence"])
+                    if context
+                    else []
+                )
+                if context and not all(contained(s, scope) for s in spans):
+                    issue(
+                        "evidence_outside_assertion_scope"
+                        if scoped
+                        else "evidence_outside_context",
+                        path,
+                    )
                 if key == "roles":
                     reference(node["actor_id"], actors, f"{path}/actor_id")
                 elif key == "events":

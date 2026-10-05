@@ -80,6 +80,7 @@ def replay_completed(root: Path, document_paths: list[Path], source_run: Path, o
     if strict_json((source_run / "report.json").read_bytes())["config"]["version"] in {
         "qwen-extraction-v10",
         "qwen-extraction-v11",
+        "qwen-extraction-v12",
     }:
         from judicial_kg.extraction.staged_replay import replay_completed as replay_staged
 

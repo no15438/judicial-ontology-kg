@@ -1,3 +1,5 @@
+> 本轮新增契约0.3/v12：包围范围与直接断言来源分离，见 docs/scoped-contexts.md 和进度末节。历史0.2/v10/v11保留；真实v12结果以新运行报告为准。
+
 > 新首轮分阶段设计与两轮真实失败见 docs/experiment-feedback.md、research/qwen-context-first-report.json 和 docs/progress.md 最后节。v10/v11 仅为独立小样本协议试验，历史 v8 3/10 与修复后7/10分别保留；最新真实结果以对应新运行报告为准。
 
 # 新仓库交接

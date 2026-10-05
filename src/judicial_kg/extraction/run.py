@@ -49,6 +49,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v9",
             "qwen-extraction-v10",
             "qwen-extraction-v11",
+            "qwen-extraction-v12",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
             "qwen-mention-repair-v3",
@@ -165,6 +166,7 @@ def _run_extraction(
         draft,
         identity_first,
         preventive,
+        scoped,
         typed,
     )
 
@@ -184,6 +186,7 @@ def _run_extraction(
             "qwen-extraction-v9": constrained,
             "qwen-extraction-v10": context_first,
             "qwen-extraction-v11": identity_first,
+            "qwen-extraction-v12": scoped,
         }[config["version"]]
     )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
@@ -448,7 +451,11 @@ def _run_extraction(
                     "version": metadata["service_snapshot"]["models_sha256"],
                     "run_id": run_id,
                 }
-                if config["version"] in {"qwen-extraction-v10", "qwen-extraction-v11"}:
+                if config["version"] in {
+                    "qwen-extraction-v10",
+                    "qwen-extraction-v11",
+                    "qwen-extraction-v12",
+                }:
 
                     def save_stage(name, value, index=index):
                         write_json(output / f"stage-{index:03}-{name}.json", value)
