@@ -7,18 +7,19 @@ from collections import Counter
 from jsonschema import Draft202012Validator
 
 from judicial_kg.contracts import Contract
-from judicial_kg.extraction import actor_grounded, contextual
+from judicial_kg.extraction import actor_grounded, constrained, contextual
 from judicial_kg.extraction.anchored import GroundingError, source_units
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.mention_repair import build_plan as mention_plan
 from judicial_kg.extraction.mention_repair import occurrences, selector
 from judicial_kg.extraction.replay import load_saved_run
-from judicial_kg.extraction.run import completion_content, run_extraction
+from judicial_kg.extraction.run import completion_content, load_config, run_extraction
 from judicial_kg.sources.development import write_json
 from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation_run import strict_json, validate_batch
 
 VERSION = "qwen-selector-repair-v1"
+CONSTRAINED_VERSION = "qwen-selector-repair-v2"
 PROMPT_FILE = "prompts/qwen-selector-repair-v1.txt"
 
 
@@ -246,7 +247,54 @@ class SelectorRepair:
         )
 
 
-def prepare_repair(root, document_paths, specification):
+class ConstrainedSelectorRepair(SelectorRepair):
+    PROMPT_FILE = "prompts/qwen-selector-repair-v2.txt"
+    GENERATION_CONSTRAINT_VERSION = "frozen-selector-catalog-and-bounded-reasons-v1"
+    GENERATION_CONSTRAINT_SCOPE = "selector_item_ids_count_choices_and_reason_length"
+
+    def draft_schema(self, contract):
+        schema = response_schema()
+        schema["properties"]["selector_choices"]["items"]["properties"]["reason"]["maxLength"] = 80
+        return schema
+
+    def bound_schema(self, doc):
+        schema = self.draft_schema(None)
+        items = self.plans[doc["document_id"]]["selector_items"]
+        array = schema["properties"]["selector_choices"]
+        array.update(minItems=len(items), maxItems=len(items))
+        props = array["items"]["properties"]
+        props["item_id"]["enum"] = [i["item_id"] for i in items]
+        props["choice_id"]["enum"] = sorted(
+            {p["choice_id"] for item in items for p in item["choices"]}
+        ) + [None]
+        return schema
+
+    def response_format(self, doc, schema):
+        return constrained.response_format(doc, self.bound_schema(doc))
+
+    def check_selection(self, docs, config):
+        if (
+            config["version"] != CONSTRAINED_VERSION
+            or [d["document_id"] for d in docs] != self.selection_ids
+        ):
+            raise ValueError("Repair selection must exactly retain frozen target IDs")
+
+    def messages(self, doc, prompt, schema):
+        return super().messages(doc, prompt, self.bound_schema(doc))
+
+    def materialize(self, content, doc, contract, provenance):
+        try:
+            choices = strict_json(content)
+        except (ValueError, TypeError):
+            raise DraftError("selector_repair_invalid_json") from None
+        if list(Draft202012Validator(self.bound_schema(doc)).iter_errors(choices)):
+            raise DraftError("selector_repair_schema_invalid")
+        return super().materialize(content, doc, contract, provenance)
+
+
+def prepare_repair(root, document_paths, specification, version=VERSION):
+    if version not in {VERSION, CONSTRAINED_VERSION}:
+        raise ValueError("Unsupported selector repair version")
     docs = [d for p in document_paths for d in strict_json(p.read_bytes())]
     contract = Contract.load(root, "0.2.0")
     validate_batch(docs, [], contract)
@@ -306,7 +354,8 @@ def prepare_repair(root, document_paths, specification):
                 ],
             }
         )
-    return SelectorRepair(
+    factory = ConstrainedSelectorRepair if version == CONSTRAINED_VERSION else SelectorRepair
+    return factory(
         drafts,
         plans,
         ids,
@@ -316,6 +365,14 @@ def prepare_repair(root, document_paths, specification):
             "draft_representation": (
                 "v6 flat draft; v7-v9 nesting flattened and matching redundant types removed; "
                 "original responses remain immutable"
+                if any(
+                    s["source_protocol"] in {"qwen-extraction-v8", "qwen-extraction-v9"}
+                    for s in lineage
+                )
+                else (
+                    "v6 flat draft; v7 nesting flattened and matching redundant types removed; "
+                    "original responses remain immutable"
+                )
             ),
             "baseline_used": False,
             "plan_counts": {
@@ -327,12 +384,13 @@ def prepare_repair(root, document_paths, specification):
 
 
 def run_repair(root, document_paths, specification, config, output, client=None):
-    protocol = prepare_repair(root, document_paths, specification)
+    protocol = prepare_repair(root, document_paths, specification, load_config(config)["version"])
     return run_extraction(root, document_paths, config, output, client, protocol)
 
 
 def replay_repair(root, document_paths, specification, saved_repair, output):
     from judicial_kg.extraction.repair_replay import replay_prepared
 
-    protocol = prepare_repair(root, document_paths, specification)
-    return replay_prepared(root, document_paths, saved_repair, output, protocol, VERSION)
+    version = strict_json((saved_repair / "report.json").read_bytes())["config"]["version"]
+    protocol = prepare_repair(root, document_paths, specification, version)
+    return replay_prepared(root, document_paths, saved_repair, output, protocol, version)

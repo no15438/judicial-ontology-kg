@@ -51,6 +51,7 @@ def load_config(path: Path) -> dict:
             "qwen-mention-repair-v4",
             "qwen-mention-repair-v5",
             "qwen-selector-repair-v1",
+            "qwen-selector-repair-v2",
             "qwen-attribution-repair-v1",
             "qwen-local-review-v1",
             "qwen-actor-type-review-v1",
@@ -235,7 +236,11 @@ def run_extraction(
     if hasattr(protocol, "GENERATION_CONSTRAINT_VERSION"):
         metadata["generation_constraints"] = {
             "version": protocol.GENERATION_CONSTRAINT_VERSION,
-            "scope": "structural_schema_enums_and_source_unit_ids",
+            "scope": getattr(
+                protocol,
+                "GENERATION_CONSTRAINT_SCOPE",
+                "structural_schema_enums_and_source_unit_ids",
+            ),
             "local_only": ["uniqueness", "predicate_conditions", "references", "source_grounding"],
             "full_contract_validation_required": True,
             "unconstrained_fallback": False,

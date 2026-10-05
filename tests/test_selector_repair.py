@@ -15,6 +15,7 @@ from judicial_kg.extraction.anchored import GroundingError
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import run_extraction
 from judicial_kg.extraction.selector_repair import (
+    CONSTRAINED_VERSION,
     VERSION,
     apply_choices,
     build_plan,
@@ -176,7 +177,12 @@ def test_local_span_only_unique_in_original_unit(text, valid):
     "version",
     ["qwen-extraction-v6", "qwen-extraction-v7", "qwen-extraction-v8", "qwen-extraction-v9"],
 )
-def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(workspace, version):  # noqa: F811
+@pytest.mark.parametrize("repair_version", [VERSION, CONSTRAINED_VERSION])
+def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(
+    workspace,  # noqa: F811
+    version,
+    repair_version,
+):
     root, docs, config = workspace
     for name in [
         "ontology/private-lending-v0.2.json",
@@ -186,6 +192,7 @@ def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(work
         "prompts/qwen-extraction-v8.txt",
         "prompts/qwen-extraction-v9.txt",
         "prompts/qwen-selector-repair-v1.txt",
+        "prompts/qwen-selector-repair-v2.txt",
     ]:
         (root / name).write_bytes((ROOT / name).read_bytes())
     doc, draft, _, choices = example()
@@ -235,9 +242,9 @@ def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(work
     # Target becomes second in full repair manifest; no implicit first-N selection.
     repair_docs = root / "repair-docs.json"
     repair_docs.write_text(json.dumps([extra_source(2), doc]))
-    cfg["version"] = VERSION
+    cfg["version"] = repair_version
     config.write_text(json.dumps(cfg))
-    prepared = prepare_repair(root, [repair_docs], spec)
+    prepared = prepare_repair(root, [repair_docs], spec, repair_version)
     assert prepared.drafts[doc["document_id"]] == draft
     for wanted in (["missing"], [doc["document_id"], doc["document_id"]]):
         prepared.selection_ids = wanted

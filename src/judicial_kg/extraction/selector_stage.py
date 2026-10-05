@@ -20,10 +20,10 @@ def prepare_stages(root, documents, specification, saved, output):
     output = safe_output(root, output)
     if output.exists():
         raise ValueError("Selector stage requires a new output directory")
-    parent = selector_repair.prepare_repair(root, documents, specification)
-    proof = replay_prepared(
-        root, documents, saved, output / "parent-replay", parent, selector_repair.VERSION
-    )
+    report = strict_json((saved / "report.json").read_bytes())
+    version = report["config"]["version"]
+    parent = selector_repair.prepare_repair(root, documents, specification, version)
+    proof = replay_prepared(root, documents, saved, output / "parent-replay", parent, version)
     if not proof["accepted_candidates_match_saved"] or not proof["outcomes_match_saved"]:
         raise ValueError("Parent selector replay mismatch")
     report = strict_json((saved / "report.json").read_bytes())
