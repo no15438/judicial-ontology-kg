@@ -12,7 +12,7 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
-@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21])
+@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21, 22])
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
 def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
@@ -89,13 +89,20 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                     }
                 else:
                     value = {"roles": [], "events": [], "statements": []}
-                    if version == 21 and n == 5:
+                    if version in (21, 22) and n == 5:
                         value["statements"] = [
                             {
                                 "id": "s",
                                 "subject_id": "a",
                                 "predicate": "other",
-                                "value": {"kind": "text", "source": {"text": "A🙂"}},
+                                "value": {
+                                    "kind": "text",
+                                    "source": (
+                                        {"span_id": payload["evidence_catalog"][0]["span_id"]}
+                                        if version == 22
+                                        else {"text": "A🙂"}
+                                    ),
+                                },
                                 "polarity": "affirmed",
                             }
                         ]

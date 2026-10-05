@@ -12,6 +12,7 @@ from judicial_kg.extraction import compact_inventory as protocol
 from judicial_kg.extraction import (
     context_delta,
     context_ids,
+    evidence_first,
     mention_stage,
     space_inventory,
     value_stage,
@@ -85,6 +86,7 @@ def _run(
         19: context_ids,
         20: mention_stage,
         21: value_stage,
+        22: evidence_first,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
