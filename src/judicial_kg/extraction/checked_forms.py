@@ -50,7 +50,9 @@ def apply_replacements(doc, units, original, result):
     return {"forms": corrected}
 
 
-def generate_body(doc, prompt, combined, context, contract, infer, save, index, *, budget):
+def generate_body(
+    doc, prompt, combined, context, contract, infer, save, index, *, budget, repair_options=None
+):
     def infer_checked(messages, fmt, stage):
         raw = infer(messages, fmt, stage)
         if not stage.endswith("-forms"):
@@ -96,6 +98,30 @@ def generate_body(doc, prompt, combined, context, contract, infer, save, index, 
         payload["unmatched_proposals"] = [
             {"proposal_id": key, "text": original["forms"][int(key[1:])]} for key in missing
         ]
+        if repair_options is not None:
+            options = repair_options(doc, context["assertion_units"], original, missing)
+            save(stage + "-repair-options", options)
+            payload["allowed_source_fragments"] = options
+            schema["properties"]["replacements"]["items"] = {
+                "oneOf": [
+                    actor_inventory.obj(
+                        {
+                            "proposal_id": {"const": key},
+                            "forms": {
+                                "type": "array",
+                                "minItems": 1,
+                                "maxItems": 8,
+                                "uniqueItems": True,
+                                "items": {"enum": choices},
+                            },
+                        }
+                    )
+                    for key, choices in options.items()
+                ]
+            }
+            correction[0]["content"] += (
+                "只能选择本提议allowed_source_fragments列出的原文片段，不能再次输出未命中形式。片段只是字面候选，需选择实际能指向人物或机构的形式，后续另做归属。"
+            )
         correction[-1]["content"] = json.dumps(payload, ensure_ascii=False)
         budget["used"] += 1
         result = strict_json(infer(correction, response_format(doc, schema), stage + "-repair-1"))

@@ -14,6 +14,7 @@ from judicial_kg.extraction import (
     context_delta,
     context_ids,
     evidence_first,
+    fragment_repairs,
     grouped_mentions,
     mention_stage,
     owner_first,
@@ -97,6 +98,7 @@ def _run(
         25: collective_mentions,
         26: grouped_mentions,
         27: checked_forms,
+        28: fragment_repairs,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
