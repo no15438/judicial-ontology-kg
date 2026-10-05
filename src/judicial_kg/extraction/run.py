@@ -52,6 +52,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v12",
             "qwen-extraction-v13",
             "qwen-extraction-v14",
+            "qwen-extraction-v15",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
             "qwen-mention-repair-v3",
@@ -161,6 +162,7 @@ def _run_extraction(
     config = load_config(config_path)
     from judicial_kg.extraction import (
         actor_grounded,
+        actor_inventory,
         anchored,
         constrained,
         context_first,
@@ -193,6 +195,7 @@ def _run_extraction(
             "qwen-extraction-v12": scoped,
             "qwen-extraction-v13": scoped_incremental,
             "qwen-extraction-v14": span_first,
+            "qwen-extraction-v15": actor_inventory,
         }[config["version"]]
     )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
@@ -463,6 +466,7 @@ def _run_extraction(
                     "qwen-extraction-v12",
                     "qwen-extraction-v13",
                     "qwen-extraction-v14",
+                    "qwen-extraction-v15",
                 }:
 
                     def save_stage(name, value, index=index):

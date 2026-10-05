@@ -127,10 +127,13 @@ def extract(
     merge=None,
     on_header=None,
     generate_body=None,
+    generate_header=None,
 ):
     schema = draft_schema(contract)
-    header = strict_json(
-        infer(messages(doc, prompt, schema), response_format(doc, schema), "header")
+    header = (
+        strict_json(infer(messages(doc, prompt, schema), response_format(doc, schema), "header"))
+        if generate_header is None
+        else generate_header(doc, prompt, contract, provenance, infer, save)
     )
     save("header-draft", header)
     context_first.check_schema(header, schema)

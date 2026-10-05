@@ -83,6 +83,7 @@ def replay_completed(root: Path, document_paths: list[Path], source_run: Path, o
         "qwen-extraction-v12",
         "qwen-extraction-v13",
         "qwen-extraction-v14",
+        "qwen-extraction-v15",
     }:
         from judicial_kg.extraction.staged_replay import replay_completed as replay_staged
 
