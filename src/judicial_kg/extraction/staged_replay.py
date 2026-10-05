@@ -4,7 +4,13 @@ from collections import Counter
 from pathlib import Path
 
 from judicial_kg.contracts import Contract
-from judicial_kg.extraction import context_first, identity_first, scoped, scoped_incremental
+from judicial_kg.extraction import (
+    context_first,
+    identity_first,
+    scoped,
+    scoped_incremental,
+    span_first,
+)
 from judicial_kg.extraction.run import _run_extraction
 from judicial_kg.extraction.transport import Response
 from judicial_kg.sources.development import write_json
@@ -21,6 +27,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v11",
         "qwen-extraction-v12",
         "qwen-extraction-v13",
+        "qwen-extraction-v14",
     }:
         raise ValueError("Staged replay requires a complete staged run")
     protocol = {
@@ -28,6 +35,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v11": identity_first,
         "qwen-extraction-v12": scoped,
         "qwen-extraction-v13": scoped_incremental,
+        "qwen-extraction-v14": span_first,
     }[original["config"]["version"]]
     # Verify every artifact before deriving output, including failed/unused phases.
     verified = {}

@@ -116,7 +116,18 @@ def body_messages(doc, prompt, catalog, context, schema):
     return result
 
 
-def extract(doc, prompt, contract, provenance, infer, save, *, merge=None, on_header=None):
+def extract(
+    doc,
+    prompt,
+    contract,
+    provenance,
+    infer,
+    save,
+    *,
+    merge=None,
+    on_header=None,
+    generate_body=None,
+):
     schema = draft_schema(contract)
     header = strict_json(
         infer(messages(doc, prompt, schema), response_format(doc, schema), "header")
@@ -157,13 +168,16 @@ def extract(doc, prompt, contract, provenance, infer, save, *, merge=None, on_he
             continue
         try:
             schema = body_schema(header, context, contract)
-            body = strict_json(
-                infer(
-                    body_messages(doc, prompt, combined, context, schema),
-                    response_format(doc, schema),
-                    f"body-{index:03}",
+            if generate_body is None:
+                body = strict_json(
+                    infer(
+                        body_messages(doc, prompt, combined, context, schema),
+                        response_format(doc, schema),
+                        f"body-{index:03}",
+                    )
                 )
-            )
+            else:
+                body = generate_body(doc, prompt, combined, context, contract, infer, save, index)
             save(f"body-{index:03}-draft", body)
             context_first.check_schema(body, schema)
             proposed = (
