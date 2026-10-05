@@ -3,6 +3,8 @@
 import json
 from collections import Counter
 
+from jsonschema import Draft202012Validator
+
 from judicial_kg.contracts import Contract
 from judicial_kg.extraction import contextual, selector_repair
 from judicial_kg.extraction.draft import DraftError
@@ -34,11 +36,35 @@ def prepare_stages(root, documents, specification, saved, output):
     for doc, call in zip(selected, calls, strict=True):
         key = doc["document_id"]
         raw = (saved / f"rpc-{call['rpc']:03}.response.bin").read_bytes()
-        content, _ = completion_content(strict_json(raw), report["config"]["model"])
-        choices = strict_json(content)
-        patched, counts, pending = selector_repair.stage_choices(
-            parent.drafts[key], parent.plans[key], choices
-        )
+        choices = None
+        try:
+            content, _ = completion_content(strict_json(raw), report["config"]["model"])
+            try:
+                choices = strict_json(content)
+            except (TypeError, ValueError):
+                raise DraftError("selector_stage_invalid_json") from None
+            if hasattr(parent, "bound_schema") and list(
+                Draft202012Validator(parent.bound_schema(doc)).iter_errors(choices)
+            ):
+                raise DraftError("selector_repair_schema_invalid")
+            patched, counts, pending = selector_repair.stage_choices(
+                parent.drafts[key], parent.plans[key], choices
+            )
+        except DraftError as error:
+            # Invalid decisions are never converted to uncertainty or applied in
+            # part. Keep this entire document unchanged and continue other docs.
+            stages[key] = {
+                "original_draft_sha256": canonical_hash(parent.drafts[key]),
+                "staged_draft_sha256": canonical_hash(parent.drafts[key]),
+                "draft": parent.drafts[key],
+                "decisions": choices,
+                "decision_counts": {},
+                "pending_decisions": [],
+                "validation_issues": error.issues,
+                "status": "invalid_parent_decisions",
+                "reference_status": "model_decisions_not_gold",
+            }
+            continue
         # Full checks are always run. Unresolved decisions remain explicitly pending
         # even when unchanged selectors might happen to compile under a later rule.
         try:

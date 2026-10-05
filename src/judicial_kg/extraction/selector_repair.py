@@ -20,6 +20,7 @@ from judicial_kg.validation_run import strict_json, validate_batch
 
 VERSION = "qwen-selector-repair-v1"
 CONSTRAINED_VERSION = "qwen-selector-repair-v2"
+LOCAL_SPAN_VERSION = "qwen-selector-repair-v3"
 PROMPT_FILE = "prompts/qwen-selector-repair-v1.txt"
 
 
@@ -292,8 +293,30 @@ class ConstrainedSelectorRepair(SelectorRepair):
         return super().materialize(content, doc, contract, provenance)
 
 
+class LocalSpanSelectorRepair(ConstrainedSelectorRepair):
+    """V3 decouples literal text from choice IDs; V2 requests remain replayable."""
+
+    PROMPT_FILE = "prompts/qwen-selector-repair-v3.txt"
+    GENERATION_CONSTRAINT_VERSION = "frozen-selector-catalog-literal-text-independent-v1"
+
+    def bound_schema(self, doc):
+        schema = super().bound_schema(doc)
+        props = schema["properties"]["selector_choices"]["items"]["properties"]
+        # V2's nullable-string dict was shared by choice_id and local_text.
+        # Preserve its historical schema, but give V3 text a separate dict.
+        props["local_text"] = {k: v for k, v in props["local_text"].items() if k != "enum"}
+        return schema
+
+    def check_selection(self, docs, config):
+        if (
+            config["version"] != LOCAL_SPAN_VERSION
+            or [d["document_id"] for d in docs] != self.selection_ids
+        ):
+            raise ValueError("Repair selection must exactly retain frozen target IDs")
+
+
 def prepare_repair(root, document_paths, specification, version=VERSION):
-    if version not in {VERSION, CONSTRAINED_VERSION}:
+    if version not in {VERSION, CONSTRAINED_VERSION, LOCAL_SPAN_VERSION}:
         raise ValueError("Unsupported selector repair version")
     docs = [d for p in document_paths for d in strict_json(p.read_bytes())]
     contract = Contract.load(root, "0.2.0")
@@ -354,7 +377,11 @@ def prepare_repair(root, document_paths, specification, version=VERSION):
                 ],
             }
         )
-    factory = ConstrainedSelectorRepair if version == CONSTRAINED_VERSION else SelectorRepair
+    factory = {
+        VERSION: SelectorRepair,
+        CONSTRAINED_VERSION: ConstrainedSelectorRepair,
+        LOCAL_SPAN_VERSION: LocalSpanSelectorRepair,
+    }[version]
     return factory(
         drafts,
         plans,

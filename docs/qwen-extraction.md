@@ -270,3 +270,9 @@ v8固定10篇从原文重抽的首轮结果保持3通过、6校验拒收、1截�
 bash scripts/run.sh repair-qwen-context-scope --documents <全量登记1> --documents <全量登记2> --repair-spec <固定父运行及目标ID> --config configs/qwen-context-scope-review-v1.json --output artifacts/<新修复目录>
 bash scripts/run.sh replay-qwen-context-scope --documents <同一全量登记1> --documents <同一全量登记2> --repair-spec <同一登记> --repair-run artifacts/<修复目录> --output artifacts/<新回放目录>
 ```
+
+### 选择器 v3 与逐篇失败隔离
+
+v2 的生成 Schema 复用了 `choice_id`/`local_text` 的可空字符串对象，给 `choice_id` 绑定目录枚举时同时限制了 `local_text`。实际失败响应因此在原文字段输出位置编号，局部字面校验拒收。`qwen-selector-repair-v3` 将文字字段独立出来；选项 ID 仍受目录限制，文字必须在原指定片段唯一出现，身份、语境、属性与全部本地校验不放宽。v2 保持历史生成 Schema 和提示不变，已保存的失败仍可精确回放。
+
+暂存流程现在逐篇隔离无效决定：完整记录原决定、错误与未变的原草稿，状态 `invalid_parent_decisions`，不自动转换为 `uncertain` 或应用部分决定。其他文书可继续暂存；无效文书不进入局部复核。对存在未决项的合法决定，仍保留已定位项并整篇拒收，直到有界审核和完整校验通过。

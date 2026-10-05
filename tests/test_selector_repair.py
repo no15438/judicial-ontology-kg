@@ -16,6 +16,7 @@ from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import run_extraction
 from judicial_kg.extraction.selector_repair import (
     CONSTRAINED_VERSION,
+    LOCAL_SPAN_VERSION,
     VERSION,
     apply_choices,
     build_plan,
@@ -177,7 +178,7 @@ def test_local_span_only_unique_in_original_unit(text, valid):
     "version",
     ["qwen-extraction-v6", "qwen-extraction-v7", "qwen-extraction-v8", "qwen-extraction-v9"],
 )
-@pytest.mark.parametrize("repair_version", [VERSION, CONSTRAINED_VERSION])
+@pytest.mark.parametrize("repair_version", [VERSION, CONSTRAINED_VERSION, LOCAL_SPAN_VERSION])
 def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(
     workspace,  # noqa: F811
     version,
@@ -193,6 +194,7 @@ def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(
         "prompts/qwen-extraction-v9.txt",
         "prompts/qwen-selector-repair-v1.txt",
         "prompts/qwen-selector-repair-v2.txt",
+        "prompts/qwen-selector-repair-v3.txt",
     ]:
         (root / name).write_bytes((ROOT / name).read_bytes())
     doc, draft, _, choices = example()

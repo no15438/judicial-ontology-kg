@@ -52,6 +52,7 @@ def load_config(path: Path) -> dict:
             "qwen-mention-repair-v5",
             "qwen-selector-repair-v1",
             "qwen-selector-repair-v2",
+            "qwen-selector-repair-v3",
             "qwen-attribution-repair-v1",
             "qwen-local-review-v1",
             "qwen-local-review-v2",
