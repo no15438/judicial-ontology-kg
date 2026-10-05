@@ -91,7 +91,18 @@
       "version": 19,
       "replay_requests_submitted": 0,
       "replay_verified": true,
-      "request_elapsed_seconds": 65.273
+      "request_elapsed_seconds": 65.273,
+      "context_statuses": [
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
     },
     {
       "run_id": "a8ec487d-2589-4fe7-871d-d3a4b26e888a",
@@ -114,7 +125,20 @@
       "version": 20,
       "replay_requests_submitted": 0,
       "replay_verified": true,
-      "request_elapsed_seconds": 158.015
+      "request_elapsed_seconds": 158.015,
+      "context_statuses": [
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
     },
     {
       "run_id": "cc2205b2-0090-4153-b0a3-5be0853d7f88",
@@ -137,10 +161,132 @@
       "version": 21,
       "replay_requests_submitted": 0,
       "replay_verified": true,
-      "request_elapsed_seconds": 119.22
+      "request_elapsed_seconds": 119.22,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
+    },
+    {
+      "run_id": "e013f7f8-debd-4c1f-b925-c1373f6c6853",
+      "code_commit": "ac4ac8459d7454d729b8022611d188ff9fd513bf",
+      "worktree_dirty": false,
+      "status": "fact_evidence_outside_owner",
+      "issues": [
+        {
+          "code": "fact_evidence_outside_owner",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 12,
+      "observed_cost_cny": "0.987912",
+      "budget_committed_cny": "0.987912",
+      "prior_committed_cny": "3.537276",
+      "version": 22,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 115.575,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
+    },
+    {
+      "run_id": "92eb9a95-ce1d-4b7d-859f-69db3055d780",
+      "code_commit": "ef9681adfd70c38df30fe7f3e754c106c8ce69ed",
+      "worktree_dirty": false,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/event_statements/e_absence/0/value/kind"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 19,
+      "observed_cost_cny": "1.493292",
+      "budget_committed_cny": "1.493292",
+      "prior_committed_cny": "4.525188",
+      "version": 23,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 154.426,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
+    },
+    {
+      "run_id": "265da3c4-0d00-4a81-937c-fc3af3d6c0cc",
+      "code_commit": "99ec1117b835d636aaffc62e3c78dd31e9feddf5",
+      "worktree_dirty": false,
+      "status": "span_proposals_unresolved",
+      "issues": [
+        {
+          "code": "span_proposals_unresolved",
+          "path": "/"
+        }
+      ],
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 21,
+      "observed_cost_cny": "1.768272",
+      "budget_committed_cny": "1.768272",
+      "prior_committed_cny": "6.018480",
+      "version": 24,
+      "replay_requests_submitted": 0,
+      "replay_verified": true,
+      "request_elapsed_seconds": 146.795,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
     }
   ],
-  "cumulative_estimated_cny": "3.537276",
+  "cumulative_estimated_cny": "7.786752",
   "authorized_cumulative_cap_cny": "200",
   "semantic_precision_recall_f1": null,
   "gold_available": false,

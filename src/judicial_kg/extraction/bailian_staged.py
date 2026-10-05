@@ -13,6 +13,7 @@ from judicial_kg.extraction import (
     context_delta,
     context_ids,
     evidence_first,
+    grouped_mentions,
     mention_stage,
     owner_first,
     space_inventory,
@@ -93,6 +94,7 @@ def _run(
         23: owner_first,
         24: typed_owner,
         25: collective_mentions,
+        26: grouped_mentions,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:

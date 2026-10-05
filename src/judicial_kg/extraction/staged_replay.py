@@ -12,6 +12,7 @@ from judicial_kg.extraction import (
     context_first,
     context_ids,
     evidence_first,
+    grouped_mentions,
     identity_first,
     mention_stage,
     owner_first,
@@ -50,6 +51,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v23",
         "qwen-extraction-v24",
         "qwen-extraction-v25",
+        "qwen-extraction-v26",
     }:
         raise ValueError("Staged replay requires a complete staged run")
     protocol = {
@@ -69,6 +71,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v23": owner_first,
         "qwen-extraction-v24": typed_owner,
         "qwen-extraction-v25": collective_mentions,
+        "qwen-extraction-v26": grouped_mentions,
     }[original["config"]["version"]]
     # Verify every artifact before deriving output, including failed/unused phases.
     verified = {}
