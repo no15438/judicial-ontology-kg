@@ -189,3 +189,17 @@ bash scripts/run.sh repair-qwen-attribution \
  --output artifacts/qwen-extraction/attribution-repair-pilot-v1
 ```
 离线使用replay-qwen-attribution、相同来源/spec，并指定--repair-run和新的--output；不会调用模型。
+
+## 剩余5篇有限位置回归已完成（最新状态）
+
+5次本地串行调用已结束，累计255.657秒：1新增通过、3定位拒判、1完整契约拒收；31篇本轮未选中。零调用重放候选与全部outcomes一致，原失败/原响应不可变。运行时工作树有上轮结果元数据未提交，但全部源码字节哈希与记录的df92b17提交一致，不能误记为干净运行。公共记录research/qwen-remaining-five-repair-report.json。
+
+累计完整36篇：10篇曾尝试，其中6通过、4拒收，另26未选中。6篇候选装配1942节点/3950边、1642次证据引用，写盘还原、来源重验、CSV逐条payload一致。artifacts/graph/development10-v3与artifacts/neo4j/development10-v3为最终新快照，尚未载入Neo4j。装配缺失30篇=4拒收+26未选中。无推理在途，不要重复启动selector-repair-remaining-five-v1目录。
+
+下轮固定4篇，不新增案件：
+1. AppealCase 026b…：7提及和1事件属性拒判；当前归属/不支持姓名目录均无可修项目，需要局部证据重新分析，属性仍限原语境。
+2. AppealCase 442c…：5提及拒判；另有3个候选语境复核项目、2个不支持姓名目录项目，不能把目录当正确决策。
+3. Spark 4396…：2提及拒判，其中1个符合不支持姓名复核目录；另1个仍需来源核查。
+4. Spark 6b9b…：a9 organization无提及、无语境/角色引用；下轮实现有界主体保留/拒绝复核前，不能自动删除、补姓名或放宽minItems。
+
+优先补齐已确定位置与未决项的分阶段账本：只保留明确模型位置选择，未决项保持失败，不重新猜已解决位置；测试不可变语义、来源和回放后，才局部回归上述4篇。原始断言、拒绝原因及完整分母持续保留，语义P/R/F1仍为空。

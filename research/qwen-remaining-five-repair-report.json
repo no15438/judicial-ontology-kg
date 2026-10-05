@@ -1,0 +1,201 @@
+{
+  "code_commit": "df92b172bd00441b2658e26642cf9294f312eeb3",
+  "worktree_dirty": false,
+  "completed": true,
+  "expected_documents": 36,
+  "selected_documents": 5,
+  "requests_submitted": 5,
+  "document_status_counts": {
+    "accepted_candidate": 1,
+    "contract_rejected": 1,
+    "draft_grounding_failed": 3,
+    "not_selected": 31
+  },
+  "selected_outcomes": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "selected": true,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/62/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/110/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/112/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/118/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/137/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/138/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/161/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/contexts/2/events/0/statements/1/value/source"
+        }
+      ],
+      "input_tokens": 26350,
+      "request_elapsed_seconds": 127.99795887499931,
+      "usage": {
+        "prompt_tokens": 26350,
+        "completion_tokens": 1942,
+        "total_tokens": 28292
+      }
+    },
+    {
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "selected": true,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/37/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/60/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/65/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/97/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/138/evidence"
+        }
+      ],
+      "input_tokens": 22062,
+      "request_elapsed_seconds": 67.92455483399681,
+      "usage": {
+        "prompt_tokens": 22062,
+        "completion_tokens": 912,
+        "total_tokens": 22974
+      }
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "selected": true,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/22/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/44/evidence"
+        }
+      ],
+      "input_tokens": 8420,
+      "request_elapsed_seconds": 20.03301670801011,
+      "usage": {
+        "prompt_tokens": 8420,
+        "completion_tokens": 260,
+        "total_tokens": 8680
+      }
+    },
+    {
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "selected": true,
+      "status": "accepted_candidate",
+      "issues": [],
+      "input_tokens": 10108,
+      "request_elapsed_seconds": 23.961776499985717,
+      "usage": {
+        "prompt_tokens": 10108,
+        "completion_tokens": 303,
+        "total_tokens": 10411
+      }
+    },
+    {
+      "document_id": "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+      "selected": true,
+      "status": "contract_rejected",
+      "issues": [
+        {
+          "code": "schema:minItems",
+          "path": "/actors/8/mention_ids"
+        }
+      ],
+      "input_tokens": 9995,
+      "request_elapsed_seconds": 15.73920700000599,
+      "usage": {
+        "prompt_tokens": 9995,
+        "completion_tokens": 111,
+        "total_tokens": 10106
+      }
+    }
+  ],
+  "repair_decision_counts": {
+    "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49": {
+      "local_span": 1
+    },
+    "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26": {
+      "locate": 2,
+      "local_span": 1
+    }
+  },
+  "prompt_sha256": "b043b494ed0eacf198f598b330998171c62863bedee379e98e87a116a768ad80",
+  "input_files": [
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    },
+    {
+      "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+      "bytes": 428236
+    }
+  ],
+  "schema_version": 1,
+  "protocol_version": "qwen-selector-repair-v1",
+  "run_kind": "local_qwen_bounded_selector_repair_not_gold",
+  "model_request_seconds": 255.657,
+  "source_report_sha256": "16ea1b9e13b35cceb991207ab1b8432e1624385130c759583a6ecbece18c3ca5",
+  "offline_replay": {
+    "requests_submitted": 0,
+    "accepted_candidates_match_saved": true,
+    "outcomes_match_saved": true
+  },
+  "new_accepted_candidates": 1,
+  "aggregate_development_status": {
+    "attempted_unique_documents": 10,
+    "accepted": 6,
+    "rejected": 4,
+    "not_selected": 26
+  },
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false,
+  "code_files_match_recorded_commit": true,
+  "dirty_worktree_note": "Only prior-pilot metadata was uncommitted at start; every recorded code hash matches its commit.",
+  "graph": {
+    "nodes": 1942,
+    "edges": 3950,
+    "documents_assembled": 6,
+    "documents_assembly_failed": 0,
+    "graph_canonical_sha256": "3b13379c69e7f8696430a1d703dcb0c29173b9a473de29c1e48bdf12582693a7"
+  },
+  "evidence_references_replayed": 1642,
+  "csv_payloads_match_graph": true,
+  "neo4j_loaded": false
+}
