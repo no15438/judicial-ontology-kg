@@ -2,9 +2,9 @@
 
 核对日期：2026-10-05，Australia/Sydney。
 
-当前分支 `codex/qwen-extraction`。v8 首轮预防约束代码 `df23553`；首轮统计与只读角色诊断也已实现，全套 313 项测试通过。后续只调用本地 Qwen，不需要用户提供法律 gold。原文/QA/模型输出/图谱在 Git 忽略目录；用户已授权这些开发资料上传 Google 项目文件夹，仍不上传 GitHub，密钥不上传。
+当前分支 `codex/qwen-extraction`。v8 首轮预防约束代码 `df23553`；首轮统计与只读角色诊断也已实现，全套 322 项测试通过。后续只调用本地 Qwen，不需要用户提供法律 gold。原文/QA/模型输出/图谱在 Git 忽略目录；用户已授权这些开发资料上传 Google 项目文件夹，仍不上传 GitHub，密钥不上传。
 
-当前在途：`artifacts/qwen-extraction/fresh-first-pass-v8/`，固定 AppealCase 5 篇、Spark 5 篇从原文重新抽取，执行固定于干净 `df23553`。请求只发送原文 source_units，不发送 QA、旧候选或修复决定。10 篇串行处理，完整 36 篇分母保留；不要重复启动该目录。原等待自动化 automation-2 已暂停，不重启服务、不恢复旧等待任务。
+v8固定10篇首轮已经结束：3候选通过、6拒收、1截断；新图819节点/1503边、706次证据引用，零调用回放与CSV保真通过，不覆盖旧修复图。执行为干净df23553，原目录artifacts/qwen-extraction/fresh-first-pass-v8不可覆盖。当前准备在同一服务串行运行v9单篇词表回归（原文重抽，不送旧候选）；新目录artifacts/qwen-extraction/constrained-pilot-v9，不重复启动。原等待自动化automation-2保持暂停，不重启服务。
 
 此前固定 10 篇经多轮有界修复后工程通过，图为 3,843 节点/7,631 边、3,183 次证据引用，位于 `artifacts/graph/development10-v5/`；不是本轮首轮结果。Neo4j 尚未切换该快照，旧 524/994 展示不变。历史首轮拒收、截断和修复中间结果全部保留。普通抽取默认仍为 v5，不自动扩量或切默认。
 
@@ -132,3 +132,13 @@ Drive 中的《01 开发进度与复现入口｜Codex》接续初期为空白；
 固定既有10篇开发文书（AppealCase5+Spark5），全36篇仅重排清单，无新增案件/原文改写，选样在请求前登记artifacts/fresh-first-pass-v8/selection.json。请求只含原文source_units，QA、旧候选、修复决定不发送。温度0.2、seed42、输出12288、串行、本地Spark Qwen；代码运行固定于干净df23553。
 
 artifacts/qwen-extraction/fresh-first-pass-v8当前在途，不重复启动该目录。先完整完成10篇新抽取与严格校验，再零调用回放，分别报告首轮候选通过/空输出/失败、未选中26篇；后续修复另列，不能用旧修复通过充数。新图若导出亦与旧修复10篇快照隔离，不自动载入Neo4j。语义P/R/F1仍为空，已曝光开发回归不是盲测。
+
+## v8首轮完整回归与v9词表修复准备
+
+v8固定10篇从原文重新生成已结束，执行为干净df23553：10次本地调用，3首轮候选通过、6定位/Schema拒收、1截断、0空输出；完整36篇分母保留，26未选中。累计模型请求3135.807秒。严格首轮通过率30%仅为工程通过率，不是法律语义准确率；旧修复10篇不计入本轮。
+
+已零调用回放，接受候选和逐篇状态/问题一致；3篇新候选独立装配819节点/1503边、706次证据引用，保存还原、原文重验及CSV payload比对通过。新路径artifacts/graph/fresh-first-pass-v8及artifacts/neo4j/fresh-first-pass-v8未载入Neo4j，旧图哈希未变。公共元数据research/qwen-fresh-first-pass-v8-report.json。
+
+主要首轮问题为重复文字未指定序号、姓名/属性选错片段、事件证据越出语境、输出截断，以及Role.role误用事件参与者词表claimant/respondent。v9代码68c365e已加入明确词表区分和服务端结构Schema约束，并将片段ID枚举绑定当前原文；唯一性、predicate条件、引用和逐字证据仍由完整本地校验，服务端失败不回退到无约束生成。本体0.2.0/编译器严格规则未放宽。全套322项测试通过，默认仍v5。
+
+当前准备串行重抽固定的一篇词表错误短文书：configs/qwen-constrained-pilot-v9.json，选样在artifacts/fresh-first-pass-v8/v9-pilot-registration.json登记；只发送原文，不发送旧候选或修复答案。该单篇是已曝光错误回归，不能外推10篇稳定性，结果不得改写v8首轮3/10。定位与语境错误仍需分别有界修复，不新增案件或OpenJev，整体语义P/R/F1为null。

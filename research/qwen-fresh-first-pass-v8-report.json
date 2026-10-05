@@ -1,0 +1,99 @@
+{
+  "run_kind": "fresh_first_pass_engineering_summary_not_gold",
+  "expected_documents": 36,
+  "selected_documents": 10,
+  "requests_submitted": 10,
+  "first_pass_candidate_accepted": 3,
+  "first_pass_empty_accepted": 0,
+  "first_pass_failed": 7,
+  "first_pass_status_counts": {
+    "draft_grounding_failed": 6,
+    "response_truncated": 1,
+    "accepted_candidate": 3
+  },
+  "first_pass_candidate_rate": 0.3,
+  "not_selected": 26,
+  "followup_repair_performed": false,
+  "post_repair_candidate_accepted": null,
+  "prior_repaired_candidates_counted": false,
+  "model_request_seconds": 3135.8067486670043,
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "source_run_id": "4b072d0266ba4b66ac63268ce67fb06b",
+  "source_report_sha256": "10d26f3d6c445904311888db9017827b64f88af185a69cdcb0bb128f3e5f83c4",
+  "source_code_commit": "df23553f4bd69d5ba02dcb2bc50ff4acbb69cf0f",
+  "source_worktree_dirty": false,
+  "prompt_sha256": "152e18d9dec47d0552c758a4b2372e2fe0737f1b94157ef38614889a9daaf5c9",
+  "config_sha256": "1634a767656e678b08fe3ef2f55f5d579209ab04c271dbc79ce531afa281918a",
+  "input_files": [
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    },
+    {
+      "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+      "bytes": 428236
+    }
+  ],
+  "selection_sha256": "ec5426cced71bb509a9b98a1042c7796e18200a16216415e83f42765447a86c7",
+  "selected_document_ids": [
+    "appealcase:9ada232ac377047075e7185daff0cb786c1062beff60d94f5708c8aee4b13ba1",
+    "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+    "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+    "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+    "appealcase:6c2f27fa07e45ca57c315183a4d9bdf3675ebf3f699ad4be467687f47996bb00",
+    "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+    "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+    "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+    "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+    "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49"
+  ],
+  "failure_issue_code_counts": {
+    "quote_ambiguous_in_unit": 14,
+    "quote_missing_in_unit": 11,
+    "response_truncated": 1,
+    "evidence_outside_context": 2,
+    "draft_schema_invalid": 2
+  },
+  "replay_requests_submitted": 0,
+  "replay_accepted_and_selected_outcomes_match": true,
+  "original_report_unmodified": true,
+  "graph_documents_assembled": 3,
+  "graph_nodes": 819,
+  "graph_edges": 1503,
+  "graph_evidence_references": 706,
+  "graph_canonical_sha256": "573bc131d8541057460a19ca45d25c41984fc66c38ea309f4263e9750135c0be",
+  "graph_roundtrip_and_source_revalidation": true,
+  "assembly_denominator": {
+    "expected_documents": 36,
+    "source_fields_verified": 156,
+    "attempts_total": 3,
+    "attempts_rejected": 0,
+    "documents_accepted_candidate": 3,
+    "documents_accepted_empty": 0,
+    "documents_rejected": 0,
+    "documents_missing": 33,
+    "issue_counts": {},
+    "accepted_node_counts": {
+      "actors": 26,
+      "mentions": 106,
+      "contexts": 28,
+      "roles": 23,
+      "events": 23,
+      "statements": 80
+    },
+    "accepted_evidence_spans_replayed": 706,
+    "semantic_precision_recall_f1": null,
+    "gold_available": false,
+    "semantic_completeness": "not_assessed",
+    "requires_user_legal_annotation": false
+  },
+  "assembly_missing_includes_grounding_failures_and_not_selected": true,
+  "participant_hint_counts": {},
+  "participant_diagnostics_are_not_semantic_errors": true,
+  "csv_payloads_match_graph": true,
+  "loaded_into_neo4j": false,
+  "old_graph_unmodified": true,
+  "development_exposed_not_blind_test": true,
+  "requires_user_legal_annotation": false
+}

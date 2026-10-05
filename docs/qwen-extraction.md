@@ -237,3 +237,13 @@ bash scripts/run.sh repair-qwen-attribution \
 固定既有10篇开发文书（AppealCase5+Spark5），全36篇仅重排清单，无新增案件/原文改写，选样在请求前登记artifacts/fresh-first-pass-v8/selection.json。请求只含原文source_units，QA、旧候选、修复决定不发送。温度0.2、seed42、输出12288、串行、本地Spark Qwen；代码运行固定于干净df23553。
 
 artifacts/qwen-extraction/fresh-first-pass-v8当前在途，不重复启动该目录。先完整完成10篇新抽取与严格校验，再零调用回放，分别报告首轮候选通过/空输出/失败、未选中26篇；后续修复另列，不能用旧修复通过充数。新图若导出亦与旧修复10篇快照隔离，不自动载入Neo4j。语义P/R/F1仍为空，已曝光开发回归不是盲测。
+
+## v8首轮完整回归与v9词表修复准备
+
+v8固定10篇从原文重新生成已结束，执行为干净df23553：10次本地调用，3首轮候选通过、6定位/Schema拒收、1截断、0空输出；完整36篇分母保留，26未选中。累计模型请求3135.807秒。严格首轮通过率30%仅为工程通过率，不是法律语义准确率；旧修复10篇不计入本轮。
+
+已零调用回放，接受候选和逐篇状态/问题一致；3篇新候选独立装配819节点/1503边、706次证据引用，保存还原、原文重验及CSV payload比对通过。新路径artifacts/graph/fresh-first-pass-v8及artifacts/neo4j/fresh-first-pass-v8未载入Neo4j，旧图哈希未变。公共元数据research/qwen-fresh-first-pass-v8-report.json。
+
+主要首轮问题为重复文字未指定序号、姓名/属性选错片段、事件证据越出语境、输出截断，以及Role.role误用事件参与者词表claimant/respondent。v9代码68c365e已加入明确词表区分和服务端结构Schema约束，并将片段ID枚举绑定当前原文；唯一性、predicate条件、引用和逐字证据仍由完整本地校验，服务端失败不回退到无约束生成。本体0.2.0/编译器严格规则未放宽。全套322项测试通过，默认仍v5。
+
+当前准备串行重抽固定的一篇词表错误短文书：configs/qwen-constrained-pilot-v9.json，选样在artifacts/fresh-first-pass-v8/v9-pilot-registration.json登记；只发送原文，不发送旧候选或修复答案。该单篇是已曝光错误回归，不能外推10篇稳定性，结果不得改写v8首轮3/10。定位与语境错误仍需分别有界修复，不新增案件或OpenJev，整体语义P/R/F1为null。
