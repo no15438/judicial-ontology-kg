@@ -4,7 +4,7 @@
 
 **新增授权工作**：新分支 [OpenJev 影子对照](docs/jev-shadow-evaluation.md) 已实现并完成36次真实请求：9语境、Qwen/Jev反序稳定各8/9，4项待复核；零调用回放通过，431项测试。Jev保持影子模式，不自动改候选；主流程M1–M4及完整端到端对照尚待实现。
 
-**当前执行计划**：[工程改进计划](docs/engineering-improvement-plan.md)。按 M1 原文位置接口 → M2 冻结前归属复核 → M3 阶段恢复与修复预算 → M4 三篇/固定十篇完整验收推进。M1–M4 均待实施，本轮只完成计划；首个交付物为 M1 代码与离线回归。历史章节的“下一步”不覆盖此顺序。
+**当前执行计划**：[工程改进计划](docs/engineering-improvement-plan.md)。按 M1 原文位置接口 → M2 冻结前归属复核 → M3 阶段恢复与修复预算 → M4 三篇/固定十篇完整验收推进。M1的[位置目录/生成Schema/编译基础模块](docs/span-catalog.md)已实现并通过真实6位置零调用回归；下一步接入新版本生成器和运行回放。属性值、完整首轮协议及M2–M4仍未完成。历史章节的“下一步”不覆盖此顺序。
 
 当前新增契约0.3：Context包围范围与直接断言来源分离，父子包含、引用隔离、完整分区和图中covers/assertion_source均已实现。v12/v13在同一已阅Spark4396原文上新抽，不输入旧候选/QA/修复答案；全套408项测试及Ruff/格式/项目检查通过。代码提交7b93d94、8ba1e8c，真实运行均始于干净工作树。设计见docs/scoped-contexts.md，公开结果research/qwen-scoped-context-report.json。
 

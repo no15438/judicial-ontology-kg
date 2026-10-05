@@ -1,0 +1,18 @@
+{
+  "version": "direct-span-catalog-v1",
+  "validation": "offline_source_coordinate_regression_only",
+  "source_document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+  "catalog_sha256": "f91b6f650bfbf2248df5b262177454894518bc0e65deb473456c46fb0b621e4d",
+  "source_sha256": "f38940c37fc87cb545b7d63b1c707753d199b3f0997fb835b7d264596356aa07",
+  "scope_units": 12,
+  "exact_positions": 6,
+  "matches_prior_diagnostic": true,
+  "each_position_compiles_and_replays": true,
+  "ambiguous_proposal_can_remain_unresolved": true,
+  "automatic_position_selected": false,
+  "model_calls": 0,
+  "candidate_modified": false,
+  "semantic_attribution_verified": false,
+  "full_document_extraction_tested": false,
+  "old_v13_rejection_unchanged": true
+}
