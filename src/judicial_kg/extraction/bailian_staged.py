@@ -28,6 +28,7 @@ from judicial_kg.extraction import compact_inventory as protocol
 from judicial_kg.extraction.bailian import MODEL, PRICE_SOURCE, BailianClient, credentials
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.run import completion_content, extraction_lock, usage_counts
+from judicial_kg.extraction.stage_resume import StagePrefix
 from judicial_kg.extraction.transport import Response
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import sha256
@@ -61,6 +62,8 @@ def run_cloud(
     version=16,
     previous_runs=(),
     budget_cny=None,
+    resume_from=None,
+    restart_stage=None,
 ):
     with extraction_lock(root):
         return _run(
@@ -72,6 +75,8 @@ def run_cloud(
             version=version,
             previous_runs=previous_runs,
             budget_cny=budget_cny,
+            resume_from=resume_from,
+            restart_stage=restart_stage,
         )
 
 
@@ -85,6 +90,8 @@ def _run(
     version=16,
     previous_runs=(),
     budget_cny=None,
+    resume_from=None,
+    restart_stage=None,
 ):
     root = root.resolve()
     selected_protocol = {
@@ -111,10 +118,12 @@ def _run(
             raise ValueError("Budget must be positive and at most authorized 200 CNY")
         config["budget_cny"] = str(budget)
     lineage, prior = [], Decimal(0)
+    prior_reports = []
     for path in previous_runs:
         path = path.resolve()
         raw = (path / "report.json").read_bytes()
         saved = strict_json(raw)
+        prior_reports.append(saved)
         if not saved["completed"] or saved["config"]["model"] != MODEL:
             raise ValueError("Unsettled prior cloud run")
         prior += Decimal(saved["budget_committed_cny"])
@@ -140,6 +149,19 @@ def _run(
     validate_batch(docs, [], contract)
     if not docs:
         raise ValueError("No source documents")
+    reuse = None
+    if resume_from is not None:
+        reuse = StagePrefix(root, resume_from, inputs, contract.versions(), config, restart_stage)
+        if reuse.origin not in lineage:
+            raise ValueError("Resume source must be included in the budget lineage")
+        resume_attempt = 1 + sum(
+            "resume_origin" in saved and saved.get("selected_document_id") == docs[0]["document_id"]
+            for saved in prior_reports
+        )
+        if resume_attempt > 3:
+            raise ValueError("Resume attempt budget exhausted for this document")
+    elif restart_stage is not None:
+        raise ValueError("restart_stage requires resume_from")
     output = safe_output(root, output)
     output.mkdir(parents=True, exist_ok=False)
     client = client or BailianClient(*credentials(root))
@@ -174,6 +196,14 @@ def _run(
     }
     if version != 16 or lineage:
         report.update(budget_lineage=lineage, prior_committed_cny=str(prior))
+    if reuse is not None:
+        report.update(
+            resume_origin=reuse.origin,
+            restart_stage=reuse.restart_stage,
+            responses_reused=0,
+            resume_attempt=resume_attempt,
+            max_resume_attempts=3,
+        )
     observed, committed = Decimal(0), Decimal(0)
 
     def save(name, value):
@@ -216,6 +246,24 @@ def _run(
         report["stages"].append(row)
         save("request-" + stage, request)
         save("schema-" + stage, fmt["schema"])
+        if reuse is not None:
+            cached = reuse.take(stage, request, fmt["schema"])
+            if cached is not None:
+                raw, receipt, origin_row = cached
+                (output / ("response-" + stage + ".bin")).write_bytes(raw)
+                save("receipt-" + stage, receipt)
+                row.update(
+                    status="response_reused",
+                    response_sha256=sha256(raw),
+                    source_stage=stage,
+                    source_response_cost_cny=origin_row.get("cost_cny"),
+                    elapsed_seconds=0,
+                    cost_cny="0",
+                )
+                report["responses_reused"] += 1
+                checkpoint()
+                content, _ = completion_content(strict_json(raw), MODEL)
+                return content
         if upper > 120000:
             row["status"] = "input_budget_exceeded"
             checkpoint()
@@ -296,8 +344,11 @@ def _run(
             s["stage"].endswith("-repair-1") for s in report["stages"]
         )
         report["first_pass_accepted"] = (
-            candidate is not None and report["model_correction_calls"] == 0
+            candidate is not None and report["model_correction_calls"] == 0 and reuse is None
         )
+    if reuse is not None:
+        report["first_pass_accepted"] = False
+        report["resume_cache_stop_reason"] = reuse.stop_reason
     save("accepted", [] if candidate is None else [candidate])
     report["completed"] = True
     report["outputs_sha256"] = {
@@ -353,6 +404,10 @@ def replay_cloud(root, paths, source_run, output):
         version=version,
         budget_cny=original["config"]["budget_cny"],
         previous_runs=[root / x["path"] for x in original.get("budget_lineage", [])],
+        resume_from=(root / original["resume_origin"]["path"])
+        if "resume_origin" in original
+        else None,
+        restart_stage=original.get("restart_stage"),
     )
     if result.get("budget_lineage", []) != original.get("budget_lineage", []):
         raise ValueError("Prior budget lineage changed")
