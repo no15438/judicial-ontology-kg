@@ -52,6 +52,7 @@ def load_config(path: Path) -> dict:
             "qwen-attribution-repair-v1",
             "qwen-local-review-v1",
             "qwen-actor-type-review-v1",
+            "qwen-property-scope-review-v1",
         }
         or not isinstance(config["model"], str)
         or not config["model"]

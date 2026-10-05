@@ -30,6 +30,8 @@ def main() -> int:
             "assemble-graph",
             "stage-qwen-selectors",
             "repair-qwen-local",
+            "repair-qwen-property-scope",
+            "replay-qwen-property-scope",
             "repair-qwen-actor-type",
             "replay-qwen-actor-type",
             "replay-qwen-local",
@@ -55,8 +57,19 @@ def main() -> int:
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
-        if args.command in {"repair-qwen-actor-type", "replay-qwen-actor-type"}:
-            from judicial_kg.extraction import actor_type_review
+        if args.command in {
+            "repair-qwen-actor-type",
+            "replay-qwen-actor-type",
+            "repair-qwen-property-scope",
+            "replay-qwen-property-scope",
+        }:
+            from judicial_kg.extraction import actor_type_review, property_scope_review
+
+            module = (
+                property_scope_review
+                if args.command.endswith("property-scope")
+                else actor_type_review
+            )
 
             if not all(
                 (args.documents, args.repair_spec, args.source_run, args.local_run, args.output)
@@ -67,7 +80,7 @@ def main() -> int:
             if args.command.startswith("replay-"):
                 if args.repair_run is None:
                     parser.error("actor type replay requires repair-run")
-                result = actor_type_review.replay_repair(
+                result = module.replay_repair(
                     args.root,
                     args.documents,
                     args.repair_spec,
@@ -80,13 +93,13 @@ def main() -> int:
                     result["accepted_candidates_match_saved"] and result["outcomes_match_saved"]
                 )
             else:
-                result = actor_type_review.run_repair(
+                result = module.run_repair(
                     args.root,
                     args.documents,
                     args.repair_spec,
                     args.source_run,
                     args.local_run,
-                    args.config or args.root / "configs/qwen-actor-type-review-v1.json",
+                    args.config or args.root / ("configs/" + module.VERSION + ".json"),
                     args.output,
                 )
                 failed = any(o["issues"] for o in result["selected_outcomes"])
