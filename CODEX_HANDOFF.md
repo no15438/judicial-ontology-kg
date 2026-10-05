@@ -2,6 +2,8 @@
 
 核对日期：2026-10-05，Australia/Sydney。当前分支 `codex/qwen-extraction`，使用 `judicial-ontology-kg-current`。
 
+**当前执行计划**：[工程改进计划](docs/engineering-improvement-plan.md)。按 M1 原文位置接口 → M2 冻结前归属复核 → M3 阶段恢复与修复预算 → M4 三篇/固定十篇完整验收推进。M1–M4 均待实施，本轮只完成计划；首个交付物为 M1 代码与离线回归。历史章节的“下一步”不覆盖此顺序。
+
 当前新增契约0.3：Context包围范围与直接断言来源分离，父子包含、引用隔离、完整分区和图中covers/assertion_source均已实现。v12/v13在同一已阅Spark4396原文上新抽，不输入旧候选/QA/修复答案；全套408项测试及Ruff/格式/项目检查通过。代码提交7b93d94、8ba1e8c，真实运行均始于干净工作树。设计见docs/scoped-contexts.md，公开结果research/qwen-scoped-context-report.json。
 
 v12头部9主体/9语境覆盖118原文单元且通过完整范围校验，但首子阶段3条重复身份锚点导致拒收。v13只复用同Actor/kind/精确选择器的已校验提及并保存原响应和别名回执；新实跑前2子语境通过，复用1条既有提及，第三子语境因quote_missing_in_unit拒收。该文字在其直接范围有6个位置选项，不能自动选择。后6语境未尝试，不发布半篇。两轮共6次577.103秒请求耗时；各35篇未选中，零调用回放候选/状态/全部阶段文件一致。
