@@ -12,7 +12,7 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
-@pytest.mark.parametrize("version", [16, 17, 18, 19, 20])
+@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21])
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
 def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
@@ -56,8 +56,19 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                     c["attributed_actor_ids"] = ["a"]
                 if version >= 18:
                     value.pop("actors")
-            elif version == 20:
-                phase = (n - 3) % 3
+            elif version == 21 and n == 6:
+                catalog = payload["catalog"]
+                value = {
+                    "catalog_sha256": catalog["catalog_sha256"],
+                    "selections": [
+                        {
+                            "proposal_id": "v0",
+                            "span_id": catalog["proposal_ledger"][0]["span_ids"][0],
+                        }
+                    ],
+                }
+            elif version >= 20:
+                phase = (n - 3 - int(version == 21 and n > 6)) % 3
                 if phase == 0:
                     value = {"forms": ["A🙂"] if n == 3 else []}
                 elif phase == 1:
@@ -78,6 +89,16 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                     }
                 else:
                     value = {"roles": [], "events": [], "statements": []}
+                    if version == 21 and n == 5:
+                        value["statements"] = [
+                            {
+                                "id": "s",
+                                "subject_id": "a",
+                                "predicate": "other",
+                                "value": {"kind": "text", "source": {"text": "A🙂"}},
+                                "polarity": "affirmed",
+                            }
+                        ]
             elif n in (3, 5):
                 value = {"forms": []}
             else:
@@ -111,7 +132,7 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
     assert (
         result["requests_submitted"]
         == {
-            None: 9 if version == 20 else 7,
+            None: 10 if version == 21 else 9 if version >= 20 else 7,
             "unresolved": 2,
             "missing_usage": 1,
             "http": 1,

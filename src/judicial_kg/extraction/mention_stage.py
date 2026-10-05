@@ -27,7 +27,9 @@ draft_schema = context_ids.draft_schema
 response_format = context_ids.response_format
 
 
-def generate_body(doc, prompt, combined, context, contract, infer, save, index):
+def generate_body(
+    doc, prompt, combined, context, contract, infer, save, index, *, facts_generator=None
+):
     prefix = f"body-{index:03}"
     units = [u for u in source_units(doc) if u["id"] in context["assertion_units"]]
     schema = actor_inventory.obj(
@@ -113,6 +115,11 @@ def generate_body(doc, prompt, combined, context, contract, infer, save, index):
     save(prefix + "-span-compiled", compiled)
     if compiled["status"] != "source_grounded_stage":
         raise DraftError("span_proposals_unresolved")
+    if facts_generator is not None:
+        facts = facts_generator(
+            doc, prompt, combined, context, contract, compiled, infer, save, index
+        )
+        return {"mentions": compiled["mentions"], **facts}
     # Facts consume the selected source mentions; they cannot regenerate them.
     schema = scoped.body_schema(combined, context, contract)
     del schema["properties"]["mentions"]
