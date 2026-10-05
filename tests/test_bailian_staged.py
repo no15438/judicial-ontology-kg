@@ -12,7 +12,7 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
-@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28])
+@pytest.mark.parametrize("version", [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29])
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
 def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
@@ -38,6 +38,9 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, 
                 value = {"forms": ["A🙂", "missing"] if failure == "unresolved" else ["A🙂"]}
             elif n == 1:
                 value = selection(payload["catalog"])
+                if version == 29:
+                    for actor in value["actors"]:
+                        actor["anchor_kind"] = "name"
                 if failure == "unresolved":
                     value["decisions"].append(
                         {"proposal_id": "p1", "actor_id": None, "span_id": None}
