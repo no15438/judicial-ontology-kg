@@ -2,7 +2,7 @@
 
 核对日期：2026-10-05，Australia/Sydney。当前分支 `codex/jev-shadow-evaluation`（从 `600fe87` 新建；原分支保留），使用 `judicial-ontology-kg-current`。
 
-**新增授权工作**：先在新分支实现并评测 [OpenJev 影子对照](docs/jev-shadow-evaluation.md)，所有旧候选不变；主流程 M1–M4 尚待实现。
+**新增授权工作**：新分支 [OpenJev 影子对照](docs/jev-shadow-evaluation.md) 已实现并完成36次真实请求：9语境、Qwen/Jev反序稳定各8/9，4项待复核；零调用回放通过，431项测试。Jev保持影子模式，不自动改候选；主流程M1–M4及完整端到端对照尚待实现。
 
 **当前执行计划**：[工程改进计划](docs/engineering-improvement-plan.md)。按 M1 原文位置接口 → M2 冻结前归属复核 → M3 阶段恢复与修复预算 → M4 三篇/固定十篇完整验收推进。M1–M4 均待实施，本轮只完成计划；首个交付物为 M1 代码与离线回归。历史章节的“下一步”不覆盖此顺序。
 

@@ -15,7 +15,7 @@
 
 ## 当前执行清单（唯一当前计划，与 Google 项目文件夹同步）
 
-新增授权：独立分支 `codex/jev-shadow-evaluation` 先实施 [OpenJev 影子对照](jev-shadow-evaluation.md)，只做局部归属诊断，不改候选或提前宣称端到端收益。
+新增授权：独立分支 `codex/jev-shadow-evaluation` 已完成 [OpenJev 影子对照](jev-shadow-evaluation.md)：9语境36次请求，双方正反序稳定各8/9，4项待复核，431测试与零调用回放通过。Jev保留影子模式，不改候选或宣称端到端收益。
 
 完整设计、调用预算和扩样条件见 [工程改进计划](engineering-improvement-plan.md)。基线为 `1ecca32`：408 项测试；v12/v13 同一篇新抽均未整篇接受。新计划尚未实现，历史修复分数不代表当前新协议稳定性。
 
