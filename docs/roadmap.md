@@ -19,7 +19,7 @@
 |---|---|---|---|
 | 1 | [#3 联合陈述者契约](https://github.com/no15438/judicial-ontology-kg/issues/3) | 工程实现完成；194 项测试通过 | 版本化多主体归属；旧候选保持可复现；非法引用拒收；图谱关系顺序和证据无损还原 |
 | 2 | [#6 多次提及与转述回归](https://github.com/no15438/judicial-ontology-kg/issues/6) | 原两篇修复已通过；新增失败待修复 | 有界修复后两篇通过，6 处定位/提及问题与 3 处旧提及已处理；226 项测试；剩余 9 个无提及覆盖区域与语义覆盖仍待核验 |
-| 3 | [#8 约 10 篇开发扩展](https://github.com/no15438/judicial-ontology-kg/issues/8) | 首轮 10 篇尝试完成；3 通过、7 拒收 | 从既有开发清单选样，报告困难类型、工程失败、疑点、用量和耗时，未选中仍记缺失 |
+| 3 | [#8 约 10 篇开发扩展](https://github.com/no15438/judicial-ontology-kg/issues/8) | 旧 10 篇修复后通过；v8 新首轮 10 篇回归进行中 | 从既有开发清单选样，报告困难类型、工程失败、疑点、用量和耗时，未选中仍记缺失 |
 | 4 | [#4 参考覆盖](https://github.com/no15438/judicial-ontology-kg/issues/4)、[#5 局部质量检查](https://github.com/no15438/judicial-ontology-kg/issues/5) | 待推进 | 不依赖用户法律标注；只在独立参考覆盖范围计分；无参考不报告全图谱 P/R/F1 |
 | 5 | [#7 Neo4j 与图谱保真](https://github.com/no15438/judicial-ontology-kg/issues/7) | 兼容代码完成；累计三篇独立导出通过 | 旧 524/994 展示保留；新合并 997/2082 独立导出、829 次证据引用还原；多陈述者候选通过工程校验 |
 | 6 | [#9 OpenJev 可选对照](https://github.com/no15438/judicial-ontology-kg/issues/9) | 后续可选 | 相同疑难片段对比 Qwen＋规则、Qwen 复核、OpenJev 辅助；收益未验证不接入主流程 |
