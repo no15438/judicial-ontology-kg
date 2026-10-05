@@ -1,5 +1,7 @@
 """Compile exact source spans for constrained generation; no attribution inference."""
 
+import re
+
 from jsonschema import Draft202012Validator
 
 from judicial_kg.extraction.anchored import source_units
@@ -10,7 +12,7 @@ VERSION = "direct-span-catalog-v1"
 KINDS = ["name", "pronoun", "description"]
 
 
-def build_catalog(doc, direct_units, seed_texts, proposals=()):
+def build_catalog(doc, direct_units, seed_texts, proposals=(), *, space_variants=False):
     units = source_units(doc)
     by_id = {u["id"]: u for u in units}
     if len(set(direct_units)) != len(direct_units) or any(i not in by_id for i in direct_units):
@@ -35,7 +37,21 @@ def build_catalog(doc, direct_units, seed_texts, proposals=()):
     matches = {}
     for text in texts:
         matches[text] = []
-        for position in occurrences(scope, text):
+        positions = occurrences(scope, text)
+        if space_variants and text.strip(" \u3000"):
+            pattern = "".join(
+                "[ \u3000]+" if part and part[0] in " \u3000" else re.escape(part)
+                for part in re.split(r"([ \u3000]+)", text)
+            )
+            variants = {
+                m.group(1)
+                for unit in scope
+                for m in re.finditer("(?=(" + pattern + "))", unit["text"])
+            }
+            positions = [
+                position for variant in sorted(variants) for position in occurrences(scope, variant)
+            ]
+        for position in positions:
             evidence = evidence_span(doc, position["field"], position["start"], position["end"])
             identifier = "s_" + canonical_hash(evidence)
             entries[identifier] = {
@@ -44,8 +60,8 @@ def build_catalog(doc, direct_units, seed_texts, proposals=()):
                 "selector": selector(position),
             }
             matches[text].append(identifier)
-    return {
-        "version": VERSION,
+    result = {
+        "version": "direct-span-catalog-space-v1" if space_variants else VERSION,
         "document_id": doc["document_id"],
         "source_sha256": canonical_hash(doc),
         "direct_units": [u["id"] for u in scope],
@@ -66,10 +82,19 @@ def build_catalog(doc, direct_units, seed_texts, proposals=()):
         "unmatched_seeds": [t for t in sorted(set(seed_texts)) if not matches[t]],
         "complete_mention_coverage": False,
     }
+    if space_variants:
+        result["matching_policy"] = "ascii-fullwidth-space-runs-only-no-auto-selection"
+    return result
 
 
 def verify_catalog(doc, direct_units, catalog):
-    rebuilt = build_catalog(doc, direct_units, catalog["seed_texts"], catalog["proposals"])
+    rebuilt = build_catalog(
+        doc,
+        direct_units,
+        catalog["seed_texts"],
+        catalog["proposals"],
+        space_variants=catalog["version"] == "direct-span-catalog-space-v1",
+    )
     if rebuilt != catalog:
         raise ValueError("Catalog source, scope or entries changed")
 

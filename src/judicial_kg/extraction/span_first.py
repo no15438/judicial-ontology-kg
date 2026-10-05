@@ -17,7 +17,18 @@ draft_schema = scoped.draft_schema
 response_format = scoped.response_format
 
 
-def generate_body(doc, prompt, combined, context, contract, infer, save, index):
+def generate_body(
+    doc,
+    prompt,
+    combined,
+    context,
+    contract,
+    infer,
+    save,
+    index,
+    *,
+    catalog_builder=span_catalog.build_catalog,
+):
     prefix = f"body-{index:03}"
     units = [u for u in source_units(doc) if u["id"] in context["assertion_units"]]
     proposal_schema = {
@@ -51,7 +62,7 @@ def generate_body(doc, prompt, combined, context, contract, infer, save, index):
     context_first.check_schema(proposal, proposal_schema)
     seeds = [m["evidence"]["text"] for a in combined["actors"] for m in a["mentions"]]
     proposals = [{"id": f"p{i}", "text": text} for i, text in enumerate(proposal["forms"])]
-    catalog = span_catalog.build_catalog(doc, context["assertion_units"], seeds, proposals)
+    catalog = catalog_builder(doc, context["assertion_units"], seeds, proposals)
     save(prefix + "-span-catalog", catalog)
     actor_ids = [a["id"] for a in combined["actors"]]
     selection_schema = span_catalog.selection_schema(catalog, actor_ids)

@@ -12,13 +12,14 @@ from test_scoped import ROOT, fixtures
 from judicial_kg.extraction import bailian_staged as cloud
 
 
+@pytest.mark.parametrize("version", [16, 17])
 @pytest.mark.parametrize("failure", [None, "unresolved", "missing_usage", "http", "budget"])
-def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure):  # noqa: F811
+def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure, version):  # noqa: F811
     root, docs, _ = prepare(workspace)
     for name in [
         "ontology/private-lending-v0.3.json",
         "schemas/extraction-v0.3.schema.json",
-        cloud.protocol.PROMPT_FILE,
+        f"prompts/qwen-extraction-v{version}.txt",
     ]:
         (root / name).write_bytes((ROOT / name).read_bytes())
     if failure == "budget":
@@ -70,7 +71,7 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure):
 
     client = Client()
     run = root / "artifacts/cloud"
-    result = cloud.run_cloud(root, [docs], run, client=client)
+    result = cloud.run_cloud(root, [docs], run, client=client, version=version)
     expected = {
         None: "accepted_candidate",
         "unresolved": "inventory_unresolved",
@@ -92,3 +93,39 @@ def test_cloud_shared_protocol_and_cost_ledger(workspace, monkeypatch, failure):
     (run / "accepted.json").write_text("[] changed")
     with pytest.raises(ValueError, match="artifact changed"):
         cloud.replay_cloud(root, [docs], run, root / "artifacts/replay-bad")
+
+
+def test_prior_budget_is_charged_before_any_new_request(workspace, monkeypatch):  # noqa: F811
+    root, docs, _ = prepare(workspace)
+    for name in [
+        "ontology/private-lending-v0.3.json",
+        "schemas/extraction-v0.3.schema.json",
+        "prompts/qwen-extraction-v17.txt",
+    ]:
+        (root / name).write_bytes((ROOT / name).read_bytes())
+    prior = root / "artifacts/prior"
+    prior.mkdir(parents=True)
+    (prior / "report.json").write_text(
+        json.dumps(
+            {"completed": True, "config": {"model": cloud.MODEL}, "budget_committed_cny": "4.99"}
+        )
+    )
+
+    class NeverCalled:
+        def call(self, *args):
+            raise AssertionError("Budget should stop all network traffic")
+
+    result = cloud.run_cloud(
+        root,
+        [docs],
+        root / "artifacts/guard",
+        client=NeverCalled(),
+        version=17,
+        previous_runs=[prior],
+    )
+    assert result["status"] == "cost_budget_exceeded"
+    assert result["requests_submitted"] == 0
+    assert result["prior_committed_cny"] == "4.99"
+    assert result["budget_committed_cny"] == "0"
+    replay = cloud.replay_cloud(root, [docs], root / "artifacts/guard", root / "artifacts/replay")
+    assert replay["outcome_and_artifact_equality_verified"]

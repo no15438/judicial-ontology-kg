@@ -118,7 +118,17 @@ def compile_inventory(doc, catalog, result, contract, provenance):
     }
 
 
-def generate_header(doc, prompt, contract, provenance, infer, save, *, request_view=None):
+def generate_header(
+    doc,
+    prompt,
+    contract,
+    provenance,
+    infer,
+    save,
+    *,
+    request_view=None,
+    catalog_builder=span_catalog.build_catalog,
+):
     forms_schema = obj(
         {
             "forms": {
@@ -148,7 +158,7 @@ def generate_header(doc, prompt, contract, provenance, infer, save, *, request_v
     forms = strict_json(infer(messages, response_format(doc, forms_schema), "inventory-forms"))
     save("inventory-forms", forms)
     context_first.check_schema(forms, forms_schema)
-    catalog = span_catalog.build_catalog(
+    catalog = catalog_builder(
         doc,
         [u["id"] for u in source_units(doc)],
         [],
