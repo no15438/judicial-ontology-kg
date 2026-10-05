@@ -495,11 +495,123 @@
         "not_attempted",
         "not_attempted"
       ]
+    },
+    {
+      "run_id": "a8b8c73d-3215-4636-a082-827bc5c7baad",
+      "code_commit": "2c71786439e70ca8572a183086f92f3206a9ee8e",
+      "worktree_dirty": false,
+      "status": "accepted_candidate",
+      "issues": null,
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 12,
+      "responses_reused": 38,
+      "observed_cost_cny": "1.074144",
+      "budget_committed_cny": "1.074144",
+      "prior_committed_cny": "19.952592",
+      "model_correction_calls": 1,
+      "first_pass_accepted": false,
+      "resume_attempt": 1,
+      "restart_stage": "body-008-forms",
+      "version": 31,
+      "replay_requests_submitted": 0,
+      "replay_requests_replayed": 12,
+      "replay_responses_reused": 38,
+      "replay_verified": true,
+      "request_elapsed_seconds": 61.423,
+      "context_stage_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated"
+      ]
     }
   ],
-  "cumulative_estimated_cny": "19.952592",
+  "cumulative_estimated_cny": "21.026736",
   "authorized_cumulative_cap_cny": "200",
   "semantic_precision_recall_f1": null,
   "gold_available": false,
-  "raw_documents_or_responses_included": false
+  "raw_documents_or_responses_included": false,
+  "latest_assembly": {
+    "code_commit": "2c71786439e70ca8572a183086f92f3206a9ee8e",
+    "worktree_dirty": true,
+    "validation": {
+      "expected_documents": 36,
+      "source_fields_verified": 156,
+      "attempts_total": 1,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 1,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 35,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 18,
+        "mentions": 182,
+        "contexts": 11,
+        "roles": 29,
+        "events": 38,
+        "statements": 62
+      },
+      "accepted_evidence_spans_replayed": 608,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false
+    },
+    "documents_assembled": 1,
+    "documents_assembly_failed": 0,
+    "document_status_counts": {
+      "assembled_candidate": 1,
+      "missing": 35
+    },
+    "nodes": 638,
+    "edges": 1616,
+    "node_counts": {
+      "Actor": 18,
+      "Context": 11,
+      "Document": 1,
+      "Event": 38,
+      "EvidenceSpan": 297,
+      "Mention": 182,
+      "Role": 29,
+      "Statement": 62
+    },
+    "edge_counts": {
+      "about": 62,
+      "assertion_source": 118,
+      "attributed_to": 13,
+      "contains": 340,
+      "covers": 127,
+      "denotes": 182,
+      "has_mention": 182,
+      "in_context": 129,
+      "participant": 69,
+      "role_of": 29,
+      "supported_by": 363,
+      "within_context": 2
+    },
+    "diagnostic_hint_counts": {
+      "reported_material_in_finding_context": 1
+    },
+    "assembled_documents_diagnostics": {
+      "assertion_evidence_characters": 1247,
+      "context_evidence_characters": 1731,
+      "literal_name_occurrences_without_mention": 2,
+      "mention_evidence_characters": 465,
+      "source_characters": 1731
+    },
+    "graph_canonical_sha256": "ed1763a8e5bfad047082b07816793f75d85c91dfa7a424db292e282781eacce9",
+    "requests_submitted": 0,
+    "worktree_dirty_note": "Only design documentation was modified; executable source hashes recorded in the local assembly report."
+  },
+  "latest_outcome_scope": "One exposed development document accepted after repair/resume; no fresh whole-document first pass or semantic accuracy claim."
 }

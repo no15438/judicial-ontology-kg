@@ -1,8 +1,8 @@
 # 新仓库交接
 
-核对日期：2026-10-05，Australia/Sydney。当前分支 `codex/jev-shadow-evaluation`（从 `600fe87` 新建；原分支保留），使用 `judicial-ontology-kg-current`。
+核对日期：2026-10-06，Australia/Sydney。当前分支 `codex/jev-shadow-evaluation`（从 `600fe87` 新建；原分支保留），使用 `judicial-ontology-kg-current`。
 
-**最新接续**：当前分支 `codex/jev-shadow-evaluation`。v22–v26 已实现证据前置、事件先行、按事件与字面类型限制属性、集合指代及唯一提及映射；567 项测试通过。v25 实跑前 5 个语境通过，第 6 个因同主体同位置的冲突提及类型拒收；v26 因发现阶段拼接了不存在的称谓而拒收；v27 已加来源前置检查和每阶段一次/每篇三次纠正预算，待同篇真实复测，整篇尚未宣布通过。用户授权本轮既有百炼累计上限 200 元，v16–v26 已估算 11.898408 元；历史首轮 3/10 不变。详见 [证据前置设计](docs/evidence-first-design.md) 与 [逐轮开发账本](research/bailian-staged-development-report.json)。Jev 仍作独立影子信号，未接入当前逐事实支持性审查。
+**最新接续**：当前分支 `codex/jev-shadow-evaluation`。v31同一篇Spark4396已完成11/11语境严格工程校验、零调用回放及图谱无损还原：638节点、1616边、608次证据引用。顺序恢复复用38次响应并重新校验，只新增12次请求，估算1.074144元；v16–v31累计21.026736元，授权上限200元。612项测试通过。属于有界纠正和续跑后的接受，无纠正首轮仍为false，历史固定10篇首轮3/10不改写；36篇分母中35篇本轮未选中。仍有1条转述/法院认定诊断和2处姓名字面出现未覆盖提示，均未解决；匿名主体同一性、完整召回及法律语义未验证，非gold。下一步先独立复核陈述归属和证据支持，再按事件拆分高负荷属性阶段、隔离局部增量，最后做三篇/固定十篇回归。Jev逐事实复核尚未接入，Neo4j旧展示未替换。 详见 [设计](docs/evidence-first-design.md)、[计划](docs/engineering-improvement-plan.md) 与 [账本](research/bailian-staged-development-report.json)。
 
 下方旧版本的“最新/下一步/预算”仅保留当时状态，当前以上段及报告为准。
 
