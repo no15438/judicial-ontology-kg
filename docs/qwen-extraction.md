@@ -257,3 +257,16 @@ v8固定10篇从原文重抽的首轮结果保持3通过、6校验拒收、1截�
 本轮共15次本地模型请求、3547.759秒模型请求时间；零调用回放首轮、v9、选择器及局部复核，结果一致。后续修复新增1篇，当前固定10篇中4候选工程接受、6仍未解决，完整36篇保留26未选中；不使用旧修复10篇替代本轮失败。4篇新合并图1373节点/2553边、1133次证据引用，保存还原、原文重验和CSV payload比对通过。输出artifacts/graph/fresh-first-pass-post-repair-v1及artifacts/neo4j/fresh-first-pass-post-repair-v1，未载入Neo4j；旧图哈希不变。完整元数据research/qwen-fresh-followup-repair-report.json，首轮元数据独立保留。全套338项测试通过，本轮推理全部结束。
 
 下一轮只处理固定失败，不扩量：先为程序角色/事件建立不可跨陈述者的有界语境范围复核；重复引用和局部主体仍按冻结目录处理，无法判定保留拒收；截断样本按明确输出预算从原文独立重抽，结果列为重抽不改写首轮分母。更长期考虑先冻结语境、再在各自原文范围内抽取角色/事件，避免单次长输出同时猜类型、位置和归属。未实现的语境分阶段抽取不当作完成；OpenJev及规模化仍待稳定性证据。整体语义P/R/F1仍为null，无需用户法律gold。
+
+### 有界语境范围审核 v1
+
+`context_scope_review` 处理完整、已拒收草稿中角色/事件的 `evidence_outside_context`。父抽取先做零调用回放，并核验响应、输入及全量分母。修复目录保存原草稿、冻结选项、模型决定、修复草稿和逐项前后账本。
+
+模型只能选择证据包含完整子记录的既有语境，且语境类型、归属主体和父语境须与原语境完全相同。人员角色若来自 root `procedural_record`、姓名已定位且全部原角色证据都在 `footer`，可明确审核后迁入独立落款程序语境；两个角色共享完全相同证据时复用该语境。原语境不扩大、不重新分类，角色、事件、属性、参与者、极性和引用均不可改写或删除。事件属性随事件一起迁移并必须落在目标证据范围内。
+
+决定使用绑定条目数、ID、选项及 80 字理由上限的生成 Schema，并在本地重新验证逐项选项、覆盖和全部契约。不确定或没有合法目标时保留拒收。该流程属于模型工程修复，不是人工 gold，也不保证同类语境的语义一致性；仍需逐项原文核验和后续独立评测。默认首轮配置不切换。
+
+```bash
+bash scripts/run.sh repair-qwen-context-scope --documents <全量登记1> --documents <全量登记2> --repair-spec <固定父运行及目标ID> --config configs/qwen-context-scope-review-v1.json --output artifacts/<新修复目录>
+bash scripts/run.sh replay-qwen-context-scope --documents <同一全量登记1> --documents <同一全量登记2> --repair-spec <同一登记> --repair-run artifacts/<修复目录> --output artifacts/<新回放目录>
+```

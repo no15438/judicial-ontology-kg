@@ -35,6 +35,8 @@ def main() -> int:
             "repair-qwen-actor-type",
             "replay-qwen-actor-type",
             "replay-qwen-local",
+            "repair-qwen-context-scope",
+            "replay-qwen-context-scope",
         ],
     )
     parser.add_argument("--root", type=Path, default=Path.cwd())
@@ -57,6 +59,31 @@ def main() -> int:
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command in {"repair-qwen-context-scope", "replay-qwen-context-scope"}:
+            from judicial_kg.extraction import context_scope_review as module
+
+            if not all((args.documents, args.repair_spec, args.output)):
+                parser.error("context scope review requires documents, repair-spec and output")
+            if args.command.startswith("replay-"):
+                if args.repair_run is None:
+                    parser.error("context scope replay requires repair-run")
+                result = module.replay_repair(
+                    args.root, args.documents, args.repair_spec, args.repair_run, args.output
+                )
+                failed = not (
+                    result["accepted_candidates_match_saved"] and result["outcomes_match_saved"]
+                )
+            else:
+                result = module.run_repair(
+                    args.root,
+                    args.documents,
+                    args.repair_spec,
+                    args.config or args.root / ("configs/" + module.VERSION + ".json"),
+                    args.output,
+                )
+                failed = any(o["issues"] for o in result["selected_outcomes"])
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return int(failed)
         if args.command in {
             "repair-qwen-actor-type",
             "replay-qwen-actor-type",

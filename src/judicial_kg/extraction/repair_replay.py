@@ -74,6 +74,13 @@ def replay_prepared(root, document_paths, saved_repair, output, protocol, versio
             doc, prompt, schema
         ):
             raise ValueError("Saved repair response is not bound to this document and plan")
+        expected_format = (
+            protocol.response_format(doc, schema)
+            if hasattr(protocol, "response_format")
+            else {"type": "json_object"}
+        )
+        if request["body"].get("response_format") != expected_format:
+            raise ValueError("Saved repair generation constraints differ from frozen catalog")
         responses.append(read_verified(stem + ".response.bin"))
     expected = read_verified("accepted.json")
     output.mkdir(parents=True, exist_ok=False)
