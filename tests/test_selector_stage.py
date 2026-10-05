@@ -50,7 +50,7 @@ def test_mixed_invalid_and_pending_documents_do_not_abort_or_convert_decisions(w
     from test_selector_repair import example
 
     from judicial_kg.extraction.run import run_extraction
-    from judicial_kg.extraction.selector_repair import LOCAL_SPAN_VERSION, run_repair
+    from judicial_kg.extraction.selector_repair import LOCAL_SPAN_VERSION, replay_repair, run_repair
     from judicial_kg.extraction.selector_stage import prepare_stages
     from judicial_kg.sources.records import document
 
@@ -77,11 +77,19 @@ def test_mixed_invalid_and_pending_documents_do_not_abort_or_convert_decisions(w
     config.write_text(json.dumps(cfg))
 
     class Client(SimulatedClient):
-        def __init__(self):
+        def __init__(self, skip_second=False):
             super().__init__()
-            self.index = 0
+            self.index, self.metrics, self.skip_second = 0, 0, skip_second
 
         def call(self, path, body=None, timeout=15):
+            if path == "/metrics":
+                self.metrics += 1
+                if self.skip_second and self.metrics == 2:
+                    from judicial_kg.extraction.transport import Response
+
+                    return Response(
+                        200, b"llamacpp:requests_processing 1\nllamacpp:requests_deferred 0\n", 0.01
+                    )
             if path != "/v1/chat/completions":
                 return super().call(path, body, timeout)
             value = copy.deepcopy(draft)
@@ -137,3 +145,12 @@ def test_mixed_invalid_and_pending_documents_do_not_abort_or_convert_decisions(w
     }
     assert result["document_status_counts"] == {"invalid_parent_decisions": 1, "unresolved": 1}
     assert result["selected_documents"] == 2 and result["resolved_decisions"] == 1
+
+    busy_run = root / "artifacts/busy-selectors"
+    busy_report = run_repair(root, [docs], spec, config, busy_run, Client(skip_second=True))
+    assert busy_report["requests_submitted"] == 1
+    busy_proof = replay_repair(root, [docs], spec, busy_run, root / "artifacts/busy-replay")
+    assert busy_proof["requests_submitted"] == 0
+    assert busy_proof["accepted_candidates_match_saved"] and busy_proof["outcomes_match_saved"]
+    assert busy_proof["busy_skips_verified_without_inference"] == [second["document_id"]]
+    assert busy_proof["document_status_counts"]["service_busy"] == 1

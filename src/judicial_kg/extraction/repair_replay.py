@@ -9,7 +9,7 @@ from pathlib import Path
 from judicial_kg.contracts import COLLECTIONS, Contract
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.mention_repair import VERSION, prepare_repair
-from judicial_kg.extraction.run import completion_content
+from judicial_kg.extraction.run import busy, completion_content
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation import validate_record
@@ -64,10 +64,40 @@ def replay_prepared(root, document_paths, saved_repair, output, protocol, versio
         raise ValueError("Original drafts changed")
     prompt = read_verified("prompt.txt", False).decode()
     calls = [c for c in original["response_metadata"] if c["path"] == "/v1/chat/completions"]
-    if len(calls) != len(selected) or original["requests_submitted"] != len(selected):
-        raise ValueError("Repair replay requires a response for every selected document")
+    metrics = [c for c in original["response_metadata"] if c["path"] == "/metrics"]
+    if len(metrics) != len(selected) or original["requests_submitted"] != len(calls):
+        raise ValueError("Repair replay requires one verified load receipt per selected document")
     responses = []
-    for doc, call in zip(selected, calls, strict=True):
+    skipped = []
+    original_outcomes = {o["document_id"]: o for o in original["selected_outcomes"]}
+    for index, (doc, metric) in enumerate(zip(selected, metrics, strict=True)):
+        stem = f"rpc-{metric['rpc']:03}"
+        load_request = read_verified(stem + ".request.json")
+        if (
+            metric["status"] != 200
+            or metric["error"]
+            or load_request != {"path": "/metrics", "body": None}
+        ):
+            raise ValueError("Repair replay load receipt invalid")
+        load_raw = read_verified(stem + ".response.bin", False)
+        if sha256(load_raw) != metric["response_sha256"]:
+            raise ValueError("Repair replay load receipt hash mismatch")
+        next_rpc = metrics[index + 1]["rpc"] if index + 1 < len(metrics) else float("inf")
+        document_calls = [c for c in calls if metric["rpc"] < c["rpc"] < next_rpc]
+        if busy(load_raw.decode()):
+            outcome = original_outcomes[doc["document_id"]]
+            if (
+                document_calls
+                or outcome["status"] != "service_busy"
+                or outcome["issues"] != [{"code": "service_busy", "path": "/"}]
+            ):
+                raise ValueError("Busy skip differs from saved load receipt")
+            responses.append(None)
+            skipped.append(doc["document_id"])
+            continue
+        if len(document_calls) != 1:
+            raise ValueError("Non-busy repair replay requires exactly one response per document")
+        call = document_calls[0]
         stem = f"rpc-{call['rpc']:03}"
         request = read_verified(stem + ".request.json")
         if request["path"] != call["path"] or request["body"]["messages"] != protocol.messages(
@@ -92,6 +122,9 @@ def replay_prepared(root, document_paths, saved_repair, output, protocol, versio
     records = []
     for doc, payload in zip(selected, responses, strict=True):
         outcome = outcomes[doc["document_id"]]
+        if payload is None:
+            outcome.update(status="service_busy", issues=[{"code": "service_busy", "path": "/"}])
+            continue
         try:
             content, _ = completion_content(payload, original["config"]["model"])
             record = protocol.materialize(
@@ -158,5 +191,7 @@ def replay_prepared(root, document_paths, saved_repair, output, protocol, versio
         "semantic_precision_recall_f1": None,
         "requires_user_legal_annotation": False,
     }
+    if skipped:
+        report["busy_skips_verified_without_inference"] = skipped
     write_json(output / "report.json", report)
     return report
