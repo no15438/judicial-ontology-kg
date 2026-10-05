@@ -172,6 +172,7 @@ def generate_header(
     context_only=False,
     context_ids=False,
     descriptive=False,
+    augment_inventory=None,
 ):
     forms_schema = obj(
         {
@@ -267,6 +268,14 @@ def generate_header(
     save("inventory-compiled", inventory)
     if inventory["unresolved_proposals"]:
         raise DraftError("inventory_unresolved")
+    if augment_inventory is not None:
+        original_actors = copy.deepcopy(inventory["actors"])
+        augmented = augment_inventory(doc, original_actors, contract, provenance, infer, save)
+        if augmented[: len(original_actors)] != inventory["actors"]:
+            raise DraftError("named_inventory_changed_during_augmentation")
+        scoped.compile_checked({"actors": augmented, "contexts": []}, doc, contract, provenance)
+        inventory["actors"] = augmented
+        save("augmented-inventory", inventory)
     schema = draft_schema(contract)
     if context_only:
         del schema["properties"]["actors"]

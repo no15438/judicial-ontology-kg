@@ -67,6 +67,7 @@ def load_config(path: Path) -> dict:
             "qwen-extraction-v27",
             "qwen-extraction-v28",
             "qwen-extraction-v29",
+            "qwen-extraction-v30",
             "qwen-mention-repair-v1",
             "qwen-mention-repair-v2",
             "qwen-mention-repair-v3",
@@ -178,6 +179,7 @@ def _run_extraction(
         actor_grounded,
         actor_inventory,
         anchored,
+        augmented_inventory,
         checked_forms,
         collective_mentions,
         compact_inventory,
@@ -238,6 +240,7 @@ def _run_extraction(
             "qwen-extraction-v27": checked_forms,
             "qwen-extraction-v28": fragment_repairs,
             "qwen-extraction-v29": described_actors,
+            "qwen-extraction-v30": augmented_inventory,
         }[config["version"]]
     )
     contract = Contract.load(root, getattr(protocol, "CONTRACT_VERSION", "0.1.0"))
@@ -523,6 +526,7 @@ def _run_extraction(
                     "qwen-extraction-v27",
                     "qwen-extraction-v28",
                     "qwen-extraction-v29",
+                    "qwen-extraction-v30",
                 }:
 
                     def save_stage(name, value, index=index):

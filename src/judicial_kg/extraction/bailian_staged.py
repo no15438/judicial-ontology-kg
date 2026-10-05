@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from judicial_kg.contracts import Contract
 from judicial_kg.extraction import (
+    augmented_inventory,
     checked_forms,
     collective_mentions,
     context_delta,
@@ -101,6 +102,7 @@ def _run(
         27: checked_forms,
         28: fragment_repairs,
         29: described_actors,
+        30: augmented_inventory,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
