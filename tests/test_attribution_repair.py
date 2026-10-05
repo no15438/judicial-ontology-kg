@@ -210,3 +210,11 @@ def test_parent_verified_full_denominator_offline_replay_and_tampering(tmp_path,
     raw.write_bytes(raw.read_bytes() + b" ")
     with pytest.raises(ValueError, match="hash mismatch"):
         attribution_repair.prepare_repair(root, [docs], spec, parent)
+
+
+def test_property_position_failure_is_not_an_identity_review_target():
+    from test_selector_repair import value_example
+
+    doc, draft, _ = value_example()
+    plan = build_plan(doc, draft, CONTRACT)
+    assert plan["mention_items"] == []

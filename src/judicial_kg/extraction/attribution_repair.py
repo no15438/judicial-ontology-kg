@@ -42,6 +42,8 @@ def build_plan(doc, draft, contract):
             )
     mentions = []
     for item in selectors["selector_items"]:
+        if item["target_kind"] != "mention":
+            continue
         m = draft["mentions"][item["mention_index"]]
         unit = item["original_unit"]
         peers = [
