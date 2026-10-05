@@ -156,7 +156,8 @@ def test_property_rejection_confined_to_unsupported_original_statement():
     assert patched["contexts"][0]["events"][0]["polarity"] == "negated"
 
 
-def test_saved_stage_source_replay_and_rejected_ledger_conservation(workspace):  # noqa: F811
+@pytest.mark.parametrize("version", [local_review.VERSION, local_review.CONSTRAINED_VERSION])
+def test_saved_stage_source_replay_and_rejected_ledger_conservation(workspace, version):  # noqa: F811
     root, docs, config = workspace
     project = Path(__file__).resolve().parents[1]
     for name in [
@@ -165,6 +166,7 @@ def test_saved_stage_source_replay_and_rejected_ledger_conservation(workspace): 
         "prompts/qwen-extraction-v6.txt",
         "prompts/qwen-selector-repair-v1.txt",
         "prompts/qwen-local-review-v1.txt",
+        "prompts/qwen-local-review-v2.txt",
     ]:
         (root / name).write_bytes((project / name).read_bytes())
     doc, draft, _, _ = fixture()
@@ -219,7 +221,7 @@ def test_saved_stage_source_replay_and_rejected_ledger_conservation(workspace): 
     config.write_text(json.dumps(cfg))
     parent = root / "artifacts/parent"
     selector_repair.run_repair(root, [docs], spec, config, parent, Client())
-    cfg["version"] = local_review.VERSION
+    cfg["version"] = version
     config.write_text(json.dumps(cfg))
     out = root / "artifacts/review"
     report = local_review.run_repair(root, [docs], spec, parent, config, out, Client())

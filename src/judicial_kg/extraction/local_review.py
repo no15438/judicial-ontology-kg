@@ -7,18 +7,19 @@ from uuid import uuid4
 from jsonschema import Draft202012Validator
 
 from judicial_kg.contracts import Contract
-from judicial_kg.extraction import attribution_repair, contextual, selector_repair
+from judicial_kg.extraction import attribution_repair, constrained, contextual, selector_repair
 from judicial_kg.extraction.anchored import GroundingError, source_units
 from judicial_kg.extraction.draft import DraftError
 from judicial_kg.extraction.mention_repair import occurrences, selector
 from judicial_kg.extraction.repair_replay import replay_prepared
-from judicial_kg.extraction.run import run_extraction
+from judicial_kg.extraction.run import load_config, run_extraction
 from judicial_kg.extraction.selector_stage import prepare_stages
 from judicial_kg.sources.development import write_json
 from judicial_kg.sources.records import canonical_hash, sha256
 from judicial_kg.validation_run import strict_json
 
 VERSION = "qwen-local-review-v1"
+CONSTRAINED_VERSION = "qwen-local-review-v2"
 
 
 def references(value, wanted):
@@ -232,7 +233,67 @@ class LocalReview(selector_repair.SelectorRepair):
         )
 
 
-def prepare_repair(root, documents, specification, saved):
+class ConstrainedLocalReview(LocalReview):
+    PROMPT_FILE = "prompts/qwen-local-review-v2.txt"
+    GENERATION_CONSTRAINT_VERSION = "bounded-local-review-conclusion-before-action-v1"
+    GENERATION_CONSTRAINT_SCOPE = "review_ids_counts_short_source_conclusion_before_action"
+
+    def draft_schema(self, contract):
+        schema = response_schema()
+        for array in schema["properties"].values():
+            item = array["items"]
+            props = item["properties"]
+            props["reason"]["maxLength"] = 80
+            identifier = next(iter(props))
+            item["properties"] = {
+                identifier: props[identifier],
+                "reason": props["reason"],
+                **{k: v for k, v in props.items() if k not in {identifier, "reason"}},
+            }
+        return schema
+
+    def bound_schema(self, doc):
+        schema = self.draft_schema(None)
+        plan = self.plans[doc["document_id"]]
+        for kind, identifier in {
+            "context": "context_id",
+            "mention": "mention_id",
+            "property": "statement_id",
+            "actor": "actor_id",
+        }.items():
+            items = plan[kind + "_items"]
+            array = schema["properties"][kind + "_choices"]
+            array.update(minItems=len(items), maxItems=len(items))
+            if items:
+                array["items"]["properties"][identifier]["enum"] = [i[identifier] for i in items]
+        return schema
+
+    def response_format(self, doc, schema):
+        return constrained.response_format(doc, self.bound_schema(doc))
+
+    def messages(self, doc, prompt, schema):
+        return super().messages(doc, prompt, self.bound_schema(doc))
+
+    def check_selection(self, docs, config):
+        if (
+            config["version"] != CONSTRAINED_VERSION
+            or [d["document_id"] for d in docs] != self.selection_ids
+        ):
+            raise ValueError("Local review must retain frozen targets")
+
+    def materialize(self, content, doc, contract, provenance):
+        try:
+            choices = strict_json(content)
+        except (TypeError, ValueError):
+            raise DraftError("local_review_invalid_json") from None
+        if list(Draft202012Validator(self.bound_schema(doc)).iter_errors(choices)):
+            raise DraftError("local_review_schema_invalid")
+        return super().materialize(content, doc, contract, provenance)
+
+
+def prepare_repair(root, documents, specification, saved, version=VERSION):
+    if version not in {VERSION, CONSTRAINED_VERSION}:
+        raise ValueError("Unsupported local review version")
     folder = root / "artifacts/local-review-source-verification" / uuid4().hex
     proof = prepare_stages(root, documents, specification, saved, folder)
     stages = strict_json((folder / "stages.json").read_bytes())
@@ -251,7 +312,8 @@ def prepare_repair(root, documents, specification, saved):
         ids.append(key)
     if not ids:
         raise ValueError("No supported local review targets")
-    return LocalReview(
+    factory = ConstrainedLocalReview if version == CONSTRAINED_VERSION else LocalReview
+    return factory(
         drafts,
         plans,
         ids,
@@ -271,11 +333,17 @@ def run_repair(root, documents, specification, saved, config, output, client=Non
         config,
         output,
         client,
-        prepare_repair(root, documents, specification, saved),
+        prepare_repair(root, documents, specification, saved, load_config(config)["version"]),
     )
 
 
 def replay_repair(root, documents, specification, saved, run, output):
+    version = strict_json((run / "report.json").read_bytes())["config"]["version"]
     return replay_prepared(
-        root, documents, run, output, prepare_repair(root, documents, specification, saved), VERSION
+        root,
+        documents,
+        run,
+        output,
+        prepare_repair(root, documents, specification, saved, version),
+        version,
     )
