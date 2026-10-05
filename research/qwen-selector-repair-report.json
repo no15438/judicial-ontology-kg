@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "run_kind": "local_qwen_bounded_selector_repair_not_gold",
+  "code_commit": "ec70bfa892d6731ecaf32adcbd3ac2034c0daa2f",
+  "worktree_dirty": false,
+  "completed": true,
+  "expected_documents": 36,
+  "selected_documents": 2,
+  "requests_submitted": 2,
+  "document_status_counts": {
+    "contract_rejected": 1,
+    "draft_grounding_failed": 1,
+    "not_selected": 34
+  },
+  "selected_outcomes": [
+    {
+      "document_id": "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d",
+      "selected": true,
+      "status": "contract_rejected",
+      "issues": [
+        {
+          "code": "court_attribution_type",
+          "path": "/contexts/6"
+        },
+        {
+          "code": "court_attribution_type",
+          "path": "/contexts/9"
+        }
+      ],
+      "input_tokens": 12508,
+      "request_elapsed_seconds": 25.695009582996136,
+      "usage": {
+        "prompt_tokens": 12508,
+        "completion_tokens": 272,
+        "total_tokens": 12780
+      }
+    },
+    {
+      "document_id": "spark_qa:d79508e6c779e795ca2171d4f2c9e002fb5eb914c2bda238b5a73569537bb5aa",
+      "selected": true,
+      "status": "draft_grounding_failed",
+      "issues": [
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/8/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/10/evidence"
+        },
+        {
+          "code": "selector_repair_uncertain",
+          "path": "/mentions/31/evidence"
+        }
+      ],
+      "input_tokens": 9323,
+      "request_elapsed_seconds": 20.82058041699929,
+      "usage": {
+        "prompt_tokens": 9323,
+        "completion_tokens": 256,
+        "total_tokens": 9579
+      }
+    }
+  ],
+  "repair_decision_counts": {
+    "appealcase:238de480647263420b499555025ab845ce6153ff9ccf6454ae2117893413905d": {
+      "locate": 2
+    }
+  },
+  "model_request_seconds": 46.516,
+  "protocol_version": "qwen-selector-repair-v1",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "temperature": 0.2,
+  "seed": 42,
+  "source_report_sha256": "9218f9565aed9f9e98103afa68a5a00734cf4d662f38623c966c8dcafe4839a4",
+  "prompt_sha256": "b043b494ed0eacf198f598b330998171c62863bedee379e98e87a116a768ad80",
+  "input_files": [
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    },
+    {
+      "sha256": "c724584fb180d4cc1cd0d94f72ae223708c669788a8f13d44a7418e78b5d3343",
+      "bytes": 428236
+    }
+  ],
+  "offline_replay": {
+    "requests_submitted": 0,
+    "accepted_candidates_match_saved": true,
+    "outcomes_match_saved": true,
+    "report_sha256": "bfb54c802f6aa0694b77970db0dc1310077ed5a0cbc0b1130087b8af95abd11e"
+  },
+  "new_accepted_candidates": 0,
+  "aggregate_development_status": {
+    "attempted_unique_documents": 10,
+    "accepted": 3,
+    "rejected": 7,
+    "not_selected": 26
+  },
+  "tests": {
+    "passed": 243,
+    "new_selector_tests": 17
+  },
+  "remaining_blocks": [
+    "two_party_evidence_submission_contexts_misclassified_as_court_report",
+    "three_source_actor_mentions_require_identity_review_not_position_guess"
+  ],
+  "gold_available": false,
+  "semantic_precision_recall_f1": null,
+  "requires_user_legal_annotation": false
+}
