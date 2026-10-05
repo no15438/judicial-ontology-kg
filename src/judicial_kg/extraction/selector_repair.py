@@ -127,7 +127,7 @@ def response_schema():
     }
 
 
-def apply_choices(draft, plan, choices):
+def stage_choices(draft, plan, choices):
     if canonical_hash(draft) != plan["draft_sha256"]:
         raise ValueError("Draft differs from frozen repair plan")
     if list(Draft202012Validator(response_schema()).iter_errors(choices)):
@@ -188,9 +188,14 @@ def apply_choices(draft, plan, choices):
             if path is not None:
                 at(unchanged, path[:-1])[path[-1]] = copy.deepcopy(at(draft, path))
     assert unchanged == draft
+    return patched, dict(counts), issues
+
+
+def apply_choices(draft, plan, choices):
+    patched, counts, issues = stage_choices(draft, plan, choices)
     if issues:
         raise GroundingError(issues)
-    return patched, dict(counts)
+    return patched, counts
 
 
 class SelectorRepair:

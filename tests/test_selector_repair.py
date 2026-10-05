@@ -251,6 +251,17 @@ def test_saved_run_explicit_selection_full_denominator_replay_and_tampering(work
     report = replay_repair(root, [repair_docs], spec, out, replay)
     assert report["requests_submitted"] == 0
     assert (out / "accepted.json").read_bytes() == (replay / "accepted.json").read_bytes()
+    from judicial_kg.extraction.selector_stage import prepare_stages
+
+    stage = root / "artifacts/stage"
+    staged = prepare_stages(root, [repair_docs], spec, out, stage)
+    assert staged["requests_submitted"] == 0
+    assert staged["document_status_counts"] == {"validated_parent_candidate": 1}
+    assert staged["resolved_decisions"] == 2 and staged["pending_decisions"] == 0
+    assert staged["expected_documents"] == 2
+    stage2 = root / "artifacts/stage2"
+    prepare_stages(root, [repair_docs], spec, out, stage2)
+    assert (stage / "stages.json").read_bytes() == (stage2 / "stages.json").read_bytes()
     saved = json.loads((run / "report.json").read_text())
     call = next(c for c in saved["response_metadata"] if c["path"] == "/v1/chat/completions")
     original = run / f"rpc-{call['rpc']:03}.response.bin"

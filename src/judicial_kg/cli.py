@@ -28,6 +28,9 @@ def main() -> int:
             "repair-qwen-attribution",
             "replay-qwen-attribution",
             "assemble-graph",
+            "stage-qwen-selectors",
+            "repair-qwen-local",
+            "replay-qwen-local",
         ],
     )
     parser.add_argument("--root", type=Path, default=Path.cwd())
@@ -49,16 +52,34 @@ def main() -> int:
     args = parser.parse_args()
     try:
         verified = verify_manifest(args.root)
+        if args.command == "stage-qwen-selectors":
+            from judicial_kg.extraction.selector_stage import prepare_stages
+
+            if not all((args.documents, args.repair_spec, args.repair_run, args.output)):
+                parser.error("stage requires documents, repair-spec, repair-run and new output")
+            result = prepare_stages(
+                args.root, args.documents, args.repair_spec, args.repair_run, args.output
+            )
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return int(result["document_status_counts"].get("unresolved", 0) > 0)
         if args.command in {
             "repair-qwen-selectors",
             "replay-qwen-selectors",
             "repair-qwen-attribution",
             "replay-qwen-attribution",
+            "repair-qwen-local",
+            "replay-qwen-local",
         }:
-            from judicial_kg.extraction import attribution_repair, selector_repair
+            from judicial_kg.extraction import attribution_repair, local_review, selector_repair
 
-            attribution = args.command.endswith("attribution")
-            module = attribution_repair if attribution else selector_repair
+            attribution = args.command.endswith(("attribution", "local"))
+            module = (
+                local_review
+                if args.command.endswith("local")
+                else attribution_repair
+                if attribution
+                else selector_repair
+            )
             if attribution and args.source_run is None:
                 parser.error("attribution repair requires parent selector source-run")
             extra = [args.source_run] if attribution else []
