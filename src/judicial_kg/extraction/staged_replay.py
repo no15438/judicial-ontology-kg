@@ -4,7 +4,7 @@ from collections import Counter
 from pathlib import Path
 
 from judicial_kg.contracts import Contract
-from judicial_kg.extraction import context_first
+from judicial_kg.extraction import context_first, identity_first
 from judicial_kg.extraction.run import _run_extraction
 from judicial_kg.extraction.transport import Response
 from judicial_kg.sources.development import write_json
@@ -16,8 +16,12 @@ def replay_completed(root, document_paths, source_run, output):
     root, source_run = root.resolve(), source_run.resolve()
     raw_report = (source_run / "report.json").read_bytes()
     original = strict_json(raw_report)
-    if not original.get("completed") or original["config"]["version"] != "qwen-extraction-v10":
+    if not original.get("completed") or original["config"]["version"] not in {
+        "qwen-extraction-v10",
+        "qwen-extraction-v11",
+    }:
         raise ValueError("Staged replay requires a complete v10 run")
+    protocol = identity_first if original["config"]["version"].endswith("v11") else context_first
     # Verify every artifact before deriving output, including failed/unused phases.
     verified = {}
     for name, digest in original["outputs_sha256"].items():
@@ -36,18 +40,18 @@ def replay_completed(root, document_paths, source_run, output):
         inputs.append({"sha256": sha256(raw), "bytes": len(raw)})
     if inputs != original["input_files"] or len(docs) != original["expected_documents"]:
         raise ValueError("Replay must retain the exact original input denominator")
-    contract = Contract.load(root, context_first.CONTRACT_VERSION)
+    contract = Contract.load(root, protocol.CONTRACT_VERSION)
     if any(original.get(k) != v for k, v in contract.versions().items()):
         raise ValueError("Replay contract changed")
     validate_batch(docs, [], contract)
     config = strict_json(verified["config.json"])
-    prompt = (root / context_first.PROMPT_FILE).read_bytes()
+    prompt = (root / protocol.PROMPT_FILE).read_bytes()
     if (
         config != original["config"]
         or canonical_hash(config) != original["config_sha256"]
         or prompt != verified["prompt.txt"]
         or sha256(prompt) != original["prompt_sha256"]
-        or canonical_hash(context_first.draft_schema(contract)) != original["draft_schema_sha256"]
+        or canonical_hash(protocol.draft_schema(contract)) != original["draft_schema_sha256"]
     ):
         raise ValueError("Replay configuration, prompt or schema changed")
     calls = original["response_metadata"]

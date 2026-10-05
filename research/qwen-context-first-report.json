@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "run_kind": "staged_first_pass_development_not_gold",
+  "expected_documents": 36,
+  "fixed_v8_first_pass": {
+    "accepted": 3,
+    "selected": 10
+  },
+  "prior_post_repair_fixed10": {
+    "accepted": 7,
+    "unresolved": 3
+  },
+  "runs": [
+    {
+      "protocol": "qwen-extraction-v10",
+      "run_id": "661628d47a47473b9b34dfbaf983ebca",
+      "code_commit": "94b5ecba433530ac67075f11d6f085f9d2961c81",
+      "worktree_dirty": false,
+      "selected_documents": 1,
+      "document_status_counts": {
+        "draft_grounding_failed": 1,
+        "not_selected": 35
+      },
+      "requests_submitted": 1,
+      "request_elapsed_seconds": 113.9182594169979,
+      "selected_outcomes": [
+        {
+          "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+          "selected": true,
+          "status": "draft_grounding_failed",
+          "issues": [
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/4/evidence"
+            },
+            {
+              "code": "quote_missing_in_unit",
+              "path": "/mentions/23/evidence"
+            }
+          ],
+          "stages": [
+            {
+              "stage": "header",
+              "status": "response_complete",
+              "messages_sha256": "00268cd7a1a9f676762e26176c65538d68792779d067ef145eed850a19ae1100",
+              "response_format_sha256": "ce2094ad121b5791394b40fa1c6d528ed7398ac9e8c4fd54a13f283405274bc0",
+              "input_tokens": 7312,
+              "completion_rpc": 7,
+              "request_elapsed_seconds": 113.9182594169979,
+              "usage": {
+                "prompt_tokens": 7312,
+                "completion_tokens": 2672,
+                "total_tokens": 9984
+              }
+            }
+          ],
+          "response_format_sha256": "ce2094ad121b5791394b40fa1c6d528ed7398ac9e8c4fd54a13f283405274bc0",
+          "input_tokens": 7312,
+          "request_elapsed_seconds": 113.9182594169979,
+          "usage": {
+            "prompt_tokens": 7312,
+            "completion_tokens": 2672,
+            "total_tokens": 9984
+          }
+        }
+      ],
+      "report_sha256": "77275f3f322ad4d4479b864f2d40a2afd8286a50d4e2848491e9ba0b9ab16c80",
+      "offline_replay": {
+        "requests_submitted": 0,
+        "equal": true
+      }
+    }
+  ],
+  "engineering_lesson": "Complete JSON and integer occurrence do not ensure local Mention text; v11 separates representative identity anchors from source-local mention completion.",
+  "semantic_precision_recall_f1": null,
+  "gold_available": false,
+  "requires_user_legal_annotation": false,
+  "new_default_enabled": false,
+  "expanded_samples": false
+}

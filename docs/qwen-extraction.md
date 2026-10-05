@@ -278,3 +278,25 @@ v2 的生成 Schema 复用了 `choice_id`/`local_text` 的可空字符串对象�
 暂存流程现在逐篇隔离无效决定：完整记录原决定、错误与未变的原草稿，状态 `invalid_parent_decisions`，不自动转换为 `uncertain` 或应用部分决定。其他文书可继续暂存；无效文书不进入局部复核。对存在未决项的合法决定，仍保留已定位项并整篇拒收，直到有界审核和完整校验通过。
 
 本仓库的本地抽取/修复命令增加跨进程互斥锁 `local/qwen-extraction.lock`：覆盖预检、全部串行请求及失败退出，在创建运行目录或调用服务前阻止同仓库的并发运行，进程退出自动释放。该锁仅覆盖当前仓库检出，其他仓库/应用仍须由服务繁忙预检防护；不修改 Spark 服务。新增负向测试验证第二个运行没有输出目录或任何 RPC，并确认异常后释放。
+
+## v10 固定语境首轮试验
+
+新协议先抽并校验主体/提及/语境，再冻结目录，逐语境抽取子记录。任何阶段失败整篇拒收。它与对旧草稿的有界修复分开，默认配置仍为 v5。设计依据见 [试验反馈](experiment-feedback.md)。
+
+使用完整 36 篇来源清单，将单个已阅目标排在最前；先登记目标 ID、配置、分母和开发暴露状态，再运行。试验配置 `configs/qwen-extraction-v10-pilot.json` 每篇最多 32 个语境，各阶段输出上限 8192；这不是 8K/16K 响应速度测试。
+
+```bash
+bash scripts/run.sh extract-qwen \
+  --documents artifacts/fresh-first-pass-v8/context-first-v10/spark-documents.json \
+  --documents artifacts/fresh-first-pass-v8/context-first-v10/appealcase-documents.json \
+  --config configs/qwen-extraction-v10-pilot.json \
+  --output artifacts/qwen-extraction/fresh-context-first-v10-spark439
+
+bash scripts/run.sh replay-qwen \
+  --documents artifacts/fresh-first-pass-v8/context-first-v10/spark-documents.json \
+  --documents artifacts/fresh-first-pass-v8/context-first-v10/appealcase-documents.json \
+  --source-run artifacts/qwen-extraction/fresh-context-first-v10-spark439 \
+  --output artifacts/qwen-extraction/fresh-context-first-v10-spark439-replay
+```
+
+输出目录必须全新。每篇 `stages` 逐阶段保存预算、请求 Schema/message 哈希、响应 RPC、使用量和状态；`stage-*-stage-plan.json` 区分失败、已校验和未尝试语境，记录未分配片段。回放仅读取原运行回执，逐次重建请求，比较中间产物及最终候选，不调用模型。新版本的少量成功不改写原 v8 首轮 3/10 或旧修复后 7/10。

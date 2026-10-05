@@ -124,7 +124,7 @@ def body_messages(doc, prompt, header, context, schema):
     ]
 
 
-def merge_body(header, context_index, body):
+def merge_body(header, context_index, body, namespace="v10"):
     """Namespace local child IDs; never alter actors, context ownership or evidence."""
     result, body = copy.deepcopy(header), copy.deepcopy(body)
     nodes = [n for k in CHILDREN for n in body[k]]
@@ -133,7 +133,7 @@ def merge_body(header, context_index, body):
     if len(set(ids)) != len(ids):
         raise GroundingError([{"code": "duplicate_child_id", "path": "/"}])
     for node in nodes:
-        node["id"] = f"v10_b{context_index}_{node['id']}"
+        node["id"] = f"{namespace}_b{context_index}_{node['id']}"
     result["contexts"][context_index].update(body)
     return result
 
