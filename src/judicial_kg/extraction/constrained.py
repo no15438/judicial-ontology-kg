@@ -1,4 +1,4 @@
-"""V9 server-side schema constraints; source grounding remains mandatory."""
+"""V9 structural generation constraints; full local validation remains mandatory."""
 
 import copy
 
@@ -13,11 +13,13 @@ from judicial_kg.extraction.actor_grounded import (
 from judicial_kg.extraction.anchored import source_units
 
 PROMPT_FILE = "prompts/qwen-extraction-v9.txt"
+GENERATION_CONSTRAINT_VERSION = "structural-schema-source-unit-enums-v1"
 
 __all__ = [
     "CONTRACT_VERSION",
     "NORMALIZER_VERSION",
     "PROMPT_FILE",
+    "GENERATION_CONSTRAINT_VERSION",
     "draft_schema",
     "materialize",
     "messages",
@@ -35,6 +37,11 @@ def response_format(doc, schema):
 
     def visit(node):
         if isinstance(node, dict):
+            # llama.cpp does not enforce uniqueness or predicate conditionals.
+            # Explicitly project the generation subset; keep the complete schema
+            # in the prompt and unchanged local compiler, never relax acceptance.
+            node.pop("uniqueItems", None)
+            node.pop("allOf", None)
             if node == {"type": "string", "pattern": "^u[0-9]+$"}:
                 node.clear()
                 node.update(type="string", enum=identifiers.copy())
@@ -46,6 +53,6 @@ def response_format(doc, schema):
                 visit(child)
 
     visit(bound)
-    # llama.cpp's documented schema-constrained JSON format. Failure is explicit;
+    # llama.cpp's documented structural-schema JSON format. Failure is explicit;
     # there is no fallback to unconstrained generation or permissive validation.
     return {"type": "json_object", "schema": bound}

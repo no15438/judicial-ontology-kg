@@ -232,6 +232,14 @@ def run_extraction(
         "semantic_precision_recall_f1": None,
         "requires_user_legal_annotation": False,
     }
+    if hasattr(protocol, "GENERATION_CONSTRAINT_VERSION"):
+        metadata["generation_constraints"] = {
+            "version": protocol.GENERATION_CONSTRAINT_VERSION,
+            "scope": "structural_schema_enums_and_source_unit_ids",
+            "local_only": ["uniqueness", "predicate_conditions", "references", "source_grounding"],
+            "full_contract_validation_required": True,
+            "unconstrained_fallback": False,
+        }
     if protocol_override is not None:
         metadata["run_kind"] = getattr(
             protocol, "RUN_KIND", "local_qwen_bounded_mention_repair_not_gold"

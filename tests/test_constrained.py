@@ -24,6 +24,9 @@ def test_generation_schema_is_source_bound_without_mutating_static_schema():
     for kind in ("context", "role", "event"):
         assert bound[kind]["properties"]["evidence_units"]["items"]["enum"] == identifiers
     assert response["type"] == "json_object"
+    assert "uniqueItems" not in json.dumps(response)
+    assert "allOf" not in json.dumps(response)
+    assert "allOf" in json.dumps(schema)
 
 
 @pytest.mark.parametrize("role", ["claimant", "respondent", "transferor", "transferee"])
