@@ -1,0 +1,92 @@
+{
+  "experiment": "bailian-staged-v16-spark439",
+  "code_commit": "9ba494a6f30cc419f8a0e1a6adeac307d4d31951",
+  "worktree_dirty": false,
+  "config": {
+    "version": "bailian-staged-v16",
+    "model": "qwen3.8-max-0902",
+    "temperature": 0.2,
+    "seed": 42,
+    "max_tokens": 8192,
+    "budget_cny": "5",
+    "timeout_seconds": 300,
+    "input_cny_per_million": "12",
+    "output_cny_per_million": "36",
+    "response_mode": "json_object_with_local_schema_validation"
+  },
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "accepted_documents": 0,
+  "status": "inventory_unresolved",
+  "requests_submitted": 2,
+  "request_elapsed_seconds": 18.384,
+  "usage": {
+    "prompt_tokens": 15238,
+    "completion_tokens": 773,
+    "total_tokens": 16011
+  },
+  "observed_list_price_cny": "0.210684",
+  "budget_committed_cny": "0.210684",
+  "stages": [
+    {
+      "stage": "inventory-forms",
+      "status": "response_complete",
+      "input_upper_bound": 17811,
+      "reservation_cny": "0.508644",
+      "http_status": 200,
+      "transport_error": null,
+      "elapsed_seconds": 4.595582916052081,
+      "response_sha256": "a01d70582eaa52a373fac5ac9f264fe1a270c6bed9b3c2141225b5baf8798908",
+      "usage": {
+        "prompt_tokens": 5443,
+        "completion_tokens": 85,
+        "total_tokens": 5528
+      },
+      "cost_cny": "0.068376"
+    },
+    {
+      "stage": "inventory-select",
+      "status": "response_complete",
+      "input_upper_bound": 27619,
+      "reservation_cny": "0.62634",
+      "http_status": 200,
+      "transport_error": null,
+      "elapsed_seconds": 13.78851941699395,
+      "response_sha256": "5d4a532add76a11c35589e8fb89f8747f08ca9f0fdee224e395c397d7849a2cc",
+      "usage": {
+        "prompt_tokens": 9795,
+        "completion_tokens": 688,
+        "total_tokens": 10483
+      },
+      "cost_cny": "0.142308"
+    }
+  ],
+  "proposed_forms": 17,
+  "catalog_positions": 51,
+  "source_grounded_candidate_actors": 16,
+  "unresolved_proposals": 1,
+  "contexts_generated": 0,
+  "diagnosis": {
+    "model_whitespace": "U+0020",
+    "source_whitespace": "U+3000",
+    "whitespace_insensitive_candidates": 1,
+    "automatic_rewrite_or_selection": false,
+    "blocking": "Generated name form replaced a full-width space with an ASCII space; no exact match, correctly retained as unresolved.",
+    "previous_organization_omission": "Organization now present in candidate inventory; whole-document success not established."
+  },
+  "offline_replay": {
+    "requests_submitted": 0,
+    "outcome_and_artifact_equality_verified": true
+  },
+  "stopped_after_first_explicit_failure": true,
+  "new_graph": false,
+  "semantic_precision_recall_f1": null,
+  "artifacts_sha256": {
+    "report.json": "895dfec55f80edf466b888e65f892ab192cd4a5a5e4c43c47bf0168242b22f7e",
+    "inventory-catalog.json": "beda6c9da626da1a70f164a61019edc93f948e4df33f7d85a74f8e563e0839de",
+    "inventory-selection.json": "08cb02baa80b67a6017b6757b363b2f34fbc682fed9563a312ee2b167850a76a",
+    "inventory-compiled.json": "87a6634ec787c95c5a203a3474677e294dc47fecb035f2170b94e9d96f1b7244",
+    "whitespace-diagnostic.json": "f1f808e2e34f18e9fafd955729a47a739c7dcdc7ea4b1818d36eda63d936501a"
+  }
+}
