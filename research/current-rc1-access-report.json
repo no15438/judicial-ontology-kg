@@ -1,0 +1,22 @@
+{
+  "run": "current-rc1-three-01",
+  "frozen_commit": "2b77ec0",
+  "classification": "provider_parameter_error_not_model_quality",
+  "http_status": 400,
+  "actual_api_requests": 42,
+  "model_outputs": 0,
+  "budget": {
+    "prior_committed_cny": "72.0172411",
+    "cap_cny": "77.0172411",
+    "new_committed_cny": "2.0545976",
+    "new_observed_cny": "0",
+    "cumulative_committed_cny": "74.0718387",
+    "actual_api_requests": 42,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "offline_replay_verified": true,
+  "reason": "JSON output mode requires literal JSON word; missing in Chinese prompt",
+  "fix": "local JSON request preflight and shared 400 circuit breaker"
+}

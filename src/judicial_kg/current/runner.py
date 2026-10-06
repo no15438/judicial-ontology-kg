@@ -19,6 +19,8 @@ from judicial_kg.validation_run import strict_json
 
 
 def request_body(messages):
+    messages = copy.deepcopy(messages)
+    messages[0]["content"] += "\n请输出符合Schema的 JSON 对象。"
     return {
         "model": "qwen3.8-flash",
         "messages": messages,
@@ -35,8 +37,11 @@ class Calls:
         self.client, self.output = client, output
         self.calls = 0
         self.rows = []
+        self.halted = False
 
     def infer(self, messages, stage):
+        if self.halted:
+            raise ValueError("provider_circuit_open")
         body = request_body(messages)
         if sum(len(m["content"].encode()) for m in messages) + 4096 > 120000:
             raise ValueError("input_budget_exceeded")
@@ -53,6 +58,8 @@ class Calls:
             }
         )
         write_json(self.output / "calls.json", self.rows)
+        if response.status in {400, 401, 403, 404} or response.error == "shared_budget_exhausted":
+            self.halted = True
         if response.status != 200 or response.error:
             raise ValueError("transport_failure")
         content, _ = completion_content(response.json(), body["model"])
@@ -216,7 +223,13 @@ def run_document(root, doc, output, client, window_size=16):
     report = {
         "version": VERSION,
         "document_id": doc["document_id"],
-        "status": "partial" if partial else "engineering_complete",
+        "status": (
+            "service_failed"
+            if calls.rows and all(r["http_status"] != 200 for r in calls.rows)
+            else "partial"
+            if partial
+            else "engineering_complete"
+        ),
         "unit_count": len(units),
         "coverage_rows": len(coverage),
         "windows": len(windows),

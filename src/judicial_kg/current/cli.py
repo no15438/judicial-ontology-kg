@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -13,6 +14,18 @@ from judicial_kg.extraction.fresh_workflow import fingerprint
 from judicial_kg.extraction.transport import Response
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import canonical_hash, sha256
+
+
+class CircuitBudget(SharedBudget):
+    """A deterministic provider request error halts this cohort, including other documents."""
+
+    def call(self, body, timeout):
+        response = super().call(body, timeout)
+        if response.status == 400:
+            with self.lock:
+                self.halted = True
+                self.save()
+        return response
 
 
 def replay(root, source_run, output):
@@ -76,7 +89,7 @@ def run(root, manifest_path, output, credential_root):
     write_json(output / "frozen-inputs.json", frozen)
     # Persist every input document in the text index, including unselected graph documents.
     write_json(output / "text-index.json", index_documents(documents))
-    budget = SharedBudget(
+    budget = CircuitBudget(
         BailianClient(*credentials(credential_root)),
         manifest["prior_committed_cny"],
         manifest["cumulative_cap_cny"],
@@ -105,6 +118,10 @@ def run(root, manifest_path, output, credential_root):
 
     report = {
         "status": "running",
+        "code_commit": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], text=True, cwd=root
+        ).strip(),
+        "input_manifest_sha256": sha256(manifest_path.read_bytes()),
         "input_documents": len(documents),
         "selected": len(order),
         "not_selected": len(documents) - len(order),

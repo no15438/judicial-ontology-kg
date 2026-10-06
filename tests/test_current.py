@@ -293,3 +293,26 @@ def test_partial_membership_is_preserved_without_event_propagation():
     assert not c.issues
     assert c.record["collective_memberships"][0]["polarity"] == "affirmed"
     assert c.record["events"][0]["participants"] == []
+
+
+def test_json_mode_is_locally_prepared_and_provider_error_halts_window_calls(tmp_path):
+    from judicial_kg.current.runner import request_body
+
+    messages = [{"role": "system", "content": "中文模式"}]
+    body = request_body(messages)
+    assert "json" in body["messages"][0]["content"].lower()
+    assert messages[0]["content"] == "中文模式"
+
+    class Bad:
+        count = 0
+
+        def call(self, body, timeout):
+            self.count += 1
+            return Response(400, b"{}", 0)
+
+    client = Bad()
+    result = run_document(ROOT, source(), tmp_path / "run", client, window_size=1)
+    assert client.count == 1
+    assert result["status"] == "service_failed"
+    units, _ = batches(source())
+    assert result["coverage_rows"] == len(units)
