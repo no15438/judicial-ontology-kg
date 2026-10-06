@@ -277,7 +277,9 @@ def test_unresolved_window_does_not_block_later_window_text_or_compilation(tmp_p
             {"unit": i, "status": "no_relevant_content", "reason": "fixture"} for i in windows[1]
         ],
     }
-    report = run_document(ROOT, doc, tmp_path / "run", FakeClient([{"malformed": True}, empty]))
+    report = run_document(
+        ROOT, doc, tmp_path / "run", FakeClient([{"malformed": True}] * 3 + [empty])
+    )
     assert report["status"] == "partial"
     coverage = json.loads((tmp_path / "run/coverage.json").read_text())
     assert [r["unit"] for r in coverage] == list(range(len(units)))

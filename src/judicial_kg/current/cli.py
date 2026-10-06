@@ -199,6 +199,11 @@ def run(root, manifest_path, output, credential_root):
     report.update(
         status="completed", frozen_inputs_unchanged=implementation_fingerprint(root) == frozen
     )
+    report["engineering_passed"] = sum(
+        r.get("engineering_pipeline_passed", False) and r.get("offline_replay_verified", False)
+        for r in results
+    )
+    report["engineering_total"] = len(order)
     write_json(output / "batch-report.json", report)
     return report
 

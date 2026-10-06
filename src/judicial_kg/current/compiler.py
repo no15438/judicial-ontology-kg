@@ -58,6 +58,8 @@ class Compiler:
                         and str(error)
                         in {
                             "wire_schema_invalid",
+                            "dependency_quarantined",
+                            "local_reference_out_of_range",
                             "verifier_rejected",
                             "source_unit_outside_scope",
                             "empty_source_quote",
@@ -96,6 +98,14 @@ class Compiler:
                 "unresolved",
             )
         }
+
+        def ref(mapping, index, collection):
+            if index in mapping:
+                return mapping[index]
+            if type(index) is int and 0 <= index < len(wire[collection]):
+                raise ValueError("dependency_quarantined")
+            raise ValueError("local_reference_out_of_range")
+
         # Invalid optional identities do not erase unrelated actors or assertions.
         for i, actor in enumerate(wire.get("actors", [])):
             path = f"{prefix}/actors/{i}"
@@ -127,7 +137,7 @@ class Compiler:
                 {
                     "id": cid,
                     "kind": wire["kind"],
-                    "attributed_actor_ids": [actor_map[i] for i in wire["speakers"]],
+                    "attributed_actor_ids": [ref(actor_map, i, "actors") for i in wire["speakers"]],
                     "parent_context_id": None,
                     "evidence": spans,
                     "assertion_evidence": spans,
@@ -166,7 +176,7 @@ class Compiler:
                         {
                             "id": self.identifier(prefix, "member", i, j),
                             "collective_id": gid,
-                            "actor_id": actor_map[member["actor"]],
+                            "actor_id": ref(actor_map, member["actor"], "actors"),
                             "context_id": cid,
                             "polarity": member["polarity"],
                             "evidence": self.spans(member["units"], scope),
@@ -205,7 +215,7 @@ class Compiler:
                 self.record["roles"].append(
                     {
                         "id": self.identifier(prefix, "role", i),
-                        "actor_id": actor_map[role["actor"]],
+                        "actor_id": ref(actor_map, role["actor"], "actors"),
                         "role": role["role"],
                         "context_id": cid,
                         "polarity": role["polarity"],
@@ -225,12 +235,14 @@ class Compiler:
                 for j, p in enumerate(event["participants"]):
                     t = p["target"]
                     if t["kind"] == "actor":
-                        participants.append({"actor_id": actor_map[t["index"]], "role": p["role"]})
+                        participants.append(
+                            {"actor_id": ref(actor_map, t["index"], "actors"), "role": p["role"]}
+                        )
                     else:
                         self.record["collective_participations"].append(
                             {
                                 "id": self.identifier(prefix, "participant", i, j),
-                                "collective_id": collective_map[t["index"]],
+                                "collective_id": ref(collective_map, t["index"], "collectives"),
                                 "event_id": eid,
                                 "context_id": cid,
                                 "role": p["role"],
@@ -249,7 +261,7 @@ class Compiler:
                     }
                 )
                 for j, index in enumerate(event["objects"]):
-                    mid = object_map[index]
+                    mid = ref(object_map, index, "objects")
                     mention = next(m for m in self.record["object_mentions"] if m["id"] == mid)
                     self.record["object_links"].append(
                         {
@@ -277,7 +289,11 @@ class Compiler:
                 self.record["statements"].append(
                     {
                         "id": self.identifier(prefix, "statement", i),
-                        "subject_id": target[statement["subject"]],
+                        "subject_id": ref(
+                            target,
+                            statement["subject"],
+                            "actors" if statement["subject_kind"] == "actor" else "events",
+                        ),
                         "predicate": statement["predicate"],
                         "context_id": cid,
                         "polarity": statement["polarity"],
