@@ -69,6 +69,8 @@ def extract(
     header_generator=None,
     anonymous_repair_options=None,
     header_schema_builder=None,
+    classifier=None,
+    form_router=None,
 ):
     budget = {"used": 0}
 
@@ -116,7 +118,15 @@ def extract(
 
     def dispatch(messages, fmt, stage):
         if stage == "anonymous-forms" and anonymous_repair_options is not None:
-            return anonymous_checked(messages, fmt, stage)
+            value = anonymous_checked(messages, fmt, stage)
+            return (
+                json.dumps(
+                    form_router(strict_json(value), [u["id"] for u in source_units(doc)], stage),
+                    ensure_ascii=False,
+                )
+                if form_router
+                else value
+            )
         if stage in ("inventory-forms", "anonymous-forms"):
             return checked(messages, fmt, stage)
         return infer_canonical(messages, fmt, stage)
@@ -131,4 +141,6 @@ def extract(
         budget=budget,
         header_generator=header_generator,
         header_schema_builder=header_schema_builder,
+        form_router=form_router,
+        classifier=classifier,
     )

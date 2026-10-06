@@ -143,6 +143,8 @@ def extract(
     budget=None,
     header_generator=None,
     header_schema_builder=None,
+    classifier=None,
+    form_router=None,
 ):
     def typed_discovery(messages, fmt, stage):
         raw = infer(messages, fmt, stage)
@@ -152,7 +154,7 @@ def extract(
         save("inventory-discovery-original", original)
         forms, receipt = unique_forms.deduplicate(original, fmt["schema"])
         save("inventory-discovery-dedup", receipt)
-        result = classify(doc, forms, infer, save)
+        result = (classifier or classify)(doc, forms, infer, save)
         context_first.check_schema(result, fmt["schema"])
         return json.dumps(result, ensure_ascii=False)
 
@@ -166,4 +168,5 @@ def extract(
         budget=budget,
         header_generator=header_generator,
         header_schema_builder=header_schema_builder,
+        form_router=form_router,
     )

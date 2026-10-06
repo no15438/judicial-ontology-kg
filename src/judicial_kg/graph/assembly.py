@@ -2,14 +2,25 @@
 
 from copy import deepcopy
 
-from judicial_kg.contracts import COLLECTIONS
+from judicial_kg.contracts import COLLECTIONS, collections
 from judicial_kg.sources.records import canonical_hash
 
 GRAPH_VERSION = "0.1.0"
 KINDS = dict(
     zip(COLLECTIONS, ("Actor", "Mention", "Context", "Role", "Event", "Statement"), strict=True)
 )
+KINDS.update(objects="Object", object_mentions="ObjectMention", object_links="ObjectLink")
 REFERENCES = {
+    "objects": {"mention_ids": ("has_object_mention", True)},
+    "object_mentions": {
+        "object_id": ("denotes_object", False),
+        "context_id": ("in_context", False),
+    },
+    "object_links": {
+        "object_mention_id": ("object_via", False),
+        "event_id": ("object_of_event", False),
+        "context_id": ("in_context", False),
+    },
     "actors": {"mention_ids": ("has_mention", True)},
     "mentions": {"actor_id": ("denotes", False)},
     "contexts": {
@@ -25,9 +36,9 @@ REFERENCES = {
 def references(record: dict, collection: str) -> dict:
     """Select reference cardinality from the explicit record contract, never guess."""
     version = record["schema_version"]
-    if version not in {"0.1.0", "0.2.0", "0.3.0"} or record["ontology_version"] != version:
+    if version not in {"0.1.0", "0.2.0", "0.3.0", "0.4.0"} or record["ontology_version"] != version:
         raise ValueError("Unsupported or inconsistent record version")
-    if collection == "contexts" and version in {"0.2.0", "0.3.0"}:
+    if collection == "contexts" and version in {"0.2.0", "0.3.0", "0.4.0"}:
         return {
             "attributed_actor_ids": ("attributed_to", True),
             "parent_context_id": ("within_context", False),
@@ -36,9 +47,9 @@ def references(record: dict, collection: str) -> dict:
 
 
 def evidence_fields(record, collection):
-    if collection == "actors":
+    if collection in {"actors", "objects"}:
         return {}
-    if collection == "contexts" and record["schema_version"] == "0.3.0":
+    if collection == "contexts" and record["schema_version"] in {"0.3.0", "0.4.0"}:
         return {"evidence": "covers", "assertion_evidence": "assertion_source"}
     return {"evidence": "supported_by"}
 
@@ -91,15 +102,17 @@ def project_records(records: list[dict]) -> dict:
                 "kind": "Document",
                 "document_id": doc_id,
                 "record_pointer": "",
-                "properties": {k: deepcopy(v) for k, v in record.items() if k not in COLLECTIONS},
+                "properties": {
+                    k: deepcopy(v) for k, v in record.items() if k not in collections(record)
+                },
             }
         )
         local = {
             node["id"]: node_id(doc_id, KINDS[key], node["id"])
-            for key in COLLECTIONS
+            for key in collections(record)
             for node in record[key]
         }
-        for key in COLLECTIONS:
+        for key in collections(record):
             for index, original in enumerate(record[key]):
                 identifier = local[original["id"]]
                 properties = deepcopy(original)
@@ -119,7 +132,7 @@ def project_records(records: list[dict]) -> dict:
                         )
                 for field, relation in evidence_fields(record, key).items():
                     evidence = properties.pop(field)
-                    spans = [evidence] if key == "mentions" else evidence
+                    spans = [evidence] if key in {"mentions", "object_mentions"} else evidence
                     for position, span in enumerate(spans):
                         evidence_id = node_id(doc_id, "EvidenceSpan", canonical_hash(span))
                         if evidence_id not in nodes:
@@ -176,9 +189,9 @@ def restore_records(graph: dict) -> list[dict]:
             if doc["kind"] != "Document":
                 continue
             record = deepcopy(doc["properties"])
-            record.update({k: [] for k in COLLECTIONS})
+            record.update({k: [] for k in collections(record)})
             contained = links(doc["id"], "contains")
-            for key in COLLECTIONS:
+            for key in collections(record):
                 for connection in (e for e in contained if e["properties"]["collection"] == key):
                     node = nodes[connection["target"]]
                     item = deepcopy(node["properties"])
@@ -203,9 +216,9 @@ def restore_records(graph: dict) -> list[dict]:
                             deepcopy(nodes[e["target"]]["properties"])
                             for e in links(node["id"], relation)
                         ]
-                        if key == "mentions" and len(spans) != 1:
+                        if key in {"mentions", "object_mentions"} and len(spans) != 1:
                             raise ValueError("Mention must have exactly one evidence span")
-                        item[field] = spans[0] if key == "mentions" else spans
+                        item[field] = spans[0] if key in {"mentions", "object_mentions"} else spans
                     record[key].append(item)
             records.append(record)
         # Reprojection catches omitted/unused nodes, unsupported edges, wrong types,

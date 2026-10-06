@@ -3,7 +3,7 @@
 import re
 from collections import Counter, defaultdict
 
-from judicial_kg.contracts import COLLECTIONS
+from judicial_kg.contracts import collections
 
 DIAGNOSTIC_VERSION = "candidate-diagnostics-v1"
 
@@ -33,12 +33,20 @@ def diagnose_record(record: dict, doc: dict) -> dict:
     """Requires a source-validated record. Read-only; hints never alter acceptance."""
     spans = defaultdict(lambda: defaultdict(list))
     hints = []
-    for key in COLLECTIONS:
-        if key == "actors":
+    for key in collections(record):
+        if key in {"actors", "objects"}:
             continue
-        group = "mention" if key == "mentions" else "context" if key == "contexts" else "assertion"
+        group = (
+            "mention"
+            if key in {"mentions", "object_mentions"}
+            else "context"
+            if key == "contexts"
+            else "assertion"
+        )
         for node in record[key]:
-            evidence = [node["evidence"]] if key == "mentions" else node["evidence"]
+            evidence = (
+                [node["evidence"]] if key in {"mentions", "object_mentions"} else node["evidence"]
+            )
             for span in evidence:
                 spans[span["field"]][group].append((span["start"], span["end"]))
     fields = []

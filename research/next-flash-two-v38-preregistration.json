@@ -1,0 +1,40 @@
+{
+  "protocol_version": 38,
+  "status": "registered_before_inference",
+  "contract_version": "0.4.0",
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "development_exposed": true,
+  "is_blind_test": false,
+  "original_input_documents": 36,
+  "selected_documents": 2,
+  "not_selected": 34,
+  "order": [
+    "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+    "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8"
+  ],
+  "config": "configs/qwen-extraction-v38-pilot.json",
+  "attempts_per_document": 1,
+  "historical_response_reuse": false,
+  "manual_graph_edits": false,
+  "cloud_requests": 0,
+  "semantic_precision_recall_f1": null,
+  "input_hashes": {
+    "artifacts/scoped-v12/spark-documents.json": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74",
+    "artifacts/scoped-v12/appealcase-documents.json": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034"
+  },
+  "acceptance": [
+    "whole workflow from immutable source",
+    "exact source evidence and context validation",
+    "objects retained separately from actors",
+    "offline zero-call replay",
+    "lossless graph roundtrip"
+  ],
+  "failure_policy": "retain every failed stage and document in denominator; new fix requires separately frozen protocol/run",
+  "limitations": [
+    "24 metadata unit/integration tests are not semantic gold",
+    "object and actor identity still model judgments",
+    "no_supported_event objects remain unlinked; not counted as complete semantic recall",
+    "same-span overlap only for object reuse; no text-only identity merge"
+  ]
+}

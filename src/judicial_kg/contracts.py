@@ -14,8 +14,15 @@ CONTRACT_FILES = {
     "0.1.0": (ONTOLOGY_FILE, SCHEMA_FILE),
     "0.2.0": ("ontology/private-lending-v0.2.json", "schemas/extraction-v0.2.schema.json"),
     "0.3.0": ("ontology/private-lending-v0.3.json", "schemas/extraction-v0.3.schema.json"),
+    "0.4.0": ("ontology/private-lending-v0.4.json", "schemas/extraction-v0.4.schema.json"),
 }
 COLLECTIONS = ("actors", "mentions", "contexts", "roles", "events", "statements")
+
+OBJECT_COLLECTIONS = ("objects", "object_mentions", "object_links")
+
+
+def collections(record):
+    return COLLECTIONS + (OBJECT_COLLECTIONS if record["schema_version"] == "0.4.0" else ())
 
 
 def build_schema(ontology: dict) -> dict:
@@ -88,13 +95,13 @@ def build_schema(ontology: dict) -> dict:
             **contextual,
         ),
     }
-    if ontology["version"] in {"0.2.0", "0.3.0"}:
+    if ontology["version"] in {"0.2.0", "0.3.0", "0.4.0"}:
         context = definitions["context"]
         del context["properties"]["attributed_actor_id"]
         context["required"].remove("attributed_actor_id")
         context["properties"]["attributed_actor_ids"] = array(identifier)
         context["required"].append("attributed_actor_ids")
-    if ontology["version"] == "0.3.0":
+    if ontology["version"] in {"0.3.0", "0.4.0"}:
         context = definitions["context"]
         context["properties"]["assertion_evidence"] = array({"$ref": "#/$defs/span"})
         context["required"].append("assertion_evidence")
@@ -112,6 +119,28 @@ def build_schema(ontology: dict) -> dict:
         ),
         **{key: array({"$ref": f"#/$defs/{key[:-1]}"}) for key in COLLECTIONS},
     )
+    if ontology["version"] == "0.4.0":
+        definitions.update(
+            object=obj(
+                id=identifier, object_type=enum("object_types"), mention_ids=array(identifier, 1)
+            ),
+            object_mention=obj(
+                id=identifier,
+                object_id=identifier,
+                context_id=identifier,
+                evidence={"$ref": "#/$defs/span"},
+            ),
+            object_link=obj(
+                id=identifier,
+                object_mention_id=identifier,
+                event_id=identifier,
+                relation={"const": "involves_object"},
+                **contextual,
+            ),
+        )
+        for key in OBJECT_COLLECTIONS:
+            schema["properties"][key] = array({"$ref": f"#/$defs/{key[:-1]}"})
+            schema["required"].append(key)
     return {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Judicial KG development extraction contract",
@@ -166,5 +195,5 @@ def candidate_record(
             ],
             "semantic_completeness": "not_assessed",
         },
-        **{key: [] for key in COLLECTIONS},
+        **{key: [] for key in collections({"schema_version": version})},
     }

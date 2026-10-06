@@ -8,7 +8,7 @@ from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
 
-from judicial_kg.contracts import COLLECTIONS, Contract
+from judicial_kg.contracts import COLLECTIONS, OBJECT_COLLECTIONS, Contract, collections
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import sha256
 from judicial_kg.validation import validate_record, validate_source
@@ -71,7 +71,7 @@ def validate_batch(documents: list[dict], lines: list[str], contract: Contract) 
             if attempt["issues"]:
                 outcome["status"] = "rejected"
             else:
-                empty = not any(record[key] for key in COLLECTIONS)
+                empty = not any(record[key] for key in collections(record))
                 outcome["status"] = "accepted_empty" if empty else "accepted_candidate"
                 attempt["status"] = outcome["status"]
                 accepted.append(record)
@@ -93,15 +93,17 @@ def validate_batch(documents: list[dict], lines: list[str], contract: Contract) 
             "documents_missing": counts["missing"],
             "issue_counts": dict(sorted(issues.items())),
             "accepted_node_counts": {
-                key: sum(len(r[key]) for r in accepted) for key in COLLECTIONS
+                key: sum(len(r[key]) for r in accepted)
+                for key in COLLECTIONS
+                + (OBJECT_COLLECTIONS if contract.ontology["version"] == "0.4.0" else ())
             },
             "accepted_evidence_spans_replayed": sum(
                 1
-                if key == "mentions"
+                if key in {"mentions", "object_mentions"}
                 else len(node["evidence"]) + len(node.get("assertion_evidence", []))
                 for record in accepted
-                for key in COLLECTIONS
-                if key != "actors"
+                for key in collections(record)
+                if key not in {"actors", "objects"}
                 for node in record[key]
             ),
             "semantic_precision_recall_f1": None,

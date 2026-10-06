@@ -156,12 +156,22 @@ def generate_body(
     budget,
     repair_options=None,
     body_generator=None,
+    form_router=None,
 ):
     infer_checked = source_checked_infer(
         doc, context["assertion_units"], infer, save, budget=budget, repair_options=repair_options
     )
+
+    def routed(messages, fmt, stage):
+        raw = infer_checked(messages, fmt, stage)
+        if form_router and stage.endswith("-forms"):
+            return json.dumps(
+                form_router(strict_json(raw), context["assertion_units"], stage), ensure_ascii=False
+            )
+        return raw
+
     return (body_generator or grouped_mentions.generate_body)(
-        doc, prompt, combined, context, contract, infer_checked, save, index
+        doc, prompt, combined, context, contract, routed, save, index
     )
 
 

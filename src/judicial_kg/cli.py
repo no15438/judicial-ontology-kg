@@ -51,7 +51,7 @@ def main() -> int:
     parser.add_argument("--repair-spec", type=Path)
     parser.add_argument(
         "--contract-version",
-        choices=["0.1.0", "0.2.0", "0.3.0"],
+        choices=["0.1.0", "0.2.0", "0.3.0", "0.4.0"],
         default="0.1.0",
         help="Contract for offline validation and graph assembly",
     )

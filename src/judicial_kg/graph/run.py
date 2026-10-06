@@ -6,7 +6,7 @@ from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 
-from judicial_kg.contracts import COLLECTIONS, Contract
+from judicial_kg.contracts import Contract, collections
 from judicial_kg.graph.assembly import GRAPH_VERSION, empty_graph, project_records, restore_records
 from judicial_kg.graph.diagnostics import DIAGNOSTIC_VERSION, diagnose_record
 from judicial_kg.sources.development import safe_output, write_json
@@ -34,7 +34,7 @@ def assemble_batch(documents: list[dict], lines: list[str], contract: Contract) 
             continue
         outcome.update(
             status="assembled_candidate"
-            if any(record[k] for k in COLLECTIONS)
+            if any(record[k] for k in collections(record))
             else "assembled_empty",
             input_record_sha256=canonical_hash(record),
             restored_record_sha256=canonical_hash(restored[0]),

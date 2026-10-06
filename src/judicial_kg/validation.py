@@ -3,7 +3,7 @@
 import re
 from datetime import date
 
-from judicial_kg.contracts import COLLECTIONS, Contract
+from judicial_kg.contracts import Contract, collections
 from judicial_kg.sources.records import canonical_hash, sha256, verify_evidence
 
 
@@ -74,12 +74,22 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
     unprocessed = set(record["coverage"]["unprocessed_fields"])
     if processed & unprocessed or processed | unprocessed != fields:
         issue("field_coverage_not_partition", "/coverage")
-    tables = {key: {node["id"]: node for node in record[key]} for key in COLLECTIONS}
-    all_ids = [node["id"] for key in COLLECTIONS for node in record[key]]
+    tables = {key: {node["id"]: node for node in record[key]} for key in collections(record)}
+    all_ids = [node["id"] for key in collections(record) for node in record[key]]
     if len(all_ids) != len(set(all_ids)):
         issue("duplicate_id", "/")
         return issues
     actors, mentions, contexts = (tables[k] for k in ("actors", "mentions", "contexts"))
+    if record["schema_version"] == "0.4.0":
+        actor_spans = {canonical_hash(m["evidence"]) for m in record["mentions"]}
+        object_spans = set()
+        for i, mention in enumerate(record["object_mentions"]):
+            key = canonical_hash(mention["evidence"])
+            if key in actor_spans:
+                issue("same_position_actor_object_conflict", f"/object_mentions/{i}")
+            if key in object_spans:
+                issue("duplicate_object_mention_evidence", f"/object_mentions/{i}")
+            object_spans.add(key)
 
     def reference(identifier, table, path):
         if identifier not in table:
@@ -94,7 +104,7 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
             for parent in enclosing
         )
 
-    scoped = record["schema_version"] == "0.3.0"
+    scoped = record["schema_version"] in {"0.3.0", "0.4.0"}
     children = {
         identifier: [c for c in record["contexts"] if c["parent_context_id"] == identifier]
         for identifier in contexts
@@ -116,11 +126,15 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                 return True
         return False
 
-    for key in COLLECTIONS:
+    for key in collections(record):
         for i, node in enumerate(record[key]):
             path = f"/{key}/{i}"
-            if key != "actors":
-                spans = [node["evidence"]] if key == "mentions" else node["evidence"]
+            if key not in {"actors", "objects"}:
+                spans = (
+                    [node["evidence"]]
+                    if key in {"mentions", "object_mentions"}
+                    else node["evidence"]
+                )
                 for j, span in enumerate(spans):
                     try:
                         verify_evidence(doc, span)
@@ -146,7 +160,35 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                     issue("leaf_context_without_assertion_scope", path)
                 if not all(union_covers(span, direct + nested) for span in spans):
                     issue("enclosing_scope_not_partitioned", path)
-            if key == "actors":
+            if key == "objects":
+                for mid in node["mention_ids"]:
+                    mention = reference(mid, tables["object_mentions"], path + "/mention_ids")
+                    if mention and mention["object_id"] != node["id"]:
+                        issue("object_mention_disagreement", path)
+            elif key == "object_mentions":
+                obj = reference(node["object_id"], tables["objects"], path + "/object_id")
+                if obj and node["id"] not in obj["mention_ids"]:
+                    issue("object_mention_disagreement", path)
+                context = reference(node["context_id"], contexts, path + "/context_id")
+                if context and not contained(node["evidence"], context["assertion_evidence"]):
+                    issue("object_mention_outside_assertion_scope", path)
+            elif key == "object_links":
+                mention = reference(node["object_mention_id"], tables["object_mentions"], path)
+                event = reference(node["event_id"], tables["events"], path)
+                context = reference(node["context_id"], contexts, path)
+                if mention and event and context:
+                    if (
+                        mention["context_id"] != node["context_id"]
+                        or event["context_id"] != node["context_id"]
+                    ):
+                        issue("object_event_context_mismatch", path)
+                    if node["polarity"] != event["polarity"]:
+                        issue("object_event_polarity_mismatch", path)
+                    if mention["evidence"] not in spans or not all(
+                        contained(s, event["evidence"]) for s in spans
+                    ):
+                        issue("object_link_outside_event_evidence", path)
+            elif key == "actors":
                 for mid in node["mention_ids"]:
                     mention = reference(mid, mentions, f"{path}/mention_ids")
                     if mention and mention["actor_id"] != node["id"]:
@@ -156,7 +198,7 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                 if actor and node["id"] not in actor["mention_ids"]:
                     issue("mention_actor_disagreement", path)
             elif key == "contexts":
-                if record["schema_version"] in {"0.2.0", "0.3.0"}:
+                if record["schema_version"] in {"0.2.0", "0.3.0", "0.4.0"}:
                     attributions = node["attributed_actor_ids"]
                     attribution_path = path + "/attributed_actor_ids"
                 else:

@@ -152,7 +152,11 @@ def run_fresh(
             )
             unchanged()
             graph = run_assembly(
-                root, paths, candidates, output / "graph", contract_version="0.3.0"
+                root,
+                paths,
+                candidates,
+                output / "graph",
+                contract_version="0.4.0" if version == 38 else "0.3.0",
             )
             ok = graph["documents_assembled"] == 1 and graph["documents_assembly_failed"] == 0
             report.update(

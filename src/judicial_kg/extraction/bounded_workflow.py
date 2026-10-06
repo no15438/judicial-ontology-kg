@@ -200,6 +200,7 @@ def extract(
     budget=None,
     header_generator=None,
     header_schema_builder=None,
+    form_router=None,
 ):
     budget = {"used": 0} if budget is None else budget
 
@@ -253,6 +254,7 @@ def extract(
         budget=budget,
         repair_options=fragment_repairs.source_fragments,
         body_generator=partial(grouped_mentions.generate_body, facts_generator=facts),
+        form_router=form_router,
     )
     return scoped.extract(
         doc,

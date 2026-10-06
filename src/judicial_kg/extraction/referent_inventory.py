@@ -315,6 +315,8 @@ def extract(
     *,
     allow_collectives=False,
     header_schema_builder=None,
+    classifier=None,
+    form_router=None,
 ):
     def whole_form_repair(messages, fmt, stage):
         if stage == "anonymous-forms-repair-1":
@@ -335,4 +337,6 @@ def extract(
         header_generator=partial(generate_header, allow_collectives=allow_collectives),
         anonymous_repair_options=supported_forms,
         header_schema_builder=header_schema_builder,
+        form_router=form_router,
+        classifier=classifier,
     )
