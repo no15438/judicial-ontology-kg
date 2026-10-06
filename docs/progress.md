@@ -1,5 +1,7 @@
 # 当前进度与来源核对
 
+最新启动结果：Flash v42首次三篇全部在首请求返回403（API-Key restrictions），无模型输出，不属于抽取质量失败；共享账本已停止，未切Max。累计保守预留71.2583248元，其中本次0.1330648元为未返回usage请求预留，非已确认账单。百炼控制台登录失效，需恢复登录并使现有项目密钥允许qwen3.8-flash；之后以新目录/新预算祖先重新启动，保留本次记录。见research/bailian-flash-v42-access-report.json。
+
 本轮启动登记：bailian-flash-three-v42-01，百炼qwen3.8-flash，固定026b/Spark4396/f99e三篇，36选3/33未选，3路并行，协议v42，历史预留71.125260元，本轮最多5元，总授权仍200元。模型及计费已显式贯穿请求、共享预算、provenance和离线回放，不回退Max。实时入口 artifacts/bailian-extraction/flash-three-v42-01/batch-report.json；启动状态须读该报告，不把本登记视作完成。
 
 v42第二批已实现Schema回显的有界格式纠正、空身份绑定原文审计和云端异常定位；旧真实响应回归只验证诊断/停止行为，未做新模型推理。详细进度见 docs/v41-repair-plan.md 的v42章节及 research/v42-response-guard-regression.json；未知成员图谱契约、属性/语境修复和云端Flash新抽仍未完成。

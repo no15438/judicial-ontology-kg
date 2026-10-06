@@ -1,0 +1,21 @@
+{
+  "status": "blocked_by_api_key_model_restriction",
+  "model": "qwen3.8-flash",
+  "selected_documents": 3,
+  "completed_model_responses": 0,
+  "http_403": 3,
+  "provider_error": "Access denied by API-Key restrictions.",
+  "budget": {
+    "prior_committed_cny": "71.125260",
+    "cap_cny": "76.125260",
+    "new_committed_cny": "0.1330648",
+    "new_observed_cny": "0",
+    "cumulative_committed_cny": "71.2583248",
+    "actual_api_requests": 3,
+    "budget_blocked_calls": 0,
+    "halted": true,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "code_commit": "5b8902e",
+  "note": "No model quality result; no usage returned, reservations retained conservatively. Permission change required before a separate fresh restart."
+}
