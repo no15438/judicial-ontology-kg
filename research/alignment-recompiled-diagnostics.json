@@ -1,0 +1,42 @@
+{
+  "type": "offline_recompile_saved_candidates_not_new_extraction",
+  "documents": [
+    {
+      "document": "document-01",
+      "recompiled_issue_records": 70,
+      "codes": {
+        "verifier_rejected": 27,
+        "contract_validation": 8,
+        "KeyError": 9,
+        "source_position_missing": 3,
+        "source_position_not_unique": 13,
+        "wire_schema_invalid": 10
+      }
+    },
+    {
+      "document": "document-02",
+      "recompiled_issue_records": 33,
+      "codes": {
+        "source_position_missing": 4,
+        "verifier_rejected": 7,
+        "contract_validation": 13,
+        "wire_schema_invalid": 3,
+        "KeyError": 5,
+        "source_position_not_unique": 1
+      }
+    },
+    {
+      "document": "document-03",
+      "recompiled_issue_records": 36,
+      "codes": {
+        "verifier_rejected": 10,
+        "contract_validation": 16,
+        "source_position_missing": 2,
+        "KeyError": 7,
+        "wire_schema_invalid": 1
+      }
+    }
+  ],
+  "skipped_windows_without_verification": true,
+  "semantic_accuracy": null
+}

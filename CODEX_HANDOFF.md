@@ -2,6 +2,8 @@
 
 唯一开发主入口：`judicial-kg current`；实现位于 `src/judicial_kg/current/`。候选版本 `current-rc1`，不是已证明语义质量或GraphRAG收益的生产最终版。
 
+最新开发分支为 `codex/model-alignment`，对齐计划见 [模型对齐](docs/model-alignment-plan.md)。新鲜三篇结果以最新进度为准。
+
 先读 [当前流程与运行命令](docs/current-workflow.md)、[最新进度](docs/progress.md) 和 AGENTS.md。
 
 - 原文先入文本索引；提议、同模型证据复核、程序编译、局部隔离和图谱回放独立留档。

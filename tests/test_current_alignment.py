@@ -81,7 +81,8 @@ def test_decision_circuit_prevents_repeated_auth_calls():
     assert client.calls == 1
 
 
-def test_aligned_pipeline_replays_native_calls_without_network(tmp_path):
+@pytest.mark.parametrize("mode", ["flash", "decision"])
+def test_aligned_pipeline_replays_native_calls_without_network(tmp_path, mode):
     import json
 
     from test_current import ROOT, FakeClient, source
@@ -118,6 +119,7 @@ def test_aligned_pipeline_replays_native_calls_without_network(tmp_path):
             answers = {
                 k: {
                     "type": "choice",
+                    "confidence": 1.0,
                     "choice": "o0",
                     "probabilities": {o: float(o == "o0") for o in q["criteria"]},
                 }
@@ -129,16 +131,23 @@ def test_aligned_pipeline_replays_native_calls_without_network(tmp_path):
 
     dest = tmp_path / "run"
     result = run_document(
-        ROOT, doc, dest, FakeClient([proposal, verification]), alignment_client=Native()
+        ROOT,
+        doc,
+        dest,
+        FakeClient(
+            [proposal, {"a0": "o0"}, verification] if mode == "flash" else [proposal, verification]
+        ),
+        alignment_client=Native() if mode == "decision" else None,
+        alignment_mode=mode,
     )
-    assert result["alignment_requests"] == 1
+    assert result["alignment_requests"] == (2 if mode == "decision" else 1)
     assert result["status"] == "engineering_complete"
     write_json(
         dest / "config.json",
         {
             "window_size": 16,
             "implementation": implementation_fingerprint(ROOT),
-            "alignment": "decision",
+            "alignment": mode,
         },
     )
     write_json(dest / "outputs.json", {p.name: sha256(p.read_bytes()) for p in dest.iterdir()})

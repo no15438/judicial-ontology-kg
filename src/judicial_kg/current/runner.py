@@ -9,7 +9,7 @@ from judicial_kg.contracts import Contract
 from judicial_kg.current import VERSION
 from judicial_kg.current.alignment import put
 from judicial_kg.current.compiler import Compiler
-from judicial_kg.current.decision import AlignmentCalls
+from judicial_kg.current.decision import AlignmentCalls, FlashAlignmentCalls
 from judicial_kg.current.protocol import PROMPT, array, obj, schema
 from judicial_kg.current.retrieval import index_documents
 from judicial_kg.current.source import batches
@@ -112,7 +112,17 @@ def verify(wire, payload, calls, stage, save):
     return decision
 
 
-def run_document(root, doc, output, client, window_size=16, *, run_id=None, alignment_client=None):
+def run_document(
+    root,
+    doc,
+    output,
+    client,
+    window_size=16,
+    *,
+    run_id=None,
+    alignment_client=None,
+    alignment_mode=None,
+):
     validate_source(doc)
     run_id = run_id or str(uuid4())
     output.mkdir(parents=True, exist_ok=False)
@@ -130,7 +140,13 @@ def run_document(root, doc, output, client, window_size=16, *, run_id=None, alig
         },
     )
     calls = Calls(client, output)
-    aligner = AlignmentCalls(alignment_client, output) if alignment_client else None
+    aligner = (
+        FlashAlignmentCalls(calls, output)
+        if alignment_mode == "flash"
+        else AlignmentCalls(alignment_client, output)
+        if alignment_client
+        else None
+    )
     coverage = []
     started = time.monotonic()
 
@@ -246,7 +262,13 @@ def run_document(root, doc, output, client, window_size=16, *, run_id=None, alig
         "windows": len(windows),
         "requests": calls.calls,
         "alignment_requests": len(aligner.rows) if aligner else 0,
-        "alignment_model": "decision-model-preview" if aligner else None,
+        "alignment_model": (
+            "qwen3.8-flash"
+            if alignment_mode == "flash"
+            else "decision-model-preview"
+            if aligner
+            else None
+        ),
         "counts": compiler.counts(),
         "issues": len(compiler.issues),
         "wall_seconds": time.monotonic() - started,

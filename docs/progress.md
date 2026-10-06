@@ -1,5 +1,10 @@
 # 当前进度
 
+## 新分支：模型对齐
+
+`codex/model-alignment` 从592636b建立。计划见 [模型对齐](model-alignment-plan.md)。已实现原文位置与语境内引用的模型有限选择、unknown隔离及两种模型的离线回放。12项同候选对照显示decision仍有明确角色绑定错误，因此新三篇采用Flash对齐；决策模型不作为默认路径。新运行登记见 research/alignment-flash-three-preregistration.json，开始时累计75.1187192元、子预算5元。结果完成前不宣称改进。
+
+
 ## current-rc1收敛候选版
 
 当前源码冻结：32f6863（在2b77ec0收敛实现上补API预检/熔断）。收尾源码823项测试通过，Ruff、doctor与diff检查通过。主流程见 [current-workflow.md](current-workflow.md)。

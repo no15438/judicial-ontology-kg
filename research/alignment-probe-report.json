@@ -1,0 +1,133 @@
+{
+  "status": "completed",
+  "tasks": 12,
+  "inventory": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "tasks": 228,
+      "positions": 6,
+      "bindings": 222,
+      "diagnostics": {
+        "no_bounded_candidates": 20,
+        "invalid_selector": 6
+      },
+      "selected": 4
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "tasks": 136,
+      "positions": 4,
+      "bindings": 132,
+      "diagnostics": {
+        "no_bounded_candidates": 4,
+        "invalid_selector": 1
+      },
+      "selected": 4
+    },
+    {
+      "document_id": "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+      "tasks": 192,
+      "positions": 2,
+      "bindings": 190,
+      "diagnostics": {
+        "no_bounded_candidates": 5
+      },
+      "selected": 4
+    }
+  ],
+  "decision_order_stable": 11,
+  "cross_model_agreement": 5,
+  "unknown": {
+    "decision": 1,
+    "decision_reversed": 1,
+    "flash": 3
+  },
+  "results": {
+    "decision": {
+      "http_status": 200,
+      "elapsed_seconds": 3.5812682079849765,
+      "choices": {
+        "a0": "o0",
+        "a1": "o0",
+        "a2": "o0",
+        "a3": "o0",
+        "a4": "o4",
+        "a5": "o0",
+        "a6": "o1",
+        "a7": "o1",
+        "a8": "unknown",
+        "a9": "o0",
+        "a10": "o0",
+        "a11": "o0"
+      },
+      "confidence": {
+        "a0": 0.1,
+        "a1": 0.09,
+        "a2": 0.8,
+        "a3": 0.77,
+        "a4": 0.08,
+        "a5": 0.24,
+        "a6": 0.72,
+        "a7": 0.7,
+        "a8": 0.78,
+        "a9": 0.38,
+        "a10": 0.97,
+        "a11": 0.97
+      }
+    },
+    "decision_reversed": {
+      "http_status": 200,
+      "elapsed_seconds": 3.168272542010527,
+      "choices": {
+        "a0": "o0",
+        "a1": "o0",
+        "a2": "o0",
+        "a3": "o0",
+        "a4": "o0",
+        "a5": "o0",
+        "a6": "o1",
+        "a7": "o1",
+        "a8": "unknown",
+        "a9": "o0",
+        "a10": "o0",
+        "a11": "o0"
+      },
+      "confidence": {
+        "a0": 0.3,
+        "a1": 0.31,
+        "a2": 0.93,
+        "a3": 0.92,
+        "a4": 0.18,
+        "a5": 0.14,
+        "a6": 0.56,
+        "a7": 0.57,
+        "a8": 0.78,
+        "a9": 0.33,
+        "a10": 0.98,
+        "a11": 0.98
+      }
+    },
+    "flash": {
+      "choices": {
+        "a0": "unknown",
+        "a1": "unknown",
+        "a2": "o0",
+        "a3": "o0",
+        "a4": "o0",
+        "a5": "o11",
+        "a6": "o1",
+        "a7": "o2",
+        "a8": "o0",
+        "a9": "unknown",
+        "a10": "o0",
+        "a11": "o0"
+      }
+    }
+  },
+  "semantic_accuracy": null,
+  "fresh_extraction": false,
+  "frozen_inputs_unchanged": true,
+  "source": "same saved candidate sample; no manual graph edits",
+  "finding": "descriptive choices improve explicit plaintiff binding; agent still assigned to plaintiff rather than agent; decision not promoted as default",
+  "unverified_positions": "alternative identical-name occurrences may be equivalent; cross-model disagreement is not automatically error"
+}

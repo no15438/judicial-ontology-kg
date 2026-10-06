@@ -76,7 +76,14 @@ def replay(root, source_run, output):
         else None
     )
     run_document(
-        root, doc, output, client, config["window_size"], run_id=run_id, alignment_client=alignment
+        root,
+        doc,
+        output,
+        client,
+        config["window_size"],
+        run_id=run_id,
+        alignment_client=alignment,
+        alignment_mode=config.get("alignment"),
     )
     if alignment and alignment.count != len(alignment.rows):
         raise ValueError("Unused alignment responses")
@@ -118,7 +125,7 @@ def run(root, manifest_path, output, credential_root):
         output / "budget.json",
         "qwen3.8-flash",
     )
-    if manifest.get("alignment") not in {None, "decision"}:
+    if manifest.get("alignment") not in {None, "decision", "flash"}:
         raise ValueError("Unsupported alignment mode")
     alignment = (
         BoundedDecisionClient(
@@ -140,6 +147,7 @@ def run(root, manifest_path, output, credential_root):
             budget,
             manifest.get("window_size", 16),
             alignment_client=alignment,
+            alignment_mode=manifest.get("alignment"),
         )
         write_json(
             dest / "config.json",
