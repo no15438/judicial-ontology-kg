@@ -1,0 +1,238 @@
+{
+  "audit": "literal-diagnostic-containment-review-v1",
+  "source_trial": "next-flash-fresh-v37-01",
+  "candidate_sha256": "4188ea5ca3b94f533fddbc903304c54178e571c3534743cfcfc217ee99f1115e",
+  "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+  "original_hint_count": 11,
+  "containment_counts": {
+    "same_actor_containment": 10,
+    "other_actor_containment": 1,
+    "uncovered": 0
+  },
+  "rows": [
+    {
+      "position": {
+        "field": "text",
+        "start": 6,
+        "end": 10
+      },
+      "query_sha256": "00c8f5705a5e997dd30295003b6e5ba781e3a62b78f31a78ed0b00a701fffa6a",
+      "covering_mention_ids": [
+        "anchor_15c7257457b9a394caf4de3bda59e58d"
+      ],
+      "same_actor_covering_mention_ids": [],
+      "status": "other_actor_containment",
+      "observed_actor_id_sha256": [
+        "274927550a57e8ccd1bc3ca8d2c3f67c8b0d94f3a476e30cded415c2a86bc9b1"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 39,
+        "end": 42
+      },
+      "query_sha256": "e32c9b5a81d3c4de3aee4eba38ccc5ce54901fd47c0a133b5ea705b947efe9d6",
+      "covering_mention_ids": [
+        "anchor_59e156d19d9f7fd008afa2252ec8dcc5"
+      ],
+      "same_actor_covering_mention_ids": [
+        "anchor_59e156d19d9f7fd008afa2252ec8dcc5"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "6bd2c6690480d8fae18cb426cf1f5f7906d4b0efba81603c9e555e45d792b650"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 111,
+        "end": 114
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "anchor_b7298769b6cb0c114089afbd81c28bdb"
+      ],
+      "same_actor_covering_mention_ids": [
+        "anchor_b7298769b6cb0c114089afbd81c28bdb"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 222,
+        "end": 225
+      },
+      "query_sha256": "e32c9b5a81d3c4de3aee4eba38ccc5ce54901fd47c0a133b5ea705b947efe9d6",
+      "covering_mention_ids": [
+        "mention_4239ac4a2d35db2ade6903051fea8c2cbb45b9db",
+        "v13_b1_m_20a57138073d91ccf8bbdbd5646dfcc6d8fcb6ab",
+        "mention_2c6ff792e801960f18777015f9925ce4c8b4b75f"
+      ],
+      "same_actor_covering_mention_ids": [
+        "mention_4239ac4a2d35db2ade6903051fea8c2cbb45b9db",
+        "v13_b1_m_20a57138073d91ccf8bbdbd5646dfcc6d8fcb6ab"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "6bd2c6690480d8fae18cb426cf1f5f7906d4b0efba81603c9e555e45d792b650"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 248,
+        "end": 251
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "mention_81fd7ee8989ce57e149dfaf2bdb0b0cd1f9dc99c",
+        "mention_c488174641596881835cdd30f756874c6219c945",
+        "v13_b1_m_0ae05403e01257827d381ded51e2358aafe97c54",
+        "mention_47a4711da985756d36e68de895db826f17b245e5"
+      ],
+      "same_actor_covering_mention_ids": [
+        "mention_81fd7ee8989ce57e149dfaf2bdb0b0cd1f9dc99c",
+        "mention_c488174641596881835cdd30f756874c6219c945",
+        "v13_b1_m_0ae05403e01257827d381ded51e2358aafe97c54"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 462,
+        "end": 465
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "v13_b3_m_0eded9dc03940b04e0125891d52a205ff85c9bd7",
+        "v13_b3_m_d2220fa47f48055b1cc49a7ac017339c084b1885",
+        "v13_b3_m_1563fd33b5fc9f7366bf5c8985c9521d5775c551",
+        "v13_b3_m_da93ad00aab414f34be065c70573d88f0b1bafc5"
+      ],
+      "same_actor_covering_mention_ids": [
+        "v13_b3_m_0eded9dc03940b04e0125891d52a205ff85c9bd7",
+        "v13_b3_m_d2220fa47f48055b1cc49a7ac017339c084b1885",
+        "v13_b3_m_1563fd33b5fc9f7366bf5c8985c9521d5775c551"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 493,
+        "end": 496
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "v13_b4_m_1e3bdc7133505c3255e436ab0f61dcb4a72da189",
+        "v13_b4_m_9935213be2bf1afb44316d046b010787b66d8dd7"
+      ],
+      "same_actor_covering_mention_ids": [
+        "v13_b4_m_1e3bdc7133505c3255e436ab0f61dcb4a72da189",
+        "v13_b4_m_9935213be2bf1afb44316d046b010787b66d8dd7"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 689,
+        "end": 692
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "v13_b4_m_606da9d91238104853bbe7a05e446b0c0b99c523",
+        "v13_b4_m_76c3808e2ffb9a1a46aee992d6383da035d51093"
+      ],
+      "same_actor_covering_mention_ids": [
+        "v13_b4_m_606da9d91238104853bbe7a05e446b0c0b99c523",
+        "v13_b4_m_76c3808e2ffb9a1a46aee992d6383da035d51093"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 697,
+        "end": 700
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "v13_b4_m_75ce10b8c764b086f74fd1c4e8d9dd5d820c0df4"
+      ],
+      "same_actor_covering_mention_ids": [
+        "v13_b4_m_75ce10b8c764b086f74fd1c4e8d9dd5d820c0df4"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 710,
+        "end": 713
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "v13_b4_m_6dfb5532bf9b6da3422284665970e519135c0a0d"
+      ],
+      "same_actor_covering_mention_ids": [
+        "v13_b4_m_6dfb5532bf9b6da3422284665970e519135c0a0d"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    },
+    {
+      "position": {
+        "field": "text",
+        "start": 766,
+        "end": 769
+      },
+      "query_sha256": "8d02ede7e7a1d724fbae2d87acd7550f4035396de7eda22d77248daf60670487",
+      "covering_mention_ids": [
+        "v13_b4_m_05abec8443a659e31a5a0a12a832ed0d6f35e1ff",
+        "v13_b4_m_42de5002c99038ea1001ac436024c1689e53f1d9"
+      ],
+      "same_actor_covering_mention_ids": [
+        "v13_b4_m_05abec8443a659e31a5a0a12a832ed0d6f35e1ff",
+        "v13_b4_m_42de5002c99038ea1001ac436024c1689e53f1d9"
+      ],
+      "status": "same_actor_containment",
+      "observed_actor_id_sha256": [
+        "4d9662bd0258718a15319fe1eec0df312ffe21bd5f52877edac55ecbd724ccd2"
+      ]
+    }
+  ],
+  "candidate_modified": false,
+  "existing_diagnostics_rewritten": false,
+  "semantic_identity_verified": false,
+  "conclusion": "Exact-boundary diagnostic mismatches are not necessarily missing mentions. Containing evidence is observable; semantic identity remains unverified.",
+  "reported_material_in_finding_context": {
+    "count": 1,
+    "status": "unresolved_source_attribution_review",
+    "rule_hint_not_proven_semantic_error": true
+  }
+}

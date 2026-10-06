@@ -38,4 +38,10 @@ PYTHONPATH=src .venv/bin/python -m judicial_kg.extraction.fresh_workflow \
 
 ### 本地目标模型 v32
 
-同一控制器支持 `--local-config configs/qwen-extraction-v32-pilot.json --version 32 --execute`，替代云端预算参数。保持完整输入清单，目前本地新流程只选择第一个来源文书且要求 max_documents=1；不通过裁剪来源清单改变分母。代码/原文/配置冻结、零调用回放和接受后装配门槛相同，报告标明 Spark LAN、实际模型与零云端请求。失败不发布半篇，不自动重试。27B 服务未配置，不声明已支持该实际模型。
+同一控制器支持 `--local-config configs/qwen-extraction-v32-pilot.json --version 32 --execute`，替代云端预算参数。保持完整输入清单，本地每次要求 max_documents=1；省略 --document-id 时选择第一篇，显式传入时从完整输入选择该ID，未命中在调用前拒收，零调用回放保留同一选择；不通过裁剪来源清单改变分母。代码/原文/配置冻结、零调用回放和接受后装配门槛相同，报告标明 Spark LAN、实际模型与零云端请求。失败不发布半篇，不自动重试。27B 服务未配置，不声明已支持该实际模型。
+
+### 固定三篇本地 v37 回归
+
+同三篇以完整来源数组逐篇运行 `--local-config configs/qwen-extraction-v37-pilot.json --version 37 --document-id <登记ID> --execute`，每次使用新输出目录。选择功能只改变执行对象，不改变抽取协议、原文数组或分母；旧无ID运行回放保持兼容。预登记见 `research/next-flash-three-v37-preregistration.json`。
+
+运行代码796fc2d：111次本地调用，自动流程1/3、未经纠正首轮0/3；Spark60次通过、026b47次拒收、442c4次拒收。3/3零调用回放与冻结检查通过。完整报告见 `research/next-flash-three-v37-report.json`，下一轮先修主体/非主体分流，暂不扩十篇。

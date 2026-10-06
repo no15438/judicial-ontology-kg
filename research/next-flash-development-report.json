@@ -90,9 +90,20 @@
     "real_execution_report": "research/next-flash-v37-report.json"
   },
   "remaining_work": [
-    "same three exposed documents from source on frozen target-model workflow",
-    "source-bound independent attribution/support review of remaining hints",
-    "fixed ten gate only after three-document regression",
-    "measure stability and reduce request duplication without losing evidence"
-  ]
+    "source-bound actor/non-actor/uncertain triage in inventory and body",
+    "retain platform/project references without forcing organizational identity",
+    "evidence-bounded role and reported-material attribution review",
+    "rerun same three after frozen fix; do not expand ten until gate passes",
+    "reversible input deduplication and measured efficiency"
+  ],
+  "latest_distinct_document_cohort": {
+    "report": "research/next-flash-three-v37-report.json",
+    "protocol": 37,
+    "selected_documents": 3,
+    "not_selected": 33,
+    "automatic_pipeline_accepted": 1,
+    "uncorrected_first_pass_accepted": 0,
+    "requests_submitted": 111,
+    "kept_separate_from_same_document_protocol_iterations": true
+  }
 }

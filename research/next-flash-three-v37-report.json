@@ -1,0 +1,1502 @@
+{
+  "trial": "next-flash-three-v37-01",
+  "started_at_utc": "2026-10-06T04:33:23.327075+00:00",
+  "completed": true,
+  "expected_documents": 36,
+  "selected_documents": 3,
+  "not_selected": 33,
+  "protocol": 37,
+  "model": "qwen3.8-flash-next-iq4xs",
+  "historical_responses_reused": 0,
+  "manual_graph_edits": 0,
+  "cloud_requests_submitted": 0,
+  "semantic_precision_recall_f1": null,
+  "rows": [
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "status": "automatic_pipeline_accepted",
+      "directory": "spark4396",
+      "workflow": "fresh-source-to-graph-v1",
+      "protocol_version": 37,
+      "code_commit": "796fc2d2b6b3f53cfc57832ac12650ca8287f90f",
+      "completed": true,
+      "response_reuse_enabled": false,
+      "external_candidate_input": false,
+      "automatic_pipeline_accepted": true,
+      "uncorrected_first_pass_accepted": false,
+      "semantic_precision_recall_f1": null,
+      "backend": "spark_lan",
+      "model": "qwen3.8-flash-next-iq4xs",
+      "cloud_requests_submitted": 0,
+      "selected_document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "extraction_status": "accepted_candidate",
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 60,
+      "responses_reused": 0,
+      "model_correction_calls": 1,
+      "observed_cost_cny": "0",
+      "prior_committed_cny": "0",
+      "offline_replay_verified": true,
+      "graph": {
+        "nodes": 634,
+        "edges": 1591,
+        "validation": {
+          "expected_documents": 36,
+          "source_fields_verified": 156,
+          "attempts_total": 1,
+          "attempts_rejected": 0,
+          "documents_accepted_candidate": 1,
+          "documents_accepted_empty": 0,
+          "documents_rejected": 0,
+          "documents_missing": 35,
+          "issue_counts": {},
+          "accepted_node_counts": {
+            "actors": 18,
+            "mentions": 193,
+            "contexts": 9,
+            "roles": 27,
+            "events": 15,
+            "statements": 77
+          },
+          "accepted_evidence_spans_replayed": 594,
+          "semantic_precision_recall_f1": null,
+          "gold_available": false,
+          "semantic_completeness": "not_assessed",
+          "requires_user_legal_annotation": false
+        },
+        "diagnostic_hint_counts": {
+          "reported_material_in_finding_context": 1
+        },
+        "assembled_documents_diagnostics": {
+          "assertion_evidence_characters": 1203,
+          "context_evidence_characters": 1731,
+          "literal_name_occurrences_without_mention": 11,
+          "mention_evidence_characters": 416,
+          "source_characters": 1731
+        },
+        "graph_canonical_sha256": "47c1d0dea41871f47d7d24820eb08069fd2adc2da0eb74d8b246f79d4d1d5ed2"
+      },
+      "frozen_inputs_unchanged": true,
+      "started_at_utc": "2026-10-06T04:33:23.374902+00:00",
+      "finished_at_utc": "2026-10-06T04:56:59.501265+00:00",
+      "request_elapsed_seconds": 1332.979855996964,
+      "usage": {
+        "prompt_tokens": 392169,
+        "completion_tokens": 22044,
+        "total_tokens": 414213
+      },
+      "issues": [],
+      "stage_summary": [
+        {
+          "stage": "inventory-forms",
+          "status": "response_complete",
+          "input_tokens": 5360,
+          "request_elapsed_seconds": 12.01028404099634,
+          "usage": {
+            "prompt_tokens": 5360,
+            "completion_tokens": 149,
+            "total_tokens": 5509
+          }
+        },
+        {
+          "stage": "inventory-type-000",
+          "status": "response_complete",
+          "input_tokens": 7682,
+          "request_elapsed_seconds": 18.084409124974627,
+          "usage": {
+            "prompt_tokens": 7682,
+            "completion_tokens": 238,
+            "total_tokens": 7920
+          }
+        },
+        {
+          "stage": "inventory-type-001",
+          "status": "response_complete",
+          "input_tokens": 6980,
+          "request_elapsed_seconds": 17.89838075003354,
+          "usage": {
+            "prompt_tokens": 6980,
+            "completion_tokens": 256,
+            "total_tokens": 7236
+          }
+        },
+        {
+          "stage": "inventory-type-002",
+          "status": "response_complete",
+          "input_tokens": 6197,
+          "request_elapsed_seconds": 13.334898624976631,
+          "usage": {
+            "prompt_tokens": 6197,
+            "completion_tokens": 161,
+            "total_tokens": 6358
+          }
+        },
+        {
+          "stage": "inventory-select",
+          "status": "response_complete",
+          "input_tokens": 8906,
+          "request_elapsed_seconds": 64.46562350000022,
+          "usage": {
+            "prompt_tokens": 8906,
+            "completion_tokens": 1347,
+            "total_tokens": 10253
+          }
+        },
+        {
+          "stage": "anonymous-forms",
+          "status": "response_complete",
+          "input_tokens": 6860,
+          "request_elapsed_seconds": 18.4586172500276,
+          "usage": {
+            "prompt_tokens": 6860,
+            "completion_tokens": 269,
+            "total_tokens": 7129
+          }
+        },
+        {
+          "stage": "anonymous-forms-repair-1",
+          "status": "response_complete",
+          "input_tokens": 7067,
+          "request_elapsed_seconds": 10.010481915960554,
+          "usage": {
+            "prompt_tokens": 7067,
+            "completion_tokens": 48,
+            "total_tokens": 7115
+          }
+        },
+        {
+          "stage": "anonymous-referents",
+          "status": "response_complete",
+          "input_tokens": 15787,
+          "request_elapsed_seconds": 41.29386804095702,
+          "usage": {
+            "prompt_tokens": 15787,
+            "completion_tokens": 545,
+            "total_tokens": 16332
+          }
+        },
+        {
+          "stage": "header",
+          "status": "response_complete",
+          "input_tokens": 9445,
+          "request_elapsed_seconds": 115.49799470900325,
+          "usage": {
+            "prompt_tokens": 9445,
+            "completion_tokens": 2569,
+            "total_tokens": 12014
+          }
+        },
+        {
+          "stage": "body-000-forms",
+          "status": "response_complete",
+          "input_tokens": 1039,
+          "request_elapsed_seconds": 3.627136791998055,
+          "usage": {
+            "prompt_tokens": 1039,
+            "completion_tokens": 48,
+            "total_tokens": 1087
+          }
+        },
+        {
+          "stage": "body-000-mentions",
+          "status": "response_complete",
+          "input_tokens": 5632,
+          "request_elapsed_seconds": 16.646812292048708,
+          "usage": {
+            "prompt_tokens": 5632,
+            "completion_tokens": 254,
+            "total_tokens": 5886
+          }
+        },
+        {
+          "stage": "body-000-events",
+          "status": "response_complete",
+          "input_tokens": 7823,
+          "request_elapsed_seconds": 15.946874500019476,
+          "usage": {
+            "prompt_tokens": 7823,
+            "completion_tokens": 179,
+            "total_tokens": 8002
+          }
+        },
+        {
+          "stage": "body-000-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 5373,
+          "request_elapsed_seconds": 6.809099083999172,
+          "usage": {
+            "prompt_tokens": 5373,
+            "completion_tokens": 18,
+            "total_tokens": 5391
+          }
+        },
+        {
+          "stage": "body-001-forms",
+          "status": "response_complete",
+          "input_tokens": 365,
+          "request_elapsed_seconds": 4.1168839579913765,
+          "usage": {
+            "prompt_tokens": 365,
+            "completion_tokens": 57,
+            "total_tokens": 422
+          }
+        },
+        {
+          "stage": "body-001-mentions",
+          "status": "response_complete",
+          "input_tokens": 5522,
+          "request_elapsed_seconds": 24.556259999983013,
+          "usage": {
+            "prompt_tokens": 5522,
+            "completion_tokens": 472,
+            "total_tokens": 5994
+          }
+        },
+        {
+          "stage": "body-001-events",
+          "status": "response_complete",
+          "input_tokens": 7171,
+          "request_elapsed_seconds": 25.551964625017717,
+          "usage": {
+            "prompt_tokens": 7171,
+            "completion_tokens": 445,
+            "total_tokens": 7616
+          }
+        },
+        {
+          "stage": "body-001-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 3866,
+          "request_elapsed_seconds": 31.11868366698036,
+          "usage": {
+            "prompt_tokens": 3866,
+            "completion_tokens": 712,
+            "total_tokens": 4578
+          }
+        },
+        {
+          "stage": "body-001-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 3609,
+          "request_elapsed_seconds": 8.175835000001825,
+          "usage": {
+            "prompt_tokens": 3609,
+            "completion_tokens": 100,
+            "total_tokens": 3709
+          }
+        },
+        {
+          "stage": "body-002-forms",
+          "status": "response_complete",
+          "input_tokens": 604,
+          "request_elapsed_seconds": 2.848307416017633,
+          "usage": {
+            "prompt_tokens": 604,
+            "completion_tokens": 40,
+            "total_tokens": 644
+          }
+        },
+        {
+          "stage": "body-002-mentions",
+          "status": "response_complete",
+          "input_tokens": 3957,
+          "request_elapsed_seconds": 25.3168710420141,
+          "usage": {
+            "prompt_tokens": 3957,
+            "completion_tokens": 550,
+            "total_tokens": 4507
+          }
+        },
+        {
+          "stage": "body-002-events",
+          "status": "response_complete",
+          "input_tokens": 8624,
+          "request_elapsed_seconds": 38.49588879197836,
+          "usage": {
+            "prompt_tokens": 8624,
+            "completion_tokens": 723,
+            "total_tokens": 9347
+          }
+        },
+        {
+          "stage": "body-002-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 8810,
+          "request_elapsed_seconds": 28.991343833040446,
+          "usage": {
+            "prompt_tokens": 8810,
+            "completion_tokens": 478,
+            "total_tokens": 9288
+          }
+        },
+        {
+          "stage": "body-002-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 6006,
+          "request_elapsed_seconds": 15.996948792017065,
+          "usage": {
+            "prompt_tokens": 6006,
+            "completion_tokens": 241,
+            "total_tokens": 6247
+          }
+        },
+        {
+          "stage": "body-002-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 4162,
+          "request_elapsed_seconds": 8.852775542007294,
+          "usage": {
+            "prompt_tokens": 4162,
+            "completion_tokens": 107,
+            "total_tokens": 4269
+          }
+        },
+        {
+          "stage": "body-002-properties-owner-003",
+          "status": "response_complete",
+          "input_tokens": 5944,
+          "request_elapsed_seconds": 18.338757375022396,
+          "usage": {
+            "prompt_tokens": 5944,
+            "completion_tokens": 306,
+            "total_tokens": 6250
+          }
+        },
+        {
+          "stage": "body-003-forms",
+          "status": "response_complete",
+          "input_tokens": 125,
+          "request_elapsed_seconds": 1.897507665969897,
+          "usage": {
+            "prompt_tokens": 125,
+            "completion_tokens": 27,
+            "total_tokens": 152
+          }
+        },
+        {
+          "stage": "body-003-mentions",
+          "status": "response_complete",
+          "input_tokens": 2513,
+          "request_elapsed_seconds": 12.065444542036857,
+          "usage": {
+            "prompt_tokens": 2513,
+            "completion_tokens": 237,
+            "total_tokens": 2750
+          }
+        },
+        {
+          "stage": "body-003-events",
+          "status": "response_complete",
+          "input_tokens": 6322,
+          "request_elapsed_seconds": 12.312093333050143,
+          "usage": {
+            "prompt_tokens": 6322,
+            "completion_tokens": 134,
+            "total_tokens": 6456
+          }
+        },
+        {
+          "stage": "body-003-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 2980,
+          "request_elapsed_seconds": 4.467973749968223,
+          "usage": {
+            "prompt_tokens": 2980,
+            "completion_tokens": 18,
+            "total_tokens": 2998
+          }
+        },
+        {
+          "stage": "body-004-forms",
+          "status": "response_complete",
+          "input_tokens": 1094,
+          "request_elapsed_seconds": 8.257180333021097,
+          "usage": {
+            "prompt_tokens": 1094,
+            "completion_tokens": 178,
+            "total_tokens": 1272
+          }
+        },
+        {
+          "stage": "body-004-mentions",
+          "status": "response_complete",
+          "input_tokens": 7854,
+          "request_elapsed_seconds": 51.50142741698073,
+          "usage": {
+            "prompt_tokens": 7854,
+            "completion_tokens": 1090,
+            "total_tokens": 8944
+          }
+        },
+        {
+          "stage": "body-004-events",
+          "status": "response_complete",
+          "input_tokens": 11703,
+          "request_elapsed_seconds": 47.29818095796509,
+          "usage": {
+            "prompt_tokens": 11703,
+            "completion_tokens": 822,
+            "total_tokens": 12525
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 11772,
+          "request_elapsed_seconds": 55.417824333009776,
+          "usage": {
+            "prompt_tokens": 11772,
+            "completion_tokens": 1010,
+            "total_tokens": 12782
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 7302,
+          "request_elapsed_seconds": 14.940976000041701,
+          "usage": {
+            "prompt_tokens": 7302,
+            "completion_tokens": 166,
+            "total_tokens": 7468
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 6690,
+          "request_elapsed_seconds": 8.6514725839952,
+          "usage": {
+            "prompt_tokens": 6690,
+            "completion_tokens": 28,
+            "total_tokens": 6718
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-003",
+          "status": "response_complete",
+          "input_tokens": 8589,
+          "request_elapsed_seconds": 17.00412104197312,
+          "usage": {
+            "prompt_tokens": 8589,
+            "completion_tokens": 183,
+            "total_tokens": 8772
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-004",
+          "status": "response_complete",
+          "input_tokens": 8331,
+          "request_elapsed_seconds": 15.981178792018909,
+          "usage": {
+            "prompt_tokens": 8331,
+            "completion_tokens": 169,
+            "total_tokens": 8500
+          }
+        },
+        {
+          "stage": "body-005-forms",
+          "status": "response_complete",
+          "input_tokens": 271,
+          "request_elapsed_seconds": 2.0312562919571064,
+          "usage": {
+            "prompt_tokens": 271,
+            "completion_tokens": 25,
+            "total_tokens": 296
+          }
+        },
+        {
+          "stage": "body-005-mentions",
+          "status": "response_complete",
+          "input_tokens": 3176,
+          "request_elapsed_seconds": 10.835093249974307,
+          "usage": {
+            "prompt_tokens": 3176,
+            "completion_tokens": 186,
+            "total_tokens": 3362
+          }
+        },
+        {
+          "stage": "body-005-events",
+          "status": "response_complete",
+          "input_tokens": 7090,
+          "request_elapsed_seconds": 19.68385854101507,
+          "usage": {
+            "prompt_tokens": 7090,
+            "completion_tokens": 299,
+            "total_tokens": 7389
+          }
+        },
+        {
+          "stage": "body-005-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 6516,
+          "request_elapsed_seconds": 17.386559667007532,
+          "usage": {
+            "prompt_tokens": 6516,
+            "completion_tokens": 244,
+            "total_tokens": 6760
+          }
+        },
+        {
+          "stage": "body-005-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 5006,
+          "request_elapsed_seconds": 15.070863874978386,
+          "usage": {
+            "prompt_tokens": 5006,
+            "completion_tokens": 241,
+            "total_tokens": 5247
+          }
+        },
+        {
+          "stage": "body-006-forms",
+          "status": "response_complete",
+          "input_tokens": 1570,
+          "request_elapsed_seconds": 9.191193749953527,
+          "usage": {
+            "prompt_tokens": 1570,
+            "completion_tokens": 191,
+            "total_tokens": 1761
+          }
+        },
+        {
+          "stage": "body-006-mentions",
+          "status": "response_complete",
+          "input_tokens": 10789,
+          "request_elapsed_seconds": 82.583356832969,
+          "usage": {
+            "prompt_tokens": 10789,
+            "completion_tokens": 1712,
+            "total_tokens": 12501
+          }
+        },
+        {
+          "stage": "body-006-events",
+          "status": "response_complete",
+          "input_tokens": 15263,
+          "request_elapsed_seconds": 48.03421879099915,
+          "usage": {
+            "prompt_tokens": 15263,
+            "completion_tokens": 726,
+            "total_tokens": 15989
+          }
+        },
+        {
+          "stage": "body-006-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 14506,
+          "request_elapsed_seconds": 46.86317758302903,
+          "usage": {
+            "prompt_tokens": 14506,
+            "completion_tokens": 723,
+            "total_tokens": 15229
+          }
+        },
+        {
+          "stage": "body-006-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 9682,
+          "request_elapsed_seconds": 14.823702917026822,
+          "usage": {
+            "prompt_tokens": 9682,
+            "completion_tokens": 99,
+            "total_tokens": 9781
+          }
+        },
+        {
+          "stage": "body-006-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 9672,
+          "request_elapsed_seconds": 14.790949082991574,
+          "usage": {
+            "prompt_tokens": 9672,
+            "completion_tokens": 98,
+            "total_tokens": 9770
+          }
+        },
+        {
+          "stage": "body-006-properties-owner-003",
+          "status": "response_complete",
+          "input_tokens": 10764,
+          "request_elapsed_seconds": 19.069692541030236,
+          "usage": {
+            "prompt_tokens": 10764,
+            "completion_tokens": 176,
+            "total_tokens": 10940
+          }
+        },
+        {
+          "stage": "body-006-properties-owner-004",
+          "status": "response_complete",
+          "input_tokens": 10169,
+          "request_elapsed_seconds": 17.951339874998666,
+          "usage": {
+            "prompt_tokens": 10169,
+            "completion_tokens": 164,
+            "total_tokens": 10333
+          }
+        },
+        {
+          "stage": "body-007-forms",
+          "status": "response_complete",
+          "input_tokens": 723,
+          "request_elapsed_seconds": 3.721857625001576,
+          "usage": {
+            "prompt_tokens": 723,
+            "completion_tokens": 62,
+            "total_tokens": 785
+          }
+        },
+        {
+          "stage": "body-007-mentions",
+          "status": "response_complete",
+          "input_tokens": 6784,
+          "request_elapsed_seconds": 34.04738983302377,
+          "usage": {
+            "prompt_tokens": 6784,
+            "completion_tokens": 677,
+            "total_tokens": 7461
+          }
+        },
+        {
+          "stage": "body-007-events",
+          "status": "response_complete",
+          "input_tokens": 10745,
+          "request_elapsed_seconds": 32.084558707952965,
+          "usage": {
+            "prompt_tokens": 10745,
+            "completion_tokens": 498,
+            "total_tokens": 11243
+          }
+        },
+        {
+          "stage": "body-007-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 9842,
+          "request_elapsed_seconds": 39.644734875008,
+          "usage": {
+            "prompt_tokens": 9842,
+            "completion_tokens": 708,
+            "total_tokens": 10550
+          }
+        },
+        {
+          "stage": "body-007-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 6762,
+          "request_elapsed_seconds": 16.427956749976147,
+          "usage": {
+            "prompt_tokens": 6762,
+            "completion_tokens": 229,
+            "total_tokens": 6991
+          }
+        },
+        {
+          "stage": "body-007-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 7530,
+          "request_elapsed_seconds": 18.05649612500565,
+          "usage": {
+            "prompt_tokens": 7530,
+            "completion_tokens": 246,
+            "total_tokens": 7776
+          }
+        },
+        {
+          "stage": "body-008-forms",
+          "status": "response_complete",
+          "input_tokens": 137,
+          "request_elapsed_seconds": 1.8541377910296433,
+          "usage": {
+            "prompt_tokens": 137,
+            "completion_tokens": 27,
+            "total_tokens": 164
+          }
+        },
+        {
+          "stage": "body-008-mentions",
+          "status": "response_complete",
+          "input_tokens": 5102,
+          "request_elapsed_seconds": 11.71418516698759,
+          "usage": {
+            "prompt_tokens": 5102,
+            "completion_tokens": 155,
+            "total_tokens": 5257
+          }
+        },
+        {
+          "stage": "body-008-events",
+          "status": "response_complete",
+          "input_tokens": 7671,
+          "request_elapsed_seconds": 15.165902332984842,
+          "usage": {
+            "prompt_tokens": 7671,
+            "completion_tokens": 166,
+            "total_tokens": 7837
+          }
+        },
+        {
+          "stage": "body-008-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 4333,
+          "request_elapsed_seconds": 5.706992374965921,
+          "usage": {
+            "prompt_tokens": 4333,
+            "completion_tokens": 18,
+            "total_tokens": 4351
+          }
+        }
+      ],
+      "contexts_total": 9,
+      "contexts_validated": 9,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated"
+      ],
+      "exact_graph_roundtrip": true
+    },
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "status": "extraction_rejected",
+      "directory": "appeal026b",
+      "workflow": "fresh-source-to-graph-v1",
+      "protocol_version": 37,
+      "code_commit": "796fc2d2b6b3f53cfc57832ac12650ca8287f90f",
+      "completed": true,
+      "response_reuse_enabled": false,
+      "external_candidate_input": false,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "semantic_precision_recall_f1": null,
+      "backend": "spark_lan",
+      "model": "qwen3.8-flash-next-iq4xs",
+      "cloud_requests_submitted": 0,
+      "selected_document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "extraction_status": "draft_grounding_failed",
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 47,
+      "responses_reused": 0,
+      "model_correction_calls": 0,
+      "observed_cost_cny": "0",
+      "prior_committed_cny": "0",
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "started_at_utc": "2026-10-06T04:57:01.811472+00:00",
+      "finished_at_utc": "2026-10-06T05:20:21.042339+00:00",
+      "request_elapsed_seconds": 1332.7276671259897,
+      "usage": {
+        "prompt_tokens": 382554,
+        "completion_tokens": 21473,
+        "total_tokens": 404027
+      },
+      "issues": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/mentions/s2"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/mentions/s12"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/mentions/s17"
+        }
+      ],
+      "stage_summary": [
+        {
+          "stage": "inventory-forms",
+          "status": "response_complete",
+          "input_tokens": 11495,
+          "request_elapsed_seconds": 20.45787400001427,
+          "usage": {
+            "prompt_tokens": 11495,
+            "completion_tokens": 180,
+            "total_tokens": 11675
+          }
+        },
+        {
+          "stage": "inventory-type-000",
+          "status": "response_complete",
+          "input_tokens": 15698,
+          "request_elapsed_seconds": 28.413808332988992,
+          "usage": {
+            "prompt_tokens": 15698,
+            "completion_tokens": 252,
+            "total_tokens": 15950
+          }
+        },
+        {
+          "stage": "inventory-type-001",
+          "status": "response_complete",
+          "input_tokens": 18021,
+          "request_elapsed_seconds": 31.64105216698954,
+          "usage": {
+            "prompt_tokens": 18021,
+            "completion_tokens": 258,
+            "total_tokens": 18279
+          }
+        },
+        {
+          "stage": "inventory-type-002",
+          "status": "response_complete",
+          "input_tokens": 12340,
+          "request_elapsed_seconds": 20.562593667011242,
+          "usage": {
+            "prompt_tokens": 12340,
+            "completion_tokens": 164,
+            "total_tokens": 12504
+          }
+        },
+        {
+          "stage": "inventory-select",
+          "status": "response_complete",
+          "input_tokens": 23073,
+          "request_elapsed_seconds": 110.1652935409802,
+          "usage": {
+            "prompt_tokens": 23073,
+            "completion_tokens": 1767,
+            "total_tokens": 24840
+          }
+        },
+        {
+          "stage": "anonymous-forms",
+          "status": "response_complete",
+          "input_tokens": 13293,
+          "request_elapsed_seconds": 16.134872832975816,
+          "usage": {
+            "prompt_tokens": 13293,
+            "completion_tokens": 29,
+            "total_tokens": 13322
+          }
+        },
+        {
+          "stage": "anonymous-referents",
+          "status": "response_complete",
+          "input_tokens": 17887,
+          "request_elapsed_seconds": 27.73125012498349,
+          "usage": {
+            "prompt_tokens": 17887,
+            "completion_tokens": 174,
+            "total_tokens": 18061
+          }
+        },
+        {
+          "stage": "header",
+          "status": "response_complete",
+          "input_tokens": 13375,
+          "request_elapsed_seconds": 231.08963300002506,
+          "usage": {
+            "prompt_tokens": 13375,
+            "completion_tokens": 4974,
+            "total_tokens": 18349
+          }
+        },
+        {
+          "stage": "body-000-forms",
+          "status": "response_complete",
+          "input_tokens": 1271,
+          "request_elapsed_seconds": 6.052379207976628,
+          "usage": {
+            "prompt_tokens": 1271,
+            "completion_tokens": 109,
+            "total_tokens": 1380
+          }
+        },
+        {
+          "stage": "body-000-mentions",
+          "status": "response_complete",
+          "input_tokens": 10722,
+          "request_elapsed_seconds": 33.09332904097391,
+          "usage": {
+            "prompt_tokens": 10722,
+            "completion_tokens": 513,
+            "total_tokens": 11235
+          }
+        },
+        {
+          "stage": "body-000-events",
+          "status": "response_complete",
+          "input_tokens": 9039,
+          "request_elapsed_seconds": 38.73724170803325,
+          "usage": {
+            "prompt_tokens": 9039,
+            "completion_tokens": 701,
+            "total_tokens": 9740
+          }
+        },
+        {
+          "stage": "body-000-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 7021,
+          "request_elapsed_seconds": 8.711471749993507,
+          "usage": {
+            "prompt_tokens": 7021,
+            "completion_tokens": 18,
+            "total_tokens": 7039
+          }
+        },
+        {
+          "stage": "body-001-forms",
+          "status": "response_complete",
+          "input_tokens": 604,
+          "request_elapsed_seconds": 4.190285624994431,
+          "usage": {
+            "prompt_tokens": 604,
+            "completion_tokens": 77,
+            "total_tokens": 681
+          }
+        },
+        {
+          "stage": "body-001-mentions",
+          "status": "response_complete",
+          "input_tokens": 5063,
+          "request_elapsed_seconds": 25.145393249986228,
+          "usage": {
+            "prompt_tokens": 5063,
+            "completion_tokens": 503,
+            "total_tokens": 5566
+          }
+        },
+        {
+          "stage": "body-001-events",
+          "status": "response_complete",
+          "input_tokens": 7736,
+          "request_elapsed_seconds": 52.52175441698637,
+          "usage": {
+            "prompt_tokens": 7736,
+            "completion_tokens": 1089,
+            "total_tokens": 8825
+          }
+        },
+        {
+          "stage": "body-001-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 5508,
+          "request_elapsed_seconds": 6.865422584000044,
+          "usage": {
+            "prompt_tokens": 5508,
+            "completion_tokens": 18,
+            "total_tokens": 5526
+          }
+        },
+        {
+          "stage": "body-001-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 3572,
+          "request_elapsed_seconds": 8.379193792003207,
+          "usage": {
+            "prompt_tokens": 3572,
+            "completion_tokens": 106,
+            "total_tokens": 3678
+          }
+        },
+        {
+          "stage": "body-001-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 3882,
+          "request_elapsed_seconds": 8.58283604204189,
+          "usage": {
+            "prompt_tokens": 3882,
+            "completion_tokens": 102,
+            "total_tokens": 3984
+          }
+        },
+        {
+          "stage": "body-001-properties-owner-003",
+          "status": "response_complete",
+          "input_tokens": 3531,
+          "request_elapsed_seconds": 8.232220000005327,
+          "usage": {
+            "prompt_tokens": 3531,
+            "completion_tokens": 100,
+            "total_tokens": 3631
+          }
+        },
+        {
+          "stage": "body-001-properties-owner-004",
+          "status": "response_complete",
+          "input_tokens": 3416,
+          "request_elapsed_seconds": 11.940100541047286,
+          "usage": {
+            "prompt_tokens": 3416,
+            "completion_tokens": 182,
+            "total_tokens": 3598
+          }
+        },
+        {
+          "stage": "body-002-forms",
+          "status": "response_complete",
+          "input_tokens": 236,
+          "request_elapsed_seconds": 2.7386748749995604,
+          "usage": {
+            "prompt_tokens": 236,
+            "completion_tokens": 43,
+            "total_tokens": 279
+          }
+        },
+        {
+          "stage": "body-002-mentions",
+          "status": "response_complete",
+          "input_tokens": 2519,
+          "request_elapsed_seconds": 13.69844758399995,
+          "usage": {
+            "prompt_tokens": 2519,
+            "completion_tokens": 276,
+            "total_tokens": 2795
+          }
+        },
+        {
+          "stage": "body-002-events",
+          "status": "response_complete",
+          "input_tokens": 6546,
+          "request_elapsed_seconds": 36.43078462500125,
+          "usage": {
+            "prompt_tokens": 6546,
+            "completion_tokens": 734,
+            "total_tokens": 7280
+          }
+        },
+        {
+          "stage": "body-002-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 3340,
+          "request_elapsed_seconds": 4.7733728750026785,
+          "usage": {
+            "prompt_tokens": 3340,
+            "completion_tokens": 18,
+            "total_tokens": 3358
+          }
+        },
+        {
+          "stage": "body-002-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 2886,
+          "request_elapsed_seconds": 13.426456999965012,
+          "usage": {
+            "prompt_tokens": 2886,
+            "completion_tokens": 263,
+            "total_tokens": 3149
+          }
+        },
+        {
+          "stage": "body-003-forms",
+          "status": "response_complete",
+          "input_tokens": 1894,
+          "request_elapsed_seconds": 5.421070999989752,
+          "usage": {
+            "prompt_tokens": 1894,
+            "completion_tokens": 78,
+            "total_tokens": 1972
+          }
+        },
+        {
+          "stage": "body-003-mentions",
+          "status": "response_complete",
+          "input_tokens": 7723,
+          "request_elapsed_seconds": 80.31483983399812,
+          "usage": {
+            "prompt_tokens": 7723,
+            "completion_tokens": 1801,
+            "total_tokens": 9524
+          }
+        },
+        {
+          "stage": "body-003-events",
+          "status": "response_complete",
+          "input_tokens": 15308,
+          "request_elapsed_seconds": 57.16711379197659,
+          "usage": {
+            "prompt_tokens": 15308,
+            "completion_tokens": 932,
+            "total_tokens": 16240
+          }
+        },
+        {
+          "stage": "body-003-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 14027,
+          "request_elapsed_seconds": 33.402286332973745,
+          "usage": {
+            "prompt_tokens": 14027,
+            "completion_tokens": 424,
+            "total_tokens": 14451
+          }
+        },
+        {
+          "stage": "body-003-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 10478,
+          "request_elapsed_seconds": 18.510530708997976,
+          "usage": {
+            "prompt_tokens": 10478,
+            "completion_tokens": 168,
+            "total_tokens": 10646
+          }
+        },
+        {
+          "stage": "body-003-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 10466,
+          "request_elapsed_seconds": 18.781650000019,
+          "usage": {
+            "prompt_tokens": 10466,
+            "completion_tokens": 173,
+            "total_tokens": 10639
+          }
+        },
+        {
+          "stage": "body-003-properties-owner-003",
+          "status": "response_complete",
+          "input_tokens": 9427,
+          "request_elapsed_seconds": 20.612916458048858,
+          "usage": {
+            "prompt_tokens": 9427,
+            "completion_tokens": 248,
+            "total_tokens": 9675
+          }
+        },
+        {
+          "stage": "body-004-forms",
+          "status": "response_complete",
+          "input_tokens": 2375,
+          "request_elapsed_seconds": 5.430861000029836,
+          "usage": {
+            "prompt_tokens": 2375,
+            "completion_tokens": 59,
+            "total_tokens": 2434
+          }
+        },
+        {
+          "stage": "body-004-mentions",
+          "status": "response_complete",
+          "input_tokens": 8341,
+          "request_elapsed_seconds": 68.4778653329704,
+          "usage": {
+            "prompt_tokens": 8341,
+            "completion_tokens": 1481,
+            "total_tokens": 9822
+          }
+        },
+        {
+          "stage": "body-004-events",
+          "status": "response_complete",
+          "input_tokens": 16363,
+          "request_elapsed_seconds": 50.00601958401967,
+          "usage": {
+            "prompt_tokens": 16363,
+            "completion_tokens": 719,
+            "total_tokens": 17082
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 14791,
+          "request_elapsed_seconds": 33.03080387500813,
+          "usage": {
+            "prompt_tokens": 14791,
+            "completion_tokens": 385,
+            "total_tokens": 15176
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 9875,
+          "request_elapsed_seconds": 18.32547004101798,
+          "usage": {
+            "prompt_tokens": 9875,
+            "completion_tokens": 178,
+            "total_tokens": 10053
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 9877,
+          "request_elapsed_seconds": 12.1918545839726,
+          "usage": {
+            "prompt_tokens": 9877,
+            "completion_tokens": 29,
+            "total_tokens": 9906
+          }
+        },
+        {
+          "stage": "body-004-properties-owner-003",
+          "status": "response_complete",
+          "input_tokens": 9769,
+          "request_elapsed_seconds": 12.079128833021969,
+          "usage": {
+            "prompt_tokens": 9769,
+            "completion_tokens": 29,
+            "total_tokens": 9798
+          }
+        },
+        {
+          "stage": "body-005-forms",
+          "status": "response_complete",
+          "input_tokens": 361,
+          "request_elapsed_seconds": 2.772553666960448,
+          "usage": {
+            "prompt_tokens": 361,
+            "completion_tokens": 42,
+            "total_tokens": 403
+          }
+        },
+        {
+          "stage": "body-005-mentions",
+          "status": "response_complete",
+          "input_tokens": 4460,
+          "request_elapsed_seconds": 16.115066415979527,
+          "usage": {
+            "prompt_tokens": 4460,
+            "completion_tokens": 289,
+            "total_tokens": 4749
+          }
+        },
+        {
+          "stage": "body-005-events",
+          "status": "response_complete",
+          "input_tokens": 8709,
+          "request_elapsed_seconds": 28.55850745900534,
+          "usage": {
+            "prompt_tokens": 8709,
+            "completion_tokens": 471,
+            "total_tokens": 9180
+          }
+        },
+        {
+          "stage": "body-005-properties-owner-000",
+          "status": "response_complete",
+          "input_tokens": 8125,
+          "request_elapsed_seconds": 22.930656749987975,
+          "usage": {
+            "prompt_tokens": 8125,
+            "completion_tokens": 344,
+            "total_tokens": 8469
+          }
+        },
+        {
+          "stage": "body-005-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 5555,
+          "request_elapsed_seconds": 12.805915000033565,
+          "usage": {
+            "prompt_tokens": 5555,
+            "completion_tokens": 168,
+            "total_tokens": 5723
+          }
+        },
+        {
+          "stage": "body-005-properties-owner-002",
+          "status": "response_complete",
+          "input_tokens": 5614,
+          "request_elapsed_seconds": 13.08297487499658,
+          "usage": {
+            "prompt_tokens": 5614,
+            "completion_tokens": 174,
+            "total_tokens": 5788
+          }
+        },
+        {
+          "stage": "body-006-forms",
+          "status": "response_complete",
+          "input_tokens": 663,
+          "request_elapsed_seconds": 4.14796849997947,
+          "usage": {
+            "prompt_tokens": 663,
+            "completion_tokens": 72,
+            "total_tokens": 735
+          }
+        },
+        {
+          "stage": "body-006-mentions",
+          "status": "response_complete",
+          "input_tokens": 6279,
+          "request_elapsed_seconds": 28.84587050002301,
+          "usage": {
+            "prompt_tokens": 6279,
+            "completion_tokens": 559,
+            "total_tokens": 6838
+          }
+        }
+      ],
+      "contexts_total": 14,
+      "contexts_validated": 6,
+      "context_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "failed",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted",
+        "not_attempted"
+      ]
+    },
+    {
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "status": "extraction_rejected",
+      "directory": "appeal442c",
+      "workflow": "fresh-source-to-graph-v1",
+      "protocol_version": 37,
+      "code_commit": "796fc2d2b6b3f53cfc57832ac12650ca8287f90f",
+      "completed": true,
+      "response_reuse_enabled": false,
+      "external_candidate_input": false,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "semantic_precision_recall_f1": null,
+      "backend": "spark_lan",
+      "model": "qwen3.8-flash-next-iq4xs",
+      "cloud_requests_submitted": 0,
+      "selected_document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "extraction_status": "inventory_candidate_type_unresolved",
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 4,
+      "responses_reused": 0,
+      "model_correction_calls": 0,
+      "observed_cost_cny": "0",
+      "prior_committed_cny": "0",
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "started_at_utc": "2026-10-06T05:20:22.525829+00:00",
+      "finished_at_utc": "2026-10-06T05:21:59.493674+00:00",
+      "request_elapsed_seconds": 90.06928850000259,
+      "usage": {
+        "prompt_tokens": 52905,
+        "completion_tokens": 713,
+        "total_tokens": 53618
+      },
+      "issues": [
+        {
+          "code": "inventory_candidate_type_unresolved",
+          "path": "/"
+        }
+      ],
+      "stage_summary": [
+        {
+          "stage": "inventory-forms",
+          "status": "response_complete",
+          "input_tokens": 10699,
+          "request_elapsed_seconds": 18.327830167021602,
+          "usage": {
+            "prompt_tokens": 10699,
+            "completion_tokens": 143,
+            "total_tokens": 10842
+          }
+        },
+        {
+          "stage": "inventory-type-000",
+          "status": "response_complete",
+          "input_tokens": 17857,
+          "request_elapsed_seconds": 31.04545712500112,
+          "usage": {
+            "prompt_tokens": 17857,
+            "completion_tokens": 251,
+            "total_tokens": 18108
+          }
+        },
+        {
+          "stage": "inventory-type-001",
+          "status": "response_complete",
+          "input_tokens": 13250,
+          "request_elapsed_seconds": 25.16785999998683,
+          "usage": {
+            "prompt_tokens": 13250,
+            "completion_tokens": 251,
+            "total_tokens": 13501
+          }
+        },
+        {
+          "stage": "inventory-type-002",
+          "status": "response_complete",
+          "input_tokens": 11099,
+          "request_elapsed_seconds": 15.52814120799303,
+          "usage": {
+            "prompt_tokens": 11099,
+            "completion_tokens": 68,
+            "total_tokens": 11167
+          }
+        }
+      ],
+      "contexts_total": null,
+      "contexts_validated": 0
+    }
+  ],
+  "frozen_inputs_unchanged": true,
+  "finished_at_utc": "2026-10-06T05:21:59.659794+00:00",
+  "automatic_pipeline_accepted": 1,
+  "uncorrected_first_pass_accepted": 0,
+  "requests_submitted": 111,
+  "tests_passed": 688,
+  "code_commit": "796fc2d2b6b3f53cfc57832ac12650ca8287f90f",
+  "cloud_new_cost_cny": "0",
+  "cloud_prior_cumulative_cny": "33.669768",
+  "cloud_authorized_cny": "200",
+  "same_protocol_across_documents": true,
+  "no_between_document_code_changes": true,
+  "ten_document_expansion_gate_passed": false,
+  "requires_user_legal_annotation": false,
+  "model_weight_hash_verified": false,
+  "alternative_27b": "not_configured_or_verified",
+  "cohort_wall_seconds": 2916.332719,
+  "driver_sha256": "6a39a5aa500beb3c22f94a249555a6aaf36c50494444ff5da468eede14e4c26e",
+  "request_elapsed_seconds": 2755.7768116229563,
+  "model_correction_calls": 1,
+  "all_offline_replays_verified": true,
+  "spark_independent_repeat_comparison": {
+    "previous_trial": "next-flash-fresh-v37-01",
+    "differing_record_keys": [
+      "provenance"
+    ],
+    "identical_except_run_provenance": true,
+    "two_runs_not_population_stability_estimate": true
+  },
+  "failure_analysis": {
+    "appeal026b": {
+      "surface_error": "three empty Actor binding objects violate minProperties",
+      "underlying_decision": "one project-title proposal explicitly uncertain with three available source positions and no actor binding",
+      "validated_contexts_before_rejection": 6,
+      "total_contexts": 14,
+      "empty_object_removal_would_not_resolve_uncertainty": true,
+      "required_design": "source-bound actor versus non-actor proposal triage in body; retain exclusion/deferral evidence and all proposals"
+    },
+    "appeal442c": {
+      "surface_error": "inventory_candidate_type_unresolved",
+      "proposals": 18,
+      "actor_candidates": 17,
+      "unresolved": 1,
+      "underlying_candidate_category": "named online investment platform; legal organization identity not established by the name",
+      "required_design": "separate named platform/project/resource references from persons and organizations; preserve unknown decisions rather than assume legal identity"
+    }
+  },
+  "next_work": [
+    "Design source-bound Actor/non-Actor/uncertain decisions at both inventory and body discovery; preserve all original proposals and type receipts",
+    "Keep platform/project/resource references available to later event/object extraction without silently deleting or forcing an Actor",
+    "Add independent evidence-bounded attribution review for role phrases and reported material; no user legal gold dependency",
+    "Freeze next protocol and rerun the same three before any ten-document expansion",
+    "Reduce redundant repeated actor mention strings in model input with reversible positions and unchanged evidence, then measure the same cohort"
+  ]
+}
