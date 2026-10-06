@@ -40,7 +40,7 @@ def literal_kinds(text):
     return kinds
 
 
-def property_schema(base, facts, context, catalog):
+def property_schema(base, facts, context, catalog, *, classifier=None):
     identifiers = [e["id"] for e in facts["events"]]
     if len(set(identifiers)) != len(identifiers):
         raise DraftError("duplicate_event_id")
@@ -63,7 +63,7 @@ def property_schema(base, facts, context, catalog):
                 f"v{i}"
                 for i, entry in enumerate(catalog["entries"])
                 if entry["selector"]["unit_id"] in units
-                and kind in literal_kinds(entry["selector"]["text"])
+                and kind in (classifier or literal_kinds)(entry["selector"]["text"])
             ]
             if not choices:
                 continue

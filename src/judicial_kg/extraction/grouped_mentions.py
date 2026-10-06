@@ -64,7 +64,9 @@ def expand_bindings(result):
     return expanded
 
 
-def generate_body(doc, prompt, combined, context, contract, infer, save, index):
+def generate_body(
+    doc, prompt, combined, context, contract, infer, save, index, *, facts_generator=None
+):
     def infer_bindings(messages, fmt, stage):
         if not stage.endswith("-mentions"):
             return infer(messages, fmt, stage)
@@ -94,7 +96,15 @@ def generate_body(doc, prompt, combined, context, contract, infer, save, index):
         return json.dumps(expanded, ensure_ascii=False)
 
     return collective_mentions.generate_body(
-        doc, prompt, combined, context, contract, infer_bindings, save, index
+        doc,
+        prompt,
+        combined,
+        context,
+        contract,
+        infer_bindings,
+        save,
+        index,
+        **({"facts_generator": facts_generator} if facts_generator else {}),
     )
 
 

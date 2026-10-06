@@ -28,7 +28,9 @@ INSTRUCTION = (
 )
 
 
-def generate_body(doc, prompt, combined, context, contract, infer, save, index):
+def generate_body(
+    doc, prompt, combined, context, contract, infer, save, index, *, facts_generator=None
+):
     return mention_stage.generate_body(
         doc,
         prompt,
@@ -38,7 +40,8 @@ def generate_body(doc, prompt, combined, context, contract, infer, save, index):
         infer,
         save,
         index,
-        facts_generator=partial(
+        facts_generator=facts_generator
+        or partial(
             owner_first.generate_facts,
             schema_builder=typed_owner.property_schema,
             property_instruction=typed_owner.INSTRUCTION,

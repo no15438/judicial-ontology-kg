@@ -72,3 +72,79 @@ def test_fresh_controller_never_accepts_external_reuse_or_mutation(tmp_path, mon
         assert calls == ["extract", "replay"]
     assert result["not_selected"] == 35
     assert json.loads((root / "artifacts/fresh/workflow-report.json").read_text()) == result
+
+
+@pytest.mark.parametrize("mode", ["success", "correction", "rejected", "changed", "replay_bad"])
+def test_local_fresh_uses_native_model_receipts_and_fails_closed(tmp_path, monkeypatch, mode):
+    root = tmp_path
+    (root / "artifacts").mkdir()
+    docs = root / "artifacts/documents.json"
+    docs.write_text("[]")
+    config = root / "artifacts/config.json"
+    config.write_text("fixed-config")
+    monkeypatch.setattr(
+        workflow,
+        "load_config",
+        lambda p: {
+            "version": "qwen-extraction-v32",
+            "model": "target-next-flash",
+            "max_documents": 1,
+        },
+    )
+    monkeypatch.setattr(workflow.subprocess, "check_output", lambda *a, **k: "test-commit")
+    monkeypatch.setattr(
+        workflow, "run_cloud", lambda *a, **k: pytest.fail("Cloud not authorized here")
+    )
+
+    def native(root, paths, config_path, output, **kwargs):
+        assert config_path == config
+        output.mkdir()
+        (output / "accepted.json").write_text('[{"synthetic":true}]')
+        (output / "outcomes.json").write_text(
+            json.dumps(
+                [
+                    {
+                        "selected": True,
+                        "status": "rejected" if mode == "rejected" else "accepted_candidate",
+                        "stages": [
+                            {
+                                "stage": "forms-repair-1" if mode == "correction" else "forms",
+                                "completion_rpc": 1,
+                            }
+                        ],
+                    }
+                ]
+            )
+        )
+        if mode == "changed":
+            config.write_text("mutated")
+        return {"expected_documents": 36, "selected_documents": 1, "requests_submitted": 1}
+
+    def replay(*args):
+        if mode == "replay_bad":
+            raise RuntimeError("Request mismatch")
+        return {"requests_submitted": 0, "outcome_and_candidate_equality_verified": True}
+
+    def graph(*args, **kwargs):
+        return {
+            "documents_assembled": 1,
+            "documents_assembly_failed": 0,
+            "nodes": 1,
+            "edges": 0,
+            "validation": {},
+            "diagnostic_hint_counts": {},
+            "assembled_documents_diagnostics": {},
+            "graph_canonical_sha256": "test",
+        }
+
+    monkeypatch.setattr(workflow, "run_extraction", native)
+    monkeypatch.setattr(workflow, "replay_completed", replay)
+    monkeypatch.setattr(workflow, "run_assembly", graph)
+    result = workflow.run_fresh(
+        root, [docs], root / "artifacts/fresh", version=32, local_config=config
+    )
+    assert result["model"] == "target-next-flash"
+    assert result["cloud_requests_submitted"] == 0
+    assert result["automatic_pipeline_accepted"] == (mode in ("success", "correction"))
+    assert result["uncorrected_first_pass_accepted"] == (mode == "success")
+    assert result["observed_cost_cny"] == "0"

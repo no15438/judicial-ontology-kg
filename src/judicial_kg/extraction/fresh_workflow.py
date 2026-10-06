@@ -6,6 +6,8 @@ import subprocess
 from pathlib import Path
 
 from judicial_kg.extraction.bailian_staged import replay_cloud, run_cloud
+from judicial_kg.extraction.run import load_config, run_extraction
+from judicial_kg.extraction.staged_replay import replay_completed
 from judicial_kg.graph.run import run_assembly
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import sha256
@@ -29,6 +31,7 @@ def run_fresh(
     budget_cny="200",
     client=None,
     document_id=None,
+    local_config=None,
 ):
     """Prior reports are used only for cumulative billing; no old responses/candidates are read.
 
@@ -36,9 +39,16 @@ def run_fresh(
     controller never retries a failed run, edits a graph, or accepts an external repair.
     """
     root = root.resolve()
+    if local_config is not None:
+        config = load_config(local_config)
+        if config["max_documents"] != 1 or document_id is not None or previous_runs:
+            raise ValueError("Local fresh pilot selects the first source only; no cloud lineage")
+        if config["version"] != f"qwen-extraction-v{version}":
+            raise ValueError("Local configuration and workflow protocol differ")
     output = safe_output(root, output)
     output.mkdir(parents=True, exist_ok=False)
-    frozen = fingerprint(root, paths)
+    frozen_paths = [*paths, *([local_config] if local_config is not None else [])]
+    frozen = fingerprint(root, frozen_paths)
     write_json(output / "frozen-inputs.json", frozen)
     report = {
         "workflow": "fresh-source-to-graph-v1",
@@ -54,26 +64,49 @@ def run_fresh(
         "uncorrected_first_pass_accepted": False,
         "semantic_precision_recall_f1": None,
     }
+    if local_config is not None:
+        report.update(backend="spark_lan", model=config["model"], cloud_requests_submitted=0)
 
     def save():
         write_json(output / "workflow-report.json", report)
 
     def unchanged():
-        if fingerprint(root, paths) != frozen:
+        if fingerprint(root, frozen_paths) != frozen:
             raise ValueError("Frozen code, prompt, contract, configuration or source changed")
 
     save()
     try:
-        result = run_cloud(
-            root,
-            paths,
-            output / "extraction",
-            client=client,
-            version=version,
-            previous_runs=previous_runs,
-            budget_cny=budget_cny,
-            document_id=document_id,
-        )
+        if local_config is None:
+            result = run_cloud(
+                root,
+                paths,
+                output / "extraction",
+                client=client,
+                version=version,
+                previous_runs=previous_runs,
+                budget_cny=budget_cny,
+                document_id=document_id,
+            )
+        else:
+            native = run_extraction(root, paths, local_config, output / "extraction", client=client)
+            outcomes = json.loads((output / "extraction/outcomes.json").read_text())
+            selected = [row for row in outcomes if row["selected"]]
+            if len(selected) != 1:
+                raise ValueError("Local fresh pilot must retain exactly one selected outcome")
+            corrections = sum(
+                "-repair-" in (s.get("stage") or "") and "completion_rpc" in s
+                for s in selected[0].get("stages", [])
+            )
+            result = {
+                **native,
+                "status": selected[0]["status"],
+                "not_selected": native["expected_documents"] - native["selected_documents"],
+                "observed_cost_cny": "0",
+                "responses_reused": 0,
+                "model_correction_calls": corrections,
+                "first_pass_accepted": selected[0]["status"] == "accepted_candidate"
+                and not corrections,
+            }
         report.update(
             extraction_status=result["status"],
             expected_documents=result["expected_documents"],
@@ -88,8 +121,15 @@ def run_fresh(
         unchanged()
         if result.get("responses_reused", 0) or "resume_origin" in result:
             raise ValueError("Fresh workflow cannot reuse historical responses")
-        replay = replay_cloud(root, paths, output / "extraction", output / "replay")
-        if not replay["outcome_and_artifact_equality_verified"] or replay["requests_submitted"]:
+        replay = (replay_cloud if local_config is None else replay_completed)(
+            root, paths, output / "extraction", output / "replay"
+        )
+        equality_key = (
+            "outcome_and_artifact_equality_verified"
+            if local_config is None
+            else "outcome_and_candidate_equality_verified"
+        )
+        if not replay[equality_key] or replay["requests_submitted"]:
             raise ValueError("Offline replay was not verified without new requests")
         report["offline_replay_verified"] = True
         if result["status"] != "accepted_candidate":
@@ -123,7 +163,7 @@ def run_fresh(
             )
         unchanged()
         report["frozen_inputs_unchanged"] = True
-    except (ValueError, KeyError, TypeError, OSError) as error:
+    except (ValueError, KeyError, TypeError, OSError, RuntimeError) as error:
         report.update(
             status="workflow_verification_failed",
             automatic_pipeline_accepted=False,
@@ -145,11 +185,14 @@ def main():
     parser.add_argument("--document-id")
     parser.add_argument("--previous-run", type=Path, action="append", default=[])
     parser.add_argument("--version", type=int, default=31)
-    parser.add_argument("--budget-cny", required=True)
+    parser.add_argument("--budget-cny")
+    parser.add_argument("--local-config", type=Path)
     parser.add_argument("--execute", action="store_true")
     args = parser.parse_args()
     if not args.execute:
-        parser.error("--execute is required to submit approved cloud requests")
+        parser.error("--execute is required to submit model requests")
+    if args.local_config is None and args.budget_cny is None:
+        parser.error("Cloud requests require --budget-cny")
     result = run_fresh(
         args.root,
         args.documents,
@@ -158,6 +201,7 @@ def main():
         previous_runs=args.previous_run,
         budget_cny=args.budget_cny,
         document_id=args.document_id,
+        local_config=args.local_config,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return int(not result["automatic_pipeline_accepted"])

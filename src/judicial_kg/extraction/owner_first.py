@@ -53,13 +53,15 @@ def property_schema(base, facts, context, catalog):
     )
 
 
-def apply_properties(doc, context, catalog, facts, result, schema):
+def apply_properties(doc, context, catalog, facts, result, schema, *, catalog_builder=None):
     context_first.check_schema(result, schema)
     enriched = copy.deepcopy(facts)
     enriched["statements"] = copy.deepcopy(result["statements"])
     for event in enriched["events"]:
         event["statements"] = copy.deepcopy(result["event_statements"][event["id"]])
-    return evidence_first.compile_facts(doc, context, catalog, enriched)
+    return evidence_first.compile_facts(
+        doc, context, catalog, enriched, catalog_builder=catalog_builder
+    )
 
 
 def generate_facts(
@@ -75,9 +77,10 @@ def generate_facts(
     *,
     schema_builder=None,
     property_instruction="",
+    catalog_builder=None,
 ):
     prefix = f"body-{index:03}"
-    catalog = evidence_first.build_evidence_catalog(doc, context)
+    catalog = (catalog_builder or evidence_first.build_evidence_catalog)(doc, context)
     save(prefix + "-evidence-catalog", catalog)
     view = [{"span_id": f"v{i}", **e["selector"]} for i, e in enumerate(catalog["entries"])]
     base = scoped.body_schema(combined, context, contract)
@@ -125,7 +128,9 @@ def generate_facts(
     ]
     result = strict_json(infer(messages, response_format(doc, schema), prefix + "-properties"))
     save(prefix + "-properties-wire", result)
-    compiled = apply_properties(doc, context, catalog, facts, result, schema)
+    compiled = apply_properties(
+        doc, context, catalog, facts, result, schema, catalog_builder=catalog_builder
+    )
     save(prefix + "-facts-compiled", compiled)
     save(
         prefix + "-facts-receipt",

@@ -51,7 +51,18 @@ def apply_replacements(doc, units, original, result):
 
 
 def generate_body(
-    doc, prompt, combined, context, contract, infer, save, index, *, budget, repair_options=None
+    doc,
+    prompt,
+    combined,
+    context,
+    contract,
+    infer,
+    save,
+    index,
+    *,
+    budget,
+    repair_options=None,
+    body_generator=None,
 ):
     def infer_checked(messages, fmt, stage):
         raw = infer(messages, fmt, stage)
@@ -142,7 +153,7 @@ def generate_body(
         )
         return json.dumps(corrected, ensure_ascii=False)
 
-    return grouped_mentions.generate_body(
+    return (body_generator or grouped_mentions.generate_body)(
         doc, prompt, combined, context, contract, infer_checked, save, index
     )
 

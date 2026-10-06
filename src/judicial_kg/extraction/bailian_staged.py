@@ -10,6 +10,7 @@ from uuid import uuid4
 from judicial_kg.contracts import Contract
 from judicial_kg.extraction import (
     augmented_inventory,
+    bounded_workflow,
     checked_forms,
     collective_mentions,
     context_delta,
@@ -124,6 +125,7 @@ def _run(
         29: described_actors,
         30: augmented_inventory,
         31: unique_forms,
+        32: bounded_workflow,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
@@ -237,9 +239,9 @@ def _run(
         nonlocal committed, observed
         messages = copy.deepcopy(messages)
         # JSON mode alone is not a structural guarantee: enforce the same full local schema.
-        messages[0]["content"] += "\n只输出JSON，遵守本阶段Schema：\n" + json.dumps(
-            fmt["schema"], ensure_ascii=False
-        )
+        serialized_schema = json.dumps(fmt["schema"], ensure_ascii=False)
+        if version < 32 or not any(serialized_schema in m["content"] for m in messages):
+            messages[0]["content"] += "\n只输出JSON，遵守本阶段Schema：\n" + serialized_schema
         request = {
             "model": MODEL,
             "messages": messages,

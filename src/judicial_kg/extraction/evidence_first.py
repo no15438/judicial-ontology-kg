@@ -46,8 +46,8 @@ def build_evidence_catalog(doc, context):
     return span_catalog.build_catalog(doc, context["assertion_units"], sorted(texts))
 
 
-def compile_facts(doc, context, catalog, facts):
-    if build_evidence_catalog(doc, context) != catalog:
+def compile_facts(doc, context, catalog, facts, *, catalog_builder=None):
+    if (catalog_builder or build_evidence_catalog)(doc, context) != catalog:
         raise DraftError("fact_evidence_catalog_changed")
     entries = {f"v{i}": entry for i, entry in enumerate(catalog["entries"])}
     result = copy.deepcopy(facts)

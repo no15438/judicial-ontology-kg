@@ -35,3 +35,7 @@ PYTHONPATH=src .venv/bin/python -m judicial_kg.extraction.fresh_workflow \
 ## 后续三篇扩测：未通过稳定性验收
 
 固定v31、提交740b6f4，Spark4396/AppealCase026b/442c全部全新启动，不在篇间调整协议。0/3整篇通过，3/3失败零调用回放一致，未产出新接受图。55次实际调用估算7.354572元，累计33.669768元；621项测试。失败分别为点分日期未进入类型目录、称谓选择跨出自身候选位置、重复Schema使属性请求超过本地输入守卫。详情与修复顺序见 [扩测报告](../research/fresh-three-v31-report.json) 和 [工程计划](engineering-improvement-plan.md)。上一节单篇成功不被抹去，也不能解释为已有稳定性保证；目前不进入固定十篇。
+
+### 本地目标模型 v32
+
+同一控制器支持 `--local-config configs/qwen-extraction-v32-pilot.json --version 32 --execute`，替代云端预算参数。保持完整输入清单，目前本地新流程只选择第一个来源文书且要求 max_documents=1；不通过裁剪来源清单改变分母。代码/原文/配置冻结、零调用回放和接受后装配门槛相同，报告标明 Spark LAN、实际模型与零云端请求。失败不发布半篇，不自动重试。27B 服务未配置，不声明已支持该实际模型。
