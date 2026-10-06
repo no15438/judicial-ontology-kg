@@ -70,6 +70,8 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class BailianClient:
+    route = "/chat/completions"
+
     def __init__(self, key: str, endpoint: str):
         self._key, self.endpoint = key, base_url(endpoint)
         context = ssl.create_default_context()
@@ -88,7 +90,7 @@ class BailianClient:
 
     def call(self, body: dict, timeout: int) -> Response:
         request = urllib.request.Request(
-            self.endpoint + "/chat/completions",
+            self.endpoint + self.route,
             data=json.dumps(body, ensure_ascii=False).encode(),
             headers={"Authorization": "Bearer " + self._key, "Content-Type": "application/json"},
             method="POST",

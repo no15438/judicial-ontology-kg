@@ -6,6 +6,7 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from judicial_kg.current.decision import BoundedDecisionClient, DecisionClient
 from judicial_kg.current.retrieval import graph_expand, index_documents, search, search_context
 from judicial_kg.current.runner import run_document
 from judicial_kg.extraction.bailian import BailianClient, credentials
@@ -41,8 +42,11 @@ def replay(root, source_run, output):
     class Saved:
         count = 0
 
+        def __init__(self, rows):
+            self.rows = rows
+
         def call(self, body, timeout):
-            row = rows[self.count]
+            row = self.rows[self.count]
             stage = row["stage"]
             if body != json.loads((source_run / (stage + ".request.json")).read_text()):
                 raise RuntimeError("Replay request changed")
@@ -54,7 +58,7 @@ def replay(root, source_run, output):
                 row["error"],
             )
 
-    client = Saved()
+    client = Saved(rows)
     config = json.loads((source_run / "config.json").read_text())
     if implementation_fingerprint(root) != config["implementation"]:
         raise ValueError("Replay requires the frozen implementation")
@@ -64,7 +68,18 @@ def replay(root, source_run, output):
     ):
         raise ValueError("Saved artifact changed")
     run_id = json.loads((source_run / "run-metadata.json").read_text())["run_id"]
-    run_document(root, doc, output, client, config["window_size"], run_id=run_id)
+    alignment = (
+        Saved(json.loads((source_run / "alignment-calls.json").read_text()))
+        if config.get("alignment") == "decision" and (source_run / "alignment-calls.json").exists()
+        else Saved([])
+        if config.get("alignment") == "decision"
+        else None
+    )
+    run_document(
+        root, doc, output, client, config["window_size"], run_id=run_id, alignment_client=alignment
+    )
+    if alignment and alignment.count != len(alignment.rows):
+        raise ValueError("Unused alignment responses")
     for name in ("candidate", "graph", "coverage", "issues", "source-mappings"):
         if (source_run / (name + ".json")).read_bytes() != (output / (name + ".json")).read_bytes():
             raise ValueError("Replay outputs differ")
@@ -103,16 +118,36 @@ def run(root, manifest_path, output, credential_root):
         output / "budget.json",
         "qwen3.8-flash",
     )
+    if manifest.get("alignment") not in {None, "decision"}:
+        raise ValueError("Unsupported alignment mode")
+    alignment = (
+        BoundedDecisionClient(
+            DecisionClient(*credentials(credential_root)), manifest.get("decision_request_cap", 256)
+        )
+        if manifest.get("alignment") == "decision"
+        else None
+    )
     results = []
 
     def execute(i, identifier):
         if implementation_fingerprint(root) != frozen:
             raise ValueError("Implementation changed")
         dest = output / f"document-{i + 1:02}"
-        r = run_document(root, by_id[identifier], dest, budget, manifest.get("window_size", 16))
+        r = run_document(
+            root,
+            by_id[identifier],
+            dest,
+            budget,
+            manifest.get("window_size", 16),
+            alignment_client=alignment,
+        )
         write_json(
             dest / "config.json",
-            {"window_size": manifest.get("window_size", 16), "implementation": frozen},
+            {
+                "window_size": manifest.get("window_size", 16),
+                "implementation": frozen,
+                "alignment": manifest.get("alignment"),
+            },
         )
         write_json(
             dest / "outputs.json",

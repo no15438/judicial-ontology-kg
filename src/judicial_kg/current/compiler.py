@@ -49,12 +49,34 @@ class Compiler:
             self.record = before
             # Store schema paths/codes, not arbitrary exception contents.
             self.issues.append(
-                {"path": path, "status": "quarantined", "code": type(error).__name__}
+                {
+                    "path": path,
+                    "status": "quarantined",
+                    "code": (
+                        str(error)
+                        if isinstance(error, ValueError)
+                        and str(error)
+                        in {
+                            "wire_schema_invalid",
+                            "verifier_rejected",
+                            "source_unit_outside_scope",
+                            "empty_source_quote",
+                            "ambiguous_source_variants",
+                            "source_position_not_unique",
+                            "source_position_missing",
+                            "empty_or_duplicate_evidence",
+                            "evidence_outside_scope",
+                        }
+                        else type(error).__name__
+                    ),
+                }
             )
             return None
 
     @staticmethod
     def check(value, schema):
+        if isinstance(value, dict) and value.get("quarantined_by_verifier") is True:
+            raise ValueError("verifier_rejected")
         if not Draft202012Validator(schema).is_valid(value):
             raise ValueError("wire_schema_invalid")
 

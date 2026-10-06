@@ -7,7 +7,9 @@ from uuid import uuid4
 
 from judicial_kg.contracts import Contract
 from judicial_kg.current import VERSION
+from judicial_kg.current.alignment import put
 from judicial_kg.current.compiler import Compiler
+from judicial_kg.current.decision import AlignmentCalls
 from judicial_kg.current.protocol import PROMPT, array, obj, schema
 from judicial_kg.current.retrieval import index_documents
 from judicial_kg.current.source import batches
@@ -110,7 +112,7 @@ def verify(wire, payload, calls, stage, save):
     return decision
 
 
-def run_document(root, doc, output, client, window_size=16, *, run_id=None):
+def run_document(root, doc, output, client, window_size=16, *, run_id=None, alignment_client=None):
     validate_source(doc)
     run_id = run_id or str(uuid4())
     output.mkdir(parents=True, exist_ok=False)
@@ -128,6 +130,7 @@ def run_document(root, doc, output, client, window_size=16, *, run_id=None):
         },
     )
     calls = Calls(client, output)
+    aligner = AlignmentCalls(alignment_client, output) if alignment_client else None
     coverage = []
     started = time.monotonic()
 
@@ -165,8 +168,13 @@ def run_document(root, doc, output, client, window_size=16, *, run_id=None):
             Compiler.check(wire["coverage"], fmt["properties"]["coverage"])
             if sorted(r["unit"] for r in wire["coverage"]) != sorted(targets):
                 raise ValueError("coverage_not_partition")
+            blocked = []
+            if aligner:
+                wire, blocked = aligner.align(wire, doc, units, stage)
             decisions = verify(wire, payload, calls, stage, save)
             adapted = copy.deepcopy(wire)
+            for path in blocked:
+                put(adapted, path, {"quarantined_by_verifier": True})
             for ci, context in enumerate(adapted["contexts"]):
                 if not isinstance(context, dict):
                     raise ValueError("invalid_context")
@@ -237,6 +245,8 @@ def run_document(root, doc, output, client, window_size=16, *, run_id=None):
         "coverage_rows": len(coverage),
         "windows": len(windows),
         "requests": calls.calls,
+        "alignment_requests": len(aligner.rows) if aligner else 0,
+        "alignment_model": "decision-model-preview" if aligner else None,
         "counts": compiler.counts(),
         "issues": len(compiler.issues),
         "wall_seconds": time.monotonic() - started,

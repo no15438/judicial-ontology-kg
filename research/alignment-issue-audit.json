@@ -1,0 +1,41 @@
+{
+  "method": "saved issue paths joined to saved verification outputs; residual failures not guessed",
+  "documents": [
+    {
+      "document": "document-01",
+      "old_issue_count": 66,
+      "classification": {
+        "verifier_rejection": 24,
+        "window_failure": 1,
+        "needs_detailed_recompile": 31,
+        "context_rejection": 6,
+        "reference_dependency": 4
+      }
+    },
+    {
+      "document": "document-02",
+      "old_issue_count": 22,
+      "classification": {
+        "needs_detailed_recompile": 9,
+        "window_failure": 2,
+        "contract_rejection": 1,
+        "context_rejection": 3,
+        "verifier_rejection": 5,
+        "reference_dependency": 2
+      }
+    },
+    {
+      "document": "document-03",
+      "old_issue_count": 37,
+      "classification": {
+        "verifier_rejection": 10,
+        "needs_detailed_recompile": 13,
+        "context_rejection": 3,
+        "reference_dependency": 7,
+        "contract_rejection": 3,
+        "window_failure": 1
+      }
+    }
+  ],
+  "semantic_accuracy": null
+}
