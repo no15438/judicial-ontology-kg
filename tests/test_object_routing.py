@@ -55,6 +55,8 @@ def test_router_retains_objects_and_exact_positions_without_actor_conversion():
     assert ledger["decisions"][1]["positions"] == [evidence_span(source(), "alpha", 5, 7)]
     payload = json.loads(calls[0][0][1]["content"])
     assert set(payload) == {"proposals", "source_units", "adjacent_units"}
+    assert payload["proposals"][1]["positions"] == [{"unit_id": "u1", "start": 5, "end": 7}]
+    assert "field_sha256" not in json.dumps(payload)
     result = r.compile(record())
     assert result["actors"] == record()["actors"]
     assert result["objects"][0]["object_type"] == "platform"

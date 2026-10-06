@@ -21,7 +21,7 @@ from judicial_kg.validation_run import strict_json
 CONTRACT_VERSION = "0.4.0"
 NORMALIZER_VERSION = inventory_handoff.NORMALIZER_VERSION
 PROMPT_FILE = "prompts/qwen-extraction-v38.txt"
-GENERATION_CONSTRAINT_VERSION = "source-bound-actor-object-routing-v1"
+GENERATION_CONSTRAINT_VERSION = "source-bound-actor-object-routing-v2-compact-positions"
 GENERATION_CONSTRAINT_SCOPE = "typed-object-mentions-and-event-links-with-immutable-source"
 response_format = inventory_handoff.response_format
 TYPES = {
@@ -89,6 +89,23 @@ class ObjectRouter:
                     for j in (i - 1, i + 1)
                 )
             ]
+            # Fingerprints and repeated quotes belong in the ledger, not every model token.
+            # Each compact selector maps losslessly to the already verified source span.
+            compact = [
+                {
+                    "id": row["id"],
+                    "text": row["text"],
+                    "positions": [
+                        {
+                            "unit_id": next(u["id"] for u in units if contains(span, [u])),
+                            "start": span["start"],
+                            "end": span["end"],
+                        }
+                        for span in row["positions"]
+                    ],
+                }
+                for row in batch
+            ]
             messages = [
                 {
                     "role": "system",
@@ -105,7 +122,7 @@ class ObjectRouter:
                     "role": "user",
                     "content": json.dumps(
                         {
-                            "proposals": batch,
+                            "proposals": compact,
                             "source_units": relevant,
                             "adjacent_units": neighbours,
                         },

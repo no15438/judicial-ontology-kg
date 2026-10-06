@@ -1,0 +1,48 @@
+{
+  "purpose": "request-size diagnostic only; historical forms are not fresh extraction",
+  "inference_requests": 0,
+  "results": [
+    {
+      "document": "appeal442c",
+      "stage": "inventory-object-types-000",
+      "input_tokens": 12190,
+      "positions": 141,
+      "fits_32k_with_8192_output": true
+    },
+    {
+      "document": "appeal442c",
+      "stage": "inventory-object-types-001",
+      "input_tokens": 4557,
+      "positions": 37,
+      "fits_32k_with_8192_output": true
+    },
+    {
+      "document": "appeal442c",
+      "stage": "inventory-object-types-002",
+      "input_tokens": 403,
+      "positions": 2,
+      "fits_32k_with_8192_output": true
+    },
+    {
+      "document": "appeal026b",
+      "stage": "inventory-object-types-000",
+      "input_tokens": 9261,
+      "positions": 73,
+      "fits_32k_with_8192_output": true
+    },
+    {
+      "document": "appeal026b",
+      "stage": "inventory-object-types-001",
+      "input_tokens": 11448,
+      "positions": 124,
+      "fits_32k_with_8192_output": true
+    },
+    {
+      "document": "appeal026b",
+      "stage": "inventory-object-types-002",
+      "input_tokens": 539,
+      "positions": 5,
+      "fits_32k_with_8192_output": true
+    }
+  ]
+}

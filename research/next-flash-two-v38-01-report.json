@@ -1,0 +1,52 @@
+{
+  "protocol": 38,
+  "run": "next-flash-two-v38-01",
+  "status": "completed_rejected",
+  "expected_documents": 36,
+  "selected_documents": 2,
+  "not_selected": 34,
+  "results": [
+    {
+      "selected_document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "code_commit": "7ed84510bb106def05ce96fb2034d1bdbf289e67",
+      "status": "extraction_rejected",
+      "requests_submitted": 1,
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "failure_status": "context_over_budget",
+      "input_tokens": 46537,
+      "issues": [
+        {
+          "code": "context_over_budget",
+          "path": "/"
+        }
+      ]
+    },
+    {
+      "selected_document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "code_commit": "7ed84510bb106def05ce96fb2034d1bdbf289e67",
+      "status": "extraction_rejected",
+      "requests_submitted": 2,
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "failure_status": "context_over_budget",
+      "input_tokens": 63774,
+      "issues": [
+        {
+          "code": "context_over_budget",
+          "path": "/"
+        }
+      ]
+    }
+  ],
+  "elapsed_seconds": 75.42254281044006,
+  "cloud_requests": 0,
+  "manual_graph_edits": 0,
+  "historical_response_reuse": 0,
+  "semantic_precision_recall_f1": null,
+  "diagnosis": "Type-routing payload repeats complete evidence fingerprints per occurrence; context guard rejected before classification completion. Requires compact source selectors; evidence ledger must remain complete."
+}
