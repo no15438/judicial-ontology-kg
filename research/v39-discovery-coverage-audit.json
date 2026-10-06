@@ -1,0 +1,20 @@
+{
+  "kind": "known_source_object_discovery_regression",
+  "run": "next-flash-two-v39-01",
+  "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+  "stage": "body-006-forms",
+  "target_category": "project",
+  "source_positions": 4,
+  "source_span_sha256s": [
+    "2e799336c285cdf3aefc163da5a927fdcc4055145acb245fc377e1bc7a8b2e94",
+    "c79dfad5ed6cf85236c8fdd41718005718d012a17f80388c76ab03ccd916a97e",
+    "a42bf027295e63e3bd62bb9939dc831bf88224a5b5ecaa9ef79fc31d40fbfaa6",
+    "5e86810b0c79f628a7d9ec1d3783f2ca67d7b0d145bc5d957b1bcda072baf77e"
+  ],
+  "discovery_contains_target": false,
+  "routing_contains_target": false,
+  "status": "known_coverage_gap_not_fixed",
+  "source_response_sha256": "034b26da89d03f87fb1a3a63a7180a631df89334c3d9c31c16c9b6ed39ef9e1c",
+  "semantic_precision_recall_f1": null,
+  "limit": "One previously observed exact source form, not exhaustive semantic gold; aliases not inferred."
+}

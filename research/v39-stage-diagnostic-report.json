@@ -26,14 +26,24 @@
   ],
   "routing": {
     "actor_forms": 9,
-    "position_kind_counts": {
+    "occurrence_review_calls": 1,
+    "unresolved": false,
+    "decisions_sha256": "67e7ecd3b6cfc18be7ebcff0370c9589ab0194d098bbfe7c045aa96b2c93fcbd",
+    "routing_decision_rows_counts": {
       "actor_candidate": 11,
       "other": 1,
       "literal_fragment": 2
     },
-    "occurrence_review_calls": 1,
-    "unresolved": false,
-    "decisions_sha256": "67e7ecd3b6cfc18be7ebcff0370c9589ab0194d098bbfe7c045aa96b2c93fcbd"
+    "exact_source_positions_by_kind": {
+      "actor_candidate": 65,
+      "other": 1,
+      "literal_fragment": 2
+    },
+    "mixed_form_occurrences_by_kind": {
+      "actor_candidate": 3,
+      "other": 1,
+      "literal_fragment": 2
+    }
   },
   "mentions": {
     "status": "source_grounded_stage",
