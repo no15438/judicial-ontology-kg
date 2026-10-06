@@ -1,0 +1,152 @@
+{
+  "protocol_version": 38,
+  "generation_constraint_version": "source-bound-actor-object-routing-v2-compact-positions",
+  "run": "next-flash-two-v38-02",
+  "status": "completed",
+  "code_commit": "e39e213689f2344f109078685e2542e7759080da",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "backend": "spark_lan",
+  "expected_documents": 36,
+  "selected_documents": 2,
+  "not_selected": 34,
+  "automatic_pipeline_accepted": 0,
+  "uncorrected_first_pass_accepted": 0,
+  "requests_submitted": 102,
+  "elapsed_seconds": 2136.2257211208344,
+  "request_seconds": 1983.5937781244284,
+  "cloud_requests_submitted": 0,
+  "observed_cost_cny": "0",
+  "prior_cloud_cost_cny": "33.669768",
+  "historical_response_reuse": 0,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "unit_tests_passed": 722,
+  "results": [
+    {
+      "name": "appeal442c",
+      "selected_document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "code_commit": "e39e213689f2344f109078685e2542e7759080da",
+      "status": "extraction_rejected",
+      "requests_submitted": 68,
+      "model_correction_calls": 0,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "extraction_status": "span_proposals_unresolved",
+      "issues": [
+        {
+          "code": "span_proposals_unresolved",
+          "path": "/"
+        }
+      ],
+      "last_stages": [
+        {
+          "stage": "body-007-forms",
+          "status": "response_complete",
+          "input_tokens": 607
+        },
+        {
+          "stage": "body-007-forms-object-types-000",
+          "status": "response_complete",
+          "input_tokens": 1297
+        },
+        {
+          "stage": "body-007-forms-object-types-001",
+          "status": "response_complete",
+          "input_tokens": 630
+        },
+        {
+          "stage": "body-007-mentions",
+          "status": "response_complete",
+          "input_tokens": 5175
+        }
+      ],
+      "contexts": {
+        "total": 14,
+        "status_counts": {
+          "validated": 7,
+          "failed": 1,
+          "not_attempted": 6
+        },
+        "unassigned_units": 0
+      },
+      "routing_decisions": {
+        "actor_candidate": 66,
+        "platform": 2,
+        "other": 3
+      },
+      "non_actor_evidence_positions_in_route_ledger": 18,
+      "request_seconds": 1224.8324386653258,
+      "routing_calls": 14,
+      "routing_request_seconds": 70.961355833977
+    },
+    {
+      "name": "appeal026b",
+      "selected_document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "code_commit": "e39e213689f2344f109078685e2542e7759080da",
+      "status": "extraction_rejected",
+      "requests_submitted": 34,
+      "model_correction_calls": 0,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "extraction_status": "object_type_unresolved",
+      "issues": [
+        {
+          "code": "object_type_unresolved",
+          "path": "/"
+        }
+      ],
+      "last_stages": [
+        {
+          "stage": "body-002-properties-owner-001",
+          "status": "response_complete",
+          "input_tokens": 2716
+        },
+        {
+          "stage": "body-003-forms",
+          "status": "response_complete",
+          "input_tokens": 1930
+        },
+        {
+          "stage": "body-003-forms-object-types-000",
+          "status": "response_complete",
+          "input_tokens": 3516
+        },
+        {
+          "stage": "body-003-forms-object-types-001",
+          "status": "response_complete",
+          "input_tokens": 1902
+        }
+      ],
+      "contexts": {
+        "total": 13,
+        "status_counts": {
+          "validated": 3,
+          "failed": 1,
+          "not_attempted": 9
+        },
+        "unassigned_units": 0
+      },
+      "routing_decisions": {
+        "actor_candidate": 57,
+        "uncertain": 1
+      },
+      "non_actor_evidence_positions_in_route_ledger": 0,
+      "request_seconds": 758.7613394591026,
+      "routing_calls": 11,
+      "routing_request_seconds": 72.70349691790761
+    }
+  ],
+  "previous_failed_run": "research/next-flash-two-v38-01-report.json",
+  "limits": [
+    "development-exposed sources, not a blind test",
+    "engineering validity and model type consensus are not semantic accuracy",
+    "other object types and coreference require independent evidence review",
+    "no automatic same-name merging",
+    "Jev not used by this workflow",
+    "fixed three and ten document acceptance gates are not satisfied by a two-document result"
+  ]
+}
