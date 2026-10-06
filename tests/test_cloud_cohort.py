@@ -49,7 +49,7 @@ def test_unknown_usage_keeps_reservation(tmp_path):
     assert guard.call(body, 10).error == "shared_budget_exhausted"
 
 
-@pytest.mark.parametrize("version", [40, 41])
+@pytest.mark.parametrize("version", [40, 41, 42])
 def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path, version):
     import shutil
     from pathlib import Path

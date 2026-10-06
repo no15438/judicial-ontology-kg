@@ -3,6 +3,7 @@
 import copy
 import json
 import subprocess
+import traceback
 from contextlib import nullcontext
 from decimal import Decimal
 from pathlib import Path
@@ -30,6 +31,7 @@ from judicial_kg.extraction import (
     source_discovery,
     source_positions,
     space_inventory,
+    structured_response,
     typed_owner,
     unique_forms,
     value_stage,
@@ -145,6 +147,7 @@ def _run(
         37: inventory_handoff,
         40: source_discovery,
         41: source_positions,
+        42: structured_response,
         36: collective_inventory,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
@@ -377,9 +380,19 @@ def _run(
             error.code if isinstance(error, DraftError) else "protocol_invalid_response"
         )
         report["issues"] = getattr(error, "issues", [])
+        if version >= 42 and not isinstance(error, DraftError):
+            frame = traceback.extract_tb(error.__traceback__)[-1]
+            report["protocol_diagnostic"] = {
+                "exception_type": type(error).__name__,
+                "module": Path(frame.filename).name,
+                "function": frame.name,
+                "line": frame.lineno,
+                "stage": report["stages"][-1]["stage"] if report["stages"] else None,
+            }
     if version >= 27:
         report["model_correction_calls"] = sum(
-            s["stage"].endswith("-repair-1") for s in report["stages"]
+            ("-repair-" in s["stage"] if version >= 42 else s["stage"].endswith("-repair-1"))
+            for s in report["stages"]
         )
         report["first_pass_accepted"] = (
             candidate is not None and report["model_correction_calls"] == 0 and reuse is None

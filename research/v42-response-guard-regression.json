@@ -1,0 +1,27 @@
+{
+  "scope": "saved-response diagnostic replay; repeated original echo tests fail-closed behavior, not successful live correction",
+  "new_api_calls": 0,
+  "results": [
+    {
+      "document_index": 1,
+      "stage": "anonymous-forms",
+      "observed_outcome": "schema_echo_unresolved",
+      "offline_response_reads": 2,
+      "unresolved_positions": 0
+    },
+    {
+      "document_index": 19,
+      "stage": "anonymous-forms",
+      "observed_outcome": "schema_echo_unresolved",
+      "offline_response_reads": 2,
+      "unresolved_positions": 0
+    },
+    {
+      "document_index": 11,
+      "stage": "body-001-mentions",
+      "observed_outcome": "mention_binding_unresolved",
+      "offline_response_reads": 1,
+      "unresolved_positions": 12
+    }
+  ]
+}
