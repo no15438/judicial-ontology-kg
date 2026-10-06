@@ -112,6 +112,7 @@ def verify(wire, payload, calls, stage, save):
                     "主张不能升级为法院认定，共现不等于关系，未知集合成员不能猜。"
                     "主体actors允许背景证据或空units；其他项只选对应语境内的直接证据。"
                     "roles/events/statements获supported时必须有最小直接支持units。"
+                    "事件若关联objects，证据还须包括被关联对象的提及单元；不支持该关联则返回uncertain。"
                     "按题逐项输出supported/uncertain/unsupported；只输出Schema数据实例："
                     + json.dumps(fmt, ensure_ascii=False)
                 ),
@@ -181,6 +182,102 @@ def verify(wire, payload, calls, stage, save):
     return decision
 
 
+def compile_with_recovery(
+    wire,
+    compiler,
+    fmt,
+    targets,
+    payload,
+    calls,
+    aligner,
+    doc,
+    units,
+    messages,
+    stage,
+    save,
+    repairs=2,
+):
+    """Validate in a transaction; feed contract failures back before accepting a window."""
+    snapshot = copy.deepcopy(compiler.record)
+    issue_count, mapping_count = len(compiler.issues), len(compiler.mappings)
+    history = []
+    for attempt in range(repairs + 1):
+        name = stage if not attempt else f"{stage}-contract-repair-{attempt}"
+        compiler.record = copy.deepcopy(snapshot)
+        del compiler.issues[issue_count:]
+        del compiler.mappings[mapping_count:]
+        if attempt:
+            correction = messages + [
+                {
+                    "role": "user",
+                    "content": json.dumps(
+                        {
+                            "任务": (
+                                "根据原文修复下列入图前契约错误，返回完整Schema实例。"
+                                "保留无错候选，不能为了通过删除难例：无法修复的原命题必须在unresolved登记其目标原文与原因。"
+                                "同一提及不能同时是actor和collective，请按原文选择身份并同步修正引用。"
+                                "法院语境speakers是作出认定的法院，不是认定涉及的人；未明确归属可为空。"
+                                "数值谓词要求对应数值：没有约定利息不是利率0，没有欠款不是金额0。"
+                                "表达否定约定或责任而无数值时，使用有据的文本谓词或unresolved。"
+                                "事件关联对象时，事件证据须同时覆盖对象提及与关系依据；不得补入无关单位。"
+                                "背景只支持actor身份；其他背景事实不属于本窗口，不能放入目标unresolved。"
+                            ),
+                            "契约错误": history[-1]["issues"],
+                            "待修复候选": wire,
+                            "谓词值类型": compiler.contract.ontology["predicate_value_kinds"],
+                        },
+                        ensure_ascii=False,
+                    ),
+                }
+            ]
+            wire = infer_checked(
+                calls,
+                correction,
+                name + "-propose",
+                lambda value: proposal_check(value, fmt, targets),
+                save,
+            )
+            save(name + "-proposal", wire)
+        blocked = []
+        if aligner:
+            wire, blocked = aligner.align(wire, doc, units, name)
+        decisions = verify(wire, payload, calls, name, save)
+        adapted = copy.deepcopy(wire)
+        for path in blocked:
+            put(adapted, path, {"quarantined_by_verifier": True})
+        for ci, context in enumerate(adapted["contexts"]):
+            for kind in ("actors", "collectives", "objects", "roles", "events", "statements"):
+                for i, item in enumerate(context.get(kind, [])):
+                    answer = decisions[f"c{ci}_{kind}_{i}"]
+                    if answer["decision"] != "supported" or (
+                        kind in {"roles", "events", "statements"} and not answer["units"]
+                    ):
+                        context[kind][i] = {"quarantined_by_verifier": True}
+                    elif kind in {"roles", "events", "statements"}:
+                        item["units"] = answer["units"]
+            compiler.context(
+                context,
+                fmt["properties"]["contexts"]["items"],
+                set(targets),
+                f"{stage}/contexts/{ci}",
+            )
+        failures = [
+            r
+            for r in compiler.issues[issue_count:]
+            if r.get("status") != "model_unresolved"
+            and r.get("code") not in {"verifier_rejected", "dependency_quarantined"}
+        ]
+        if not failures:
+            save(stage + "-contract-recovery", history)
+            return wire, name
+        history.append({"attempt": attempt, "stage": name, "issues": failures})
+        save(stage + "-contract-recovery", history)
+    compiler.record = snapshot
+    del compiler.issues[issue_count:]
+    del compiler.mappings[mapping_count:]
+    raise ValueError("contract_recovery_exhausted")
+
+
 def run_document(
     root,
     doc,
@@ -229,6 +326,7 @@ def run_document(
     all_units = [{"unit": i, "field": u["field"], "text": u["text"]} for i, u in enumerate(units)]
     pending = deque((wi, targets, 0, f"window-{wi:03}") for wi, targets in enumerate(windows))
     attempts = []
+    accepted_stages = []
     while pending:
         wi, targets, depth, stage = pending.popleft()
         snapshot = copy.deepcopy(compiler.record)
@@ -256,33 +354,21 @@ def run_document(
                 save,
             )
             save(stage + "-proposal", wire)
-            blocked = []
-            if aligner:
-                wire, blocked = aligner.align(wire, doc, units, stage)
-            decisions = verify(wire, payload, calls, stage, save)
-            adapted = copy.deepcopy(wire)
-            for path in blocked:
-                put(adapted, path, {"quarantined_by_verifier": True})
-            for ci, context in enumerate(adapted["contexts"]):
-                if not isinstance(context, dict):
-                    raise ValueError("invalid_context")
-                # Keep indices fixed: quarantine markers invalidate only dependent assertions.
-                for kind in ("actors", "collectives", "objects", "roles", "events", "statements"):
-                    for i, item in enumerate(context.get(kind, [])):
-                        key = f"c{ci}_{kind}_{i}"
-                        answer = decisions[key]
-                        if answer["decision"] != "supported" or (
-                            kind in {"roles", "events", "statements"} and not answer["units"]
-                        ):
-                            context[kind][i] = {"quarantined_by_verifier": True}
-                        elif kind in {"roles", "events", "statements"}:
-                            item["units"] = answer["units"]
-                compiler.context(
-                    context,
-                    fmt["properties"]["contexts"]["items"],
-                    set(targets),
-                    f"{stage}/contexts/{ci}",
-                )
+            wire, final_stage = compile_with_recovery(
+                wire,
+                compiler,
+                fmt,
+                targets,
+                payload,
+                calls,
+                aligner,
+                doc,
+                units,
+                messages,
+                stage,
+                save,
+            )
+            accepted_stages.append(final_stage)
             covered = {i for c in wire["contexts"] for i in c.get("units", [])}
             for row in wire["coverage"]:
                 status = row["status"]
@@ -387,7 +473,8 @@ def run_document(
     }
     verification_audit = [
         r
-        for p in sorted(output.glob("window-*-verification-audit.json"))
+        for p in [output / (stage + "-verification-audit.json") for stage in accepted_stages]
+        if p.exists()
         for r in json.loads(p.read_text())
     ]
     report.update(

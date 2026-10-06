@@ -108,7 +108,7 @@ def test_protocol_recovery_is_bounded():
 
 
 def test_engineering_gate_does_not_accept_failed_units_or_format_errors():
-    record = {"events": [{}], "statements": [{}]}
+    record = {"events": [{}], "statements": [{}], "roles": [{}]}
     coverage = [{"unit": 0, "status": "processed"}]
     unresolved = [
         {"status": "model_unresolved"},
@@ -174,3 +174,48 @@ def test_schema_repair_includes_machine_locatable_error_details():
     with pytest.raises(ProtocolError) as caught:
         proposal_check({"contexts": []}, fmt, list(range(len(c.units))))
     assert caught.value.details[0]["rule"] == "required"
+
+
+def test_contract_feedback_recompiles_transactionally_without_manual_graph_edit():
+    from judicial_kg.current.runner import compile_with_recovery
+
+    c, fmt = compiler()
+    targets = list(range(len(c.units)))
+    original = frame()
+    original.update(kind="court_finding", speakers=[0])  # A person is not the speaking court.
+    wire = {
+        "contexts": [original],
+        "coverage": [{"unit": i, "status": "processed", "reason": "fixture"} for i in targets],
+    }
+    repaired = copy.deepcopy(wire)
+    repaired["contexts"][0]["speakers"] = []
+    decisions = {
+        f"c0_{k}_0": {"decision": "supported", "units": [1]}
+        for k in ("actors", "collectives", "events")
+    }
+    calls = DirectCalls([decisions, repaired, decisions])
+    saved = {}
+    final, name = compile_with_recovery(
+        wire,
+        c,
+        fmt,
+        targets,
+        {
+            "target_units": [{"unit": i, "text": u["text"]} for i, u in enumerate(c.units)],
+            "background_units": [],
+        },
+        calls,
+        None,
+        c.doc,
+        c.units,
+        [],
+        "window-000",
+        lambda k, v: saved.update({k: v}),
+    )
+    assert name == "window-000-contract-repair-1"
+    assert final["contexts"][0]["speakers"] == []
+    assert len(c.record["actors"]) == 1 and len(c.record["contexts"]) == 1
+    assert not c.issues
+    history = saved["window-000-contract-recovery"]
+    assert history[0]["issues"][0]["issues"][0]["code"] == "court_attribution_type"
+    assert wire["contexts"][0]["speakers"] == [0]  # Preserve failed proposal.

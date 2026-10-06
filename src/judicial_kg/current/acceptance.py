@@ -17,6 +17,8 @@ def assess(record, issues, coverage, verification_audit, expected_units):
     ]
     if blocking:
         problems.append("unresolved_engineering_issues")
+    if not record.get("roles"):
+        problems.append("empty_role_channel")
     if not record["events"] or not record["statements"]:
         problems.append("empty_event_or_statement_channel")
     return {

@@ -1,0 +1,23 @@
+{
+  "status": "stopped_repeated_contract_and_scope_failures",
+  "code_commit": "2c88337096d1cbdbdef98c5d9d15a10b37877fd1",
+  "input_manifest_sha256": "95270b9b59b0b2cc6fb98a0b771ff22f9fbd143d23dd7fd1c51e0aa2e2c40212",
+  "input_documents": 36,
+  "selected": 3,
+  "not_selected": 33,
+  "results": [],
+  "old_full_document_acceptance_comparable": false,
+  "semantic_precision_recall_f1": null,
+  "completion_claim": false,
+  "budget": {
+    "prior_committed_cny": "76.9532982",
+    "cap_cny": "81.9532982",
+    "new_committed_cny": "1.5744160",
+    "new_observed_cny": "1.3960040",
+    "cumulative_committed_cny": "78.5277142",
+    "actual_api_requests": 136,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  }
+}
