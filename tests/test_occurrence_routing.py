@@ -29,6 +29,14 @@ def test_mixed_form_routes_each_occurrence_and_retains_fragment_ledger():
     assert r.route({"forms": ["A"]}, ["u0", "u3"], "body-000-forms") == {"forms": ["A"]}
     assert len(calls) == 2
     assert "repair-object-occurrences" in calls[1][2]
+    data = json.loads(calls[1][0][1]["content"])
+    units = {u["id"]: u for u in data["source_units"]}
+    for position in data["positions"].values():
+        assert position["source_text"] == "A"
+        assert (
+            position["source_before"] + position["source_text"] + position["source_after"]
+            == units[position["unit_id"]]["text"]
+        )
     assert [x["kind"] for x in r.decisions] == ["actor_candidate", "literal_fragment"]
     assert len(saved["body-000-forms-repair-object-occurrences-001-ledger"]["decisions"]) == 2
     compiled = r.compile(record())

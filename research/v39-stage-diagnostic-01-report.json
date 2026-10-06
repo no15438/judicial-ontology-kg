@@ -1,0 +1,31 @@
+{
+  "protocol_version": 39,
+  "code_commit": "cfa64c8",
+  "status": "diagnostic_rejected",
+  "historical_proposals_used": true,
+  "inference_requests": 3,
+  "whole_document_acceptance": false,
+  "routing_status": "object_occurrence_type_unresolved",
+  "unresolved_occurrences": 2,
+  "occurrence_kind_counts": {
+    "actor_candidate": 4,
+    "uncertain": 2
+  },
+  "mention_probe_attempted": false,
+  "cloud_requests": 0,
+  "semantic_precision_recall_f1": null,
+  "harness_failures": [
+    {
+      "attempt": 1,
+      "inference_requests": 0,
+      "reason": "receipt field name mismatch"
+    },
+    {
+      "attempt": 2,
+      "inference_requests": 1,
+      "reason": "tuple adapter mismatch; exact response reused by attempt3"
+    }
+  ],
+  "diagnostic_response_reuse": 1,
+  "next_change": "Program slices source_before/source_text/source_after to remove model offset arithmetic; preserve this failed diagnostic."
+}

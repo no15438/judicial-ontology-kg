@@ -1,0 +1,13 @@
+{
+  "protocol_version": 39,
+  "status": "registered_before_new_calls",
+  "purpose": "source-slice diagnostic after explicit-position rejection",
+  "max_new_inference_requests": 3,
+  "reuse_policy": "reuse only exact unchanged requests from preceding diagnostic prefix; not whole-document acceptance",
+  "targets": [
+    "026b mixed form positions with explicit source slices",
+    "442c contradictory mention decisions"
+  ],
+  "whole_document_acceptance": false,
+  "semantic_precision_recall_f1": null
+}

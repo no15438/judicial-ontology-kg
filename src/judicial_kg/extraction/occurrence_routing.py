@@ -50,6 +50,9 @@ class OccurrenceRouter(object_routing.ObjectRouter):
                         "unit_id": unit["id"],
                         "start": span["start"],
                         "end": span["end"],
+                        "source_before": unit["text"][: span["start"] - unit["start"]],
+                        "source_text": span["quote"],
+                        "source_after": unit["text"][span["end"] - unit["start"] :],
                     }
                     index = self.units.index(unit)
                     relevant.update(
@@ -63,6 +66,8 @@ class OccurrenceRouter(object_routing.ObjectRouter):
                         "role": "system",
                         "content": (
                             "同一称谓的整体分类未决，现逐个原文出现独立判断。不同位置可指不同人、机构或对象，"
+                            "每个位置已由程序切为source_before/source_text/source_after，拼接即原文单元，"
+                            "只判断中间source_text这次出现，不需要计算数值偏移或自行选位置。"
                             "不要因为所指不同而整体判未决。也不能把较长词中的字面片段当独立代词。"
                             "只判断每个位置的类别，不猜具体身份；无法判断的那个位置保留uncertain。"
                             "literal_fragment仅用于原文明示不是独立指代的字面片段，不能用于逃避困难指代。"

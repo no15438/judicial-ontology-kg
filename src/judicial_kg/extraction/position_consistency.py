@@ -11,7 +11,7 @@ from judicial_kg.validation_run import strict_json
 CONTRACT_VERSION = object_routing.CONTRACT_VERSION
 NORMALIZER_VERSION = object_routing.NORMALIZER_VERSION
 PROMPT_FILE = "prompts/qwen-extraction-v39.txt"
-GENERATION_CONSTRAINT_VERSION = "per-occurrence-routing-bindings-bounded-consistency-review-v1"
+GENERATION_CONSTRAINT_VERSION = "per-occurrence-routing-visible-source-slices-consistency-v2"
 GENERATION_CONSTRAINT_SCOPE = (
     "source-bound-object-routing-and-explicit-binding-review-not-semantic-gold"
 )
