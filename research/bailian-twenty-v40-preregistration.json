@@ -1,0 +1,162 @@
+{
+  "run": "bailian-twenty-v40-01",
+  "protocol_version": 40,
+  "purpose": "user-authorized 20-document diagnostic expansion, not production acceptance or blind semantic evaluation",
+  "authorization": "User explicitly requested one cloud 20-document cohort; existing cumulative cap 200 CNY.",
+  "input_hashes": {
+    "artifacts/scoped-v12/appealcase-documents.json": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+    "artifacts/scoped-v12/spark-documents.json": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74"
+  },
+  "expected_documents": 36,
+  "selected_documents": 20,
+  "not_selected": 16,
+  "selection_method": "10 per source; one representative per known family; include three prior difficult anchors; representative is longest member unless mandatory anchor; iteratively maximize minimum text-length distance to selected representatives; tie by length then document ID; interleave sources.",
+  "known_family_count": 20,
+  "order": [
+    "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+    "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+    "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+    "spark_qa:3be8e84dd069608b9e381c12086d0cdd8d375b7fecf0d662e54b52def4842aed",
+    "appealcase:998b38f94a0855e4e3d6337dd0db003ea90b2f73d6da63dd795f61eed0ba1736",
+    "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+    "appealcase:46d76e8b704b9a519a681341a085638f3b7b843290acf03f7c54fbf6b0d05742",
+    "spark_qa:cf08e48614b0930ba5685020720a4f808d69c30873625445846e3cbbe4fb1554",
+    "appealcase:aaf78bc3db9a60ccb15596495212706f668e31727ce7ee776e31abe18711089f",
+    "spark_qa:639b49493e45e6041481bf68de91f090f6746495eb55ae89cee4f4fa664b840c",
+    "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+    "spark_qa:07dd3b118cbaf06663e5d8210538a125da876ae52d61aebd2bf465ff681e20e3",
+    "appealcase:72ec376c0cf5df3aff679752c832db3917d10d754458d2e86d108b692f8442c8",
+    "spark_qa:96a43ecd432d4f37f825d5dfc8336044a6b5872d7809528f2f6a4e0bf5e99383",
+    "appealcase:7acdf1c794a7ca8b469a6f4900ce29196391ee38d7f1fab70721ee241cea87c3",
+    "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+    "appealcase:407cc57fdc607ac1d7b8756d9f8fb6fb1a4a3ee2d1f136d79c4a5ebe0ec448ff",
+    "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+    "appealcase:cb95ec3a3dc7193d3f2e7c13500aa86198514b0a522c5c02e0687423d8a9fa6d",
+    "spark_qa:1783d90c5fc63b735e2c5d2e305f2f7efe0dd969c0c1405527fe02220a0a656b"
+  ],
+  "selected_metadata": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "family_id": "family:75d35f4fd02941f25b9c7d99053542c13c798c0fc7b8d7d3775c79a984a27c25",
+      "characters": 4328
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "family_id": "spark-parent:57dd281ab6bca6400c0f438f7f9105da9138e521a4ca0fba0904f1d184aa3264",
+      "characters": 1731
+    },
+    {
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "family_id": "family:78eb5b4847854fa26073b654019fe846a3d0cd7ccae648638addefca46fa14e0",
+      "characters": 3928
+    },
+    {
+      "document_id": "spark_qa:3be8e84dd069608b9e381c12086d0cdd8d375b7fecf0d662e54b52def4842aed",
+      "family_id": "spark-parent:3364aa587c5eb78057a04f5cc222b22a9daa7d6b6729ba68bf3a5642612b0460",
+      "characters": 4669
+    },
+    {
+      "document_id": "appealcase:998b38f94a0855e4e3d6337dd0db003ea90b2f73d6da63dd795f61eed0ba1736",
+      "family_id": "family:db9cc17633ff73c81d7c310935f824915b747529ba416e465591874dd6d433a8",
+      "characters": 6327
+    },
+    {
+      "document_id": "spark_qa:6b9b4f2b690a5a2127c5ab515428b6f3cd1c831857ba73acc58b568636567c49",
+      "family_id": "spark-parent:49431fa7eaa89119bb6dd9ef90474eee95fa69aeb83cb95a9120ac58d8ce12db",
+      "characters": 2833
+    },
+    {
+      "document_id": "appealcase:46d76e8b704b9a519a681341a085638f3b7b843290acf03f7c54fbf6b0d05742",
+      "family_id": "family:a99791cefb8ba216e66e72c44bc3060dd04db858b72182307a45e619bacd2115",
+      "characters": 2826
+    },
+    {
+      "document_id": "spark_qa:cf08e48614b0930ba5685020720a4f808d69c30873625445846e3cbbe4fb1554",
+      "family_id": "spark-parent:284ab5aaf65972de2d4d9d83ebfe91f3cc2b6f7ca279a7834ff890a18702f139",
+      "characters": 2292
+    },
+    {
+      "document_id": "appealcase:aaf78bc3db9a60ccb15596495212706f668e31727ce7ee776e31abe18711089f",
+      "family_id": "family:d18d1300ae6395c47e0c0625415e0c0b136d21a1d05ca7e7eb7a04179c93f30d",
+      "characters": 5389
+    },
+    {
+      "document_id": "spark_qa:639b49493e45e6041481bf68de91f090f6746495eb55ae89cee4f4fa664b840c",
+      "family_id": "spark-parent:65df0aaf30fef87f6dd8574c7b257ab4bfe690aaafbce74565363c2d73d4007f",
+      "characters": 1202
+    },
+    {
+      "document_id": "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+      "family_id": "family:398d16c98fb5b0e91b1baf6f4d9225c368c46a204d8d749fc39f9371a2e66125",
+      "characters": 3384
+    },
+    {
+      "document_id": "spark_qa:07dd3b118cbaf06663e5d8210538a125da876ae52d61aebd2bf465ff681e20e3",
+      "family_id": "spark-parent:b72f969c461484ec95109dc4ad123b895fa22792feebae81a3337b3df01da599",
+      "characters": 2644
+    },
+    {
+      "document_id": "appealcase:72ec376c0cf5df3aff679752c832db3917d10d754458d2e86d108b692f8442c8",
+      "family_id": "family:3437997796eb2383d79624f9a573e0ec0a647cc71e75fda35dce62852c616d15",
+      "characters": 3088
+    },
+    {
+      "document_id": "spark_qa:96a43ecd432d4f37f825d5dfc8336044a6b5872d7809528f2f6a4e0bf5e99383",
+      "family_id": "spark-parent:e6c13a920d89b6d62291e4d8a46a067576a4f74f7bec7d97f6af55da13f46072",
+      "characters": 2116
+    },
+    {
+      "document_id": "appealcase:7acdf1c794a7ca8b469a6f4900ce29196391ee38d7f1fab70721ee241cea87c3",
+      "family_id": "family:3a8023d44d21a46b5931c7df2519b4771bf2a50cf1dddf6940e1b39999b03cea",
+      "characters": 5155
+    },
+    {
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "family_id": "spark-parent:724620a7a58ad425f59934df277fe5d0b735a4ae2f15e5dfdca480cdcb0e513a",
+      "characters": 2428
+    },
+    {
+      "document_id": "appealcase:407cc57fdc607ac1d7b8756d9f8fb6fb1a4a3ee2d1f136d79c4a5ebe0ec448ff",
+      "family_id": "family:41a0709eaf7dfa720f924d4446dab96d7317b31d3778b9be6a15601b016f5ba5",
+      "characters": 3604
+    },
+    {
+      "document_id": "spark_qa:aebeb9fd3d6e2022ae9a24e7326fb8eb71b5bf1383076b38c90cee89aef9408b",
+      "family_id": "spark-parent:51b1e3eb799749d05bb5a24ba3d68f52dcd241c7ec7ec92421f896795324db58",
+      "characters": 1279
+    },
+    {
+      "document_id": "appealcase:cb95ec3a3dc7193d3f2e7c13500aa86198514b0a522c5c02e0687423d8a9fa6d",
+      "family_id": "family:31d6536ddfa166b173c6e775a3291d1be27b18cf6d07b1e6b6fbddbc2ad7b0c1",
+      "characters": 4026
+    },
+    {
+      "document_id": "spark_qa:1783d90c5fc63b735e2c5d2e305f2f7efe0dd969c0c1405527fe02220a0a656b",
+      "family_id": "spark-parent:a1b4f0020c398f472ecc72339cf50b7254cc01371e294cc709a3832f6c5d0b21",
+      "characters": 2797
+    }
+  ],
+  "concurrency": 4,
+  "historical_response_reuse": 0,
+  "manual_graph_edits": 0,
+  "on_document_rejection": "retain failure and continue next registered document",
+  "on_changed_code_or_sources": "stop batch and preserve queued states",
+  "limits": [
+    "known family IDs are conservative, cross-source hidden duplicates not excluded",
+    "development-exposed sources, not gold or blind test",
+    "unknown collective membership still unresolved",
+    "structural acceptance does not prove semantic accuracy or coverage",
+    "do not alter protocol mid-batch; later repairs get a separate run"
+  ],
+  "scheduling_change": "four cloud documents concurrently; within-document stages sequential",
+  "new_documents_to_extract": 20,
+  "request_timeout_seconds": 300,
+  "model": "qwen3.8-max-0902",
+  "prior_committed_cny": "38.661000",
+  "cumulative_cap_cny": "200",
+  "budget_note": "33.669768 staged historical reservations plus 4.991232 conservative initial pilot reservation; no double spend assumption. No account-wide invoice claim.",
+  "backend": "aliyun_bailian_beijing",
+  "response_reuse": false,
+  "comparison_limitations": "Same v40/source cohort; different model and cloud input guard (120000 UTF8 bytes+allowance vs local 32K tokenizer); not infrastructure-only causal experiment.",
+  "price_verified_date": "2026-10-07"
+}

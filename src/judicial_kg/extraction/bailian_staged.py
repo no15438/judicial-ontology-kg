@@ -3,6 +3,7 @@
 import copy
 import json
 import subprocess
+from contextlib import nullcontext
 from decimal import Decimal
 from pathlib import Path
 from uuid import uuid4
@@ -26,6 +27,7 @@ from judicial_kg.extraction import (
     mention_stage,
     owner_first,
     referent_inventory,
+    source_discovery,
     space_inventory,
     typed_owner,
     unique_forms,
@@ -81,8 +83,13 @@ def run_cloud(
     resume_from=None,
     restart_stage=None,
     document_id=None,
+    cohort_lease=None,
 ):
-    with extraction_lock(root):
+    if cohort_lease is not None and (
+        not cohort_lease.active or cohort_lease.root != root.resolve()
+    ):
+        raise ValueError("Invalid cloud cohort lease")
+    with nullcontext() if cohort_lease is not None else extraction_lock(root):
         return _run(
             root,
             paths,
@@ -135,6 +142,7 @@ def _run(
         34: checked_inventory,
         35: referent_inventory,
         37: inventory_handoff,
+        40: source_discovery,
         36: collective_inventory,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
@@ -388,7 +396,7 @@ def _run(
     return report
 
 
-def replay_cloud(root, paths, source_run, output):
+def replay_cloud(root, paths, source_run, output, *, cohort_lease=None):
     original = strict_json((source_run / "report.json").read_bytes())
     version = int(original["config"]["version"].rsplit("v", 1)[1])
     if not original["completed"] or original["config"] != {
@@ -429,6 +437,7 @@ def replay_cloud(root, paths, source_run, output):
         output,
         client=client,
         replay_origin=original,
+        cohort_lease=cohort_lease,
         version=version,
         budget_cny=original["config"]["budget_cny"],
         previous_runs=[root / x["path"] for x in original.get("budget_lineage", [])],

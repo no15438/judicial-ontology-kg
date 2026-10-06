@@ -68,6 +68,9 @@ def run_fresh(
     if local_config is not None:
         report.update(backend="spark_lan", model=config["model"], cloud_requests_submitted=0)
 
+    if local_config is None:
+        report.update(backend="aliyun_bailian_beijing", model="qwen3.8-max-0902")
+
     if document_id is not None:
         report["selected_document_id"] = document_id
 
@@ -88,6 +91,7 @@ def run_fresh(
                 client=client,
                 version=version,
                 previous_runs=previous_runs,
+                cohort_lease=cohort_lease,
                 budget_cny=budget_cny,
                 document_id=document_id,
             )
@@ -134,7 +138,15 @@ def run_fresh(
         if result.get("responses_reused", 0) or "resume_origin" in result:
             raise ValueError("Fresh workflow cannot reuse historical responses")
         replay = (replay_cloud if local_config is None else replay_completed)(
-            root, paths, output / "extraction", output / "replay"
+            root,
+            paths,
+            output / "extraction",
+            output / "replay",
+            **(
+                {"cohort_lease": cohort_lease}
+                if local_config is None and cohort_lease is not None
+                else {}
+            ),
         )
         equality_key = (
             "outcome_and_artifact_equality_verified"

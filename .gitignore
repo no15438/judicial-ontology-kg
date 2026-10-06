@@ -18,3 +18,5 @@ local/
 *.pem
 *.key
 .DS_Store
+
+.venv
