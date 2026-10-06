@@ -1,0 +1,58 @@
+{
+  "run": "flash-three-v44-01",
+  "frozen_commit": "38c7f5c",
+  "protocol": 44,
+  "selected": 3,
+  "not_selected": 33,
+  "accepted": 0,
+  "budget": {
+    "prior_committed_cny": "71.8314817",
+    "cap_cny": "76.8314817",
+    "new_committed_cny": "0.1857594",
+    "new_observed_cny": "0.1857594",
+    "cumulative_committed_cny": "72.0172411",
+    "actual_api_requests": 21,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "manual_graph_edits": 0,
+  "historical_response_reuse": 0,
+  "semantic_precision_recall_f1": null,
+  "documents": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "status": "anonymous_referent_unresolved",
+      "last_stage": "anonymous-referents",
+      "requests": 9,
+      "correction_calls": 0,
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "status": "header_closed_id_unresolved",
+      "last_stage": "inventory-forms-repair-1-repair-closed-id-1",
+      "requests": 3,
+      "correction_calls": 2,
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true
+    },
+    {
+      "document_id": "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+      "status": "anonymous_referent_unresolved",
+      "last_stage": "anonymous-referents",
+      "requests": 9,
+      "correction_calls": 1,
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true
+    }
+  ],
+  "findings": [
+    "026b unresolved collective referent",
+    "Spark whole-name missing-source repair offered single-character fragments; nested choice array persisted after one correction",
+    "f99ec unresolved adjudicative collective referent",
+    "contract 0.5 validated offline only; extraction continues under 0.4",
+    "v43/v44 changed multiple prompt guards; stage differences do not isolate a causal quality improvement"
+  ]
+}
