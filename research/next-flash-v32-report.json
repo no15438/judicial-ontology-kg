@@ -1,0 +1,87 @@
+{
+  "workflow": "fresh-source-to-graph-v1",
+  "protocol_version": 32,
+  "code_commit": "6cfc257ac4f20940876239e55c76ae410427b573",
+  "completed": true,
+  "status": "extraction_rejected",
+  "response_reuse_enabled": false,
+  "external_candidate_input": false,
+  "automatic_pipeline_accepted": false,
+  "uncorrected_first_pass_accepted": false,
+  "semantic_precision_recall_f1": null,
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "cloud_requests_submitted": 0,
+  "extraction_status": "inventory_unresolved",
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "requests_submitted": 2,
+  "responses_reused": 0,
+  "model_correction_calls": 0,
+  "observed_cost_cny": "0",
+  "prior_committed_cny": "0",
+  "offline_replay_verified": true,
+  "frozen_inputs_unchanged": true,
+  "trial": "next-flash-fresh-v32-01",
+  "run_directory": "artifacts/qwen-extraction/next-flash-fresh-v32-01",
+  "started_at_utc": "2026-10-06T03:22:04.571954+00:00",
+  "finished_at_utc": "2026-10-06T03:23:30.185982+00:00",
+  "worktree_dirty": false,
+  "config": {
+    "version": "qwen-extraction-v32",
+    "ssh_host": "spark-lan",
+    "port": 8003,
+    "model": "qwen3.8-flash-next-iq4xs",
+    "context_tokens": 32768,
+    "max_output_tokens": 8192,
+    "token_margin": 128,
+    "request_timeout_seconds": 480,
+    "temperature": 0.2,
+    "seed": 42,
+    "limit_per_source": 1,
+    "max_documents": 1
+  },
+  "input_files": [
+    {
+      "sha256": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74",
+      "bytes": 428236
+    },
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    }
+  ],
+  "selected_document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+  "stage_summary": [
+    {
+      "stage": "inventory-forms",
+      "status": "response_complete",
+      "input_tokens": 5360,
+      "usage": {
+        "prompt_tokens": 5360,
+        "completion_tokens": 149,
+        "total_tokens": 5509
+      },
+      "elapsed_seconds": 11.861320541996974
+    },
+    {
+      "stage": "inventory-select",
+      "status": "response_complete",
+      "input_tokens": 9316,
+      "usage": {
+        "prompt_tokens": 9316,
+        "completion_tokens": 1480,
+        "total_tokens": 10796
+      },
+      "elapsed_seconds": 69.65832837502239
+    }
+  ],
+  "request_elapsed_seconds": 81.51964891701937,
+  "root_cause": "4 legal instrument titles were discovered then correctly left without Actor IDs; pipeline lacked explicit non-Actor exclusion ledger",
+  "unresolved_proposals": 4,
+  "graph_generated": false,
+  "old_max_three_trial_unchanged": "0/3",
+  "cloud_cumulative_committed_cny": "33.669768",
+  "tests_passed": 643
+}
