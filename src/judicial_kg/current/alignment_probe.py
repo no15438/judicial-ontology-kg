@@ -85,6 +85,9 @@ def run(root, source, output, credential_root):
             write_json(output / "report.json", {"status": "access_failed", "results": results})
             return
         results[name]["choices"] = choices(body, response.json())
+        results[name]["confidence"] = {
+            k: v.get("confidence") for k, v in response.json()["answers"].items()
+        }
     budget = CircuitBudget(
         BailianClient(*credentials(credential_root)),
         "75.0876101",

@@ -143,3 +143,25 @@ def test_aligned_pipeline_replays_native_calls_without_network(tmp_path):
     )
     write_json(dest / "outputs.json", {p.name: sha256(p.read_bytes()) for p in dest.iterdir()})
     assert replay(ROOT, dest, tmp_path / "replay")["offline_replay_verified"]
+
+
+def test_rounded_probabilities_are_not_misclassified_as_protocol_failure():
+    task = {
+        "id": "a0",
+        "state": {},
+        "instruction": "选择",
+        "options": {"o0": "A", "o1": "B", "o2": "C"},
+    }
+    body = request([task])
+    response = {
+        "model": "decision-model-preview",
+        "answers": {
+            "a0": {
+                "type": "choice",
+                "choice": "o0",
+                "probabilities": {"o0": 0.34, "o1": 0.34, "o2": 0.34, "unknown": 0},
+            }
+        },
+    }
+    assert choices(body, response) == {"a0": "o0"}
+    assert "state[a0]" in body["questions"]["a0"]["instructions"]
