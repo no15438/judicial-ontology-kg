@@ -1,5 +1,7 @@
 # 当前进度与来源核对
 
+最新Jev有限选择对照：计划24次，完成15次（Jev7次/6有效，Flash8次/8有效），余9次因Jev后端故障未执行。Jev已完成两组选择稳定但跨问题矛盾；Flash存在选项顺序敏感。不能认定Jev优于Flash，不接管主流程。未重启服务。结果与下一步见docs/jev-finite-choice-findings.md及research/jev-flash-finite-v1-report.json；下次云端累计预算须包含该报告的budget。
+
 最新启动结果：Flash v42首次三篇全部在首请求返回403（API-Key restrictions），无模型输出，不属于抽取质量失败；共享账本已停止，未切Max。累计保守预留71.2583248元，其中本次0.1330648元为未返回usage请求预留，非已确认账单。百炼控制台登录失效，需恢复登录并使现有项目密钥允许qwen3.8-flash；之后以新目录/新预算祖先重新启动，保留本次记录。见research/bailian-flash-v42-access-report.json。
 
 本轮启动登记：bailian-flash-three-v42-01，百炼qwen3.8-flash，固定026b/Spark4396/f99e三篇，36选3/33未选，3路并行，协议v42，历史预留71.125260元，本轮最多5元，总授权仍200元。模型及计费已显式贯穿请求、共享预算、provenance和离线回放，不回退Max。实时入口 artifacts/bailian-extraction/flash-three-v42-01/batch-report.json；启动状态须读该报告，不把本登记视作完成。

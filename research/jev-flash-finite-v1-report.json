@@ -1,0 +1,171 @@
+{
+  "status": "blocked_service_unavailable",
+  "planned_calls": 24,
+  "submitted_calls": 15,
+  "not_attempted": 9,
+  "valid_responses": 14,
+  "semantic_accuracy": null,
+  "blocking_reason": "Jev RemoteDisconnected followed by unavailable port8002 metrics; shim version reachable; no service restart",
+  "engines": {
+    "jev": {
+      "submitted": 7,
+      "valid": 6,
+      "mean_valid_seconds": 0.912,
+      "cross_question_inconsistencies": 6,
+      "choices": [
+        {
+          "case": "c1",
+          "repeat": 0,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "incomplete"
+          },
+          "valid": true
+        },
+        {
+          "case": "c1",
+          "repeat": 1,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "incomplete"
+          },
+          "valid": true
+        },
+        {
+          "case": "c1",
+          "repeat": 2,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "incomplete"
+          },
+          "valid": true
+        },
+        {
+          "case": "c2",
+          "repeat": 0,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "explicit"
+          },
+          "valid": true
+        },
+        {
+          "case": "c2",
+          "repeat": 1,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "explicit"
+          },
+          "valid": true
+        },
+        {
+          "case": "c2",
+          "repeat": 2,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "explicit"
+          },
+          "valid": true
+        },
+        {
+          "case": "c3",
+          "repeat": 0,
+          "answers": null,
+          "valid": false
+        }
+      ]
+    },
+    "flash": {
+      "submitted": 8,
+      "valid": 8,
+      "mean_valid_seconds": 3.834,
+      "cross_question_inconsistencies": 0,
+      "choices": [
+        {
+          "case": "c1",
+          "repeat": 0,
+          "answers": {
+            "form_kind": "collective_mention",
+            "members": "incomplete"
+          },
+          "valid": true
+        },
+        {
+          "case": "c1",
+          "repeat": 1,
+          "answers": {
+            "form_kind": "entity_mention",
+            "members": "not_applicable"
+          },
+          "valid": true
+        },
+        {
+          "case": "c1",
+          "repeat": 2,
+          "answers": {
+            "form_kind": "collective_mention",
+            "members": "incomplete"
+          },
+          "valid": true
+        },
+        {
+          "case": "c2",
+          "repeat": 0,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "not_applicable"
+          },
+          "valid": true
+        },
+        {
+          "case": "c2",
+          "repeat": 1,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "not_applicable"
+          },
+          "valid": true
+        },
+        {
+          "case": "c2",
+          "repeat": 2,
+          "answers": {
+            "form_kind": "factual_statement",
+            "members": "not_applicable"
+          },
+          "valid": true
+        },
+        {
+          "case": "c3",
+          "repeat": 0,
+          "answers": {
+            "form_kind": "collective_mention",
+            "members": "incomplete"
+          },
+          "valid": true
+        },
+        {
+          "case": "c3",
+          "repeat": 1,
+          "answers": {
+            "form_kind": "collective_mention",
+            "members": "uncertain"
+          },
+          "valid": true
+        }
+      ]
+    }
+  },
+  "budget": {
+    "prior_committed_cny": "71.6402875",
+    "cap_cny": "72.6402875",
+    "new_committed_cny": "0.0036464",
+    "new_observed_cny": "0.0036464",
+    "cumulative_committed_cny": "71.6439339",
+    "actual_api_requests": 8,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "interpretation": "Small exposed diagnostic only; Jev stable choices are not accuracy; incomplete comparison due backend outage. Do not integrate as automatic authority."
+}
