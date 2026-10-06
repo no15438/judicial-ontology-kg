@@ -4,6 +4,7 @@ import argparse
 import copy
 import json
 from collections import Counter
+from decimal import Decimal
 from pathlib import Path
 
 from judicial_kg.current.alignment import tasks_for
@@ -16,7 +17,7 @@ from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import canonical_hash
 
 
-def run(root, source, output, credential_root):
+def run(root, source, output, credential_root, prior_cny):
     output = safe_output(root, output)
     output.mkdir(parents=True, exist_ok=False)
     frozen = implementation_fingerprint(root)
@@ -90,8 +91,8 @@ def run(root, source, output, credential_root):
         }
     budget = CircuitBudget(
         BailianClient(*credentials(credential_root)),
-        "75.0876101",
-        "75.5876101",
+        prior_cny,
+        str(min(Decimal(prior_cny) + Decimal("0.5"), Decimal("200"))),
         output / "budget.json",
         "qwen3.8-flash",
     )
@@ -143,8 +144,9 @@ def main():
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--credential-root", type=Path, required=True)
+    parser.add_argument("--prior-cny", required=True)
     args = parser.parse_args()
-    run(Path.cwd(), args.source, args.output, args.credential_root)
+    run(Path.cwd(), args.source, args.output, args.credential_root, args.prior_cny)
 
 
 if __name__ == "__main__":

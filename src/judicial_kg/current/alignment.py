@@ -1,6 +1,7 @@
 """Closed-choice alignment over immutable source and local reference inventories."""
 
 import copy
+import json
 
 from judicial_kg.current.source import compact, locate
 
@@ -130,6 +131,7 @@ def tasks_for(wire, doc, units):
                     )
                 )
         for path, owner, proposal, pool in references:
+            previous_count = len(tasks)
             add(
                 path,
                 owner,
@@ -141,6 +143,10 @@ def tasks_for(wire, doc, units):
                 },
                 "选择该角色、参与者或属性所属的局部主体/事件下标。不能改变主体种类、极性或语境；无明确依据选unknown。",
             )
+            if len(tasks) > previous_count:
+                tasks[-1]["options"] = {
+                    f"o{i}": json.dumps(v, ensure_ascii=False) for i, v in enumerate(pool)
+                }
     return tasks, diagnostics
 
 
