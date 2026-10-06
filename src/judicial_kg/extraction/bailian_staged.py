@@ -53,6 +53,15 @@ def cost(input_tokens, output_tokens):
     return (Decimal(input_tokens) * 12 + Decimal(output_tokens) * 36) / 1000000
 
 
+def select_document(documents, document_id=None):
+    if document_id is None:
+        return documents[0]
+    matches = [d for d in documents if d["document_id"] == document_id]
+    if len(matches) != 1:
+        raise ValueError("Selected document ID must occur exactly once in the input denominator")
+    return matches[0]
+
+
 def run_cloud(
     root,
     paths,
@@ -65,6 +74,7 @@ def run_cloud(
     budget_cny=None,
     resume_from=None,
     restart_stage=None,
+    document_id=None,
 ):
     with extraction_lock(root):
         return _run(
@@ -78,6 +88,7 @@ def run_cloud(
             budget_cny=budget_cny,
             resume_from=resume_from,
             restart_stage=restart_stage,
+            document_id=document_id,
         )
 
 
@@ -93,6 +104,7 @@ def _run(
     budget_cny=None,
     resume_from=None,
     restart_stage=None,
+    document_id=None,
 ):
     root = root.resolve()
     selected_protocol = {
@@ -151,13 +163,15 @@ def _run(
     validate_batch(docs, [], contract)
     if not docs:
         raise ValueError("No source documents")
+    selected = select_document(docs, document_id)
     reuse = None
     if resume_from is not None:
         reuse = StagePrefix(root, resume_from, inputs, contract.versions(), config, restart_stage)
         if reuse.origin not in lineage:
             raise ValueError("Resume source must be included in the budget lineage")
         resume_attempt = 1 + sum(
-            "resume_origin" in saved and saved.get("selected_document_id") == docs[0]["document_id"]
+            "resume_origin" in saved
+            and saved.get("selected_document_id") == selected["document_id"]
             for saved in prior_reports
         )
         if resume_attempt > 3:
@@ -181,7 +195,7 @@ def _run(
         "expected_documents": len(docs),
         "selected_documents": 1,
         "not_selected": len(docs) - 1,
-        "selected_document_id": docs[0]["document_id"],
+        "selected_document_id": selected["document_id"],
         "requests_submitted": 0,
         "requests_replayed": 0,
         "stages": [],
@@ -211,7 +225,7 @@ def _run(
     def save(name, value):
         write_json(output / (name + ".json"), value)
 
-    save("selected-documents", [docs[0]])
+    save("selected-documents", [selected])
     save("config", config)
     (output / "prompt.txt").write_text(prompt)
 
@@ -328,7 +342,7 @@ def _run(
     candidate = None
     try:
         candidate = selected_protocol.extract(
-            docs[0],
+            selected,
             prompt,
             contract,
             {"method": "model", "producer": MODEL, "version": config["version"], "run_id": run_id},
@@ -410,6 +424,7 @@ def replay_cloud(root, paths, source_run, output):
         if "resume_origin" in original
         else None,
         restart_stage=original.get("restart_stage"),
+        document_id=original["selected_document_id"],
     )
     if result.get("budget_lineage", []) != original.get("budget_lineage", []):
         raise ValueError("Prior budget lineage changed")

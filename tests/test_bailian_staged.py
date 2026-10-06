@@ -225,3 +225,14 @@ def test_prior_budget_is_charged_before_any_new_request(workspace, monkeypatch):
     assert result["budget_committed_cny"] == "0"
     replay = cloud.replay_cloud(root, [docs], root / "artifacts/guard", root / "artifacts/replay")
     assert replay["outcome_and_artifact_equality_verified"]
+
+
+def test_explicit_document_selection_preserves_the_full_denominator():
+    docs = [{"document_id": "a"}, {"document_id": "b"}]
+    assert cloud.select_document(docs, "b") is docs[1]
+    assert cloud.select_document(docs) is docs[0]
+    assert len(docs) == 2
+    with pytest.raises(ValueError, match="exactly once"):
+        cloud.select_document(docs, "missing")
+    with pytest.raises(ValueError, match="exactly once"):
+        cloud.select_document(docs + [docs[1]], "b")

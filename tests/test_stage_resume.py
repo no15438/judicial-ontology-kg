@@ -186,3 +186,22 @@ def test_resume_attempt_budget_cannot_reset_by_selecting_an_older_origin(setup):
     with pytest.raises(ValueError, match="attempt budget exhausted"):
         run(setup, "too-many", client, previous_runs=prior, resume_from=first)
     assert client.calls == []
+
+
+def test_nonfirst_document_is_selected_and_replayed_without_reordering_inputs(setup):
+    root, docs, _ = setup
+    values = json.loads(docs.read_text())
+    second = json.loads(json.dumps(values[0]))
+    second["source"]["record_pointer"] = "/1"
+    second["document_id"] = second["dataset"] + ":" + canonical_hash(second["source"])
+    values.append(second)
+    docs.write_text(json.dumps(values))
+    output, result = run(setup, "selected-second", Client(), document_id=second["document_id"])
+    assert result["selected_document_id"] == second["document_id"]
+    assert result["expected_documents"] == 2
+    assert result["not_selected"] == 1
+    selected = json.loads((output / "selected-documents.json").read_text())
+    assert selected == [second]
+    replay = cloud.replay_cloud(root, [docs], output, root / "artifacts/replay-second")
+    assert replay["outcome_and_artifact_equality_verified"]
+    assert replay["selected_document_id"] == second["document_id"]

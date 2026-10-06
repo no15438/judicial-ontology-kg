@@ -19,7 +19,17 @@ def fingerprint(root, paths):
     return {str(p.resolve()): sha256(p.read_bytes()) for p in sorted(files)}
 
 
-def run_fresh(root, paths, output, *, version=31, previous_runs=(), budget_cny="200", client=None):
+def run_fresh(
+    root,
+    paths,
+    output,
+    *,
+    version=31,
+    previous_runs=(),
+    budget_cny="200",
+    client=None,
+    document_id=None,
+):
     """Prior reports are used only for cumulative billing; no old responses/candidates are read.
 
     Bounded corrections already built into the selected protocol are permitted. This
@@ -62,6 +72,7 @@ def run_fresh(root, paths, output, *, version=31, previous_runs=(), budget_cny="
             version=version,
             previous_runs=previous_runs,
             budget_cny=budget_cny,
+            document_id=document_id,
         )
         report.update(
             extraction_status=result["status"],
@@ -131,6 +142,7 @@ def main():
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--documents", type=Path, action="append", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--document-id")
     parser.add_argument("--previous-run", type=Path, action="append", default=[])
     parser.add_argument("--version", type=int, default=31)
     parser.add_argument("--budget-cny", required=True)
@@ -145,6 +157,7 @@ def main():
         version=args.version,
         previous_runs=args.previous_run,
         budget_cny=args.budget_cny,
+        document_id=args.document_id,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return int(not result["automatic_pipeline_accepted"])
