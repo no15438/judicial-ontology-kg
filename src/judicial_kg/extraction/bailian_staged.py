@@ -60,8 +60,20 @@ CONFIG = {
 }
 
 
-def cost(input_tokens, output_tokens):
-    return (Decimal(input_tokens) * 12 + Decimal(output_tokens) * 36) / 1000000
+def model_settings(model):
+    if model == MODEL:
+        return {"model": MODEL, "input_cny_per_million": "12", "output_cny_per_million": "36"}
+    if model == "qwen3.8-flash":
+        return {"model": model, "input_cny_per_million": "0.8", "output_cny_per_million": "2.7"}
+    raise ValueError("Unverified cloud model")
+
+
+def cost(input_tokens, output_tokens, model=MODEL):
+    rates = model_settings(model)
+    return (
+        Decimal(input_tokens) * Decimal(rates["input_cny_per_million"])
+        + Decimal(output_tokens) * Decimal(rates["output_cny_per_million"])
+    ) / 1000000
 
 
 def select_document(documents, document_id=None):
@@ -86,6 +98,7 @@ def run_cloud(
     resume_from=None,
     restart_stage=None,
     document_id=None,
+    model=MODEL,
     cohort_lease=None,
 ):
     if cohort_lease is not None and (
@@ -105,6 +118,7 @@ def run_cloud(
             resume_from=resume_from,
             restart_stage=restart_stage,
             document_id=document_id,
+            model=model,
         )
 
 
@@ -121,6 +135,7 @@ def _run(
     resume_from=None,
     restart_stage=None,
     document_id=None,
+    model=MODEL,
 ):
     root = root.resolve()
     selected_protocol = {
@@ -150,7 +165,7 @@ def _run(
         42: structured_response,
         36: collective_inventory,
     }[version]
-    config = {**CONFIG, "version": f"bailian-staged-v{version}"}
+    config = {**CONFIG, **model_settings(model), "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:
         budget = Decimal(budget_cny)
         if not budget.is_finite() or not 0 < budget <= 200:
@@ -163,7 +178,7 @@ def _run(
         raw = (path / "report.json").read_bytes()
         saved = strict_json(raw)
         prior_reports.append(saved)
-        if not saved["completed"] or saved["config"]["model"] != MODEL:
+        if not saved["completed"] or saved["config"]["model"] not in {MODEL, "qwen3.8-flash"}:
             raise ValueError("Unsettled prior cloud run")
         prior += Decimal(saved["budget_committed_cny"])
         lineage.append(
@@ -226,8 +241,10 @@ def _run(
         "stages": [],
         "observed_cost_cny": "0",
         "budget_committed_cny": "0",
-        "price_source": PRICE_SOURCE,
-        "price_verified_date": "2026-10-05",
+        "price_source": PRICE_SOURCE
+        if model == MODEL
+        else "https://help.aliyun.com/zh/model-studio/qwen3-8-flash",
+        "price_verified_date": "2026-10-05" if model == MODEL else "2026-10-07",
         "prompt_sha256": sha256(prompt.encode()),
         "contract": contract.versions(),
         "semantic_precision_recall_f1": None,
@@ -266,7 +283,7 @@ def _run(
         if version < 32 or not any(serialized_schema in m["content"] for m in messages):
             messages[0]["content"] += "\n只输出JSON，遵守本阶段Schema：\n" + serialized_schema
         request = {
-            "model": MODEL,
+            "model": model,
             "messages": messages,
             "temperature": 0.2,
             "seed": 42,
@@ -277,7 +294,7 @@ def _run(
             "response_format": {"type": "json_object"},
         }
         upper = sum(len(m["content"].encode()) for m in messages) + 4096
-        reservation = cost(upper, CONFIG["max_tokens"])
+        reservation = cost(upper, CONFIG["max_tokens"], model)
         row = {
             "stage": stage,
             "status": "planned",
@@ -303,7 +320,7 @@ def _run(
                 )
                 report["responses_reused"] += 1
                 checkpoint()
-                content, _ = completion_content(strict_json(raw), MODEL)
+                content, _ = completion_content(strict_json(raw), model)
                 return content
         if upper > 120000:
             row["status"] = "input_budget_exceeded"
@@ -344,7 +361,7 @@ def _run(
             row["status"] = "usage_missing"
             checkpoint()
             raise DraftError(row["status"])
-        actual = cost(usage["prompt_tokens"], usage["completion_tokens"])
+        actual = cost(usage["prompt_tokens"], usage["completion_tokens"], model)
         observed += actual
         if usage["prompt_tokens"] > upper or usage["completion_tokens"] > CONFIG["max_tokens"]:
             row["status"] = "provider_usage_exceeds_reservation"
@@ -354,7 +371,7 @@ def _run(
         committed += actual - reservation
         row["cost_cny"] = str(actual)
         try:
-            content, _ = completion_content(payload, MODEL)
+            content, _ = completion_content(payload, model)
             row["status"] = "response_complete"
             return content
         except DraftError as error:
@@ -370,7 +387,7 @@ def _run(
             selected,
             prompt,
             contract,
-            {"method": "model", "producer": MODEL, "version": config["version"], "run_id": run_id},
+            {"method": "model", "producer": model, "version": config["version"], "run_id": run_id},
             infer,
             save,
         )
@@ -416,6 +433,7 @@ def replay_cloud(root, paths, source_run, output, *, cohort_lease=None):
     version = int(original["config"]["version"].rsplit("v", 1)[1])
     if not original["completed"] or original["config"] != {
         **CONFIG,
+        **model_settings(original["config"]["model"]),
         "version": f"bailian-staged-v{version}",
         "budget_cny": original["config"]["budget_cny"],
     }:
@@ -452,6 +470,7 @@ def replay_cloud(root, paths, source_run, output, *, cohort_lease=None):
         output,
         client=client,
         replay_origin=original,
+        model=original["config"]["model"],
         cohort_lease=cohort_lease,
         version=version,
         budget_cny=original["config"]["budget_cny"],

@@ -1,5 +1,7 @@
 # 当前进度与来源核对
 
+本轮启动登记：bailian-flash-three-v42-01，百炼qwen3.8-flash，固定026b/Spark4396/f99e三篇，36选3/33未选，3路并行，协议v42，历史预留71.125260元，本轮最多5元，总授权仍200元。模型及计费已显式贯穿请求、共享预算、provenance和离线回放，不回退Max。实时入口 artifacts/bailian-extraction/flash-three-v42-01/batch-report.json；启动状态须读该报告，不把本登记视作完成。
+
 v42第二批已实现Schema回显的有界格式纠正、空身份绑定原文审计和云端异常定位；旧真实响应回归只验证诊断/停止行为，未做新模型推理。详细进度见 docs/v41-repair-plan.md 的v42章节及 research/v42-response-guard-regression.json；未知成员图谱契约、属性/语境修复和云端Flash新抽仍未完成。
 
 当前修复分支 codex/source-position-repair：云端Max v40二十篇已结束，0/20整篇工程通过、403次调用、费用估算32.464260元，累计保守账本71.125260/200元。20/20离线回放及冻结校验通过。修复方案见 docs/v41-repair-plan.md；v41已接入保留原文偏移的水平空格映射，六份真实失败响应离线定位回归通过，不是新模型抽取或整篇通过。下一步结构接口及未决表示，之后云端Flash小样完整新抽；不自动重复Max整批。

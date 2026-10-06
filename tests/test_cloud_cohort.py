@@ -25,7 +25,7 @@ def test_shared_budget_reserves_before_concurrent_call(tmp_path):
 
     client = Client()
     guard = SharedBudget(client, "199.9", "200", tmp_path / "budget.json")
-    body = {"messages": [{"content": "x"}], "max_tokens": 1000}
+    body = {"model": "qwen3.8-max-0902", "messages": [{"content": "x"}], "max_tokens": 1000}
     with ThreadPoolExecutor(2) as pool:
         first = pool.submit(guard.call, body, 10)
         assert entered.wait(5)
@@ -43,14 +43,15 @@ def test_unknown_usage_keeps_reservation(tmp_path):
             return Response(None, b"", 1, "timeout")
 
     guard = SharedBudget(Client(), "199.9", "200", tmp_path / "budget.json")
-    body = {"messages": [{"content": "x"}], "max_tokens": 1000}
+    body = {"model": "qwen3.8-max-0902", "messages": [{"content": "x"}], "max_tokens": 1000}
     guard.call(body, 10)
     assert guard.committed == Decimal("0.085164")
     assert guard.call(body, 10).error == "shared_budget_exhausted"
 
 
+@pytest.mark.parametrize("model", ["qwen3.8-max-0902", "qwen3.8-flash"])
 @pytest.mark.parametrize("version", [40, 41, 42])
-def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path, version):
+def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path, version, model):
     import shutil
     from pathlib import Path
 
@@ -83,6 +84,7 @@ def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path, version):
                 [source],
                 tmp_path / "artifacts/run",
                 version=version,
+                model=model,
                 client=Client(),
                 cohort_lease=lease,
             )
@@ -95,3 +97,24 @@ def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path, version):
             )
     assert result["status"] == "transport_or_http_failed"
     assert replay["outcome_and_artifact_equality_verified"]
+
+
+def test_flash_rates_and_usage_settlement(tmp_path):
+    from judicial_kg.extraction.bailian_staged import cost
+
+    assert cost(1000000, 1000000, "qwen3.8-flash") == Decimal("3.5")
+
+    class Client:
+        def call(self, body, timeout):
+            return Response(
+                200,
+                json.dumps({"usage": {"prompt_tokens": 100, "completion_tokens": 10}}).encode(),
+                0,
+            )
+
+    guard = SharedBudget(
+        Client(), "71.125260", "76.125260", tmp_path / "budget.json", "qwen3.8-flash"
+    )
+    guard.call({"model": "qwen3.8-flash", "messages": [{"content": "x"}], "max_tokens": 100}, 10)
+    assert guard.committed == Decimal("0.000107")
+    assert guard.calls == 1

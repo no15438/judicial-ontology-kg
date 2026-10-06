@@ -33,6 +33,7 @@ def run_fresh(
     document_id=None,
     local_config=None,
     cohort_lease=None,
+    cloud_model="qwen3.8-max-0902",
 ):
     """Prior reports are used only for cumulative billing; no old responses/candidates are read.
 
@@ -69,7 +70,7 @@ def run_fresh(
         report.update(backend="spark_lan", model=config["model"], cloud_requests_submitted=0)
 
     if local_config is None:
-        report.update(backend="aliyun_bailian_beijing", model="qwen3.8-max-0902")
+        report.update(backend="aliyun_bailian_beijing", model=cloud_model)
 
     if document_id is not None:
         report["selected_document_id"] = document_id
@@ -90,6 +91,7 @@ def run_fresh(
                 output / "extraction",
                 client=client,
                 version=version,
+                model=cloud_model,
                 previous_runs=previous_runs,
                 cohort_lease=cohort_lease,
                 budget_cny=budget_cny,
