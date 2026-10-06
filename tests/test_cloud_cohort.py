@@ -50,7 +50,7 @@ def test_unknown_usage_keeps_reservation(tmp_path):
 
 
 @pytest.mark.parametrize("model", ["qwen3.8-max-0902", "qwen3.8-flash"])
-@pytest.mark.parametrize("version", [40, 41, 42])
+@pytest.mark.parametrize("version", [40, 41, 42, 43])
 def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path, version, model):
     import shutil
     from pathlib import Path

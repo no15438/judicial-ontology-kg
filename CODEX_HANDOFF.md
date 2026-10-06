@@ -1,5 +1,7 @@
 # 新仓库交接
 
+用户决定先暂停Jev，继续Flash主流程。v43新增角色提议/证据选择分步接口，原文ID由目录约束，程序装配。见docs/v43-role-evidence.md；未知集合和整句事实发现问题仍待处理，不宣称已修复整篇抽取。
+
 最新Jev有限选择对照：计划24次，完成15次（Jev7次/6有效，Flash8次/8有效），余9次因Jev后端故障未执行。Jev已完成两组选择稳定但跨问题矛盾；Flash存在选项顺序敏感。不能认定Jev优于Flash，不接管主流程。未重启服务。结果与下一步见docs/jev-finite-choice-findings.md及research/jev-flash-finite-v1-report.json；下次云端累计预算须包含该报告的budget。
 
 最新启动结果：Flash v42首次三篇全部在首请求返回403（API-Key restrictions），无模型输出，不属于抽取质量失败；共享账本已停止，未切Max。累计保守预留71.2583248元，其中本次0.1330648元为未返回usage请求预留，非已确认账单。百炼控制台登录失效，需恢复登录并使现有项目密钥允许qwen3.8-flash；之后以新目录/新预算祖先重新启动，保留本次记录。见research/bailian-flash-v42-access-report.json。

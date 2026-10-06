@@ -28,6 +28,7 @@ from judicial_kg.extraction import (
     mention_stage,
     owner_first,
     referent_inventory,
+    role_evidence,
     source_discovery,
     source_positions,
     space_inventory,
@@ -163,6 +164,7 @@ def _run(
         40: source_discovery,
         41: source_positions,
         42: structured_response,
+        43: role_evidence,
         36: collective_inventory,
     }[version]
     config = {**CONFIG, **model_settings(model), "version": f"bailian-staged-v{version}"}
