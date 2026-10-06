@@ -1,0 +1,147 @@
+{
+  "trial": "next-flash-two-v37-repeat-01",
+  "purpose": "fresh repeat of existing v37, not entity-triage integration acceptance",
+  "registration": {
+    "trial": "next-flash-two-v37-repeat-01",
+    "purpose": "requested fresh extraction repeat of existing v37; entity triage NOT integrated",
+    "code_commit": "497db4923cac757668dfddec86c421b240069b11",
+    "selected_document_ids": [
+      "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82"
+    ],
+    "expected_documents": 36,
+    "selected_documents": 2,
+    "not_selected": 34,
+    "input_sha256": [
+      "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74",
+      "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034"
+    ],
+    "protocol": 37,
+    "cloud_calls": 0,
+    "response_reuse_enabled": false,
+    "manual_graph_edits": false,
+    "per_document_attempts": 1
+  },
+  "completed": true,
+  "wall_seconds": 1488.9451704169624,
+  "expected_documents": 36,
+  "selected_documents": 2,
+  "not_selected": 34,
+  "automatic_pipeline_accepted": 0,
+  "uncorrected_first_pass_accepted": 0,
+  "cloud_requests_submitted": 0,
+  "historical_responses_reused": 0,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "new_graphs": 0,
+  "rows": [
+    {
+      "case": "appeal026b",
+      "workflow": "fresh-source-to-graph-v1",
+      "protocol_version": 37,
+      "code_commit": "497db4923cac757668dfddec86c421b240069b11",
+      "completed": true,
+      "status": "extraction_rejected",
+      "response_reuse_enabled": false,
+      "external_candidate_input": false,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "semantic_precision_recall_f1": null,
+      "backend": "spark_lan",
+      "model": "qwen3.8-flash-next-iq4xs",
+      "cloud_requests_submitted": 0,
+      "selected_document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "extraction_status": "draft_grounding_failed",
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 47,
+      "responses_reused": 0,
+      "model_correction_calls": 0,
+      "observed_cost_cny": "0",
+      "prior_committed_cny": "0",
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "request_elapsed_seconds": 1325.5749320338946,
+      "last_stage": "body-006-mentions",
+      "issues": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/mentions/s2"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/mentions/s12"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/mentions/s17"
+        }
+      ],
+      "prior_stage_comparison": {
+        "prior_files": 226,
+        "current_files": 226,
+        "shared_files": 226,
+        "json_equal_files": 226,
+        "different_files": []
+      },
+      "outcomes_sha256": "e25a0787725459a05b7fe3c02548ae8f65fe4109a1f0751a1a62fd6d5d3fa68b",
+      "workflow_report_sha256": "77533a60fd6af599cff0b117048725189bf1e4b7d750b1293d543eebde7b66b3",
+      "contexts_completed": 6,
+      "contexts_expected": 14,
+      "non_actor_proposal_still_uncertain": true
+    },
+    {
+      "case": "appeal442c",
+      "workflow": "fresh-source-to-graph-v1",
+      "protocol_version": 37,
+      "code_commit": "497db4923cac757668dfddec86c421b240069b11",
+      "completed": true,
+      "status": "extraction_rejected",
+      "response_reuse_enabled": false,
+      "external_candidate_input": false,
+      "automatic_pipeline_accepted": false,
+      "uncorrected_first_pass_accepted": false,
+      "semantic_precision_recall_f1": null,
+      "backend": "spark_lan",
+      "model": "qwen3.8-flash-next-iq4xs",
+      "cloud_requests_submitted": 0,
+      "selected_document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "extraction_status": "inventory_candidate_type_unresolved",
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 4,
+      "responses_reused": 0,
+      "model_correction_calls": 0,
+      "observed_cost_cny": "0",
+      "prior_committed_cny": "0",
+      "offline_replay_verified": true,
+      "frozen_inputs_unchanged": true,
+      "request_elapsed_seconds": 89.21082137495978,
+      "last_stage": "inventory-type-002",
+      "issues": [
+        {
+          "code": "inventory_candidate_type_unresolved",
+          "path": "/"
+        }
+      ],
+      "prior_stage_comparison": {
+        "prior_files": 11,
+        "current_files": 11,
+        "shared_files": 11,
+        "json_equal_files": 11,
+        "different_files": []
+      },
+      "outcomes_sha256": "e64ec6270caf478dca6fbdab3b516b71cba78d029e4e1d108bd7c8ac42fa3cf6",
+      "workflow_report_sha256": "d572fc8c487f190062c13e384e0cae7472ac0cc9777fbd6c8239939ea61db4ef",
+      "inventory_input_count": 18,
+      "actor_candidate_count": 17,
+      "unresolved_proposal_count": 1
+    }
+  ],
+  "requests_submitted": 51,
+  "request_elapsed_seconds": 1414.7857534088544,
+  "offline_replay_verified_documents": 2,
+  "frozen_inputs_unchanged_documents": 2
+}
