@@ -2,7 +2,7 @@
 
 ## 新分支：模型对齐
 
-`codex/model-alignment` 从592636b建立。计划见 [模型对齐](model-alignment-plan.md)。已实现原文位置与语境内引用的模型有限选择、unknown隔离及两种模型的离线回放。12项同候选对照显示decision仍有明确角色绑定错误，因此新三篇采用Flash对齐；决策模型不作为默认路径。新运行登记见 research/alignment-flash-three-preregistration.json，开始时累计75.1187192元、子预算5元。原三篇运行因第二被告角色误改绑主动停止，记录不改写。ad3357d加入改绑前比较复核，已知失败窗口的真实Flash回归保留了原绑定。下一步只新跑同一Spark原文，其他两篇暂缓；完成前不宣称改进。
+`codex/model-alignment` 从592636b建立。计划见 [模型对齐](model-alignment-plan.md)。已实现原文位置与语境内引用的模型有限选择、unknown隔离及两种模型的离线回放。12项同候选对照显示decision仍有明确角色绑定错误，因此新三篇采用Flash对齐；决策模型不作为默认路径。新运行登记见 research/alignment-flash-three-preregistration.json，开始时累计75.1187192元、子预算5元。原三篇运行因第二被告角色误改绑主动停止，记录不改写。ad3357d加入改绑前比较复核，已知失败窗口的真实Flash回归保留了原绑定。同一Spark原文在57fbd21重新运行完成：25次请求（10次对齐），零网络回放及冻结检查通过；状态partial，15事件/11陈述/18问题。原文118单元中85 processed、32 failed、1 uncertain，这不是语义召回率。3次位置修正均所在窗口被后续复核拒收，最终图谱未接收这3次修正，不能声称对齐获益。累计保守估算75.9639524元。下一步先修复复核结果局部隔离；其余两篇继续暂缓。
 
 
 ## current-rc1收敛候选版

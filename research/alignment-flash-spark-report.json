@@ -1,0 +1,81 @@
+{
+  "status": "completed",
+  "code_commit": "57fbd212ffc651d53a8494ec987dd736261c5fc1",
+  "input_manifest_sha256": "11714194d43280dd7eb84957c22f45bfb460687e6bb95f8238a28b83cce6a075",
+  "input_documents": 36,
+  "selected": 1,
+  "not_selected": 35,
+  "results": [
+    {
+      "version": "current-rc1",
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "status": "partial",
+      "unit_count": 118,
+      "coverage_rows": 118,
+      "windows": 8,
+      "requests": 25,
+      "alignment_requests": 10,
+      "alignment_model": "qwen3.8-flash",
+      "counts": {
+        "actors": 45,
+        "mentions": 45,
+        "contexts": 13,
+        "roles": 26,
+        "events": 15,
+        "statements": 11,
+        "objects": 9,
+        "object_mentions": 9,
+        "object_links": 2,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "issues": 18,
+      "wall_seconds": 335.88125149998814,
+      "source_sha256": "f38940c37fc87cb545b7d63b1c707753d199b3f0997fb835b7d264596356aa07",
+      "historical_response_reuse": 0,
+      "manual_graph_edits": 0,
+      "lossless_graph_roundtrip": true,
+      "semantic_precision_recall_f1": null,
+      "coverage_interpretation": "model_accounting_not_semantic_recall",
+      "offline_replay_verified": true,
+      "network_calls": 0,
+      "saved_requests_replayed": 25
+    }
+  ],
+  "old_full_document_acceptance_comparable": false,
+  "semantic_precision_recall_f1": null,
+  "frozen_inputs_unchanged": true,
+  "budget": {
+    "prior_committed_cny": "75.7384428",
+    "cap_cny": "80.1187192",
+    "new_committed_cny": "0.2255096",
+    "new_observed_cny": "0.2255096",
+    "cumulative_committed_cny": "75.9639524",
+    "actual_api_requests": 25,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "alignment_decisions": {
+    "unchanged": 103,
+    "unresolved": 7,
+    "changed": 3
+  },
+  "alignment_diagnostics": {
+    "no_bounded_candidates": 2
+  },
+  "coverage": {
+    "processed": 85,
+    "failed": 32,
+    "uncertain": 1
+  },
+  "changed_position_selections_in_final_graph": 0,
+  "changed_positions_rejected_at_window_verification": 3,
+  "failure_diagnosis": {
+    "window-001": "invalid proposal envelope, required coverage missing",
+    "window-003": "verification units outside target enum for three items triggered whole-window rejection"
+  },
+  "interpretation": "No demonstrated alignment benefit; raw proposed changes are not accepted graph corrections. Prior Spark run 12 events/22 statements/22 issues; new 15/11/18 is descriptive only, not controlled semantic comparison."
+}
