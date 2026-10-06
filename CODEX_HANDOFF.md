@@ -2,6 +2,10 @@
 
 ## v40 实施进展（当前）
 
+用户现已明确授权直接使用20篇局域网模型抽取，本轮改为诊断性扩样，不再等待旧小样门槛。固定v40、10篇AppealCase+10篇Spark、20个已知案组、完整36篇来源选20/未选16，串行全新推理；原集合缺口与覆盖风险仍保留，不视为生产验收或语义准确率。清单见 research/next-flash-twenty-v40-preregistration.json；运行状态和每篇失败写入 artifacts/qwen-extraction/next-flash-twenty-v40-01/batch-report.json。旧的“不扩量”是此前计划，由本次用户授权变更。
+
+此前实现与实验记录：
+
 v40已消除正文发现的主体限定冲突，749项测试通过；冻结4d8c8e3后，对026b同一真实片段进行了4次全新本地调用，不输入旧答案或目标名称，22个形式分流为15个Actor候选、5个项目形式、2个文书形式，之前遗漏项目的4个精确原文位置全部保留，零调用回放与冻结校验通过。此为阶段诊断，尚未重新完成v40整篇抽取。下一步实现未知成员集合契约及来源/事件绑定，再冻结同两篇完整回归，不能据诊断直接扩十篇。详见 docs/source-discovery.md、research/v40-discovery-diagnostic-report.json；集合设计见 docs/collective-reference-design.md。
 
 v39完整运行记录：
