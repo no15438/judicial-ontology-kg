@@ -53,37 +53,46 @@
       "failure": "draft_grounding_failed",
       "model_correction_calls": 1,
       "offline_replay_verified": true
+    },
+    {
+      "protocol": 37,
+      "report": "research/next-flash-v37-report.json",
+      "code_commit": "dc03d30556aa4d648f548e1fff6a0b5af28e3594",
+      "requests_submitted": 60,
+      "automatic_pipeline_accepted": true,
+      "failure": null,
+      "model_correction_calls": 1,
+      "offline_replay_verified": true
     }
   ],
   "expected_documents": 36,
   "unique_selected_documents": 1,
   "not_selected_documents": 35,
-  "unique_accepted_documents": 0,
-  "requests_submitted": 34,
-  "request_elapsed_seconds": 898.978093418933,
+  "unique_accepted_documents": 1,
+  "requests_submitted": 94,
+  "request_elapsed_seconds": 2239.891078042565,
   "cloud_requests_submitted": 0,
   "new_cloud_cost_cny": "0",
   "cloud_prior_cumulative_cny": "33.669768",
   "cloud_authorized_budget_cny": "200",
   "manual_graph_edits": 0,
   "historical_responses_reused": 0,
-  "graphs_generated": 0,
+  "graphs_generated": 1,
   "semantic_precision_recall_f1": null,
-  "tests_passed": 680,
+  "tests_passed": 686,
   "smaller_owner_schema_offline_regression": {
     "source_trial": "fresh-three-v31-01/appeal442c",
     "original_schema_bytes": 50644,
     "event_count": 9,
     "owner_batches": 10,
     "max_batch_schema_bytes": 12916,
-    "new_model_execution_reached_properties": false
+    "new_model_execution_reached_properties": true,
+    "real_execution_report": "research/next-flash-v37-report.json"
   },
   "remaining_work": [
-    "referent-preserving source repair",
-    "closed existing/new Actor attribution interface",
-    "fresh complete one-document target-model acceptance",
-    "same three documents target-model regression",
-    "independent source attribution/support review",
-    "fixed ten gate before expansion"
+    "same three exposed documents from source on frozen target-model workflow",
+    "source-bound independent attribution/support review of remaining hints",
+    "fixed ten gate only after three-document regression",
+    "measure stability and reduce request duplication without losing evidence"
   ]
 }
