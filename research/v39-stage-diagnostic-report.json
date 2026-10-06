@@ -1,0 +1,47 @@
+{
+  "protocol_version": 39,
+  "code_commit": "1be0f9c3fdda0ec0196e942070434e46b55b876d",
+  "historical_proposals_used": true,
+  "whole_document_acceptance": false,
+  "manual_graph_edits": 0,
+  "cloud_requests_submitted": 0,
+  "semantic_precision_recall_f1": null,
+  "offline_replay_verified": true,
+  "frozen_inputs_unchanged": true,
+  "elapsed_seconds": 38.53736090660095,
+  "new_inference_requests_this_attempt": 2,
+  "diagnostic_response_reuse": 2,
+  "previous_actual_inference_requests": 3,
+  "harness_failures": [
+    {
+      "attempt": 1,
+      "inference_requests": 0,
+      "reason": "receipt field name mismatch"
+    },
+    {
+      "attempt": 2,
+      "inference_requests": 1,
+      "reason": "completion helper tuple adapter mismatch; exact response reused in attempt 3"
+    }
+  ],
+  "routing": {
+    "actor_forms": 9,
+    "position_kind_counts": {
+      "actor_candidate": 11,
+      "other": 1,
+      "literal_fragment": 2
+    },
+    "occurrence_review_calls": 1,
+    "unresolved": false,
+    "decisions_sha256": "67e7ecd3b6cfc18be7ebcff0370c9589ab0194d098bbfe7c045aa96b2c93fcbd"
+  },
+  "mentions": {
+    "status": "source_grounded_stage",
+    "mentions": 22,
+    "unresolved_proposals": [],
+    "review_calls": 0,
+    "compiled_sha256": "66a3a3cff292a412a381ed9823f7b3bec0a1a84e94ef73ebd318c2b7aceb6ba9"
+  },
+  "requests_processed_by_diagnostic": 4,
+  "inference_requests": 5
+}
