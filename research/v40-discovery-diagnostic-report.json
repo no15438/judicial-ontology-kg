@@ -1,0 +1,33 @@
+{
+  "protocol_version": 40,
+  "run": "v40-discovery-diagnostic-01",
+  "code_commit": "4d8c8e33301a05a341e5703eb2416947c2525c84",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "backend": "spark_lan",
+  "historical_source_request_used": true,
+  "historical_response_reuse": 0,
+  "input_contains_expected_target_or_old_forms": false,
+  "whole_document_acceptance": false,
+  "manual_graph_edits": 0,
+  "cloud_requests_submitted": 0,
+  "semantic_precision_recall_f1": null,
+  "offline_replay_verified": true,
+  "frozen_inputs_unchanged": true,
+  "elapsed_seconds": 31.647568941116333,
+  "request_seconds": 25.347460292978212,
+  "unit_tests_passed": 749,
+  "status": "passed",
+  "discovered_forms": 22,
+  "retained_actor_forms": 15,
+  "decision_counts": {
+    "actor_candidate": 15,
+    "project": 5,
+    "instrument": 2
+  },
+  "expected_project_positions": 4,
+  "retained_project_positions": 4,
+  "project_source_position_hashes_match": true,
+  "decisions_sha256": "97ba11fd52a8b0e43ab7e07666a6494e95cb5f7dec0c34b2e21ad1daa2a1dd18",
+  "occurrence_review_calls": 0,
+  "inference_requests": 4
+}
