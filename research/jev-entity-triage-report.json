@@ -1,0 +1,346 @@
+{
+  "version": "entity-triage-shadow-v1",
+  "cases": 4,
+  "planned_calls": 24,
+  "submitted_calls": 24,
+  "valid_responses": 24,
+  "request_elapsed_seconds": 74.2987701249076,
+  "comparisons": [
+    {
+      "case_id": "c000",
+      "question": "referent_kind",
+      "qwen": {
+        "choices": [
+          "project",
+          "project",
+          "project"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "project",
+          "project",
+          "project"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    },
+    {
+      "case_id": "c000",
+      "question": "actor_name_support",
+      "qwen": {
+        "choices": [
+          "not_established",
+          "not_established",
+          "not_established"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "not_established",
+          "not_established",
+          "not_established"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    },
+    {
+      "case_id": "c001",
+      "question": "referent_kind",
+      "qwen": {
+        "choices": [
+          "platform",
+          "platform",
+          "platform"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "platform",
+          "platform",
+          "platform"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    },
+    {
+      "case_id": "c001",
+      "question": "actor_name_support",
+      "qwen": {
+        "choices": [
+          "not_established",
+          "not_established",
+          "not_established"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "not_established",
+          "not_established",
+          "not_established"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    },
+    {
+      "case_id": "c002",
+      "question": "referent_kind",
+      "qwen": {
+        "choices": [
+          "court",
+          "court",
+          "court"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "court",
+          "court",
+          "court"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    },
+    {
+      "case_id": "c002",
+      "question": "actor_name_support",
+      "qwen": {
+        "choices": [
+          "supported",
+          "supported",
+          "supported"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "supported",
+          "supported",
+          "supported"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    },
+    {
+      "case_id": "c003",
+      "question": "referent_kind",
+      "qwen": {
+        "choices": [
+          "person",
+          "person",
+          "person"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "person",
+          "person",
+          "person"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    },
+    {
+      "case_id": "c003",
+      "question": "actor_name_support",
+      "qwen": {
+        "choices": [
+          "supported",
+          "supported",
+          "supported"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "jev": {
+        "choices": [
+          "supported",
+          "supported",
+          "supported"
+        ],
+        "all_three_stable": true,
+        "same_order_repeat_stable": true
+      },
+      "stable_agreement": true
+    }
+  ],
+  "candidate_modified": false,
+  "graph_modified": false,
+  "semantic_accuracy": null,
+  "probabilities_calibrated_for_this_task": false,
+  "end_to_end_extraction_evaluated": false,
+  "wall_seconds": 113.80408583302051,
+  "completed": true,
+  "code_commit": "3b508a05195e8156557b6a7c3683c63ee6ce7515",
+  "expected_documents": 36,
+  "selected_documents": 2,
+  "not_selected_documents": 34,
+  "case_labels": {
+    "c000": "026b project proposal",
+    "c001": "442c investment platform proposal",
+    "c002": "026b court comparator",
+    "c003": "442c person comparator"
+  },
+  "registration": {
+    "version": "entity-triage-shadow-v1",
+    "code_commit": "3b508a05195e8156557b6a7c3683c63ee6ce7515",
+    "module_sha256": "3537be4b14557375d8d2095f8149ba50e2b1d3325fef7b9a402fe3ed32ef1899",
+    "cases_sha256": "db9f7f28a8fe12d0558b1c1f05b4c892349cde045d72f42d8accf9797e0bf43e",
+    "sources_sha256": "73b7dd669e6409459a98479feaa91eb001ea78427ae84e02997891d0790cce17",
+    "questions_sha256": "da9be2603d2d1d84bc2bc1f2e5bffffb7f46459ca379b9a2245dd3b13f3d2ac4",
+    "instruction_sha256": "e97f31223a59d87c8331485dbfe794a30fb8ccc456a68494ec75f176b590b3ca",
+    "expected_documents": 36,
+    "selected_documents": 2,
+    "planned_calls": 24,
+    "orders": [
+      false,
+      true,
+      false
+    ],
+    "max_state_bytes": 24000,
+    "case_selection": "two observed failures and two source comparators; exposed development, not gold"
+  },
+  "services": {
+    "jev": {
+      "model_dir": "openjev-FP8",
+      "T": 0.85,
+      "noul_t": 1.829074,
+      "noul_bias": 0.0,
+      "flags": {
+        "perms": 1,
+        "stagger": true,
+        "loop_break": false,
+        "compact": false,
+        "compact_cap": 0,
+        "layout": "",
+        "pad": 0,
+        "targeted": true,
+        "instr_style": "pyrepr"
+      },
+      "shim_file": "shim.py",
+      "shim_sha256": "81a22f1b1b8912a465059207ef9f60b7c6c16b4de6372305d867efbe38a1987a"
+    },
+    "qwen": {
+      "models": [
+        {
+          "name": "qwen3.8-flash-next-iq4xs",
+          "model": "qwen3.8-flash-next-iq4xs",
+          "modified_at": "",
+          "size": "",
+          "digest": "",
+          "type": "model",
+          "description": "",
+          "tags": [
+            ""
+          ],
+          "capabilities": [
+            "completion"
+          ],
+          "parameters": "",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "",
+            "families": [
+              ""
+            ],
+            "parameter_size": "",
+            "quantization_level": ""
+          }
+        }
+      ],
+      "object": "list",
+      "data": [
+        {
+          "id": "qwen3.8-flash-next-iq4xs",
+          "aliases": [
+            "qwen3.8-flash-next-iq4xs"
+          ],
+          "tags": [],
+          "object": "model",
+          "created": 1791271341,
+          "owned_by": "llamacpp",
+          "meta": {
+            "vocab_type": 2,
+            "n_vocab": 248320,
+            "n_ctx": 32768,
+            "n_ctx_train": 262144,
+            "n_embd": 2560,
+            "n_params": 176943899520,
+            "size": 93671559680,
+            "ftype": "IQ4_XS - 4.25 bpw"
+          }
+        }
+      ]
+    },
+    "models": {
+      "jev": "openjev-FP8 T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "qwen": "qwen3.8-flash-next-iq4xs"
+    }
+  },
+  "verification": {
+    "actual_model_calls": 0,
+    "source_request_answer_summary_replay_equal": true,
+    "module_unchanged_during_run": true
+  },
+  "cloud_calls": 0,
+  "new_cloud_cost_cny": 0,
+  "cumulative_bailian_cost_cny": 33.669768,
+  "legal_gold_available": false,
+  "previous_full_workflow_accepted": 1,
+  "previous_full_workflow_selected": 3,
+  "previous_uncorrected_first_pass_accepted": 0,
+  "interpretation": "Both engines stable on all four exposed diagnostic cases. Decomposition supports typed referent routing; no evidence Jev is necessary or superior. Full extraction integration and A/B outcome remain untested.",
+  "per_engine": {
+    "qwen": {
+      "submitted_calls": 12,
+      "valid_responses": 12,
+      "request_elapsed_seconds": 51.06607945897849,
+      "median_request_seconds": 3.390549125499092,
+      "choices_stable_questions": 8
+    },
+    "jev": {
+      "submitted_calls": 12,
+      "valid_responses": 12,
+      "request_elapsed_seconds": 23.232690665929113,
+      "median_request_seconds": 1.5532732704887167,
+      "choices_stable_questions": 8
+    }
+  },
+  "private_artifact_hashes": {
+    "registration.json": "241155cfb5dfe382e6c7bd1b2d7b8968e0d424da1017e15e41c9b8aa6ed7c59c",
+    "report.json": "5f4aaf8352703135f1137b205f74ffcc1fe543bf6382cf9bf59976e75b5217d7",
+    "cases.json": "1914694d24da0497f3ef3515a6f30ce6ad6caf26f67e3a3c415c894f215b5e9f",
+    "rows.json": "1c20a6e682d1a1427b24672c6705177f67becdd8561c3e99b6fb8b9cd7256f5b",
+    "rpc.json": "6b6fda9d8c5fcac30548714c82db97c1c802b0c6839eb86eaf55fa7828544c14",
+    "service.json": "cd02cdcc08edcc8a539293ea744393b6da56c1e2f9351252723adeb3c1c2c3e3",
+    "verification.json": "8729ee94e3fae2c1c67b8616d04994f987194e1721c4c8ac7826b6c71342d6c2"
+  }
+}

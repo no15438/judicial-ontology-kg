@@ -68,3 +68,33 @@ PYTHONPATH=src .venv/bin/python -m judicial_kg.extraction.jev_shadow \
 正式接入前增加同序重复控制，区分一般运行变化与顺序扰动；在固定来源上比较细粒度问题。没有独立司法参考，无法证明语义准确率或校准阈值；本轮没有设置自动采纳置信度阈值。当前较低的Jev请求耗时也不能证明混合管线更快，端到端A/B/C尚待实现和测量。
 
 新增23项边界/运行/回放测试，全套431项及Ruff/格式/9份参考哈希检查通过。没有新接受图、Neo4j导入、云端调用或旧运行改写。公开结果见 [首轮影子评测元数据](../research/jev-shadow-pilot-report.json)。
+
+## 实体分流对照：026b 项目与 442c 平台
+
+在冻结提交 `3b508a0` 完成新的 `entity-triage-shadow-v1` 实测：2篇已曝光来源、4个称谓提议（两个原失败及法院/人物对照），完整输入36篇、34篇未选择。两模型分别接收目标全部精确出现及相邻原文，不输入旧决定、QA或对方答案；正序、反序、同序重复各一次。每次请求独立回答“所指类型”和“原文是否支持该称谓就是人/机构本身”，共24次新请求、无自动重试。
+
+| 原文提议 | Qwen三次 | Jev三次 | 人/机构名称支持（两模型均三次一致） |
+|---|---|---|---|
+| 026b工程项目 | project | project | not_established |
+| 442c投资平台 | platform | platform | not_established |
+| 026b法院名称对照 | court | court | supported |
+| 442c人物名称对照 | person | person | supported |
+
+24/24响应结构有效；每模型8/8问题在反序与同序重复下稳定，两模型8/8问题稳定一致。没有独立gold，这些比例是响应/稳定性指标，不是语义准确率。`not_established`表示给定原文不足以将目标名称直接作为人或机构本身，不表示其运营者不存在或否定任何法律资格。
+
+Qwen 12次请求累计51.066秒、中位3.391秒；OpenJev 12次累计23.233秒、中位1.553秒，均含SSH与模型请求时间。全轮墙钟113.804秒；该小样串行实验不证明混合管线更快。现有helper为openjev-FP8，读出T=0.85，perms=1；Qwen为qwen3.8-flash-next-iq4xs，温度0.2/seed42。没有服务调参、重启或云端调用。最低可用内存4.603GiB，高于4GiB保护线。零调用回放重建来源/精确请求/答案/报告一致，运行模块哈希未变。
+
+**结论**：Jev适合继续评估为有限分类辅助，但本轮没有证明它优于或不可由Qwen替代。拆开问题后Qwen也稳定通过。工程根因是发现“具名对象”后缺少Actor以外的合法去向。下一步按 [实体分流设计](engineering-improvement-plan.md) 增加带证据的对象目录，使项目/平台得以保留而不强制主体绑定；Jev不直接改图，不凭概率自动放行。
+
+本轮仅完成独立诊断模块，尚未接入正文绑定或具名目录，未重新抽取/接受两篇完整文书。原v37完整流程1/3通过、未经纠正首轮0/3不变；未导入Neo4j、未扩大十篇。全套698项测试通过。原文/请求/响应位于忽略目录`artifacts/jev-shadow/entity-triage-v1`；公开文件只有代码及元数据：[预登记](../research/jev-entity-triage-preregistration.json)、[结果](../research/jev-entity-triage-report.json)。
+
+复现既有结果（零调用）：
+
+```python
+from pathlib import Path
+from judicial_kg.extraction.entity_triage_shadow import replay
+
+print(replay(Path("artifacts/jev-shadow/entity-triage-v1")))
+```
+
+新实跑需使用冻结私有目标清单与完整两份来源清单，调用`entity_triage_shadow.run(root, sources, manifest_path, new_output)`；拒绝覆盖旧目录，仍执行双服务负载/内存/版本保护。私有目标清单仅指定精确称谓，不含预期答案。新输入超出状态预算显式保留未尝试，不截断。
