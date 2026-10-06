@@ -174,3 +174,26 @@ def test_rounded_probabilities_are_not_misclassified_as_protocol_failure():
     }
     assert choices(body, response) == {"a0": "o0"}
     assert "state[a0]" in body["questions"]["a0"]["instructions"]
+
+
+def test_second_supported_actor_is_not_collapsed_by_alignment(tmp_path):
+    from judicial_kg.current.decision import FlashAlignmentCalls
+
+    c, _ = compiler()
+    f = frame()
+    f["actors"].append(copy.deepcopy(f["actors"][0]))
+    f["roles"] = [{"actor": 1, "role": "defendant", "polarity": "affirmed", "units": [1]}]
+
+    class Calls:
+        count = 0
+
+        def infer(self, messages, stage):
+            self.count += 1
+            return {"a0": "o0"} if self.count == 1 else {"a0": "keep"}
+
+    calls = Calls()
+    aligner = FlashAlignmentCalls(calls, tmp_path)
+    adapted, blocked = aligner.align({"contexts": [f]}, c.doc, c.units, "w")
+    assert adapted["contexts"][0]["roles"][0]["actor"] == 1
+    assert calls.count == 2
+    assert not blocked

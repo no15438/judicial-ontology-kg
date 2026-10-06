@@ -101,6 +101,53 @@ class AlignmentCalls:
         for offset in range(0, len(tasks), 16):
             name = f"{stage}-align-{offset // 16:03}"
             decisions.update(self.decide(tasks[offset : offset + 16], name))
+        # A supported current referent must not be replaced by another also-supported referent.
+        from judicial_kg.current.alignment import get
+
+        comparisons = []
+        for task in tasks:
+            before = get(wire, task["path"])
+            chosen = decisions[task["id"]]
+            if (
+                type(before) is int
+                and f"o{before}" in task["options"]
+                and chosen not in {"unknown", f"o{before}"}
+            ):
+                comparisons.append(
+                    {
+                        "id": task["id"],
+                        "state": {
+                            **task["state"],
+                            "original": task["options"][f"o{before}"],
+                            "proposed_replacement": task["options"][chosen],
+                        },
+                        "options": {
+                            "keep": "原绑定仍有原文依据：保持原绑定，即使另一个对象也有相同角色",
+                            "change": "原绑定明确无依据或错误，且新绑定唯一得到原文支持",
+                        },
+                        "instruction": (
+                            "比较原绑定和拟修改绑定。多名被告、原告或代理人分别保留；"
+                            "不能把第二人改成第一人。原绑定仍有依据必须选keep；无法判断选unknown。"
+                        ),
+                    }
+                )
+        review = {}
+        for offset in range(0, len(comparisons), 16):
+            review.update(
+                self.decide(
+                    comparisons[offset : offset + 16], f"{stage}-binding-review-{offset // 16:03}"
+                )
+            )
+        for task in tasks:
+            if task["id"] in review:
+                if review[task["id"]] == "keep":
+                    decisions[task["id"]] = f"o{get(wire, task['path'])}"
+                elif review[task["id"]] != "change":
+                    decisions[task["id"]] = "unknown"
+        write_json(
+            self.output / (stage + "-binding-review.json"),
+            {"tasks": comparisons, "decisions": review},
+        )
         adapted, ledger, blocked = apply(wire, tasks, decisions)
         blocked.extend(d["owner"] for d in diagnostics)
         write_json(

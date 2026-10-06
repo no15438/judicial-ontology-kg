@@ -141,7 +141,7 @@ def tasks_for(wire, doc, units):
                     "context": background,
                     "inventory": [{"index": i, "candidate": v} for i, v in enumerate(pool)],
                 },
-                "选择该角色、参与者或属性所属的局部主体/事件下标。不能改变主体种类、极性或语境；无明确依据选unknown。",
+                "核查当前下标的绑定。原绑定有依据则保持，即使其他对象也有相同角色。只有原绑定错误且新绑定唯一有依据才改；不确定选unknown。",
             )
             if len(tasks) > previous_count:
                 tasks[-1]["options"] = {
