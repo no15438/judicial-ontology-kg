@@ -1,0 +1,24 @@
+{
+  "status": "stopped_observed_binding_regression",
+  "code_commit": "db8dced92485419b6b545f627ef5f9a068c6d784",
+  "input_manifest_sha256": "3f45408839006e587cb4e854b8839354b8bbe8ee68708fc4d01392429e8e9a6c",
+  "input_documents": 36,
+  "selected": 3,
+  "not_selected": 33,
+  "results": [],
+  "old_full_document_acceptance_comparable": false,
+  "semantic_precision_recall_f1": null,
+  "stop_reason": "two explicitly named defendants: valid second actor role collapsed to first actor by alignment; no manual graph change",
+  "budget_at_stop": {
+    "prior_committed_cny": "75.1187192",
+    "cap_cny": "80.1187192",
+    "new_committed_cny": "0.6044565",
+    "new_observed_cny": "0.4849229",
+    "cumulative_committed_cny": "75.7231757",
+    "actual_api_requests": 48,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "completion_claim": false
+}

@@ -1,0 +1,40 @@
+{
+  "run": "alignment-flash-spark-02",
+  "model": "qwen3.8-flash",
+  "concurrency": 1,
+  "input_hashes": {
+    "artifacts/scoped-v12/appealcase-documents.json": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+    "artifacts/scoped-v12/spark-documents.json": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74"
+  },
+  "order": [
+    "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998"
+  ],
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "selection_reason": "same Spark case with observed role-collapse; developmental regression, not held-out quality test",
+  "prior_committed_cny": "75.7384428",
+  "cumulative_cap_cny": "80.1187192",
+  "authorized_cumulative_cap_cny": "200",
+  "round_limit_cny": "4.3802772",
+  "price_source": "https://help.aliyun.com/zh/model-studio/qwen3-8-flash",
+  "input_cny_per_million": "0.8",
+  "output_cny_per_million": "2.7",
+  "price_verified_date": "2026-10-07",
+  "historical_response_reuse": 0,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "on_failure": "retain and continue other registered documents; auth failure halts API submissions; no Max fallback",
+  "known_limitations": [
+    "Independent processing windows may miss cross-window relations; ledger and background preserved",
+    "No cross-context entity coreference merge; identities remain scoped",
+    "TF-IDF is lexical not semantic embedding",
+    "Same-model verification is not expert gold",
+    "Partial outcomes not comparable to legacy full-document acceptance"
+  ],
+  "restart_reason": "fresh regression after valid second-defendant binding protection; previous run stopped and preserved",
+  "workflow": "current-rc1",
+  "window_size": 16,
+  "comparison_goal": "fresh source-to-graph with model position and local binding alignment; compare preserved and quarantined assertions, not gold accuracy",
+  "alignment": "flash"
+}
