@@ -132,7 +132,7 @@ def classify(doc, forms, infer, save):
     return result
 
 
-def extract(doc, prompt, contract, provenance, infer, save):
+def extract(doc, prompt, contract, provenance, infer, save, *, budget=None):
     def typed_discovery(messages, fmt, stage):
         raw = infer(messages, fmt, stage)
         if stage != "inventory-forms":
@@ -145,4 +145,6 @@ def extract(doc, prompt, contract, provenance, infer, save):
         context_first.check_schema(result, fmt["schema"])
         return json.dumps(result, ensure_ascii=False)
 
-    return bounded_workflow.extract(doc, prompt, contract, provenance, typed_discovery, save)
+    return bounded_workflow.extract(
+        doc, prompt, contract, provenance, typed_discovery, save, budget=budget
+    )

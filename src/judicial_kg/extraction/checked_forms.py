@@ -50,27 +50,14 @@ def apply_replacements(doc, units, original, result):
     return {"forms": corrected}
 
 
-def generate_body(
-    doc,
-    prompt,
-    combined,
-    context,
-    contract,
-    infer,
-    save,
-    index,
-    *,
-    budget,
-    repair_options=None,
-    body_generator=None,
-):
+def source_checked_infer(doc, units, infer, save, *, budget, repair_options=None):
     def infer_checked(messages, fmt, stage):
         raw = infer(messages, fmt, stage)
         if not stage.endswith("-forms"):
             return raw
         original = strict_json(raw)
         context_first.check_schema(original, fmt["schema"])
-        missing = missing_forms(doc, context["assertion_units"], original["forms"])
+        missing = missing_forms(doc, units, original["forms"])
         save(
             stage + "-source-check",
             {"original_sha256": canonical_hash(original), "unmatched_proposals": missing},
@@ -110,7 +97,7 @@ def generate_body(
             {"proposal_id": key, "text": original["forms"][int(key[1:])]} for key in missing
         ]
         if repair_options is not None:
-            options = repair_options(doc, context["assertion_units"], original, missing)
+            options = repair_options(doc, units, original, missing)
             save(stage + "-repair-options", options)
             payload["allowed_source_fragments"] = options
             schema["properties"]["replacements"]["items"] = {
@@ -138,7 +125,7 @@ def generate_body(
         result = strict_json(infer(correction, response_format(doc, schema), stage + "-repair-1"))
         save(stage + "-replacement-wire", result)
         context_first.check_schema(result, schema)
-        corrected = apply_replacements(doc, context["assertion_units"], original, result)
+        corrected = apply_replacements(doc, units, original, result)
         context_first.check_schema(corrected, fmt["schema"])
         save(
             stage + "-correction-receipt",
@@ -153,6 +140,26 @@ def generate_body(
         )
         return json.dumps(corrected, ensure_ascii=False)
 
+    return infer_checked
+
+
+def generate_body(
+    doc,
+    prompt,
+    combined,
+    context,
+    contract,
+    infer,
+    save,
+    index,
+    *,
+    budget,
+    repair_options=None,
+    body_generator=None,
+):
+    infer_checked = source_checked_infer(
+        doc, context["assertion_units"], infer, save, budget=budget, repair_options=repair_options
+    )
     return (body_generator or grouped_mentions.generate_body)(
         doc, prompt, combined, context, contract, infer_checked, save, index
     )

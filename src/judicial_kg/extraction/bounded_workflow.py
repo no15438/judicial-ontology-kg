@@ -189,8 +189,8 @@ def batch_properties(doc, messages, fmt, stage, infer, save):
     return json.dumps(result, ensure_ascii=False)
 
 
-def extract(doc, prompt, contract, provenance, infer, save):
-    budget = {"used": 0}
+def extract(doc, prompt, contract, provenance, infer, save, *, budget=None):
+    budget = {"used": 0} if budget is None else budget
 
     def bounded(messages, fmt, stage):
         if stage.endswith("-properties"):

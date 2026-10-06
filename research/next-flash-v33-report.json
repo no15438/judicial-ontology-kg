@@ -1,0 +1,149 @@
+{
+  "workflow": "fresh-source-to-graph-v1",
+  "protocol_version": 33,
+  "code_commit": "7490e3b45cff6c3cb1f8b5268c63b67e8e3e586f",
+  "completed": true,
+  "status": "extraction_rejected",
+  "response_reuse_enabled": false,
+  "external_candidate_input": false,
+  "automatic_pipeline_accepted": false,
+  "uncorrected_first_pass_accepted": false,
+  "semantic_precision_recall_f1": null,
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "cloud_requests_submitted": 0,
+  "extraction_status": "anonymous_inventory_unresolved",
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "requests_submitted": 7,
+  "responses_reused": 0,
+  "model_correction_calls": 0,
+  "observed_cost_cny": "0",
+  "prior_committed_cny": "0",
+  "offline_replay_verified": true,
+  "frozen_inputs_unchanged": true,
+  "trial": "next-flash-fresh-v33-01",
+  "run_directory": "artifacts/qwen-extraction/next-flash-fresh-v33-01",
+  "started_at_utc": "2026-10-06T03:27:22.926521+00:00",
+  "finished_at_utc": "2026-10-06T03:30:06.527421+00:00",
+  "worktree_dirty": false,
+  "config": {
+    "version": "qwen-extraction-v33",
+    "ssh_host": "spark-lan",
+    "port": 8003,
+    "model": "qwen3.8-flash-next-iq4xs",
+    "context_tokens": 32768,
+    "max_output_tokens": 8192,
+    "token_margin": 128,
+    "request_timeout_seconds": 480,
+    "temperature": 0.2,
+    "seed": 42,
+    "limit_per_source": 1,
+    "max_documents": 1
+  },
+  "input_files": [
+    {
+      "sha256": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74",
+      "bytes": 428236
+    },
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    }
+  ],
+  "selected_document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+  "stage_summary": [
+    {
+      "stage": "inventory-forms",
+      "status": "response_complete",
+      "input_tokens": 5360,
+      "usage": {
+        "prompt_tokens": 5360,
+        "completion_tokens": 149,
+        "total_tokens": 5509
+      },
+      "elapsed_seconds": 11.911222749971785
+    },
+    {
+      "stage": "inventory-type-000",
+      "status": "response_complete",
+      "input_tokens": 7682,
+      "usage": {
+        "prompt_tokens": 7682,
+        "completion_tokens": 238,
+        "total_tokens": 7920
+      },
+      "elapsed_seconds": 18.18627150001703
+    },
+    {
+      "stage": "inventory-type-001",
+      "status": "response_complete",
+      "input_tokens": 6980,
+      "usage": {
+        "prompt_tokens": 6980,
+        "completion_tokens": 256,
+        "total_tokens": 7236
+      },
+      "elapsed_seconds": 17.865172958991025
+    },
+    {
+      "stage": "inventory-type-002",
+      "status": "response_complete",
+      "input_tokens": 6197,
+      "usage": {
+        "prompt_tokens": 6197,
+        "completion_tokens": 161,
+        "total_tokens": 6358
+      },
+      "elapsed_seconds": 13.352327333006542
+    },
+    {
+      "stage": "inventory-select",
+      "status": "response_complete",
+      "input_tokens": 8906,
+      "usage": {
+        "prompt_tokens": 8906,
+        "completion_tokens": 1347,
+        "total_tokens": 10253
+      },
+      "elapsed_seconds": 63.583251582982484
+    },
+    {
+      "stage": "anonymous-forms",
+      "status": "response_complete",
+      "input_tokens": 6871,
+      "usage": {
+        "prompt_tokens": 6871,
+        "completion_tokens": 35,
+        "total_tokens": 6906
+      },
+      "elapsed_seconds": 9.39788566698553
+    },
+    {
+      "stage": "anonymous-select",
+      "status": "response_complete",
+      "input_tokens": 7564,
+      "usage": {
+        "prompt_tokens": 7564,
+        "completion_tokens": 237,
+        "total_tokens": 7801
+      },
+      "elapsed_seconds": 17.96937191602774
+    }
+  ],
+  "request_elapsed_seconds": 152.26550370798213,
+  "root_cause": "one anonymous description concatenated noncontiguous source words; anonymous discovery did not use the existing body lexical check",
+  "inventory_type_check": {
+    "proposals": 21,
+    "actor_candidates": 17,
+    "legal_title_exclusions": 4,
+    "unresolved": 0,
+    "semantic_correctness_verified": false
+  },
+  "anonymous_proposals": 3,
+  "anonymous_unmatched": 1,
+  "graph_generated": false,
+  "cloud_cumulative_committed_cny": "33.669768",
+  "tests_passed": 652
+}

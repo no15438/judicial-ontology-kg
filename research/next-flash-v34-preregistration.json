@@ -1,0 +1,43 @@
+{
+  "trial": "next-flash-fresh-v34-01",
+  "status": "preregistered_before_inference",
+  "protocol": 34,
+  "target_model": "qwen3.8-flash-next-iq4xs",
+  "backend": "spark-lan:8003",
+  "context_tokens": 32768,
+  "temperature": 0.2,
+  "seed": 42,
+  "selected_document_ids": [
+    "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998"
+  ],
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "input_files": [
+    {
+      "sha256": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74",
+      "bytes": 428236
+    },
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    }
+  ],
+  "response_reuse_enabled": false,
+  "manual_graph_edits": false,
+  "freeze_code_during_run": true,
+  "on_failure": "preserve_failure_no_automatic_whole_run_retry_or_expansion",
+  "next_gate": "same_three_exposed_documents_on_target_model_before_fixed_ten",
+  "semantic_precision_recall_f1": null,
+  "cloud_calls_planned": 0,
+  "cloud_cumulative_prior_cny": "33.669768",
+  "cloud_budget_cny": "200",
+  "alternative_27b": "not_configured_or_verified",
+  "previous_failed_trial": "next-flash-fresh-v33-01",
+  "planned_inventory_type_batches": "at most 8 proposals per source-bound batch; only explicit legal-title exclusions; uncertain or unmatched rejects",
+  "new_run_from_source": true,
+  "all_discovery_source_check": true,
+  "shared_document_correction_budget": 3,
+  "max_corrections_per_stage": 1,
+  "property_ids": "program-owned per batch with original IDs retained; duplicates within one batch still rejected"
+}
