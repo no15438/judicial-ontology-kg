@@ -68,6 +68,7 @@ def extract(
     *,
     header_generator=None,
     anonymous_repair_options=None,
+    header_schema_builder=None,
 ):
     budget = {"used": 0}
 
@@ -129,4 +130,5 @@ def extract(
         save,
         budget=budget,
         header_generator=header_generator,
+        header_schema_builder=header_schema_builder,
     )

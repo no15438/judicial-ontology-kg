@@ -305,7 +305,17 @@ def generate_header(doc, prompt, contract, provenance, infer, save, *, allow_col
     )
 
 
-def extract(doc, prompt, contract, provenance, infer, save, *, allow_collectives=False):
+def extract(
+    doc,
+    prompt,
+    contract,
+    provenance,
+    infer,
+    save,
+    *,
+    allow_collectives=False,
+    header_schema_builder=None,
+):
     def whole_form_repair(messages, fmt, stage):
         if stage == "anonymous-forms-repair-1":
             messages = copy.deepcopy(messages)
@@ -324,4 +334,5 @@ def extract(doc, prompt, contract, provenance, infer, save, *, allow_collectives
         save,
         header_generator=partial(generate_header, allow_collectives=allow_collectives),
         anonymous_repair_options=supported_forms,
+        header_schema_builder=header_schema_builder,
     )

@@ -1,0 +1,156 @@
+{
+  "workflow": "fresh-source-to-graph-v1",
+  "protocol_version": 36,
+  "code_commit": "164f050fc89880f426c253e20d7a00a09377bcc0",
+  "completed": true,
+  "status": "extraction_rejected",
+  "response_reuse_enabled": false,
+  "external_candidate_input": false,
+  "automatic_pipeline_accepted": false,
+  "uncorrected_first_pass_accepted": false,
+  "semantic_precision_recall_f1": null,
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "cloud_requests_submitted": 0,
+  "extraction_status": "draft_grounding_failed",
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "requests_submitted": 9,
+  "responses_reused": 0,
+  "model_correction_calls": 1,
+  "observed_cost_cny": "0",
+  "prior_committed_cny": "0",
+  "offline_replay_verified": true,
+  "frozen_inputs_unchanged": true,
+  "trial": "next-flash-fresh-v36-01",
+  "run_directory": "artifacts/qwen-extraction/next-flash-fresh-v36-01",
+  "tests_passed": 680,
+  "graph_generated": false,
+  "cloud_cumulative_committed_cny": "33.669768",
+  "started_at_utc": "2026-10-06T03:55:41.278678+00:00",
+  "finished_at_utc": "2026-10-06T04:01:03.190960+00:00",
+  "worktree_dirty": false,
+  "config": {
+    "version": "qwen-extraction-v36",
+    "ssh_host": "spark-lan",
+    "port": 8003,
+    "model": "qwen3.8-flash-next-iq4xs",
+    "context_tokens": 32768,
+    "max_output_tokens": 8192,
+    "token_margin": 128,
+    "request_timeout_seconds": 480,
+    "temperature": 0.2,
+    "seed": 42,
+    "limit_per_source": 1,
+    "max_documents": 1
+  },
+  "stage_summary": [
+    {
+      "stage": "inventory-forms",
+      "status": "response_complete",
+      "input_tokens": 5360,
+      "usage": {
+        "prompt_tokens": 5360,
+        "completion_tokens": 149,
+        "total_tokens": 5509
+      },
+      "request_elapsed_seconds": 11.889465708984062
+    },
+    {
+      "stage": "inventory-type-000",
+      "status": "response_complete",
+      "input_tokens": 7682,
+      "usage": {
+        "prompt_tokens": 7682,
+        "completion_tokens": 238,
+        "total_tokens": 7920
+      },
+      "request_elapsed_seconds": 17.9660636249464
+    },
+    {
+      "stage": "inventory-type-001",
+      "status": "response_complete",
+      "input_tokens": 6980,
+      "usage": {
+        "prompt_tokens": 6980,
+        "completion_tokens": 256,
+        "total_tokens": 7236
+      },
+      "request_elapsed_seconds": 17.86175091698533
+    },
+    {
+      "stage": "inventory-type-002",
+      "status": "response_complete",
+      "input_tokens": 6197,
+      "usage": {
+        "prompt_tokens": 6197,
+        "completion_tokens": 161,
+        "total_tokens": 6358
+      },
+      "request_elapsed_seconds": 13.2693890829687
+    },
+    {
+      "stage": "inventory-select",
+      "status": "response_complete",
+      "input_tokens": 8906,
+      "usage": {
+        "prompt_tokens": 8906,
+        "completion_tokens": 1347,
+        "total_tokens": 10253
+      },
+      "request_elapsed_seconds": 63.89150825003162
+    },
+    {
+      "stage": "anonymous-forms",
+      "status": "response_complete",
+      "input_tokens": 6860,
+      "usage": {
+        "prompt_tokens": 6860,
+        "completion_tokens": 269,
+        "total_tokens": 7129
+      },
+      "request_elapsed_seconds": 18.30159695801558
+    },
+    {
+      "stage": "anonymous-forms-repair-1",
+      "status": "response_complete",
+      "input_tokens": 7067,
+      "usage": {
+        "prompt_tokens": 7067,
+        "completion_tokens": 48,
+        "total_tokens": 7115
+      },
+      "request_elapsed_seconds": 9.868414417025633
+    },
+    {
+      "stage": "anonymous-referents",
+      "status": "response_complete",
+      "input_tokens": 15787,
+      "usage": {
+        "prompt_tokens": 15787,
+        "completion_tokens": 545,
+        "total_tokens": 16332
+      },
+      "request_elapsed_seconds": 41.0971759580425
+    },
+    {
+      "stage": "header",
+      "status": "response_complete",
+      "input_tokens": 9445,
+      "usage": {
+        "prompt_tokens": 9445,
+        "completion_tokens": 2569,
+        "total_tokens": 12014
+      },
+      "request_elapsed_seconds": 115.71670237503713
+    }
+  ],
+  "request_elapsed_seconds": 309.86206729203695,
+  "root_cause": "Legacy generated-header schema capped each Actor to one Mention, rejecting the valid compiled multi-mention inventory after context generation.",
+  "referent_bindings": 12,
+  "collective_member_bindings": 2,
+  "new_anonymous_actors": 1,
+  "context_count": 9,
+  "offline_full_header_contract_valid": true
+}

@@ -22,6 +22,7 @@ from judicial_kg.extraction import (
     evidence_first,
     fragment_repairs,
     grouped_mentions,
+    inventory_handoff,
     mention_stage,
     owner_first,
     referent_inventory,
@@ -133,6 +134,7 @@ def _run(
         33: classified_inventory,
         34: checked_inventory,
         35: referent_inventory,
+        37: inventory_handoff,
         36: collective_inventory,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}

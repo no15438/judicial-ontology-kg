@@ -128,8 +128,9 @@ def extract(
     on_header=None,
     generate_body=None,
     generate_header=None,
+    header_schema_builder=None,
 ):
-    schema = draft_schema(contract)
+    schema = (header_schema_builder or draft_schema)(contract)
     header = (
         strict_json(infer(messages(doc, prompt, schema), response_format(doc, schema), "header"))
         if generate_header is None

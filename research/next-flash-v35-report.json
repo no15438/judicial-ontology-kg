@@ -28,7 +28,6 @@
   "tests_passed": 674,
   "graph_generated": false,
   "cloud_cumulative_committed_cny": "33.669768",
-  "root_cause": "One source phrase jointly refers to two known actors; single-actor referent interface cannot represent this and model chose uncertain. No manual binding or graph mutation performed.",
   "started_at_utc": "2026-10-06T03:47:12.064891+00:00",
   "finished_at_utc": "2026-10-06T03:50:34.672482+00:00",
   "worktree_dirty": false,
@@ -48,145 +47,94 @@
   },
   "stage_summary": [
     {
-      "status": 200,
-      "elapsed_seconds": 0.7159440410323441
+      "stage": "inventory-forms",
+      "status": "response_complete",
+      "input_tokens": 5360,
+      "usage": {
+        "prompt_tokens": 5360,
+        "completion_tokens": 149,
+        "total_tokens": 5509
+      },
+      "request_elapsed_seconds": 11.852956417016685
     },
     {
-      "status": 200,
-      "elapsed_seconds": 0.3865560839767568
+      "stage": "inventory-type-000",
+      "status": "response_complete",
+      "input_tokens": 7682,
+      "usage": {
+        "prompt_tokens": 7682,
+        "completion_tokens": 238,
+        "total_tokens": 7920
+      },
+      "request_elapsed_seconds": 17.850526833033655
     },
     {
-      "status": 200,
-      "elapsed_seconds": 0.43963954196078703
+      "stage": "inventory-type-001",
+      "status": "response_complete",
+      "input_tokens": 6980,
+      "usage": {
+        "prompt_tokens": 6980,
+        "completion_tokens": 256,
+        "total_tokens": 7236
+      },
+      "request_elapsed_seconds": 17.9812672919943
     },
     {
-      "status": 200,
-      "elapsed_seconds": 0.42725370900006965
+      "stage": "inventory-type-002",
+      "status": "response_complete",
+      "input_tokens": 6197,
+      "usage": {
+        "prompt_tokens": 6197,
+        "completion_tokens": 161,
+        "total_tokens": 6358
+      },
+      "request_elapsed_seconds": 13.329467375006061
     },
     {
-      "status": 200,
-      "elapsed_seconds": 0.3813272920087911
+      "stage": "inventory-select",
+      "status": "response_complete",
+      "input_tokens": 8906,
+      "usage": {
+        "prompt_tokens": 8906,
+        "completion_tokens": 1347,
+        "total_tokens": 10253
+      },
+      "request_elapsed_seconds": 64.36143504199572
     },
     {
-      "status": 200,
-      "elapsed_seconds": 0.4164304580190219
+      "stage": "anonymous-forms",
+      "status": "response_complete",
+      "input_tokens": 6860,
+      "usage": {
+        "prompt_tokens": 6860,
+        "completion_tokens": 269,
+        "total_tokens": 7129
+      },
+      "request_elapsed_seconds": 18.413702709018253
     },
     {
-      "status": 200,
-      "elapsed_seconds": 11.852956417016685
+      "stage": "anonymous-forms-repair-1",
+      "status": "response_complete",
+      "input_tokens": 7067,
+      "usage": {
+        "prompt_tokens": 7067,
+        "completion_tokens": 48,
+        "total_tokens": 7115
+      },
+      "request_elapsed_seconds": 9.998421707947273
     },
     {
-      "status": 200,
-      "elapsed_seconds": 0.4154584999778308
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.358416750037577
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.4492224170244299
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 17.850526833033655
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.5352351670153439
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.6593357919482514
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.3970274169696495
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 17.9812672919943
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.36825066595338285
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.4691832910175435
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.3572172499843873
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 13.329467375006061
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.5133144590072334
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.437230208015535
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.3886888340348378
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 64.36143504199572
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.5999983749934472
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.4323670839658007
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.3620446249842644
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 18.413702709018253
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.35455387498950586
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.34907287498936057
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.4551187090110034
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 9.998421707947273
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.43476858298527077
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.4285261249751784
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 0.3833508329698816
-    },
-    {
-      "status": 200,
-      "elapsed_seconds": 36.58514987496892
+      "stage": "anonymous-referents",
+      "status": "response_complete",
+      "input_tokens": 13638,
+      "usage": {
+        "prompt_tokens": 13638,
+        "completion_tokens": 509,
+        "total_tokens": 14147
+      },
+      "request_elapsed_seconds": 36.58514987496892
     }
   ],
-  "request_elapsed_seconds": 202.28846021182835
+  "request_elapsed_seconds": 190.37292725098087,
+  "root_cause": "One source phrase jointly refers to two known actors; single-actor referent interface cannot represent this and model chose uncertain. No manual binding or graph mutation performed."
 }

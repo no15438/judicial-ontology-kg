@@ -1,5 +1,5 @@
 {
-  "evaluation_kind": "three_protocol_iterations_on_one_exposed_document_not_three_document_evaluation",
+  "evaluation_kind": "protocol_iterations_on_one_exposed_document_not_distinct_document_evaluation",
   "model": "qwen3.8-flash-next-iq4xs",
   "context_tokens": 32768,
   "alternative_27b": "not_configured_or_verified",
@@ -33,14 +33,34 @@
       "failure": "inventory_invalid_binding",
       "model_correction_calls": 1,
       "offline_replay_verified": true
+    },
+    {
+      "protocol": 35,
+      "report": "research/next-flash-v35-report.json",
+      "code_commit": "ddd993518973fca8db0fddae5e6d7082d1ada983",
+      "requests_submitted": 8,
+      "automatic_pipeline_accepted": false,
+      "failure": "anonymous_referent_unresolved",
+      "model_correction_calls": 1,
+      "offline_replay_verified": true
+    },
+    {
+      "protocol": 36,
+      "report": "research/next-flash-v36-report.json",
+      "code_commit": "164f050fc89880f426c253e20d7a00a09377bcc0",
+      "requests_submitted": 9,
+      "automatic_pipeline_accepted": false,
+      "failure": "draft_grounding_failed",
+      "model_correction_calls": 1,
+      "offline_replay_verified": true
     }
   ],
   "expected_documents": 36,
   "unique_selected_documents": 1,
   "not_selected_documents": 35,
   "unique_accepted_documents": 0,
-  "requests_submitted": 17,
-  "request_elapsed_seconds": 398.74309887591517,
+  "requests_submitted": 34,
+  "request_elapsed_seconds": 898.978093418933,
   "cloud_requests_submitted": 0,
   "new_cloud_cost_cny": "0",
   "cloud_prior_cumulative_cny": "33.669768",
@@ -49,7 +69,7 @@
   "historical_responses_reused": 0,
   "graphs_generated": 0,
   "semantic_precision_recall_f1": null,
-  "tests_passed": 657,
+  "tests_passed": 680,
   "smaller_owner_schema_offline_regression": {
     "source_trial": "fresh-three-v31-01/appeal442c",
     "original_schema_bytes": 50644,

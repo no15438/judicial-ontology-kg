@@ -132,7 +132,18 @@ def classify(doc, forms, infer, save):
     return result
 
 
-def extract(doc, prompt, contract, provenance, infer, save, *, budget=None, header_generator=None):
+def extract(
+    doc,
+    prompt,
+    contract,
+    provenance,
+    infer,
+    save,
+    *,
+    budget=None,
+    header_generator=None,
+    header_schema_builder=None,
+):
     def typed_discovery(messages, fmt, stage):
         raw = infer(messages, fmt, stage)
         if stage != "inventory-forms":
@@ -154,4 +165,5 @@ def extract(doc, prompt, contract, provenance, infer, save, *, budget=None, head
         save,
         budget=budget,
         header_generator=header_generator,
+        header_schema_builder=header_schema_builder,
     )
