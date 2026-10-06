@@ -165,9 +165,26 @@ def extraction_lock(root):
             fcntl.flock(handle, fcntl.LOCK_UN)
 
 
-def run_extraction(root, document_paths, config_path, output, client=None, protocol_override=None):
+def run_extraction(
+    root,
+    document_paths,
+    config_path,
+    output,
+    client=None,
+    protocol_override=None,
+    *,
+    document_id=None,
+):
     with extraction_lock(root):
-        return _run_extraction(root, document_paths, config_path, output, client, protocol_override)
+        return _run_extraction(
+            root,
+            document_paths,
+            config_path,
+            output,
+            client,
+            protocol_override,
+            document_id=document_id,
+        )
 
 
 def _run_extraction(
@@ -178,6 +195,7 @@ def _run_extraction(
     client=None,
     protocol_override=None,
     replay_origin=None,
+    document_id=None,
 ) -> dict:
     root = root.resolve()
     output = safe_output(root, output)
@@ -281,7 +299,13 @@ def _run_extraction(
     for doc in documents:
         validate_source(doc)
     selected, per_source = [], Counter()
-    wanted = getattr(protocol_override, "selection_ids", None)
+    if document_id is not None and protocol_override is not None:
+        raise ValueError("Explicit document selection cannot be combined with a repair override")
+    wanted = (
+        [document_id]
+        if document_id is not None
+        else getattr(protocol_override, "selection_ids", None)
+    )
     if wanted is None:
         indices = range(len(documents))
     else:
@@ -347,6 +371,8 @@ def _run_extraction(
         "semantic_precision_recall_f1": None,
         "requires_user_legal_annotation": False,
     }
+    if document_id is not None:
+        metadata["selection_document_id"] = document_id
     if hasattr(protocol, "GENERATION_CONSTRAINT_VERSION"):
         metadata["generation_constraints"] = {
             "version": protocol.GENERATION_CONSTRAINT_VERSION,

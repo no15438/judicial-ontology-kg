@@ -177,6 +177,7 @@ def replay_completed(root, document_paths, source_run, output):
         output,
         client=client,
         replay_origin=original,
+        document_id=original.get("selection_document_id"),
     )
     result["completed"] = False
     write_json(output / "report.json", result)

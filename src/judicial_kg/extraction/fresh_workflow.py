@@ -41,8 +41,8 @@ def run_fresh(
     root = root.resolve()
     if local_config is not None:
         config = load_config(local_config)
-        if config["max_documents"] != 1 or document_id is not None or previous_runs:
-            raise ValueError("Local fresh pilot selects the first source only; no cloud lineage")
+        if config["max_documents"] != 1 or previous_runs:
+            raise ValueError("Local fresh pilot selects one source only; no cloud lineage")
         if config["version"] != f"qwen-extraction-v{version}":
             raise ValueError("Local configuration and workflow protocol differ")
     output = safe_output(root, output)
@@ -67,6 +67,9 @@ def run_fresh(
     if local_config is not None:
         report.update(backend="spark_lan", model=config["model"], cloud_requests_submitted=0)
 
+    if document_id is not None:
+        report["selected_document_id"] = document_id
+
     def save():
         write_json(output / "workflow-report.json", report)
 
@@ -88,7 +91,14 @@ def run_fresh(
                 document_id=document_id,
             )
         else:
-            native = run_extraction(root, paths, local_config, output / "extraction", client=client)
+            native = run_extraction(
+                root,
+                paths,
+                local_config,
+                output / "extraction",
+                client=client,
+                document_id=document_id,
+            )
             outcomes = json.loads((output / "extraction/outcomes.json").read_text())
             selected = [row for row in outcomes if row["selected"]]
             if len(selected) != 1:
