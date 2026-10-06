@@ -535,7 +535,7 @@
       ]
     }
   ],
-  "cumulative_estimated_cny": "26.315196",
+  "cumulative_estimated_cny": "33.669768",
   "authorized_cumulative_cap_cny": "200",
   "semantic_precision_recall_f1": null,
   "gold_available": false,
@@ -612,7 +612,7 @@
     "graph_canonical_sha256": "e4b475e01cee3bb3425653b0085ba3ebf11d922d02e56547ac6cd36dab45818f",
     "requests_submitted": 0
   },
-  "latest_outcome_scope": "One exposed development document freshly completed by a frozen automatic workflow, zero prior response reuse and zero extra model corrections; no semantic accuracy or generalization claim.",
+  "latest_outcome_scope": "The previous one-document fresh success remains historical evidence. The subsequent frozen three-document expansion accepted 0/3; all failures replayed, no new graph accepted, ten-document expansion postponed.",
   "fresh_workflow_runs": [
     {
       "workflow": "fresh-source-to-graph-v1",
@@ -770,5 +770,16 @@
     "graph_canonical_sha256": "ed1763a8e5bfad047082b07816793f75d85c91dfa7a424db292e282781eacce9",
     "requests_submitted": 0,
     "worktree_dirty_note": "Only design documentation was modified; executable source hashes recorded in the local assembly report."
-  }
+  },
+  "expansion_trials": [
+    {
+      "report": "research/fresh-three-v31-report.json",
+      "trial": "frozen-v31-three-document-expansion-01",
+      "selected_documents": 3,
+      "automatic_pipeline_accepted": 0,
+      "requests_submitted": 55,
+      "observed_cost_cny": "7.354572",
+      "all_three_offline_replays_verified": true
+    }
+  ]
 }
