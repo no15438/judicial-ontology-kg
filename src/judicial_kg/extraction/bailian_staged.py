@@ -14,6 +14,7 @@ from judicial_kg.extraction import (
     checked_forms,
     checked_inventory,
     classified_inventory,
+    collective_inventory,
     collective_mentions,
     context_delta,
     context_ids,
@@ -132,6 +133,7 @@ def _run(
         33: classified_inventory,
         34: checked_inventory,
         35: referent_inventory,
+        36: collective_inventory,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}
     if budget_cny is not None:

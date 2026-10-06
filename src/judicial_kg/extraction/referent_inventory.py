@@ -2,6 +2,7 @@
 
 import copy
 import json
+from functools import partial
 
 from judicial_kg.extraction import (
     actor_inventory,
@@ -40,7 +41,7 @@ def supported_forms(doc, units, original, missing):
     return {key: choices.copy() for key in missing}
 
 
-def decision_schema(view, actors, contract):
+def decision_schema(view, actors, contract, *, allow_collectives=False):
     actor_ids = [a["id"] for a in actors]
     types = contract.ontology["actor_types"]
     slots = [f"n{i}" for i in range(len(view["proposal_ledger"]))]
@@ -55,6 +56,21 @@ def decision_schema(view, actors, contract):
                         {
                             "action": {"const": "existing"},
                             "actor_id": {"enum": actor_ids},
+                            "span_id": position,
+                        }
+                    )
+                )
+            if allow_collectives and len(actor_ids) >= 2:
+                branches.append(
+                    actor_inventory.obj(
+                        {
+                            "action": {"const": "existing_group"},
+                            "actor_ids": {
+                                "type": "array",
+                                "minItems": 2,
+                                "uniqueItems": True,
+                                "items": {"enum": actor_ids},
+                            },
                             "span_id": position,
                         }
                     )
@@ -78,12 +94,16 @@ def decision_schema(view, actors, contract):
     )
 
 
-def compile_decisions(doc, actors, catalog, view, aliases, raw, contract, provenance):
+def compile_decisions(
+    doc, actors, catalog, view, aliases, raw, contract, provenance, *, allow_collectives=False
+):
     span_catalog.verify_catalog(doc, [u["id"] for u in source_units(doc)], catalog)
     _, expected_view, expected_aliases = compact_inventory.compact_view(catalog, {})
     if expected_view != view or expected_aliases != aliases:
         raise DraftError("anonymous_source_view_changed")
-    context_first.check_schema(raw, decision_schema(view, actors, contract))
+    context_first.check_schema(
+        raw, decision_schema(view, actors, contract, allow_collectives=allow_collectives)
+    )
     unresolved = [key for key, d in raw["decisions"].items() if d["action"] == "uncertain"]
     if unresolved:
         raise DraftError("anonymous_referent_unresolved")
@@ -96,7 +116,9 @@ def compile_decisions(doc, actors, catalog, view, aliases, raw, contract, proven
         key = row["proposal_id"]
         decision = raw["decisions"][key]
         if decision["action"] == "existing":
-            actor = by_id[decision["actor_id"]]
+            targets = [by_id[decision["actor_id"]]]
+        elif decision["action"] == "existing_group":
+            targets = [by_id[key] for key in decision["actor_ids"]]
         else:
             slot = decision["entity_slot"]
             if slot not in slots:
@@ -118,29 +140,35 @@ def compile_decisions(doc, actors, catalog, view, aliases, raw, contract, proven
             actor = slots[slot]
             if actor["actor_type"] != decision["actor_type"]:
                 raise DraftError("anonymous_slot_type_conflict")
+            targets = [actor]
         selector = entries[aliases[decision["span_id"]]]["selector"]
-        known = next((m for m in actor["mentions"] if m["evidence"] == selector), None)
-        if known is None:
-            identifier = (
-                "mention_" + canonical_hash({"actor": actor["id"], "selector": selector})[:40]
+        for actor in targets:
+            known = next((m for m in actor["mentions"] if m["evidence"] == selector), None)
+            if known is None:
+                identifier = (
+                    "mention_" + canonical_hash({"actor": actor["id"], "selector": selector})[:40]
+                )
+                if identifier in used:
+                    raise DraftError("anonymous_mention_id_collision")
+                used.add(identifier)
+                known = {
+                    "id": identifier,
+                    "kind": "description",
+                    "evidence": copy.deepcopy(selector),
+                }
+                actor["mentions"].append(known)
+                operation = "append_source_mention"
+            else:
+                operation = "reuse_same_actor_exact_position_preserving_kind"
+            ledger.append(
+                {
+                    "proposal_id": key,
+                    "decision": copy.deepcopy(decision),
+                    "compiled_actor_id": actor["id"],
+                    "mention_id": known["id"],
+                    "operation": operation,
+                }
             )
-            if identifier in used:
-                raise DraftError("anonymous_mention_id_collision")
-            used.add(identifier)
-            known = {"id": identifier, "kind": "description", "evidence": copy.deepcopy(selector)}
-            actor["mentions"].append(known)
-            operation = "append_source_mention"
-        else:
-            operation = "reuse_same_actor_exact_position_preserving_kind"
-        ledger.append(
-            {
-                "proposal_id": key,
-                "decision": copy.deepcopy(decision),
-                "compiled_actor_id": actor["id"],
-                "mention_id": known["id"],
-                "operation": operation,
-            }
-        )
     if not actor_inventory.augmentation_preserves_named(actors, result, True):
         raise DraftError("named_identity_changed")
     scoped.compile_checked({"actors": result, "contexts": []}, doc, contract, provenance)
@@ -157,7 +185,7 @@ def compile_decisions(doc, actors, catalog, view, aliases, raw, contract, proven
     }
 
 
-def augment(doc, actors, contract, provenance, infer, save):
+def augment(doc, actors, contract, provenance, infer, save, *, allow_collectives=False):
     schema = actor_inventory.obj(
         {
             "forms": {
@@ -212,7 +240,7 @@ def augment(doc, actors, contract, provenance, infer, save):
     _, view, aliases = compact_inventory.compact_view(catalog, {})
     save("anonymous-catalog", catalog)
     save("anonymous-aliases", {"aliases": aliases, "catalog_sha256": canonical_hash(catalog)})
-    schema = decision_schema(view, actors, contract)
+    schema = decision_schema(view, actors, contract, allow_collectives=allow_collectives)
     messages = [
         {
             "role": "system",
@@ -238,16 +266,29 @@ def augment(doc, actors, contract, provenance, infer, save):
             ),
         },
     ]
+    if allow_collectives:
+        messages[0]["content"] += (
+            "\n并列名称、双方、二人等明确指向多个已知主体时用existing_group，actor_ids列出所有明确成员，"
+            "同一span_id分别关联这些主体，不合并Actor、不只选其中一人；成员无法确定仍uncertain。"
+        )
     raw = strict_json(infer(messages, response_format(doc, schema), "anonymous-referents"))
     save("anonymous-referents-wire", raw)
     result, receipt = compile_decisions(
-        doc, actors, catalog, view, aliases, raw, contract, provenance
+        doc,
+        actors,
+        catalog,
+        view,
+        aliases,
+        raw,
+        contract,
+        provenance,
+        allow_collectives=allow_collectives,
     )
     save("anonymous-referent-receipt", receipt)
     return result
 
 
-def generate_header(doc, prompt, contract, provenance, infer, save):
+def generate_header(doc, prompt, contract, provenance, infer, save, *, allow_collectives=False):
     return actor_inventory.generate_header(
         doc,
         prompt,
@@ -259,12 +300,12 @@ def generate_header(doc, prompt, contract, provenance, infer, save):
         catalog_builder=space_inventory.build_catalog,
         context_only=True,
         context_ids=True,
-        augment_inventory=augment,
+        augment_inventory=partial(augment, allow_collectives=allow_collectives),
         allow_existing_mentions=True,
     )
 
 
-def extract(doc, prompt, contract, provenance, infer, save):
+def extract(doc, prompt, contract, provenance, infer, save, *, allow_collectives=False):
     def whole_form_repair(messages, fmt, stage):
         if stage == "anonymous-forms-repair-1":
             messages = copy.deepcopy(messages)
@@ -281,6 +322,6 @@ def extract(doc, prompt, contract, provenance, infer, save):
         provenance,
         whole_form_repair,
         save,
-        header_generator=generate_header,
+        header_generator=partial(generate_header, allow_collectives=allow_collectives),
         anonymous_repair_options=supported_forms,
     )

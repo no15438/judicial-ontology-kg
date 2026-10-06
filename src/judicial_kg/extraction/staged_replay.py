@@ -11,6 +11,7 @@ from judicial_kg.extraction import (
     checked_forms,
     checked_inventory,
     classified_inventory,
+    collective_inventory,
     collective_mentions,
     compact_inventory,
     context_delta,
@@ -70,6 +71,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v33",
         "qwen-extraction-v34",
         "qwen-extraction-v35",
+        "qwen-extraction-v36",
     }:
         raise ValueError("Staged replay requires a complete staged run")
     protocol = {
@@ -99,6 +101,7 @@ def replay_completed(root, document_paths, source_run, output):
         "qwen-extraction-v33": classified_inventory,
         "qwen-extraction-v34": checked_inventory,
         "qwen-extraction-v35": referent_inventory,
+        "qwen-extraction-v36": collective_inventory,
     }[original["config"]["version"]]
     # Verify every artifact before deriving output, including failed/unused phases.
     verified = {}

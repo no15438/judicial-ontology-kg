@@ -1,0 +1,192 @@
+{
+  "workflow": "fresh-source-to-graph-v1",
+  "protocol_version": 35,
+  "code_commit": "ddd993518973fca8db0fddae5e6d7082d1ada983",
+  "completed": true,
+  "status": "extraction_rejected",
+  "response_reuse_enabled": false,
+  "external_candidate_input": false,
+  "automatic_pipeline_accepted": false,
+  "uncorrected_first_pass_accepted": false,
+  "semantic_precision_recall_f1": null,
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "cloud_requests_submitted": 0,
+  "extraction_status": "anonymous_referent_unresolved",
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "requests_submitted": 8,
+  "responses_reused": 0,
+  "model_correction_calls": 1,
+  "observed_cost_cny": "0",
+  "prior_committed_cny": "0",
+  "offline_replay_verified": true,
+  "frozen_inputs_unchanged": true,
+  "trial": "next-flash-fresh-v35-01",
+  "run_directory": "artifacts/qwen-extraction/next-flash-fresh-v35-01",
+  "tests_passed": 674,
+  "graph_generated": false,
+  "cloud_cumulative_committed_cny": "33.669768",
+  "root_cause": "One source phrase jointly refers to two known actors; single-actor referent interface cannot represent this and model chose uncertain. No manual binding or graph mutation performed.",
+  "started_at_utc": "2026-10-06T03:47:12.064891+00:00",
+  "finished_at_utc": "2026-10-06T03:50:34.672482+00:00",
+  "worktree_dirty": false,
+  "config": {
+    "version": "qwen-extraction-v35",
+    "ssh_host": "spark-lan",
+    "port": 8003,
+    "model": "qwen3.8-flash-next-iq4xs",
+    "context_tokens": 32768,
+    "max_output_tokens": 8192,
+    "token_margin": 128,
+    "request_timeout_seconds": 480,
+    "temperature": 0.2,
+    "seed": 42,
+    "limit_per_source": 1,
+    "max_documents": 1
+  },
+  "stage_summary": [
+    {
+      "status": 200,
+      "elapsed_seconds": 0.7159440410323441
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.3865560839767568
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.43963954196078703
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.42725370900006965
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.3813272920087911
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.4164304580190219
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 11.852956417016685
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.4154584999778308
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.358416750037577
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.4492224170244299
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 17.850526833033655
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.5352351670153439
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.6593357919482514
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.3970274169696495
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 17.9812672919943
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.36825066595338285
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.4691832910175435
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.3572172499843873
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 13.329467375006061
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.5133144590072334
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.437230208015535
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.3886888340348378
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 64.36143504199572
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.5999983749934472
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.4323670839658007
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.3620446249842644
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 18.413702709018253
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.35455387498950586
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.34907287498936057
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.4551187090110034
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 9.998421707947273
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.43476858298527077
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.4285261249751784
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 0.3833508329698816
+    },
+    {
+      "status": 200,
+      "elapsed_seconds": 36.58514987496892
+    }
+  ],
+  "request_elapsed_seconds": 202.28846021182835
+}
