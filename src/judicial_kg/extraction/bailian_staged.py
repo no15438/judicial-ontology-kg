@@ -16,6 +16,7 @@ from judicial_kg.extraction import (
     checked_forms,
     checked_inventory,
     classified_inventory,
+    closed_id_guard,
     collective_inventory,
     collective_mentions,
     context_delta,
@@ -165,6 +166,7 @@ def _run(
         41: source_positions,
         42: structured_response,
         43: role_evidence,
+        44: closed_id_guard,
         36: collective_inventory,
     }[version]
     config = {**CONFIG, **model_settings(model), "version": f"bailian-staged-v{version}"}

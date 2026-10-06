@@ -1,0 +1,153 @@
+{
+  "run": "flash-three-v43-baseline-01",
+  "code_commit": "f3a09dd1201e7c3b7aadd8991db57219042f8d27",
+  "selected": 3,
+  "not_selected": 33,
+  "accepted": 0,
+  "budget": {
+    "prior_committed_cny": "71.6439339",
+    "cap_cny": "76.6439339",
+    "new_committed_cny": "0.1875478",
+    "new_observed_cny": "0.1875478",
+    "cumulative_committed_cny": "71.8314817",
+    "actual_api_requests": 19,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "documents": [
+    {
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "status": "draft_grounding_failed",
+      "requests": 9,
+      "failed_stage": "header",
+      "issue_count": 500,
+      "issues_preview": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/contexts/0/enclosing_units/0"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/contexts/0/enclosing_units/1"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/contexts/0/enclosing_units/2"
+        }
+      ],
+      "workflow": {
+        "workflow": "fresh-source-to-graph-v1",
+        "protocol_version": 43,
+        "code_commit": "f3a09dd1201e7c3b7aadd8991db57219042f8d27",
+        "completed": true,
+        "status": "extraction_rejected",
+        "response_reuse_enabled": false,
+        "external_candidate_input": false,
+        "automatic_pipeline_accepted": false,
+        "uncorrected_first_pass_accepted": false,
+        "semantic_precision_recall_f1": null,
+        "backend": "aliyun_bailian_beijing",
+        "model": "qwen3.8-flash",
+        "selected_document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+        "extraction_status": "draft_grounding_failed",
+        "expected_documents": 36,
+        "selected_documents": 1,
+        "not_selected": 35,
+        "requests_submitted": 9,
+        "responses_reused": 0,
+        "model_correction_calls": 0,
+        "observed_cost_cny": "0.1052172",
+        "prior_committed_cny": "0",
+        "offline_replay_verified": true,
+        "frozen_inputs_unchanged": true
+      }
+    },
+    {
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "status": "draft_grounding_failed",
+      "requests": 2,
+      "failed_stage": "inventory-forms-repair-1",
+      "issue_count": 1,
+      "issues_preview": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/replacements/0"
+        }
+      ],
+      "workflow": {
+        "workflow": "fresh-source-to-graph-v1",
+        "protocol_version": 43,
+        "code_commit": "f3a09dd1201e7c3b7aadd8991db57219042f8d27",
+        "completed": true,
+        "status": "extraction_rejected",
+        "response_reuse_enabled": false,
+        "external_candidate_input": false,
+        "automatic_pipeline_accepted": false,
+        "uncorrected_first_pass_accepted": false,
+        "semantic_precision_recall_f1": null,
+        "backend": "aliyun_bailian_beijing",
+        "model": "qwen3.8-flash",
+        "selected_document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+        "extraction_status": "draft_grounding_failed",
+        "expected_documents": 36,
+        "selected_documents": 1,
+        "not_selected": 35,
+        "requests_submitted": 2,
+        "responses_reused": 0,
+        "model_correction_calls": 1,
+        "observed_cost_cny": "0.0092980",
+        "prior_committed_cny": "0",
+        "offline_replay_verified": true,
+        "frozen_inputs_unchanged": true
+      }
+    },
+    {
+      "document_id": "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+      "status": "draft_grounding_failed",
+      "requests": 8,
+      "failed_stage": "header",
+      "issue_count": 398,
+      "issues_preview": [
+        {
+          "code": "draft_schema_invalid",
+          "path": "/contexts/0/enclosing_units/0"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/contexts/0/enclosing_units/1"
+        },
+        {
+          "code": "draft_schema_invalid",
+          "path": "/contexts/0/enclosing_units/2"
+        }
+      ],
+      "workflow": {
+        "workflow": "fresh-source-to-graph-v1",
+        "protocol_version": 43,
+        "code_commit": "f3a09dd1201e7c3b7aadd8991db57219042f8d27",
+        "completed": true,
+        "status": "extraction_rejected",
+        "response_reuse_enabled": false,
+        "external_candidate_input": false,
+        "automatic_pipeline_accepted": false,
+        "uncorrected_first_pass_accepted": false,
+        "semantic_precision_recall_f1": null,
+        "backend": "aliyun_bailian_beijing",
+        "model": "qwen3.8-flash",
+        "selected_document_id": "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+        "extraction_status": "draft_grounding_failed",
+        "expected_documents": 36,
+        "selected_documents": 1,
+        "not_selected": 35,
+        "requests_submitted": 8,
+        "responses_reused": 0,
+        "model_correction_calls": 0,
+        "observed_cost_cny": "0.0730326",
+        "prior_committed_cny": "0",
+        "offline_replay_verified": true,
+        "frozen_inputs_unchanged": true
+      }
+    }
+  ]
+}

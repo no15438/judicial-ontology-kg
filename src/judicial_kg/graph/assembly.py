@@ -10,7 +10,31 @@ KINDS = dict(
     zip(COLLECTIONS, ("Actor", "Mention", "Context", "Role", "Event", "Statement"), strict=True)
 )
 KINDS.update(objects="Object", object_mentions="ObjectMention", object_links="ObjectLink")
+KINDS.update(
+    collectives="Collective",
+    collective_mentions="CollectiveMention",
+    collective_memberships="CollectiveMembership",
+    collective_participations="CollectiveParticipation",
+)
 REFERENCES = {
+    "collectives": {
+        "context_id": ("in_context", False),
+        "mention_ids": ("has_collective_mention", True),
+    },
+    "collective_mentions": {
+        "collective_id": ("denotes_collective", False),
+        "context_id": ("in_context", False),
+    },
+    "collective_memberships": {
+        "collective_id": ("member_of", False),
+        "actor_id": ("member_actor", False),
+        "context_id": ("in_context", False),
+    },
+    "collective_participations": {
+        "collective_id": ("collective_participant", False),
+        "event_id": ("collective_of_event", False),
+        "context_id": ("in_context", False),
+    },
     "objects": {"mention_ids": ("has_object_mention", True)},
     "object_mentions": {
         "object_id": ("denotes_object", False),
@@ -36,9 +60,12 @@ REFERENCES = {
 def references(record: dict, collection: str) -> dict:
     """Select reference cardinality from the explicit record contract, never guess."""
     version = record["schema_version"]
-    if version not in {"0.1.0", "0.2.0", "0.3.0", "0.4.0"} or record["ontology_version"] != version:
+    if (
+        version not in {"0.1.0", "0.2.0", "0.3.0", "0.4.0", "0.5.0"}
+        or record["ontology_version"] != version
+    ):
         raise ValueError("Unsupported or inconsistent record version")
-    if collection == "contexts" and version in {"0.2.0", "0.3.0", "0.4.0"}:
+    if collection == "contexts" and version in {"0.2.0", "0.3.0", "0.4.0", "0.5.0"}:
         return {
             "attributed_actor_ids": ("attributed_to", True),
             "parent_context_id": ("within_context", False),
@@ -47,9 +74,9 @@ def references(record: dict, collection: str) -> dict:
 
 
 def evidence_fields(record, collection):
-    if collection in {"actors", "objects"}:
+    if collection in {"actors", "objects", "collectives"}:
         return {}
-    if collection == "contexts" and record["schema_version"] in {"0.3.0", "0.4.0"}:
+    if collection == "contexts" and record["schema_version"] in {"0.3.0", "0.4.0", "0.5.0"}:
         return {"evidence": "covers", "assertion_evidence": "assertion_source"}
     return {"evidence": "supported_by"}
 
@@ -132,7 +159,11 @@ def project_records(records: list[dict]) -> dict:
                         )
                 for field, relation in evidence_fields(record, key).items():
                     evidence = properties.pop(field)
-                    spans = [evidence] if key in {"mentions", "object_mentions"} else evidence
+                    spans = (
+                        [evidence]
+                        if key in {"mentions", "object_mentions", "collective_mentions"}
+                        else evidence
+                    )
                     for position, span in enumerate(spans):
                         evidence_id = node_id(doc_id, "EvidenceSpan", canonical_hash(span))
                         if evidence_id not in nodes:
@@ -216,9 +247,16 @@ def restore_records(graph: dict) -> list[dict]:
                             deepcopy(nodes[e["target"]]["properties"])
                             for e in links(node["id"], relation)
                         ]
-                        if key in {"mentions", "object_mentions"} and len(spans) != 1:
+                        if (
+                            key in {"mentions", "object_mentions", "collective_mentions"}
+                            and len(spans) != 1
+                        ):
                             raise ValueError("Mention must have exactly one evidence span")
-                        item[field] = spans[0] if key in {"mentions", "object_mentions"} else spans
+                        item[field] = (
+                            spans[0]
+                            if key in {"mentions", "object_mentions", "collective_mentions"}
+                            else spans
+                        )
                     record[key].append(item)
             records.append(record)
         # Reprojection catches omitted/unused nodes, unsupported edges, wrong types,

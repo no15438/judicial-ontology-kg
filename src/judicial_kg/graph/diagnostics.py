@@ -34,18 +34,20 @@ def diagnose_record(record: dict, doc: dict) -> dict:
     spans = defaultdict(lambda: defaultdict(list))
     hints = []
     for key in collections(record):
-        if key in {"actors", "objects"}:
+        if key in {"actors", "objects", "collectives"}:
             continue
         group = (
             "mention"
-            if key in {"mentions", "object_mentions"}
+            if key in {"mentions", "object_mentions", "collective_mentions"}
             else "context"
             if key == "contexts"
             else "assertion"
         )
         for node in record[key]:
             evidence = (
-                [node["evidence"]] if key in {"mentions", "object_mentions"} else node["evidence"]
+                [node["evidence"]]
+                if key in {"mentions", "object_mentions", "collective_mentions"}
+                else node["evidence"]
             )
             for span in evidence:
                 spans[span["field"]][group].append((span["start"], span["end"]))

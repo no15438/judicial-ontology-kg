@@ -15,14 +15,28 @@ CONTRACT_FILES = {
     "0.2.0": ("ontology/private-lending-v0.2.json", "schemas/extraction-v0.2.schema.json"),
     "0.3.0": ("ontology/private-lending-v0.3.json", "schemas/extraction-v0.3.schema.json"),
     "0.4.0": ("ontology/private-lending-v0.4.json", "schemas/extraction-v0.4.schema.json"),
+    "0.5.0": ("ontology/private-lending-v0.5.json", "schemas/extraction-v0.5.schema.json"),
 }
 COLLECTIONS = ("actors", "mentions", "contexts", "roles", "events", "statements")
 
 OBJECT_COLLECTIONS = ("objects", "object_mentions", "object_links")
 
 
+COLLECTIVE_COLLECTIONS = (
+    "collectives",
+    "collective_mentions",
+    "collective_memberships",
+    "collective_participations",
+)
+
+
 def collections(record):
-    return COLLECTIONS + (OBJECT_COLLECTIONS if record["schema_version"] == "0.4.0" else ())
+    version = record["schema_version"]
+    return (
+        COLLECTIONS
+        + (OBJECT_COLLECTIONS if version in {"0.4.0", "0.5.0"} else ())
+        + (COLLECTIVE_COLLECTIONS if version == "0.5.0" else ())
+    )
 
 
 def build_schema(ontology: dict) -> dict:
@@ -95,13 +109,13 @@ def build_schema(ontology: dict) -> dict:
             **contextual,
         ),
     }
-    if ontology["version"] in {"0.2.0", "0.3.0", "0.4.0"}:
+    if ontology["version"] in {"0.2.0", "0.3.0", "0.4.0", "0.5.0"}:
         context = definitions["context"]
         del context["properties"]["attributed_actor_id"]
         context["required"].remove("attributed_actor_id")
         context["properties"]["attributed_actor_ids"] = array(identifier)
         context["required"].append("attributed_actor_ids")
-    if ontology["version"] in {"0.3.0", "0.4.0"}:
+    if ontology["version"] in {"0.3.0", "0.4.0", "0.5.0"}:
         context = definitions["context"]
         context["properties"]["assertion_evidence"] = array({"$ref": "#/$defs/span"})
         context["required"].append("assertion_evidence")
@@ -119,7 +133,7 @@ def build_schema(ontology: dict) -> dict:
         ),
         **{key: array({"$ref": f"#/$defs/{key[:-1]}"}) for key in COLLECTIONS},
     )
-    if ontology["version"] == "0.4.0":
+    if ontology["version"] in {"0.4.0", "0.5.0"}:
         definitions.update(
             object=obj(
                 id=identifier, object_type=enum("object_types"), mention_ids=array(identifier, 1)
@@ -139,6 +153,42 @@ def build_schema(ontology: dict) -> dict:
             ),
         )
         for key in OBJECT_COLLECTIONS:
+            schema["properties"][key] = array({"$ref": f"#/$defs/{key[:-1]}"})
+            schema["required"].append(key)
+    if ontology["version"] == "0.5.0":
+        definitions.update(
+            collective=obj(
+                id=identifier,
+                context_id=identifier,
+                collective_type={
+                    "enum": ["people_group", "organization_group", "adjudicative_panel", "other"]
+                },
+                membership_status={"enum": ["unknown", "partial", "explicit"]},
+                mention_ids=array(identifier, 1),
+            ),
+            collective_mention=obj(
+                id=identifier,
+                collective_id=identifier,
+                context_id=identifier,
+                evidence={"$ref": "#/$defs/span"},
+            ),
+            collective_membership=obj(
+                id=identifier,
+                collective_id=identifier,
+                actor_id=identifier,
+                **contextual,
+            ),
+            collective_participation=obj(
+                id=identifier,
+                collective_id=identifier,
+                event_id=identifier,
+                role=enum("participant_roles"),
+                **contextual,
+            ),
+        )
+        # A collective-only event is valid only with an independently checked link.
+        definitions["event"]["properties"]["participants"]["minItems"] = 0
+        for key in COLLECTIVE_COLLECTIONS:
             schema["properties"][key] = array({"$ref": f"#/$defs/{key[:-1]}"})
             schema["required"].append(key)
     return {

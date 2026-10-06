@@ -80,7 +80,7 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
         issue("duplicate_id", "/")
         return issues
     actors, mentions, contexts = (tables[k] for k in ("actors", "mentions", "contexts"))
-    if record["schema_version"] == "0.4.0":
+    if record["schema_version"] in {"0.4.0", "0.5.0"}:
         actor_spans = {canonical_hash(m["evidence"]) for m in record["mentions"]}
         object_spans = set()
         for i, mention in enumerate(record["object_mentions"]):
@@ -104,7 +104,7 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
             for parent in enclosing
         )
 
-    scoped = record["schema_version"] in {"0.3.0", "0.4.0"}
+    scoped = record["schema_version"] in {"0.3.0", "0.4.0", "0.5.0"}
     children = {
         identifier: [c for c in record["contexts"] if c["parent_context_id"] == identifier]
         for identifier in contexts
@@ -129,10 +129,10 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
     for key in collections(record):
         for i, node in enumerate(record[key]):
             path = f"/{key}/{i}"
-            if key not in {"actors", "objects"}:
+            if key not in {"actors", "objects", "collectives"}:
                 spans = (
                     [node["evidence"]]
-                    if key in {"mentions", "object_mentions"}
+                    if key in {"mentions", "object_mentions", "collective_mentions"}
                     else node["evidence"]
                 )
                 for j, span in enumerate(spans):
@@ -160,6 +160,8 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                     issue("leaf_context_without_assertion_scope", path)
                 if not all(union_covers(span, direct + nested) for span in spans):
                     issue("enclosing_scope_not_partitioned", path)
+            if key.startswith("collective"):
+                continue  # Dedicated checks below preserve collective identity and scope.
             if key == "objects":
                 for mid in node["mention_ids"]:
                     mention = reference(mid, tables["object_mentions"], path + "/mention_ids")
@@ -198,7 +200,7 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                 if actor and node["id"] not in actor["mention_ids"]:
                     issue("mention_actor_disagreement", path)
             elif key == "contexts":
-                if record["schema_version"] in {"0.2.0", "0.3.0", "0.4.0"}:
+                if record["schema_version"] in {"0.2.0", "0.3.0", "0.4.0", "0.5.0"}:
                     attributions = node["attributed_actor_ids"]
                     attribution_path = path + "/attributed_actor_ids"
                 else:
@@ -305,4 +307,8 @@ def validate_record(record: dict, doc: dict, contract: Contract) -> list[dict]:
                                 issue("date_normalization_not_supported_by_raw", f"{path}/value")
                     elif normalized is not None or value["unit"] is not None:
                         issue("text_must_remain_raw", f"{path}/value")
+    if record["schema_version"] == "0.5.0":
+        from judicial_kg.collectives import validate_collectives
+
+        issues.extend(validate_collectives(record))
     return issues
