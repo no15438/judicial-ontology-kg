@@ -1,0 +1,70 @@
+{
+  "version": "entity-triage-shadow-v1",
+  "selection": "two observed failures plus court/person source comparators; exposed diagnostics, not gold",
+  "sources": [
+    {
+      "path": "artifacts/scoped-v12/spark-documents.json",
+      "sha256": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74"
+    },
+    {
+      "path": "artifacts/scoped-v12/appealcase-documents.json",
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034"
+    }
+  ],
+  "expected_documents": 36,
+  "selected_documents": 2,
+  "not_selected_documents": 34,
+  "cases": [
+    {
+      "id": "c000",
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "query_sha256": "33ef37bf29068ecc357a5d7bb767eedde805743376c9a5dbe687cd89a046d8fe",
+      "state_sha256": "4a0674500da13e548be9021d045496535433b41477ed96a9a85dbab7fe32453c",
+      "state_bytes": 3050,
+      "target_units": 7
+    },
+    {
+      "id": "c001",
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "query_sha256": "b4d3288073760b6900bfdd646d8bbf0b60858046058e44be1d7bd8e13d47eb96",
+      "state_sha256": "e9d92cb5b9e3ba98ab12f88370ce20ce7d47397975c64e5aab5a9d83659126dd",
+      "state_bytes": 4245,
+      "target_units": 14
+    },
+    {
+      "id": "c002",
+      "document_id": "appealcase:026b9360bdac945f035a1f42914775e7136fbbea648bda8b8aa19aa2781babe8",
+      "query_sha256": "67af9b4f9b2ca97f4e638e45229596bf6c201b93ee0fc28fce662f9ffd343668",
+      "state_sha256": "4e73716288d3b1a2fed04b236ab796a09f32d2de95d6b77848b00e9428425f21",
+      "state_bytes": 387,
+      "target_units": 1
+    },
+    {
+      "id": "c003",
+      "document_id": "appealcase:442cf555594a8c454d708b1b241fa639fc39d159db31a79cc18b0b53f4f8be82",
+      "query_sha256": "4ebaccaac95064943777643951a33e11f5f906ce0b29eaf77370f9d72d1dbbc2",
+      "state_sha256": "ed6f3f9ecba44e442b7b9025f2aa2f6752d5a67febfbe3077b61aa8a48fdc042",
+      "state_bytes": 16323,
+      "target_units": 53
+    }
+  ],
+  "questions_sha256": "da9be2603d2d1d84bc2bc1f2e5bffffb7f46459ca379b9a2245dd3b13f3d2ac4",
+  "instruction_sha256": "e97f31223a59d87c8331485dbfe794a30fb8ccc456a68494ec75f176b590b3ca",
+  "orders": [
+    false,
+    true,
+    false
+  ],
+  "planned_calls": 24,
+  "engines": [
+    "qwen3.8-flash-next-iq4xs",
+    "openjev-FP8 via existing helper"
+  ],
+  "temperature_qwen": 0.2,
+  "seed_qwen": 42,
+  "max_state_bytes": 24000,
+  "graph_mutation": false,
+  "automatic_pipeline_acceptance": false,
+  "semantic_accuracy": null,
+  "cloud_calls": 0
+}
