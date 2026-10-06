@@ -284,8 +284,8 @@ class ObjectRouter:
         return result
 
 
-def extract(doc, prompt, contract, provenance, infer, save):
-    router = ObjectRouter(doc, infer, save)
+def extract(doc, prompt, contract, provenance, infer, save, *, router_factory=ObjectRouter):
+    router = router_factory(doc, infer, save)
 
     def discover(messages, fmt, stage):
         if stage == "inventory-forms" or (stage.startswith("body-") and stage.endswith("-forms")):

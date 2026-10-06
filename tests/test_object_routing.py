@@ -210,18 +210,24 @@ def test_extract_hooks_compile_and_validate_whole_record(monkeypatch):
 
 
 @pytest.mark.parametrize("unresolved", [False, True])
-def test_native_runner_and_frozen_replay_keep_object_routing(workspace, monkeypatch, unresolved):  # noqa: F811
+@pytest.mark.parametrize("version", [38, 39])
+def test_native_runner_and_frozen_replay_keep_object_routing(
+    workspace,  # noqa: F811
+    monkeypatch,
+    unresolved,
+    version,
+):
     from judicial_kg.extraction.fresh_workflow import run_fresh
 
     root, docs, config = workspace
     for name in (
         "ontology/private-lending-v0.4.json",
         "schemas/extraction-v0.4.schema.json",
-        object_routing.PROMPT_FILE,
+        f"prompts/qwen-extraction-v{version}.txt",
     ):
         (root / name).write_bytes((ROOT / name).read_bytes())
     docs.write_text(json.dumps([source()]))
-    config.write_bytes((ROOT / "configs/qwen-extraction-v38-pilot.json").read_bytes())
+    config.write_bytes((ROOT / f"configs/qwen-extraction-v{version}-pilot.json").read_bytes())
 
     def fake_core(doc, prompt, contract, provenance, infer, save, **kwargs):
         kwargs["classifier"](doc, {"forms": ["42"]}, infer, save)
@@ -244,7 +250,20 @@ def test_native_runner_and_frozen_replay_keep_object_routing(workspace, monkeypa
                             "finish_reason": "stop",
                             "message": {
                                 "content": json.dumps(
-                                    {"p0": "uncertain" if unresolved else "project"}
+                                    {
+                                        (
+                                            "o0"
+                                            if len(
+                                                [
+                                                    x
+                                                    for x in self.paths
+                                                    if x == "/v1/chat/completions"
+                                                ]
+                                            )
+                                            == 2
+                                            else "p0"
+                                        ): "uncertain" if unresolved else "project"
+                                    }
                                 )
                             },
                         }
@@ -257,13 +276,14 @@ def test_native_runner_and_frozen_replay_keep_object_routing(workspace, monkeypa
         root,
         [docs],
         root / "artifacts/fresh",
-        version=38,
+        version=version,
         local_config=config,
         client=client,
         document_id=source()["document_id"],
     )
-    assert result["requests_submitted"] == 1
-    assert client.paths.count("/v1/chat/completions") == 1
+    expected_calls = 2 if version == 39 and unresolved else 1
+    assert result["requests_submitted"] == expected_calls
+    assert client.paths.count("/v1/chat/completions") == expected_calls
     assert result["offline_replay_verified"]
     assert result["frozen_inputs_unchanged"]
     assert result["automatic_pipeline_accepted"] is not unresolved

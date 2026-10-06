@@ -1,0 +1,18 @@
+{
+  "protocol_version": 39,
+  "purpose": "local diagnosis of two failed stages before fresh whole-document run",
+  "max_inference_requests": 4,
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "historical_proposals_used": true,
+  "whole_document_acceptance": false,
+  "manual_graph_edits": false,
+  "semantic_precision_recall_f1": null,
+  "targets": [
+    "appeal026b body-003 mixed form occurrence routing",
+    "appeal442c body-007 contradictory proposal decision"
+  ],
+  "source_run": "artifacts/qwen-extraction/next-flash-two-v38-02",
+  "config": "configs/qwen-extraction-v39-pilot.json",
+  "unit_tests_passed": 741
+}

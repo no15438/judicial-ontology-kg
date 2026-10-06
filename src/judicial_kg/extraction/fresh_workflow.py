@@ -156,7 +156,7 @@ def run_fresh(
                 paths,
                 candidates,
                 output / "graph",
-                contract_version="0.4.0" if version == 38 else "0.3.0",
+                contract_version="0.4.0" if version in {38, 39} else "0.3.0",
             )
             ok = graph["documents_assembled"] == 1 and graph["documents_assembly_failed"] == 0
             report.update(
