@@ -1,0 +1,168 @@
+{
+  "workflow": "fresh-source-to-graph-v1",
+  "protocol_version": 34,
+  "code_commit": "06b7e98c77f5386e3846def915a38eb9cc58abf9",
+  "completed": true,
+  "status": "extraction_rejected",
+  "response_reuse_enabled": false,
+  "external_candidate_input": false,
+  "automatic_pipeline_accepted": false,
+  "uncorrected_first_pass_accepted": false,
+  "semantic_precision_recall_f1": null,
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "cloud_requests_submitted": 0,
+  "extraction_status": "inventory_invalid_binding",
+  "expected_documents": 36,
+  "selected_documents": 1,
+  "not_selected": 35,
+  "requests_submitted": 8,
+  "responses_reused": 0,
+  "model_correction_calls": 1,
+  "observed_cost_cny": "0",
+  "prior_committed_cny": "0",
+  "offline_replay_verified": true,
+  "frozen_inputs_unchanged": true,
+  "trial": "next-flash-fresh-v34-01",
+  "run_directory": "artifacts/qwen-extraction/next-flash-fresh-v34-01",
+  "started_at_utc": "2026-10-06T03:33:50.968333+00:00",
+  "finished_at_utc": "2026-10-06T03:36:48.424344+00:00",
+  "worktree_dirty": false,
+  "config": {
+    "version": "qwen-extraction-v34",
+    "ssh_host": "spark-lan",
+    "port": 8003,
+    "model": "qwen3.8-flash-next-iq4xs",
+    "context_tokens": 32768,
+    "max_output_tokens": 8192,
+    "token_margin": 128,
+    "request_timeout_seconds": 480,
+    "temperature": 0.2,
+    "seed": 42,
+    "limit_per_source": 1,
+    "max_documents": 1
+  },
+  "input_files": [
+    {
+      "sha256": "72f4e2439f406b9cc63e30fe54d127f1d5b6641400f86c1eb9dfc9100f49ce74",
+      "bytes": 428236
+    },
+    {
+      "sha256": "984fd465990543fc31c3ffd1085c382deacdc469bd474e76552fde7023d2a034",
+      "bytes": 302755
+    }
+  ],
+  "selected_document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+  "stage_summary": [
+    {
+      "stage": "inventory-forms",
+      "status": "response_complete",
+      "input_tokens": 5360,
+      "usage": {
+        "prompt_tokens": 5360,
+        "completion_tokens": 149,
+        "total_tokens": 5509
+      },
+      "elapsed_seconds": 11.846877582953312
+    },
+    {
+      "stage": "inventory-type-000",
+      "status": "response_complete",
+      "input_tokens": 7682,
+      "usage": {
+        "prompt_tokens": 7682,
+        "completion_tokens": 238,
+        "total_tokens": 7920
+      },
+      "elapsed_seconds": 18.088588916987646
+    },
+    {
+      "stage": "inventory-type-001",
+      "status": "response_complete",
+      "input_tokens": 6980,
+      "usage": {
+        "prompt_tokens": 6980,
+        "completion_tokens": 256,
+        "total_tokens": 7236
+      },
+      "elapsed_seconds": 17.86127758299699
+    },
+    {
+      "stage": "inventory-type-002",
+      "status": "response_complete",
+      "input_tokens": 6197,
+      "usage": {
+        "prompt_tokens": 6197,
+        "completion_tokens": 161,
+        "total_tokens": 6358
+      },
+      "elapsed_seconds": 13.267256249964703
+    },
+    {
+      "stage": "inventory-select",
+      "status": "response_complete",
+      "input_tokens": 8906,
+      "usage": {
+        "prompt_tokens": 8906,
+        "completion_tokens": 1347,
+        "total_tokens": 10253
+      },
+      "elapsed_seconds": 64.27173112501623
+    },
+    {
+      "stage": "anonymous-forms",
+      "status": "response_complete",
+      "input_tokens": 6871,
+      "usage": {
+        "prompt_tokens": 6871,
+        "completion_tokens": 35,
+        "total_tokens": 6906
+      },
+      "elapsed_seconds": 9.208523209032137
+    },
+    {
+      "stage": "anonymous-forms-repair-1",
+      "status": "response_complete",
+      "input_tokens": 6964,
+      "usage": {
+        "prompt_tokens": 6964,
+        "completion_tokens": 54,
+        "total_tokens": 7018
+      },
+      "elapsed_seconds": 10.168088291946333
+    },
+    {
+      "stage": "anonymous-select",
+      "status": "response_complete",
+      "input_tokens": 7875,
+      "usage": {
+        "prompt_tokens": 7875,
+        "completion_tokens": 290,
+        "total_tokens": 8165
+      },
+      "elapsed_seconds": 20.245603292016312
+    }
+  ],
+  "request_elapsed_seconds": 164.95794625091366,
+  "root_cause": "one automatically corrected anonymous fragment was bound to an existing named Actor outside the new anonymous Actor batch; lexical matching did not preserve referent scope",
+  "inventory_type_check": {
+    "proposals": 21,
+    "actor_candidates": 17,
+    "legal_title_exclusions": 4,
+    "unresolved": 0,
+    "semantic_correctness_verified": false
+  },
+  "anonymous_original_proposals": 3,
+  "anonymous_corrected_proposals": 4,
+  "graph_generated": false,
+  "cloud_cumulative_committed_cny": "33.669768",
+  "tests_passed": 657,
+  "not_reached": [
+    "context_partition",
+    "body_mentions",
+    "events",
+    "owner_property_batches",
+    "graph_assembly"
+  ],
+  "next_design": "source-bound complete descriptions plus explicit existing/new/unresolved referent decisions; never just admit arbitrary Actor IDs"
+}
