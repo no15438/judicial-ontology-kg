@@ -133,3 +133,44 @@ def test_engineering_gate_does_not_accept_failed_units_or_format_errors():
     assert not assess({"events": [], "statements": []}, [], coverage, [], 1)[
         "engineering_pipeline_passed"
     ]
+
+
+def test_failed_parent_splits_into_exact_source_partition(tmp_path):
+    import json
+
+    from test_current import ROOT, FakeClient, source
+
+    from judicial_kg.current.runner import run_document
+    from judicial_kg.current.source import batches
+
+    doc = source()
+    doc["fields"] = doc["fields"][:1]
+    units, windows = batches(doc)
+    target = windows[0]
+    middle = len(target) // 2
+
+    def empty(ids):
+        return {
+            "contexts": [],
+            "coverage": [
+                {"unit": i, "status": "no_relevant_content", "reason": "fixture"} for i in ids
+            ],
+        }
+
+    client = FakeClient([{}] * 3 + [empty(target[:middle]), empty(target[middle:])])
+    report = run_document(ROOT, doc, tmp_path / "run", client, max_split_depth=1)
+    coverage = json.loads((tmp_path / "run/coverage.json").read_text())
+    assert [r["unit"] for r in coverage] == list(range(len(units)))
+    assert report["split_attempts"] == 1 and report["failed_leaf_windows"] == 0
+    assert not report["engineering_pipeline_passed"]  # Empty outputs cannot satisfy acceptance.
+    attempts = json.loads((tmp_path / "run/window-attempts.json").read_text())
+    assert attempts[0]["units"] == target and attempts[0]["recovery"] == "split"
+
+
+def test_schema_repair_includes_machine_locatable_error_details():
+    from judicial_kg.current.recovery import ProtocolError
+
+    c, fmt = compiler()
+    with pytest.raises(ProtocolError) as caught:
+        proposal_check({"contexts": []}, fmt, list(range(len(c.units))))
+    assert caught.value.details[0]["rule"] == "required"

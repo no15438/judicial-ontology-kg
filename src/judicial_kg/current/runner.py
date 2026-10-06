@@ -3,6 +3,7 @@
 import copy
 import json
 import time
+from collections import deque
 from uuid import uuid4
 
 from judicial_kg.contracts import Contract
@@ -190,6 +191,7 @@ def run_document(
     run_id=None,
     alignment_client=None,
     alignment_mode=None,
+    max_split_depth=2,
 ):
     validate_source(doc)
     run_id = run_id or str(uuid4())
@@ -225,8 +227,13 @@ def run_document(
     save("source", doc)
     save("text-index", index_documents([doc]))
     all_units = [{"unit": i, "field": u["field"], "text": u["text"]} for i, u in enumerate(units)]
-    for wi, targets in enumerate(windows):
-        stage = f"window-{wi:03}"
+    pending = deque((wi, targets, 0, f"window-{wi:03}") for wi, targets in enumerate(windows))
+    attempts = []
+    while pending:
+        wi, targets, depth, stage = pending.popleft()
+        snapshot = copy.deepcopy(compiler.record)
+        map_count = len(compiler.mappings)
+        coverage_count = len(coverage)
         fmt = schema(contract, targets, list(range(len(units))))
         payload = {
             "target_units": [all_units[i] for i in targets],
@@ -293,6 +300,27 @@ def run_document(
                     }
                 )
         except (ValueError, KeyError, TypeError, IndexError, AttributeError) as error:
+            # A failed parent is an immutable attempt; children partition exactly its source units.
+            compiler.record = snapshot
+            del compiler.issues[before:]
+            del compiler.mappings[map_count:]
+            del coverage[coverage_count:]
+            split = depth < max_split_depth and len(targets) > 1 and not calls.halted
+            attempts.append(
+                {
+                    "stage": stage,
+                    "units": targets,
+                    "depth": depth,
+                    "error_type": type(error).__name__,
+                    "recovery": "split" if split else "exhausted",
+                }
+            )
+            save("window-attempts", attempts)
+            if split:
+                middle = len(targets) // 2
+                pending.appendleft((wi, targets[middle:], depth + 1, stage + "-b"))
+                pending.appendleft((wi, targets[:middle], depth + 1, stage + "-a"))
+                continue
             compiler.issues.append(
                 {
                     "path": stage,
@@ -330,6 +358,8 @@ def run_document(
         "unit_count": len(units),
         "coverage_rows": len(coverage),
         "windows": len(windows),
+        "split_attempts": len(attempts),
+        "failed_leaf_windows": sum(a["recovery"] == "exhausted" for a in attempts),
         "requests": calls.calls,
         "alignment_requests": (
             sum("-align-" in r["stage"] or "-binding-review-" in r["stage"] for r in calls.rows)

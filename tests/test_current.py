@@ -278,7 +278,11 @@ def test_unresolved_window_does_not_block_later_window_text_or_compilation(tmp_p
         ],
     }
     report = run_document(
-        ROOT, doc, tmp_path / "run", FakeClient([{"malformed": True}] * 3 + [empty])
+        ROOT,
+        doc,
+        tmp_path / "run",
+        FakeClient([{"malformed": True}] * 3 + [empty]),
+        max_split_depth=0,
     )
     assert report["status"] == "partial"
     coverage = json.loads((tmp_path / "run/coverage.json").read_text())

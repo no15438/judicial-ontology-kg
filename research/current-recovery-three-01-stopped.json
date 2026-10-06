@@ -1,0 +1,23 @@
+{
+  "status": "stopped_protocol_recovery_exhausted",
+  "code_commit": "f820b71b1df39aeba21a13db2b3c2e339bfee745",
+  "input_manifest_sha256": "d23a0cee4834894ccbd6c36d6a3cd819f8700f99970643d7a38b9e54eb9e910c",
+  "input_documents": 36,
+  "selected": 3,
+  "not_selected": 33,
+  "results": [],
+  "old_full_document_acceptance_comparable": false,
+  "semantic_precision_recall_f1": null,
+  "budget_at_stop": {
+    "prior_committed_cny": "75.9639524",
+    "cap_cny": "80.9639524",
+    "new_committed_cny": "0.9893458",
+    "new_observed_cny": "0.8402218",
+    "cumulative_committed_cny": "76.9532982",
+    "actual_api_requests": 80,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "completion_claim": false
+}
