@@ -58,7 +58,17 @@ def namespace_properties(value, stage):
     }
 
 
-def extract(doc, prompt, contract, provenance, infer, save):
+def extract(
+    doc,
+    prompt,
+    contract,
+    provenance,
+    infer,
+    save,
+    *,
+    header_generator=None,
+    anonymous_repair_options=None,
+):
     budget = {"used": 0}
 
     def infer_canonical(messages, fmt, stage):
@@ -94,11 +104,29 @@ def extract(doc, prompt, contract, provenance, infer, save):
         repair_options=fragment_repairs.source_fragments,
     )
 
+    anonymous_checked = checked_forms.source_checked_infer(
+        doc,
+        [u["id"] for u in source_units(doc)],
+        infer_canonical,
+        save,
+        budget=budget,
+        repair_options=anonymous_repair_options or fragment_repairs.source_fragments,
+    )
+
     def dispatch(messages, fmt, stage):
+        if stage == "anonymous-forms" and anonymous_repair_options is not None:
+            return anonymous_checked(messages, fmt, stage)
         if stage in ("inventory-forms", "anonymous-forms"):
             return checked(messages, fmt, stage)
         return infer_canonical(messages, fmt, stage)
 
     return classified_inventory.extract(
-        doc, prompt, contract, provenance, dispatch, save, budget=budget
+        doc,
+        prompt,
+        contract,
+        provenance,
+        dispatch,
+        save,
+        budget=budget,
+        header_generator=header_generator,
     )

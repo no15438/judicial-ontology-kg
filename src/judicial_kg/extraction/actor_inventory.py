@@ -159,6 +159,20 @@ def canonical_context_ids(delta, actors, save):
     return result
 
 
+def augmentation_preserves_named(original, augmented, allow_existing_mentions=False):
+    if len(augmented) < len(original):
+        return False
+    for before, after in zip(original, augmented, strict=False):
+        if not allow_existing_mentions:
+            if before != after:
+                return False
+        elif {k: v for k, v in before.items() if k != "mentions"} != {
+            k: v for k, v in after.items() if k != "mentions"
+        } or after["mentions"][: len(before["mentions"])] != before["mentions"]:
+            return False
+    return True
+
+
 def generate_header(
     doc,
     prompt,
@@ -173,6 +187,7 @@ def generate_header(
     context_ids=False,
     descriptive=False,
     augment_inventory=None,
+    allow_existing_mentions=False,
 ):
     forms_schema = obj(
         {
@@ -271,7 +286,9 @@ def generate_header(
     if augment_inventory is not None:
         original_actors = copy.deepcopy(inventory["actors"])
         augmented = augment_inventory(doc, original_actors, contract, provenance, infer, save)
-        if augmented[: len(original_actors)] != inventory["actors"]:
+        if not augmentation_preserves_named(
+            inventory["actors"], augmented, allow_existing_mentions
+        ):
             raise DraftError("named_inventory_changed_during_augmentation")
         scoped.compile_checked({"actors": augmented, "contexts": []}, doc, contract, provenance)
         inventory["actors"] = augmented

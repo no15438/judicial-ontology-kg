@@ -189,7 +189,7 @@ def batch_properties(doc, messages, fmt, stage, infer, save):
     return json.dumps(result, ensure_ascii=False)
 
 
-def extract(doc, prompt, contract, provenance, infer, save, *, budget=None):
+def extract(doc, prompt, contract, provenance, infer, save, *, budget=None, header_generator=None):
     budget = {"used": 0} if budget is None else budget
 
     def bounded(messages, fmt, stage):
@@ -250,7 +250,7 @@ def extract(doc, prompt, contract, provenance, infer, save, *, budget=None):
         provenance,
         bounded,
         save,
-        generate_header=augmented_inventory.generate_header,
+        generate_header=header_generator or augmented_inventory.generate_header,
         generate_body=body,
         merge=scoped_incremental.merge_body,
         on_header=scoped_incremental.header_diagnostics,
