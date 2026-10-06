@@ -1,5 +1,6 @@
 """Bounded model protocol recovery; never fabricate missing evidence or coverage."""
 
+import copy
 import json
 
 from jsonschema import Draft202012Validator
@@ -11,7 +12,17 @@ class ProtocolError(ValueError):
         self.details = details
 
 
-def proposal_check(wire, fmt, targets):
+def proposal_check(wire, fmt, targets, *, defer_selectors=False):
+    if defer_selectors:
+        # Position alignment must see wrong numeric selectors before the strict compiler gate.
+        fmt = copy.deepcopy(fmt)
+        props = fmt["properties"]["contexts"]["items"]["properties"]
+        for kind in ("actors", "collectives", "objects", "statements"):
+            item = props[kind]["items"]["properties"]
+            selector = (
+                item["value"]["properties"]["source"] if kind == "statements" else item["mention"]
+            )
+            selector["properties"]["unit"] = {"type": "integer", "minimum": 0}
     errors = list(Draft202012Validator(fmt).iter_errors(wire))
     if errors:
         raise ProtocolError(

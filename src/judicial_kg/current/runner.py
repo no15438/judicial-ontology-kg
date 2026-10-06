@@ -216,6 +216,8 @@ def compile_with_recovery(
                                 "根据原文修复下列入图前契约错误，返回完整Schema实例。"
                                 "保留无错候选，不能为了通过删除难例：无法修复的原命题必须在unresolved登记其目标原文与原因。"
                                 "同一提及不能同时是actor和collective，请按原文选择身份并同步修正引用。"
+                                "明确集合词合议庭、双方当事人、各方当事人只能放collectives；"
+                                "不能降级unknown actor绕过冲突。"
                                 "法院语境speakers是作出认定的法院，不是认定涉及的人；未明确归属可为空。"
                                 "数值谓词要求对应数值：没有约定利息不是利率0，没有欠款不是金额0。"
                                 "表达否定约定或责任而无数值时，使用有据的文本谓词或unresolved。"
@@ -234,7 +236,9 @@ def compile_with_recovery(
                 calls,
                 correction,
                 name + "-propose",
-                lambda value: proposal_check(value, fmt, targets),
+                lambda value: proposal_check(
+                    value, fmt, targets, defer_selectors=aligner is not None
+                ),
                 save,
             )
             save(name + "-proposal", wire)
@@ -350,7 +354,9 @@ def run_document(
                 calls,
                 messages,
                 stage + "-propose",
-                lambda value, fmt=fmt, targets=targets: proposal_check(value, fmt, targets),
+                lambda value, fmt=fmt, targets=targets: proposal_check(
+                    value, fmt, targets, defer_selectors=aligner is not None
+                ),
                 save,
             )
             save(stage + "-proposal", wire)

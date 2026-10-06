@@ -108,7 +108,7 @@ contexts.units必须在目标内；同一单元含无法区分的观点时留unr
 实体是当前context内局部数组；所有actor/subject/index/speakers引用均为对应数组从0开始的整数下标。
 程序生成正式ID、证据哈希和偏移。原文单元unit也使用给定整数，不能生成u前缀或把全文所有单元默认作为证据。
 actors只包含支持本语境所需的主体与说话者，mention复制连续原文；可引用背景中的明确姓名，但不能猜代词身份。
-集合单列collectives，例如各方当事人或合议庭；不等同于任何单个人或法院。同一原文提及不得重复作为actor和collective。
+集合单列collectives，例如各方当事人或合议庭；不等同于任何单个人或法院。同一原文提及不得重复作为actor和collective。合议庭、双方当事人、各方当事人只能是集合，不得改成unknown主体绕过类型约束。
 法院语境speakers是作出认定的法院，不是被认定行为的主体；未明确法院身份可为空。
 集合成员unknown时members为空；partial只列有证据的明确成员；explicit要求原文明确完整成员。不能猜配偶或把全文当事人当全部成员。
 工程、平台、借据等放objects，不强行当人或机构。原文关系句应转为events/statements，不能作为一个actor名称。

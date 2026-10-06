@@ -219,3 +219,39 @@ def test_contract_feedback_recompiles_transactionally_without_manual_graph_edit(
     history = saved["window-000-contract-recovery"]
     assert history[0]["issues"][0]["issues"][0]["code"] == "court_attribution_type"
     assert wire["contexts"][0]["speakers"] == [0]  # Preserve failed proposal.
+
+
+@pytest.mark.parametrize("actor_type", ["unknown", "court", "organization"])
+def test_explicit_panel_cannot_bypass_collective_contract_as_actor(actor_type):
+    c, fmt = compiler()
+    f = frame()
+    f["actors"][0].update(actor_type=actor_type)
+    f["actors"][0]["mention"]["text"] = "合议庭"
+    c.context(f, fmt["properties"]["contexts"]["items"], {1}, "w/c0")
+    assert not c.record["actors"]
+    assert any(r.get("code") == "explicit_collective_as_actor" for r in c.issues)
+
+
+def test_wrong_selector_reaches_alignment_but_scope_and_structure_remain_strict():
+    from judicial_kg.current.recovery import ProtocolError
+
+    c, fmt = compiler()
+    targets = list(range(len(c.units)))
+    f = frame()
+    f["collectives"][0]["mention"]["unit"] = 999
+    wire = {
+        "contexts": [f],
+        "coverage": [{"unit": i, "status": "processed", "reason": "fixture"} for i in targets],
+    }
+    with pytest.raises(ProtocolError):
+        proposal_check(wire, fmt, targets)
+    proposal_check(wire, fmt, targets, defer_selectors=True)
+    c.context(f, fmt["properties"]["contexts"]["items"], set(targets), "w")
+    assert not c.record["collectives"]  # Final compiler still rejects unaligned positions.
+    f["units"] = [999]
+    with pytest.raises(ProtocolError):
+        proposal_check(wire, fmt, targets, defer_selectors=True)
+    f["units"] = [1]
+    f["collectives"][0] = {}
+    with pytest.raises(ProtocolError):
+        proposal_check(wire, fmt, targets, defer_selectors=True)

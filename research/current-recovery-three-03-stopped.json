@@ -1,0 +1,23 @@
+{
+  "status": "stopped_known_collective_downgraded_to_unknown_actor",
+  "code_commit": "f642621785670e34d769284cd642b77a44c6e56e",
+  "input_manifest_sha256": "f6d6dd9f0bf8bf823cb68ba685562b01647bfb6b63ead1e94a56a78542297bc8",
+  "input_documents": 36,
+  "selected": 3,
+  "not_selected": 33,
+  "results": [],
+  "old_full_document_acceptance_comparable": false,
+  "semantic_precision_recall_f1": null,
+  "completion_claim": false,
+  "budget": {
+    "prior_committed_cny": "78.5277142",
+    "cap_cny": "86.5277142",
+    "new_committed_cny": "0.8848792",
+    "new_observed_cny": "0.7330696",
+    "cumulative_committed_cny": "79.4125934",
+    "actual_api_requests": 74,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  }
+}

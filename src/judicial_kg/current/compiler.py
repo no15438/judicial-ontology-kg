@@ -5,7 +5,7 @@ import copy
 from jsonschema import Draft202012Validator
 
 from judicial_kg.contracts import candidate_record, collections
-from judicial_kg.current.source import locate
+from judicial_kg.current.source import compact, locate
 from judicial_kg.sources.records import canonical_hash, evidence_span
 from judicial_kg.validation import validate_record
 
@@ -58,6 +58,7 @@ class Compiler:
                         and str(error)
                         in {
                             "wire_schema_invalid",
+                            "explicit_collective_as_actor",
                             "dependency_quarantined",
                             "local_reference_out_of_range",
                             "verifier_rejected",
@@ -112,6 +113,9 @@ class Compiler:
 
             def add_actor(actor=actor, i=i, path=path):
                 self.check(actor, defs["actors"])
+                # Explicit collective nouns are ontology categories, never an unknown person/body.
+                if compact(actor["mention"]["text"])[0] in {"合议庭", "双方当事人", "各方当事人"}:
+                    raise ValueError("explicit_collective_as_actor")
                 span = self.mention(actor["mention"], set(range(len(self.units))), path)
                 aid, mid = (
                     self.identifier(prefix, "actor", i),
