@@ -1,5 +1,7 @@
 # 工程改进计划：从逐例补救转向受约束的抽取流水线
 
+20篇队列改为文书级8路并行（服务现场核验8槽/32K），篇内仍顺序。原串行首篇026b已在8b10e2c完成：127次调用、自动接受、回放及冻结验证通过；其结果按哈希保留，第二篇0次请求，在文书边界停止旧协调器。剩余19篇在新冻结并行协调器下全新推理，不重复首篇、不复用旧模型响应。并行只改变调度与请求超时480→900秒，模型/温度/seed/抽取v40不变；759项测试通过。新的实时入口是 artifacts/qwen-extraction/next-flash-twenty-v40-parallel-01/batch-report.json，登记 research/next-flash-twenty-v40-parallel-preregistration.json；旧报告为交接前末快照，不能继续当实时状态。并行不保证8倍提速，需报告实际处理中/排队峰值与延迟。
+
 用户现已明确授权直接使用20篇局域网模型抽取，本轮改为诊断性扩样，不再等待旧小样门槛。固定v40、10篇AppealCase+10篇Spark、20个已知案组、完整36篇来源选20/未选16，串行全新推理；原集合缺口与覆盖风险仍保留，不视为生产验收或语义准确率。清单见 research/next-flash-twenty-v40-preregistration.json；运行状态和每篇失败写入 artifacts/qwen-extraction/next-flash-twenty-v40-01/batch-report.json。旧的“不扩量”是此前计划，由本次用户授权变更。
 
 当前实施入口：[v40发现修复](source-discovery.md)与[集合表示缺口](collective-reference-design.md)。749项测试通过；v39两篇200次本地调用后工程1/2、未经纠正0/2，且026b有明确项目遗漏。v40对同一片段4次全新本地调用后找回项目全部4个精确位置，回放/冻结校验通过；只是阶段诊断。下一步实现未知成员集合、补齐相应事件表示，再冻结完整两篇回归；未放行十篇。
