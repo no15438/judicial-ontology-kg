@@ -119,7 +119,7 @@ class ConsistencyReviewer:
         return json.dumps(result, ensure_ascii=False)
 
 
-def extract(doc, prompt, contract, provenance, infer, save):
+def extract(doc, prompt, contract, provenance, infer, save, *, router_class=OccurrenceRouter):
     reviewer = ConsistencyReviewer(doc, infer, save)
     holder = {}
 
@@ -129,7 +129,7 @@ def extract(doc, prompt, contract, provenance, infer, save):
         return reviewer.infer_stage(messages, fmt, stage)
 
     def factory(doc, infer, save):
-        router = OccurrenceRouter(doc, infer, save)
+        router = router_class(doc, infer, save)
         holder["router"] = router
         return router
 

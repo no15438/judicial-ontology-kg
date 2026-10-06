@@ -28,6 +28,7 @@ from judicial_kg.extraction import (
     owner_first,
     referent_inventory,
     source_discovery,
+    source_positions,
     space_inventory,
     typed_owner,
     unique_forms,
@@ -143,6 +144,7 @@ def _run(
         35: referent_inventory,
         37: inventory_handoff,
         40: source_discovery,
+        41: source_positions,
         36: collective_inventory,
     }[version]
     config = {**CONFIG, "version": f"bailian-staged-v{version}"}

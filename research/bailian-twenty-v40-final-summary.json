@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "model": "qwen3.8-max-0902",
+  "protocol_version": 40,
+  "concurrency": 4,
+  "expected_documents": 36,
+  "selected_documents": 20,
+  "not_selected": 16,
+  "historical_response_reuse": 0,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "finished_documents": 20,
+  "automatic_pipeline_accepted": 0,
+  "frozen_inputs_unchanged": true,
+  "failure_counts": {
+    "draft_grounding_failed": 4,
+    "object_routing_missing_source": 6,
+    "span_proposals_unresolved": 5,
+    "protocol_invalid_response": 1,
+    "contract_rejected": 1,
+    "form_replacement_ledger_incomplete": 1,
+    "anonymous_referent_unresolved": 2
+  },
+  "budget": {
+    "prior_committed_cny": "38.661000",
+    "cap_cny": "200",
+    "new_committed_cny": "32.464260",
+    "new_observed_cny": "32.464260",
+    "cumulative_committed_cny": "71.125260",
+    "actual_api_requests": 403,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "offline_replay_verified": 20,
+  "frozen_verified": 20
+}

@@ -1,0 +1,48 @@
+{
+  "scope": "six saved failing discovery responses; offline regression, not fresh extraction or semantic acceptance",
+  "new_api_calls": 0,
+  "results": [
+    {
+      "index": 2,
+      "proposals": 17,
+      "mapped": 1,
+      "unresolved": 0,
+      "source_spans": 52
+    },
+    {
+      "index": 6,
+      "proposals": 16,
+      "mapped": 1,
+      "unresolved": 0,
+      "source_spans": 50
+    },
+    {
+      "index": 8,
+      "proposals": 13,
+      "mapped": 1,
+      "unresolved": 0,
+      "source_spans": 29
+    },
+    {
+      "index": 12,
+      "proposals": 9,
+      "mapped": 1,
+      "unresolved": 0,
+      "source_spans": 40
+    },
+    {
+      "index": 14,
+      "proposals": 15,
+      "mapped": 1,
+      "unresolved": 0,
+      "source_spans": 41
+    },
+    {
+      "index": 16,
+      "proposals": 19,
+      "mapped": 1,
+      "unresolved": 0,
+      "source_spans": 51
+    }
+  ]
+}

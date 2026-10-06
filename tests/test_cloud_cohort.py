@@ -3,6 +3,8 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
 
+import pytest
+
 from judicial_kg.extraction.cloud_cohort import SharedBudget
 from judicial_kg.extraction.transport import Response
 
@@ -47,7 +49,8 @@ def test_unknown_usage_keeps_reservation(tmp_path):
     assert guard.call(body, 10).error == "shared_budget_exhausted"
 
 
-def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path):
+@pytest.mark.parametrize("version", [40, 41])
+def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path, version):
     import shutil
     from pathlib import Path
 
@@ -79,7 +82,7 @@ def test_v40_cloud_failure_replays_under_cohort_lease(tmp_path):
                 tmp_path,
                 [source],
                 tmp_path / "artifacts/run",
-                version=40,
+                version=version,
                 client=Client(),
                 cohort_lease=lease,
             )
