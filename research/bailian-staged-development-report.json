@@ -535,12 +535,170 @@
       ]
     }
   ],
-  "cumulative_estimated_cny": "21.026736",
+  "cumulative_estimated_cny": "26.315196",
   "authorized_cumulative_cap_cny": "200",
   "semantic_precision_recall_f1": null,
   "gold_available": false,
   "raw_documents_or_responses_included": false,
   "latest_assembly": {
+    "code_commit": "f9b3a35135ca4aed0ecc2d1935cc1db092d51c8e",
+    "worktree_dirty": false,
+    "validation": {
+      "expected_documents": 36,
+      "source_fields_verified": 156,
+      "attempts_total": 1,
+      "attempts_rejected": 0,
+      "documents_accepted_candidate": 1,
+      "documents_accepted_empty": 0,
+      "documents_rejected": 0,
+      "documents_missing": 35,
+      "issue_counts": {},
+      "accepted_node_counts": {
+        "actors": 19,
+        "mentions": 175,
+        "contexts": 11,
+        "roles": 25,
+        "events": 35,
+        "statements": 55
+      },
+      "accepted_evidence_spans_replayed": 576,
+      "semantic_precision_recall_f1": null,
+      "gold_available": false,
+      "semantic_completeness": "not_assessed",
+      "requires_user_legal_annotation": false
+    },
+    "documents_assembled": 1,
+    "documents_assembly_failed": 0,
+    "document_status_counts": {
+      "assembled_candidate": 1,
+      "missing": 35
+    },
+    "nodes": 609,
+    "edges": 1522,
+    "node_counts": {
+      "Actor": 19,
+      "Context": 11,
+      "Document": 1,
+      "Event": 35,
+      "EvidenceSpan": 288,
+      "Mention": 175,
+      "Role": 25,
+      "Statement": 55
+    },
+    "edge_counts": {
+      "about": 55,
+      "assertion_source": 118,
+      "attributed_to": 14,
+      "contains": 320,
+      "covers": 127,
+      "denotes": 175,
+      "has_mention": 175,
+      "in_context": 115,
+      "participant": 65,
+      "role_of": 25,
+      "supported_by": 331,
+      "within_context": 2
+    },
+    "diagnostic_hint_counts": {
+      "reported_material_in_finding_context": 1
+    },
+    "assembled_documents_diagnostics": {
+      "assertion_evidence_characters": 1139,
+      "context_evidence_characters": 1731,
+      "literal_name_occurrences_without_mention": 0,
+      "mention_evidence_characters": 450,
+      "source_characters": 1731
+    },
+    "graph_canonical_sha256": "e4b475e01cee3bb3425653b0085ba3ebf11d922d02e56547ac6cd36dab45818f",
+    "requests_submitted": 0
+  },
+  "latest_outcome_scope": "One exposed development document freshly completed by a frozen automatic workflow, zero prior response reuse and zero extra model corrections; no semantic accuracy or generalization claim.",
+  "fresh_workflow_runs": [
+    {
+      "workflow": "fresh-source-to-graph-v1",
+      "protocol_version": 31,
+      "code_commit": "f9b3a35135ca4aed0ecc2d1935cc1db092d51c8e",
+      "completed": true,
+      "status": "automatic_pipeline_accepted",
+      "response_reuse_enabled": false,
+      "external_candidate_input": false,
+      "automatic_pipeline_accepted": true,
+      "uncorrected_first_pass_accepted": true,
+      "semantic_precision_recall_f1": null,
+      "extraction_status": "accepted_candidate",
+      "expected_documents": 36,
+      "selected_documents": 1,
+      "not_selected": 35,
+      "requests_submitted": 49,
+      "responses_reused": 0,
+      "model_correction_calls": 0,
+      "observed_cost_cny": "5.288460",
+      "prior_committed_cny": "21.026736",
+      "offline_replay_verified": true,
+      "graph": {
+        "nodes": 609,
+        "edges": 1522,
+        "validation": {
+          "expected_documents": 36,
+          "source_fields_verified": 156,
+          "attempts_total": 1,
+          "attempts_rejected": 0,
+          "documents_accepted_candidate": 1,
+          "documents_accepted_empty": 0,
+          "documents_rejected": 0,
+          "documents_missing": 35,
+          "issue_counts": {},
+          "accepted_node_counts": {
+            "actors": 19,
+            "mentions": 175,
+            "contexts": 11,
+            "roles": 25,
+            "events": 35,
+            "statements": 55
+          },
+          "accepted_evidence_spans_replayed": 576,
+          "semantic_precision_recall_f1": null,
+          "gold_available": false,
+          "semantic_completeness": "not_assessed",
+          "requires_user_legal_annotation": false
+        },
+        "diagnostic_hint_counts": {
+          "reported_material_in_finding_context": 1
+        },
+        "assembled_documents_diagnostics": {
+          "assertion_evidence_characters": 1139,
+          "context_evidence_characters": 1731,
+          "literal_name_occurrences_without_mention": 0,
+          "mention_evidence_characters": 450,
+          "source_characters": 1731
+        },
+        "graph_canonical_sha256": "e4b475e01cee3bb3425653b0085ba3ebf11d922d02e56547ac6cd36dab45818f"
+      },
+      "frozen_inputs_unchanged": true,
+      "run_name": "fresh-v31-01",
+      "extraction_run_id": "bd283615-be8e-4e5f-88f8-20c1a47d35fc",
+      "worktree_dirty_at_start": false,
+      "request_elapsed_seconds": 323.179,
+      "replay_requests_submitted": 0,
+      "replay_requests_replayed": 49,
+      "context_stage_statuses": [
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated",
+        "validated"
+      ],
+      "deterministic_query_duplicates_removed": 1,
+      "manual_graph_edits": 0
+    }
+  ],
+  "resumed_assembly": {
     "code_commit": "2c71786439e70ca8572a183086f92f3206a9ee8e",
     "worktree_dirty": true,
     "validation": {
@@ -612,6 +770,5 @@
     "graph_canonical_sha256": "ed1763a8e5bfad047082b07816793f75d85c91dfa7a424db292e282781eacce9",
     "requests_submitted": 0,
     "worktree_dirty_note": "Only design documentation was modified; executable source hashes recorded in the local assembly report."
-  },
-  "latest_outcome_scope": "One exposed development document accepted after repair/resume; no fresh whole-document first pass or semantic accuracy claim."
+  }
 }
