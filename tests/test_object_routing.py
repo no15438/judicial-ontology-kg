@@ -210,7 +210,7 @@ def test_extract_hooks_compile_and_validate_whole_record(monkeypatch):
 
 
 @pytest.mark.parametrize("unresolved", [False, True])
-@pytest.mark.parametrize("version", [38, 39])
+@pytest.mark.parametrize("version", [38, 39, 40])
 def test_native_runner_and_frozen_replay_keep_object_routing(
     workspace,  # noqa: F811
     monkeypatch,
@@ -281,7 +281,7 @@ def test_native_runner_and_frozen_replay_keep_object_routing(
         client=client,
         document_id=source()["document_id"],
     )
-    expected_calls = 2 if version == 39 and unresolved else 1
+    expected_calls = 2 if version in {39, 40} and unresolved else 1
     assert result["requests_submitted"] == expected_calls
     assert client.paths.count("/v1/chat/completions") == expected_calls
     assert result["offline_replay_verified"]

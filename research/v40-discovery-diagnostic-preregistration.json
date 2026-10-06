@@ -1,0 +1,28 @@
+{
+  "protocol_version": 40,
+  "run": "v40-discovery-diagnostic-01",
+  "purpose": "Check whether inclusive source-only discovery retains the previously omitted project before routing",
+  "backend": "spark_lan",
+  "model": "qwen3.8-flash-next-iq4xs",
+  "source_run": "next-flash-two-v39-01",
+  "document": "appeal026b",
+  "stage": "body-006-forms",
+  "max_new_inference_requests": 5,
+  "historical_response_reuse": 0,
+  "input_contains_old_forms_or_expected_answer": false,
+  "manual_graph_edits": 0,
+  "whole_document_acceptance": false,
+  "cloud_requests_submitted": 0,
+  "acceptance": [
+    "exact prior source request hash verified",
+    "all discovered forms match current source",
+    "project target present and routed with all exact positions retained",
+    "no unresolved routing",
+    "zero-call replay and frozen fingerprint match"
+  ],
+  "limits": [
+    "development stage diagnostic only",
+    "does not resolve collective membership representation",
+    "not semantic gold or complete graph acceptance"
+  ]
+}
