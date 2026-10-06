@@ -10,6 +10,12 @@ from judicial_kg.provenance import verify_manifest
 
 
 def main() -> int:
+    if len(sys.argv) > 1 and sys.argv[1] == "current":
+        from judicial_kg.current.cli import main as current_main
+
+        del sys.argv[1]
+        current_main()
+        return 0
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "command",
@@ -51,7 +57,7 @@ def main() -> int:
     parser.add_argument("--repair-spec", type=Path)
     parser.add_argument(
         "--contract-version",
-        choices=["0.1.0", "0.2.0", "0.3.0", "0.4.0"],
+        choices=["0.1.0", "0.2.0", "0.3.0", "0.4.0", "0.5.0"],
         default="0.1.0",
         help="Contract for offline validation and graph assembly",
     )
