@@ -105,7 +105,7 @@ def load_config(path: Path) -> dict:
     return config
 
 
-def busy(metrics: str) -> bool:
+def busy(metrics: str, capacity: int = 1) -> bool:
     values = {}
     for line in metrics.splitlines():
         for name in ("llamacpp:requests_processing", "llamacpp:requests_deferred"):
@@ -113,7 +113,7 @@ def busy(metrics: str) -> bool:
                 values[name] = float(line.split()[-1])
     if len(values) != 2:
         raise ValueError("Missing service load metrics")
-    return any(value != 0 for value in values.values())
+    return sum(values.values()) >= capacity
 
 
 def completion_content(response: dict, model: str) -> tuple[str, dict]:
@@ -168,6 +168,28 @@ def extraction_lock(root):
             fcntl.flock(handle, fcntl.LOCK_UN)
 
 
+class CohortLease:
+    """Only an active coordinator holding the repository lock may share capacity."""
+
+    def __init__(self, root, limit):
+        self.root = root.resolve()
+        self.limit = limit
+        self.active = False
+
+
+@contextmanager
+def extraction_cohort(root, limit):
+    if type(limit) is not int or not 1 <= limit <= 8:
+        raise ValueError("Local cohort concurrency must be between 1 and 8")
+    lease = CohortLease(root, limit)
+    with extraction_lock(root):
+        lease.active = True
+        try:
+            yield lease
+        finally:
+            lease.active = False
+
+
 def run_extraction(
     root,
     document_paths,
@@ -177,7 +199,25 @@ def run_extraction(
     protocol_override=None,
     *,
     document_id=None,
+    cohort_lease=None,
 ):
+    if cohort_lease is not None:
+        if (
+            not isinstance(cohort_lease, CohortLease)
+            or not cohort_lease.active
+            or cohort_lease.root != root.resolve()
+        ):
+            raise ValueError("Invalid or inactive cohort lease")
+        return _run_extraction(
+            root,
+            document_paths,
+            config_path,
+            output,
+            client,
+            protocol_override,
+            document_id=document_id,
+            service_concurrency=cohort_lease.limit,
+        )
     with extraction_lock(root):
         return _run_extraction(
             root,
@@ -199,6 +239,7 @@ def _run_extraction(
     protocol_override=None,
     replay_origin=None,
     document_id=None,
+    service_concurrency=1,
 ) -> dict:
     root = root.resolve()
     output = safe_output(root, output)
@@ -374,7 +415,10 @@ def _run_extraction(
         "expected_documents": len(documents),
         "selected_documents": len(selected),
         "requests_submitted": 0,
-        "serial_service_guard": "repository_process_lock",
+        "serial_service_guard": "repository_process_lock"
+        if service_concurrency == 1
+        else "cohort_process_lock",
+        "service_concurrency_limit": service_concurrency,
         "model_weight_hash_verified": False,
         "gold_available": False,
         "semantic_precision_recall_f1": None,
@@ -449,6 +493,8 @@ def _run_extraction(
         actual_context = props["default_generation_settings"]["n_ctx"]
         if type(actual_context) is not int or actual_context < config["context_tokens"]:
             raise DraftError("service_context_mismatch")
+        if service_concurrency > (props.get("total_slots") or 1):
+            raise DraftError("service_concurrency_mismatch")
         metadata["service_snapshot"] = {
             "models_sha256": canonical_hash(model_info),
             "props_sha256": canonical_hash(props),
@@ -475,7 +521,7 @@ def _run_extraction(
                     if stage_key is not None:
                         outcome.setdefault("stages", []).append(receipt)
                     try:
-                        if busy(call("/metrics").raw.decode()):
+                        if busy(call("/metrics").raw.decode(), service_concurrency):
                             raise DraftError("service_busy")
                         request = {
                             "model": config["model"],

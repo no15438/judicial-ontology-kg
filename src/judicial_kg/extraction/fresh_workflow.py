@@ -32,6 +32,7 @@ def run_fresh(
     client=None,
     document_id=None,
     local_config=None,
+    cohort_lease=None,
 ):
     """Prior reports are used only for cumulative billing; no old responses/candidates are read.
 
@@ -98,6 +99,7 @@ def run_fresh(
                 output / "extraction",
                 client=client,
                 document_id=document_id,
+                cohort_lease=cohort_lease,
             )
             outcomes = json.loads((output / "extraction/outcomes.json").read_text())
             selected = [row for row in outcomes if row["selected"]]

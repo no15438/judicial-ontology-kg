@@ -187,6 +187,7 @@ def replay_completed(root, document_paths, source_run, output):
         client=client,
         replay_origin=original,
         document_id=original.get("selection_document_id"),
+        service_concurrency=original.get("service_concurrency_limit", 1),
     )
     result["completed"] = False
     write_json(output / "report.json", result)
