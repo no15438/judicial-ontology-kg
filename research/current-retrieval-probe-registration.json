@@ -1,0 +1,36 @@
+{
+  "source_document_sha256": "f38940c37fc87cb545b7d63b1c707753d199b3f0997fb835b7d264596356aa07",
+  "questions_sha256": "263fd198938fd244b7c79b51f89307b4e876092473b1e9b3f0435db52b1571e6",
+  "questions": 6,
+  "scope": "within_case_evidence_retrieval_not_cross_case_similarity",
+  "selection": "source-first questions fixed before reading graph content; development sample already seen",
+  "expert_gold": false,
+  "text_top_k": 3,
+  "shared_character_budget": 600,
+  "reference_units": {
+    "q1": [
+      47,
+      50
+    ],
+    "q2": [
+      32,
+      33
+    ],
+    "q3": [
+      43
+    ],
+    "q4": [
+      28,
+      29
+    ],
+    "q5": [
+      25
+    ],
+    "q6": [
+      45,
+      46,
+      49
+    ]
+  },
+  "on_results": "Report all six, extra context, and misses. No query pruning or claims of semantic accuracy."
+}

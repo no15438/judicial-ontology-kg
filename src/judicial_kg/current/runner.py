@@ -3,6 +3,7 @@
 import copy
 import json
 import time
+from uuid import uuid4
 
 from judicial_kg.contracts import Contract
 from judicial_kg.current import VERSION
@@ -109,8 +110,9 @@ def verify(wire, payload, calls, stage, save):
     return decision
 
 
-def run_document(root, doc, output, client, window_size=16):
+def run_document(root, doc, output, client, window_size=16, *, run_id=None):
     validate_source(doc)
+    run_id = run_id or str(uuid4())
     output.mkdir(parents=True, exist_ok=False)
     contract = Contract.load(root, "0.5.0")
     units, windows = batches(doc, window_size)
@@ -122,7 +124,7 @@ def run_document(root, doc, output, client, window_size=16):
             "method": "model",
             "producer": "qwen3.8-flash",
             "version": VERSION,
-            "run_id": canonical_hash(doc)[:24],
+            "run_id": run_id,
         },
     )
     calls = Calls(client, output)
@@ -132,6 +134,7 @@ def run_document(root, doc, output, client, window_size=16):
     def save(name, value):
         write_json(output / (name + ".json"), value)
 
+    save("run-metadata", {"run_id": run_id, "version": VERSION})
     save("source", doc)
     save("text-index", index_documents([doc]))
     all_units = [{"unit": i, "field": u["field"], "text": u["text"]} for i, u in enumerate(units)]

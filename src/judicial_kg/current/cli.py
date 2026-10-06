@@ -6,14 +6,20 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from judicial_kg.current.retrieval import graph_expand, index_documents, search
+from judicial_kg.current.retrieval import graph_expand, index_documents, search, search_context
 from judicial_kg.current.runner import run_document
 from judicial_kg.extraction.bailian import BailianClient, credentials
 from judicial_kg.extraction.cloud_cohort import SharedBudget
-from judicial_kg.extraction.fresh_workflow import fingerprint
+from judicial_kg.extraction.fresh_workflow import fingerprint as legacy_fingerprint
 from judicial_kg.extraction.transport import Response
 from judicial_kg.sources.development import safe_output, write_json
 from judicial_kg.sources.records import canonical_hash, sha256
+
+
+def implementation_fingerprint(root):
+    return {
+        str(Path(k).relative_to(root.resolve())): v for k, v in legacy_fingerprint(root, []).items()
+    }
 
 
 class CircuitBudget(SharedBudget):
@@ -50,14 +56,15 @@ def replay(root, source_run, output):
 
     client = Saved()
     config = json.loads((source_run / "config.json").read_text())
-    if fingerprint(root, []) != config["implementation"]:
+    if implementation_fingerprint(root) != config["implementation"]:
         raise ValueError("Replay requires the frozen implementation")
     inventory = json.loads((source_run / "outputs.json").read_text())
     if any(
         sha256((source_run / name).read_bytes()) != digest for name, digest in inventory.items()
     ):
         raise ValueError("Saved artifact changed")
-    run_document(root, doc, output, client, config["window_size"])
+    run_id = json.loads((source_run / "run-metadata.json").read_text())["run_id"]
+    run_document(root, doc, output, client, config["window_size"], run_id=run_id)
     for name in ("candidate", "graph", "coverage", "issues", "source-mappings"):
         if (source_run / (name + ".json")).read_bytes() != (output / (name + ".json")).read_bytes():
             raise ValueError("Replay outputs differ")
@@ -84,7 +91,7 @@ def run(root, manifest_path, output, credential_root):
         raise ValueError("Invalid selected documents")
     output = safe_output(root, output)
     output.mkdir(parents=True, exist_ok=False)
-    frozen = fingerprint(root, [])
+    frozen = implementation_fingerprint(root)
     write_json(output / "manifest.json", manifest)
     write_json(output / "frozen-inputs.json", frozen)
     # Persist every input document in the text index, including unselected graph documents.
@@ -99,7 +106,7 @@ def run(root, manifest_path, output, credential_root):
     results = []
 
     def execute(i, identifier):
-        if fingerprint(root, []) != frozen:
+        if implementation_fingerprint(root) != frozen:
             raise ValueError("Implementation changed")
         dest = output / f"document-{i + 1:02}"
         r = run_document(root, by_id[identifier], dest, budget, manifest.get("window_size", 16))
@@ -112,7 +119,7 @@ def run(root, manifest_path, output, credential_root):
             {p.name: sha256(p.read_bytes()) for p in dest.iterdir() if p.is_file()},
         )
         r.update(replay(root, dest, output / f"replay-{i + 1:02}"))
-        if fingerprint(root, []) != frozen:
+        if implementation_fingerprint(root) != frozen:
             raise ValueError("Frozen implementation changed")
         return r
 
@@ -146,7 +153,9 @@ def run(root, manifest_path, output, credential_root):
                     }
                 )
             write_json(output / "batch-report.json", report)
-    report.update(status="completed", frozen_inputs_unchanged=fingerprint(root, []) == frozen)
+    report.update(
+        status="completed", frozen_inputs_unchanged=implementation_fingerprint(root) == frozen
+    )
     write_json(output / "batch-report.json", report)
     return report
 
@@ -160,8 +169,12 @@ def evaluate(rows, questions, records, k=10):
             result.append({"id": q["id"], "status": "unscored_missing_reference"})
             continue
         scores = {}
-        for method in ("bm25", "tfidf", "hybrid", "graph_augmented"):
-            hits = search(rows, q["query"], "hybrid" if method == "graph_augmented" else method, k)
+        for method in ("bm25", "tfidf", "hybrid", "context", "graph_augmented"):
+            hits = (
+                search_context(rows, q["query"])
+                if method in {"context", "graph_augmented"}
+                else search(rows, q["query"], method, k)
+            )
             if method == "graph_augmented":
                 hits = graph_expand(rows, hits, records)
             found = {h["document_id"] for h in hits}
@@ -182,8 +195,9 @@ def evaluate(rows, questions, records, k=10):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("command", choices=["run", "replay", "search", "evaluate"])
+    p.add_argument("command", choices=["index", "run", "replay", "search", "evaluate"])
     p.add_argument("--manifest", type=Path)
+    p.add_argument("--documents", type=Path, action="append")
     p.add_argument("--output", type=Path)
     p.add_argument("--credential-root", type=Path)
     p.add_argument("--source-run", type=Path)
@@ -192,12 +206,24 @@ def main():
     p.add_argument("--questions", type=Path)
     p.add_argument("--candidate", action="append", type=Path, default=[])
     p.add_argument(
-        "--method", choices=["bm25", "tfidf", "hybrid", "graph_augmented"], default="hybrid"
+        "--method",
+        choices=["bm25", "tfidf", "hybrid", "context", "graph_augmented"],
+        default="context",
     )
     p.add_argument("--execute", action="store_true")
     args = p.parse_args()
     root = Path.cwd()
-    if args.command == "run":
+    if args.command == "index":
+        if not args.documents or not args.output:
+            p.error("index requires --documents --output; no credentials needed")
+        output = safe_output(root, args.output)
+        if output.exists():
+            raise ValueError("Index output already exists")
+        docs = [d for path in args.documents for d in json.loads(path.read_text())]
+        rows = index_documents(docs)
+        write_json(output, rows)
+        result = {"documents": len(docs), "source_units": len(rows), "model_calls": 0}
+    elif args.command == "run":
         if not all((args.execute, args.manifest, args.output, args.credential_root)):
             p.error("run requires --execute --manifest --output --credential-root")
         result = run(root, args.manifest, args.output, args.credential_root)
@@ -217,8 +243,10 @@ def main():
         else:
             if not args.query:
                 p.error("--query required")
-            result = search(
-                rows, args.query, "hybrid" if args.method == "graph_augmented" else args.method
+            result = (
+                search_context(rows, args.query)
+                if args.method in {"context", "graph_augmented"}
+                else search(rows, args.query, args.method)
             )
             if args.method == "graph_augmented":
                 result = graph_expand(rows, result, records)

@@ -105,3 +105,29 @@ def graph_expand(rows, hits, records):
                         "polarity": event["polarity"],
                     }
     return list(expanded.values())
+
+
+def search_context(rows, query, limit=3, radius=2, character_budget=600):
+    """Rank neighboring clauses together; return original spans, never synthetic citations."""
+    if radius < 0 or limit < 1 or character_budget < 1:
+        raise ValueError("Invalid retrieval bounds")
+    groups = {}
+    for row in rows:
+        groups.setdefault((row["document_id"], row["evidence"]["field"]), []).append(row)
+    ranked, neighborhoods = [], {}
+    for group in groups.values():
+        group.sort(key=lambda row: row["evidence"]["start"])
+        for i, row in enumerate(group):
+            neighbors = group[max(0, i - radius) : i + radius + 1]
+            neighborhoods[row["id"]] = neighbors
+            # Concatenation is ranking text only; cited evidence remains the original units.
+            ranked.append({**row, "text": "".join(n["text"] for n in neighbors)})
+    seeds = search(ranked, query, "hybrid", limit)
+    hits, seen, characters = [], set(), 0
+    for seed in seeds:
+        for row in neighborhoods[seed["id"]]:
+            if row["id"] not in seen and characters + len(row["text"]) <= character_budget:
+                hits.append({**row, "retrieval_origin": "text_context"})
+                seen.add(row["id"])
+                characters += len(row["text"])
+    return hits

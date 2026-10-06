@@ -1,0 +1,187 @@
+{
+  "status": "development_probe_not_benchmark",
+  "questions": 6,
+  "scope": "within_case_evidence_retrieval",
+  "reference_origin": "assistant_source_reading_not_expert_gold",
+  "source_window_radius": 2,
+  "top_k_passages": 3,
+  "shared_character_cap": 600,
+  "summary": {
+    "context_text": {
+      "reference_units_found": 7,
+      "reference_units": 11,
+      "returned_units": 46,
+      "returned_characters": 738
+    },
+    "context_graph": {
+      "reference_units_found": 7,
+      "reference_units": 11,
+      "returned_units": 53,
+      "returned_characters": 838
+    }
+  },
+  "results": [
+    {
+      "id": "q1",
+      "scores": {
+        "context_text": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 8,
+          "returned_characters": 101,
+          "matched_units": [],
+          "missing_units": [
+            47,
+            50
+          ]
+        },
+        "context_graph": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 10,
+          "returned_characters": 129,
+          "matched_units": [],
+          "missing_units": [
+            47,
+            50
+          ]
+        }
+      }
+    },
+    {
+      "id": "q2",
+      "scores": {
+        "context_text": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 7,
+          "returned_characters": 134,
+          "matched_units": [],
+          "missing_units": [
+            32,
+            33
+          ]
+        },
+        "context_graph": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 8,
+          "returned_characters": 146,
+          "matched_units": [],
+          "missing_units": [
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "id": "q3",
+      "scores": {
+        "context_text": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 7,
+          "returned_characters": 136,
+          "matched_units": [
+            43
+          ],
+          "missing_units": []
+        },
+        "context_graph": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 10,
+          "returned_characters": 179,
+          "matched_units": [
+            43
+          ],
+          "missing_units": []
+        }
+      }
+    },
+    {
+      "id": "q4",
+      "scores": {
+        "context_text": {
+          "reference_units_found": 2,
+          "reference_units": 2,
+          "returned_units": 8,
+          "returned_characters": 136,
+          "matched_units": [
+            28,
+            29
+          ],
+          "missing_units": []
+        },
+        "context_graph": {
+          "reference_units_found": 2,
+          "reference_units": 2,
+          "returned_units": 9,
+          "returned_characters": 153,
+          "matched_units": [
+            28,
+            29
+          ],
+          "missing_units": []
+        }
+      }
+    },
+    {
+      "id": "q5",
+      "scores": {
+        "context_text": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 9,
+          "returned_characters": 109,
+          "matched_units": [
+            25
+          ],
+          "missing_units": []
+        },
+        "context_graph": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 9,
+          "returned_characters": 109,
+          "matched_units": [
+            25
+          ],
+          "missing_units": []
+        }
+      }
+    },
+    {
+      "id": "q6",
+      "scores": {
+        "context_text": {
+          "reference_units_found": 3,
+          "reference_units": 3,
+          "returned_units": 7,
+          "returned_characters": 122,
+          "matched_units": [
+            45,
+            46,
+            49
+          ],
+          "missing_units": []
+        },
+        "context_graph": {
+          "reference_units_found": 3,
+          "reference_units": 3,
+          "returned_units": 7,
+          "returned_characters": 122,
+          "matched_units": [
+            45,
+            46,
+            49
+          ],
+          "missing_units": []
+        }
+      }
+    }
+  ],
+  "design_change": "Added stronger text context baseline after observing poor clause-only recall; not a held-out confirmatory evaluation",
+  "semantic_accuracy": null
+}

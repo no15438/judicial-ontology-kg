@@ -1,0 +1,16 @@
+{
+  "source_capture_sha256": "d2a144f4b2b77f34b53719c7e14f5d791f9ec7bce7e3abdf4b7d6f6b47966876",
+  "selected_qa_rows": 168,
+  "questions": 168,
+  "distinct_question_texts": 14,
+  "case_dependent_questions": 168,
+  "source_basis_counts": {
+    "标注数据构造": 84,
+    "原始数据规则构造": 84
+  },
+  "review_status_is_upstream_claim_not_independent_verification": true,
+  "global_case_retrieval_reference_ready": false,
+  "graph_semantic_gold": false,
+  "reason": "Questions depend on a specified case and repeat across parent documents; source_basis does not provide verified answer spans. Assigning a single relevant case to a generic question would create a misleading retrieval benchmark.",
+  "next_evaluation": "Separate within-case evidence retrieval from cross-case similarity. Freeze genuinely discriminative queries with independently traceable references; retain unscored questions."
+}

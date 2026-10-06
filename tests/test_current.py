@@ -220,8 +220,7 @@ def test_verifier_can_quarantine_event_without_changing_other_indices(tmp_path):
 
 
 def test_saved_calls_replay_without_network_and_detect_tampering(tmp_path):
-    from judicial_kg.current.cli import replay
-    from judicial_kg.extraction.fresh_workflow import fingerprint
+    from judicial_kg.current.cli import implementation_fingerprint, replay
     from judicial_kg.sources.development import write_json
     from judicial_kg.sources.records import sha256
 
@@ -245,7 +244,10 @@ def test_saved_calls_replay_without_network_and_detect_tampering(tmp_path):
     }
     dest = tmp_path / "original"
     run_document(ROOT, doc, dest, FakeClient([proposal, decisions]))
-    write_json(dest / "config.json", {"window_size": 16, "implementation": fingerprint(ROOT, [])})
+    write_json(
+        dest / "config.json",
+        {"window_size": 16, "implementation": implementation_fingerprint(ROOT)},
+    )
     write_json(dest / "outputs.json", {p.name: sha256(p.read_bytes()) for p in dest.iterdir()})
     assert replay(ROOT, dest, tmp_path / "replay")["network_calls"] == 0
     (dest / "candidate.json").write_text("{}")
@@ -316,3 +318,22 @@ def test_json_mode_is_locally_prepared_and_provider_error_halts_window_calls(tmp
     assert result["status"] == "service_failed"
     units, _ = batches(source())
     assert result["coverage_rows"] == len(units)
+
+
+def test_context_search_preserves_each_original_span_and_is_bounded():
+    from judicial_kg.current.retrieval import search_context
+
+    rows = index_documents([source()])
+    hits = search_context(rows, "42", character_budget=600)
+    assert hits
+    original = {r["id"]: r for r in rows}
+    assert all(h["text"] == h["evidence"]["quote"] == original[h["id"]]["text"] for h in hits)
+    assert sum(len(h["text"]) for h in hits) <= 600
+    assert len({h["id"] for h in hits}) == len(hits)
+
+
+def test_implementation_fingerprint_is_relative_for_portable_replay():
+    from judicial_kg.current.cli import implementation_fingerprint
+
+    value = implementation_fingerprint(ROOT)
+    assert value and all(not Path(name).is_absolute() for name in value)

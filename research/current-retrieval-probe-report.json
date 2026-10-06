@@ -1,0 +1,338 @@
+{
+  "status": "development_probe_not_benchmark",
+  "questions": 6,
+  "reference_origin": "assistant_source_reading_not_expert_gold",
+  "sample": "one previously seen Spark document",
+  "scope": "within_case_evidence_retrieval",
+  "top_k": 3,
+  "shared_character_cap": 600,
+  "summary": {
+    "bm25": {
+      "reference_units_found": 3,
+      "reference_units": 11,
+      "returned_units": 18,
+      "returned_characters": 280
+    },
+    "tfidf": {
+      "reference_units_found": 3,
+      "reference_units": 11,
+      "returned_units": 18,
+      "returned_characters": 297
+    },
+    "hybrid": {
+      "reference_units_found": 3,
+      "reference_units": 11,
+      "returned_units": 18,
+      "returned_characters": 280
+    },
+    "graph_augmented": {
+      "reference_units_found": 3,
+      "reference_units": 11,
+      "returned_units": 18,
+      "returned_characters": 280
+    }
+  },
+  "results": [
+    {
+      "id": "q1",
+      "scores": {
+        "bm25": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 55,
+          "matched_units": [],
+          "missing_units": [
+            47,
+            50
+          ]
+        },
+        "tfidf": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 55,
+          "matched_units": [],
+          "missing_units": [
+            47,
+            50
+          ]
+        },
+        "hybrid": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 55,
+          "matched_units": [],
+          "missing_units": [
+            47,
+            50
+          ]
+        },
+        "graph_augmented": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 55,
+          "matched_units": [],
+          "missing_units": [
+            47,
+            50
+          ]
+        }
+      }
+    },
+    {
+      "id": "q2",
+      "scores": {
+        "bm25": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 59,
+          "matched_units": [],
+          "missing_units": [
+            32,
+            33
+          ]
+        },
+        "tfidf": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 59,
+          "matched_units": [],
+          "missing_units": [
+            32,
+            33
+          ]
+        },
+        "hybrid": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 59,
+          "matched_units": [],
+          "missing_units": [
+            32,
+            33
+          ]
+        },
+        "graph_augmented": {
+          "reference_units_found": 0,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 59,
+          "matched_units": [],
+          "missing_units": [
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "id": "q3",
+      "scores": {
+        "bm25": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 48,
+          "matched_units": [
+            43
+          ],
+          "missing_units": []
+        },
+        "tfidf": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 67,
+          "matched_units": [
+            43
+          ],
+          "missing_units": []
+        },
+        "hybrid": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 48,
+          "matched_units": [
+            43
+          ],
+          "missing_units": []
+        },
+        "graph_augmented": {
+          "reference_units_found": 1,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 48,
+          "matched_units": [
+            43
+          ],
+          "missing_units": []
+        }
+      }
+    },
+    {
+      "id": "q4",
+      "scores": {
+        "bm25": {
+          "reference_units_found": 1,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 28,
+          "matched_units": [
+            29
+          ],
+          "missing_units": [
+            28
+          ]
+        },
+        "tfidf": {
+          "reference_units_found": 1,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 26,
+          "matched_units": [
+            29
+          ],
+          "missing_units": [
+            28
+          ]
+        },
+        "hybrid": {
+          "reference_units_found": 1,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 28,
+          "matched_units": [
+            29
+          ],
+          "missing_units": [
+            28
+          ]
+        },
+        "graph_augmented": {
+          "reference_units_found": 1,
+          "reference_units": 2,
+          "returned_units": 3,
+          "returned_characters": 28,
+          "matched_units": [
+            29
+          ],
+          "missing_units": [
+            28
+          ]
+        }
+      }
+    },
+    {
+      "id": "q5",
+      "scores": {
+        "bm25": {
+          "reference_units_found": 0,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 34,
+          "matched_units": [],
+          "missing_units": [
+            25
+          ]
+        },
+        "tfidf": {
+          "reference_units_found": 0,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 34,
+          "matched_units": [],
+          "missing_units": [
+            25
+          ]
+        },
+        "hybrid": {
+          "reference_units_found": 0,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 34,
+          "matched_units": [],
+          "missing_units": [
+            25
+          ]
+        },
+        "graph_augmented": {
+          "reference_units_found": 0,
+          "reference_units": 1,
+          "returned_units": 3,
+          "returned_characters": 34,
+          "matched_units": [],
+          "missing_units": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "id": "q6",
+      "scores": {
+        "bm25": {
+          "reference_units_found": 1,
+          "reference_units": 3,
+          "returned_units": 3,
+          "returned_characters": 56,
+          "matched_units": [
+            46
+          ],
+          "missing_units": [
+            45,
+            49
+          ]
+        },
+        "tfidf": {
+          "reference_units_found": 1,
+          "reference_units": 3,
+          "returned_units": 3,
+          "returned_characters": 56,
+          "matched_units": [
+            46
+          ],
+          "missing_units": [
+            45,
+            49
+          ]
+        },
+        "hybrid": {
+          "reference_units_found": 1,
+          "reference_units": 3,
+          "returned_units": 3,
+          "returned_characters": 56,
+          "matched_units": [
+            46
+          ],
+          "missing_units": [
+            45,
+            49
+          ]
+        },
+        "graph_augmented": {
+          "reference_units_found": 1,
+          "reference_units": 3,
+          "returned_units": 3,
+          "returned_characters": 56,
+          "matched_units": [
+            46
+          ],
+          "missing_units": [
+            45,
+            49
+          ]
+        }
+      }
+    }
+  ],
+  "semantic_accuracy": null,
+  "cross_case_relevance": null,
+  "query_selection_based_on_graph": false
+}
