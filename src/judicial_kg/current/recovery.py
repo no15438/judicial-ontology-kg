@@ -59,12 +59,14 @@ def infer_checked(calls, messages, stage, check, save, repairs=2, *, repair_inst
                     "role": "user",
                     "content": json.dumps(
                         {
+                            "修复轮次": attempt,
                             "任务": repair_instructions
                             or (
                                 "上次输出未通过协议校验。根据同一原文重新输出完整合法数据实例，不猜证据，不删难例。"
                                 "Schema要求coverage时必须完整逐项登记，语义无法判断用uncertain。"
                                 "不得用空对象占位，不返回Schema定义，不省略重复内容。"
                                 "不支持的语义结构请放入对应语境的unresolved并附原文单位和原因，不能强改为别的类型。"
+                                "若response_truncated，输出紧凑完整JSON，禁止重复空对象或Schema定义。"
                             ),
                             "失败类别": history[-1]["code"],
                             "具体错误": history[-1].get("details", []),
@@ -91,6 +93,12 @@ def infer_checked(calls, messages, stage, check, save, repairs=2, *, repair_inst
                     "transport_failure",
                     "provider_circuit_open",
                     "input_budget_exceeded",
+                    "response_truncated",
+                    "response_not_stopped",
+                    "response_content_empty",
+                    "response_refusal_or_tool_call",
+                    "response_model_mismatch",
+                    "response_choices_invalid",
                 }
                 else type(error).__name__
             )

@@ -16,6 +16,8 @@ selected_kind按原文选类型，selected_speakers按原文选实际陈述者�
 若确定的说话者不在当前actors中选missing_actor；真正不明选unknown。法院自身无具体主体绑定可用空数组。
 source_cues仅为程序收集的原文线索，可能在引用中，不是经验证的说话者或法院结论。
 context项核验实际陈述者、语境性质及引用范围：句法主语/被描述主体不是说话者。
+每个角色、事件、陈述另选source_match。直接表达属于本语境选same_context；实际来自内层引用/转述而非本语境陈述者选nested_source；不明选unclear。
+外层是原告诉称，不能把“被告改口称”的借贷性质直接存成原告确认的借贷断言；需拆分来源或未决。
 原告请求不得归给被告；一审法院说理不是被告主张；上诉人引用他人历史自认，外层仍是上诉人的论述。
 法院转述当事人请求或欲证明的内容，不等于法院确认这些内容；引用中说话者不能接管整个外层段落。
 事件核验类型、参与者和否定对象：转账款项并非借款，否认的是借贷性质，不是否认转账发生。
@@ -171,7 +173,16 @@ def review(wire, payload, calls, stage, save):
         }
         for kind in ("roles", "events", "statements"):
             for i, item in enumerate(context[kind]):
-                tasks[f"c{ci}_{kind}_{i}"] = {"context": ci, "kind": kind, "proposal": item}
+                tasks[f"c{ci}_{kind}_{i}"] = {
+                    "context": ci,
+                    "kind": kind,
+                    "proposal": item,
+                    "question": (
+                        "同时核谓词/关系及source_match：谁在表达这个命题？"
+                        "它是否只是内层引用或欲证明内容？不能因其出现在法院叙述就当法院确认。"
+                        "原文主张可明确确认或否认，不要求法院采信；affirmed仅指本语境的表达。"
+                    ),
+                }
     decisions, failures = {}, []
     entries = list(tasks.items())
     for offset in range(0, len(entries), 12):
@@ -227,6 +238,11 @@ def review(wire, payload, calls, stage, save):
                     "items": {"enum": [*task["options"], "missing_actor", "unknown"]},
                 }
                 spec["required"].append("selected_speakers")
+            elif task["kind"] != "context":
+                spec["properties"]["source_match"] = {
+                    "enum": ["same_context", "nested_source", "unclear"]
+                }
+                spec["required"].append("source_match")
             required_units = (
                 wire["contexts"][task["context"]]["units"]
                 if task["kind"] == "context"
@@ -279,6 +295,8 @@ def review(wire, payload, calls, stage, save):
                 )
                 if selected != expected and not abstained:
                     task["direct_conflicts"].append("source_selected_speakers_differ")
+            if task["kind"] != "context" and answer[key]["source_match"] != "same_context":
+                task["direct_conflicts"].append("assertion_source_does_not_match_context")
             if answer[key]["decision"] != "supported" or task["direct_conflicts"]:
                 failures.append(
                     {
@@ -346,6 +364,7 @@ def repair(wire, failures, contract, payload, calls, stage, save):
                     raise ProtocolError(
                         [{"path": ["contexts"], "rule": "unknown_requires_abstention"}]
                     )
+            errors = []
             for key, (kind, before) in originals.items():
                 outcome = value["outcomes"][key]
                 try:
@@ -365,9 +384,22 @@ def repair(wire, failures, contract, payload, calls, stage, save):
                         compact(before["value"]["source"]["text"])[0]
                         != compact(after["value"]["source"]["text"])[0]
                     ):
-                        raise ProtocolError(
-                            [{"path": ["outcomes", key], "rule": "original_raw_value_changed"}]
+                        errors.append(
+                            {
+                                "path": ["outcomes", key],
+                                "rule": "original_raw_value_changed",
+                                "expected": before["value"]["source"]["text"],
+                                "received": after["value"]["source"]["text"],
+                                "mapped_path": [
+                                    "contexts",
+                                    outcome["context"],
+                                    kind,
+                                    outcome["index"],
+                                ],
+                            }
                         )
+            if errors:
+                raise ProtocolError(errors)
 
         cues = source_cues(payload, ids)
         rows = payload["target_units"] + payload["background_units"]
@@ -385,6 +417,9 @@ def repair(wire, failures, contract, payload, calls, stage, save):
                         "outcomes必须为每个原roles/events/statements候选及已有unresolved登记去向："
                         "重抽项或unresolved的context及index；已有未决不得静默删除。"
                         "原陈述值文字不能更改；错误谓词/归属可修复或未决，不能用另一个金额替代。"
+                        "背景单元只允许主体提及；角色、事件、值与未决的units只能用目标units。"
+                        "新增说话者不意味着把原角色偷换为新说话者的角色：保留原角色或登记未决。"
+                        "仅输出紧凑JSON，不输出空对象占位，不复制Schema，不无穷追加候选。"
                         "不能改原文、编造新称谓或依据；未涉及的语境不返回。\nSchema:\n"
                     )
                     + json.dumps(envelope, ensure_ascii=False),

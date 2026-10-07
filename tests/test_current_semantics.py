@@ -43,6 +43,8 @@ def supported(keys):
             result[k]["selected_kind"] = "quoted_material"
         elif k.endswith("_speakers"):
             result[k]["selected_speakers"] = []
+        elif not k.endswith("_scope"):
+            result[k]["source_match"] = "same_context"
     return result
 
 
@@ -304,3 +306,37 @@ def test_interest_start_date_does_not_become_a_due_date():
     assert "interest_start_is_not_repayment_deadline" in direct_conflicts(c, "statements", st, rows)
     st["value"]["source"]["text"] = "2017年5月15日"
     assert not direct_conflicts(c, "statements", st, rows)
+
+
+def test_supported_nested_source_cannot_be_promoted_into_outer_assertion():
+    answer = supported(["c0_context", "c0_events_0"])
+    answer["c0_events_0"]["source_match"] = "nested_source"
+    failed = review({"contexts": [frame()]}, payload(), DirectCalls([answer]), "w", lambda *a: None)
+    assert failed[0]["key"] == "c0_events_0"
+    assert failed[0]["direct_conflicts"] == ["assertion_source_does_not_match_context"]
+
+
+def test_truncated_protocol_retries_have_explicit_reason_and_distinct_attempts():
+    from judicial_kg.current.recovery import infer_checked
+
+    class Truncated:
+        halted = False
+        messages = []
+
+        def infer(self, messages, stage):
+            self.messages.append(messages)
+            raise ValueError("response_truncated")
+
+    calls = Truncated()
+    saved = {}
+    with pytest.raises(ValueError, match="protocol_recovery_exhausted"):
+        infer_checked(
+            calls,
+            [{"role": "system", "content": "metadata"}],
+            "w",
+            lambda *a: None,
+            lambda k, v: saved.update({k: v}),
+        )
+    assert calls.messages[1] != calls.messages[2]
+    assert all(r["code"] == "response_truncated" for r in saved["w-recovery"])
+    assert json.loads(calls.messages[2][-1]["content"])["修复轮次"] == 2
