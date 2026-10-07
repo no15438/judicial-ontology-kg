@@ -153,10 +153,43 @@ def source_cues(payload, ids):
     return [selected[i] for i in sorted(selected)]
 
 
+def proof_report_scope(context, by_unit):
+    """Literal proof-purpose scope is a risk signal, not a fact or legal truth label."""
+    ids = sorted(context["units"])
+    scoped = set()
+    for index, unit in enumerate(ids):
+        if "欲证明" not in by_unit[unit]["text"]:
+            continue
+        starts = [
+            i
+            for i in ids[: index + 1]
+            if re.match(
+                r"\s*(?:原告|被告|上诉人|被上诉人).{0,80}(?:主张|举出|提供|提交)",
+                by_unit[i]["text"],
+            )
+        ]
+        first = starts[-1] if starts else unit
+        following = ids[index + 1 :]
+        ends = [
+            i
+            for i in following
+            if re.match(r"\s*(?:但|因|故|本院|法院|(?:一审|原审|二审)法院)", by_unit[i]["text"])
+        ]
+        last = ends[0] if ends else max(ids) + 1
+        scoped.update(i for i in ids if first <= i < last)
+    return scoped
+
+
 def direct_conflicts(context, kind, item, by_unit):
     """Narrow expression contradictions; these cannot be waived by a model's supported label."""
     text = "".join(by_unit[i]["text"] for i in item.get("units", context["units"]))
     errors = []
+    if (
+        kind != "context"
+        and context["kind"] in {"court_finding", "court_reasoning", "court_disposition"}
+        and set(item["units"]) & proof_report_scope(context, by_unit)
+    ):
+        errors.append("court_assertion_overlaps_reported_proof_purpose")
     if kind == "context":
         if context["kind"] == "unknown" and any(
             context[k] for k in ("roles", "events", "statements")

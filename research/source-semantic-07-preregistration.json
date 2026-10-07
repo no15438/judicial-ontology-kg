@@ -1,0 +1,41 @@
+{
+  "run": "source-semantic-07",
+  "purpose": "historical_source_counterexample_diagnostic_not_fresh_cohort",
+  "model": "qwen3.8-flash",
+  "temperature": 0.2,
+  "seed": 42,
+  "thinking": false,
+  "concurrency": 1,
+  "selected_contexts": 1,
+  "selected_source_documents": 1,
+  "historical_seed_candidates": 10,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "prior_committed_cny": "138.4666700",
+  "diagnostic_cap_cny": "139.4666700",
+  "overall_authorization_cny": "200",
+  "max_semantic_repairs_per_context": 2,
+  "unchanged_old_twenty_result": "aa01d59: 20/20 engineering, not semantic accuracy",
+  "success_boundary": "Fresh model calls on historical diagnostic candidates, not fresh cohort. A wholly abstained seed is handled but NOT counted as repaired or accepted. Exact source/graph roundtrip and zero-network replay required.",
+  "seeds": [
+    {
+      "document": "document-02",
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "source_sha256": "fb4b4a11fbeda3820873d217f23ae3df3adcb6e5fa56b41a7fc14c310f8dc2d5",
+      "context_id": "r_9b025a20ed574aa5d32254c954c3b44891d1d2a8",
+      "historical_wire_path": "artifacts/current/twenty-02/document-02/window-005-aligned.json",
+      "historical_wire_sha256": "af702cd7e44f081a1927ead9ac4efddc431a01ec8210a44a48b9ce32637370a3",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "reported_claim_inside_reasoning",
+          "original_record_id": "r_38f53f3b09b2da75c679718eced6d58e1b53cf38",
+          "kind": "events",
+          "verdict": "source_attribution_risk"
+        }
+      ]
+    }
+  ],
+  "changes": "Retest known claim-inside-court-reasoning false acceptance; proof-purpose risk veto independent of supported model label. Trace source attribution, retained candidates, explicit abstention and replay; not semantic accuracy.",
+  "alignment": "flash"
+}
