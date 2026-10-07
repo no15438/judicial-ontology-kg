@@ -642,6 +642,10 @@ def run_document(
     report["source_semantic_assertion_abstentions"] = sum(
         r["status"] == "source_semantic_abstention" for r in verification_audit
     )
+    report["source_review_protocol_abstentions"] = sum(
+        len(json.loads(p.read_text())["invalid_keys"])
+        for p in output.glob("*-semantic-review-*-protocol-abstentions.json")
+    )
     report["source_semantic_frame_abstentions"] = len(
         {
             row["path"].split("/unresolved/")[0]

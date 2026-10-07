@@ -144,15 +144,17 @@ def test_model_supported_cannot_override_a_direct_source_conflict():
 def test_supported_semantic_review_requires_actual_source_units():
     answer = supported(["c0_context", "c0_events_0"])
     answer["c0_context"]["source_units"] = []
-    with pytest.raises(ValueError, match="protocol_recovery_exhausted"):
-        review({"contexts": [frame()]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
+    failures = review({"contexts": [frame()]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
+    assert failures[0]["key"] == "c0_context"
+    assert failures[0]["decision"]["decision"] == "uncertain"
 
 
 def test_supported_review_cannot_cite_only_unrelated_background():
     answer = supported(["c0_context", "c0_events_0"])
     answer["c0_context"]["source_units"] = [0]
-    with pytest.raises(ValueError, match="protocol_recovery_exhausted"):
-        review({"contexts": [frame()]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
+    failures = review({"contexts": [frame()]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
+    assert failures[0]["key"] == "c0_context"
+    assert failures[0]["decision"]["decision"] == "uncertain"
 
 
 def test_existing_unresolved_cannot_disappear_during_semantic_repair():
@@ -545,3 +547,42 @@ def test_exhausted_source_frame_is_uncertain_and_cannot_fake_full_acceptance(mon
     result = assess(cc.record, cc.issues, coverage, [], len(units))
     assert not result["engineering_pipeline_passed"]
     assert "empty_event_or_statement_channel" in result["blocking_reasons"]
+
+
+def test_review_invalid_proof_abstains_only_invalid_answer_and_preserves_raw():
+    answer = supported(["c0_context", "c0_events_0"])
+    answer["c0_context"]["source_units"] = [0]
+    calls = ReviewCalls(answer)
+    saved = {}
+    failures = review(
+        {"contexts": [frame()]}, payload(), calls, "w", lambda k, v: saved.update({k: v})
+    )
+    assert len(calls.messages) == 3
+    report = saved["w-semantic-review"]
+    assert report["rule_protocol_abstention_keys"] == ["c0_context"]
+    assert report["decisions"]["c0_context"]["decision"] == "uncertain"
+    assert report["decisions"]["c0_speakers"]["decision"] == "supported"
+    assert failures and report["not_reviewed_tasks"] == ["c0_events_0"]
+    ledger = saved["w-semantic-review-000-protocol-abstentions"]
+    assert ledger["original_model_answer"]["c0_context"]["source_units"] == [0]
+    assert ledger["method"] == "rule" and not ledger["model_review_success"]
+
+
+def test_review_budget_failure_cannot_be_hidden_as_abstention():
+    class BudgetStopped:
+        halted = False
+
+        def infer(self, messages, stage):
+            raise ValueError("input_budget_exceeded")
+
+    with pytest.raises(ValueError, match="input_budget_exceeded"):
+        review({"contexts": [frame()]}, payload(), BudgetStopped(), "w", lambda *a: None)
+
+
+def test_contains_feedback_exposes_required_source_units():
+    from judicial_kg.current.protocol import obj
+
+    fmt = obj(source_units={"type": "array", "contains": {"enum": [1]}})
+    with pytest.raises(ProtocolError) as failure:
+        check_schema({"source_units": [0]}, fmt)
+    assert failure.value.details[0]["expected"] == {"enum": [1]}

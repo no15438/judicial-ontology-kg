@@ -70,12 +70,68 @@ def check_schema(value, fmt):
                     "path": list(e.path),
                     "rule": e.validator,
                     "expected": e.validator_value
-                    if e.validator in {"enum", "required", "type", "const"}
+                    if e.validator in {"enum", "required", "type", "const", "contains", "minItems"}
                     else None,
                 }
                 for e in errors[:16]
             ]
         )
+
+
+def checked_review(calls, messages, stage, fmt, save):
+    """Keep valid neighbors; malformed review decisions remain explicit rule uncertainty."""
+    previous = None
+
+    def remember(name, value):
+        nonlocal previous
+        if name.endswith("-parsed"):
+            previous = value
+        save(name, value)
+
+    try:
+        return infer_checked(
+            calls, messages, stage, lambda value: check_schema(value, fmt), remember
+        ), []
+    except ValueError as error:
+        if (
+            str(error) != "protocol_recovery_exhausted"
+            or calls.halted
+            or not isinstance(previous, dict)
+        ):
+            raise
+        answer, invalid = {}, []
+        for key, spec in fmt["properties"].items():
+            if key in previous and not list(Draft202012Validator(spec).iter_errors(previous[key])):
+                answer[key] = previous[key]
+                continue
+            invalid.append(key)
+            item = {
+                "decision": "uncertain",
+                "reason": "rule:source_review_protocol_abstention:bounded_invalid_model_answer",
+                "source_units": [],
+            }
+            if "selected_kind" in spec["properties"]:
+                item["selected_kind"] = CONTEXT_NAMES["unknown"]
+            if "selected_speakers" in spec["properties"]:
+                item["selected_speakers"] = ["unknown"]
+            if "source_match" in spec["properties"]:
+                item["source_match"] = "unclear"
+            answer[key] = item
+        if not invalid:
+            raise
+        check_schema(answer, fmt)
+        save(
+            stage + "-protocol-abstentions",
+            {
+                "original_model_answer": previous,
+                "invalid_keys": invalid,
+                "adapted_review": answer,
+                "method": "rule",
+                "model_review_success": False,
+                "not_gold": True,
+            },
+        )
+        return answer, invalid
 
 
 CUES = re.compile(
@@ -218,6 +274,7 @@ def review(wire, payload, calls, stage, save):
                     ),
                 }
     decisions, failures = {}, []
+    protocol_abstentions = []
     frames = [(k, t) for k, t in tasks.items() if t["kind"] == "context"]
     assertions = [(k, t) for k, t in tasks.items() if t["kind"] != "context"]
     batches = [
@@ -299,7 +356,7 @@ def review(wire, payload, calls, stage, save):
                     },
                 }
             ]
-        answer = infer_checked(
+        answer, invalid = checked_review(
             calls,
             [
                 {
@@ -320,9 +377,10 @@ def review(wire, payload, calls, stage, save):
                 },
             ],
             f"{stage}-semantic-review-{offset:03}",
-            lambda value, fmt=fmt: check_schema(value, fmt),
+            fmt,
             save,
         )
+        protocol_abstentions.extend(invalid)
         decisions.update(answer)
         for key, task in batch.items():
             context = wire["contexts"][task["context"]]
@@ -362,6 +420,7 @@ def review(wire, payload, calls, stage, save):
             "model_judgments_not_gold": True,
             "not_reviewed_tasks": sorted(set(tasks) - set(decisions)),
             "program_abstained_frames_not_model_reviewed": abstained_frames,
+            "rule_protocol_abstention_keys": protocol_abstentions,
         },
     )
     return failures

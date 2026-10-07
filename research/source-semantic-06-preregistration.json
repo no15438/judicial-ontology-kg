@@ -1,0 +1,41 @@
+{
+  "run": "source-semantic-06",
+  "purpose": "historical_source_counterexample_diagnostic_not_fresh_cohort",
+  "model": "qwen3.8-flash",
+  "temperature": 0.2,
+  "seed": 42,
+  "thinking": false,
+  "concurrency": 1,
+  "selected_contexts": 1,
+  "selected_source_documents": 1,
+  "historical_seed_candidates": 10,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "prior_committed_cny": "134.9666700",
+  "diagnostic_cap_cny": "136.4666700",
+  "overall_authorization_cny": "200",
+  "max_semantic_repairs_per_context": 2,
+  "unchanged_old_twenty_result": "aa01d59: 20/20 engineering, not semantic accuracy",
+  "success_boundary": "Fresh model calls on historical diagnostic candidates, not fresh cohort. A wholly abstained seed is handled but NOT counted as repaired or accepted. Exact source/graph roundtrip and zero-network replay required.",
+  "seeds": [
+    {
+      "document": "document-04",
+      "document_id": "spark_qa:3be8e84dd069608b9e381c12086d0cdd8d375b7fecf0d662e54b52def4842aed",
+      "source_sha256": "10dbfc024ab49bebff125bf896ea873d2a7a4631f127468398153b215308f40b",
+      "context_id": "r_3e551ff795f4e1769033a350502e8a7f2f10afd2",
+      "historical_wire_path": "artifacts/current/twenty-02/document-04/window-002-aligned.json",
+      "historical_wire_sha256": "b24b2efa0e96b0daf71d2e683fc7fcff89d3f695b9852c39615278e044a1ee35",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "reported_speech_scope",
+          "original_record_id": "r_3e551ff795f4e1769033a350502e8a7f2f10afd2",
+          "kind": "contexts",
+          "verdict": "confirmed_overbroad_speaker_scope"
+        }
+      ]
+    }
+  ],
+  "changes": "Only retest the background-only supported source-review proof failure from05; preserve invalid raw proof, valid neighbors and explicit rule uncertainty. Not a fresh document or semantic accuracy evaluation.",
+  "alignment": "flash"
+}
