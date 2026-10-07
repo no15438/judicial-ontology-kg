@@ -1,0 +1,32 @@
+{
+  "run": "source-semantic-window-01",
+  "purpose": "fresh_proposal_on_original_full_source_with_fixed_target_window_not_whole_document_acceptance",
+  "source_path": "artifacts/current/twenty-02/document-02/source.json",
+  "source_sha256": "fb4b4a11fbeda3820873d217f23ae3df3adcb6e5fa56b41a7fc14c310f8dc2d5",
+  "target_units": [
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95
+  ],
+  "full_source_background": true,
+  "historical_response_reuse": 0,
+  "manual_graph_edits": 0,
+  "model": "qwen3.8-flash",
+  "semantic_precision_recall_f1": null,
+  "prior_committed_cny": "142.4666700",
+  "cap_cny": "143.4666700",
+  "boundary": "Source/contract/graph valid, explicit abstention separately recorded, exact offline call replay. This window does not increase full-document pass denominator. Adjacent source qualifiers are immutable despite model frame edits."
+}

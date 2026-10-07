@@ -612,3 +612,18 @@ def test_proof_scope_does_not_veto_an_explicit_court_finding_without_purpose_cue
     c = frame()
     c["kind"] = "court_finding"
     assert not direct_conflicts(c, "events", c["events"][0], {1: {"text": "本院确认该项内容。"}})
+
+
+def test_repaired_context_cannot_drop_the_original_proof_purpose_qualifier():
+    c = frame()
+    c.update(kind="court_reasoning", units=[2])
+    e = {**c["events"][0], "event_type": "repayment", "polarity": "affirmed", "units": [2]}
+    units = {
+        0: {"text": "原告主张，"},
+        1: {"text": "欲证明该项内容，"},
+        2: {"text": "后已偿还的事实。"},
+        3: {"text": "但证据不足。"},
+    }
+    assert direct_conflicts(c, "events", e, units) == [
+        "court_assertion_overlaps_reported_proof_purpose"
+    ]

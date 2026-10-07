@@ -155,7 +155,8 @@ def source_cues(payload, ids):
 
 def proof_report_scope(context, by_unit):
     """Literal proof-purpose scope is a risk signal, not a fact or legal truth label."""
-    ids = sorted(context["units"])
+    # Original adjacent text remains relevant when a repair isolates the claim from its cue.
+    ids = sorted(i for i in by_unit if min(context["units"]) - 6 <= i <= max(context["units"]) + 6)
     scoped = set()
     for index, unit in enumerate(ids):
         if "欲证明" not in by_unit[unit]["text"]:
@@ -177,7 +178,7 @@ def proof_report_scope(context, by_unit):
         ]
         last = ends[0] if ends else max(ids) + 1
         scoped.update(i for i in ids if first <= i < last)
-    return scoped
+    return scoped & set(context["units"])
 
 
 def direct_conflicts(context, kind, item, by_unit):
