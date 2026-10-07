@@ -4,7 +4,7 @@
 
 最新开发分支为 `codex/model-alignment`，对齐计划见 [模型对齐](docs/model-alignment-plan.md)。冻结批次结果以最新进度为准。
 
-当前持续验收固定20篇：第一轮73b66d4已完成16/20工程通过、20/20离线回放；第二轮aa01d59在隔离目录运行，尚未完成，不能拼接两轮通过结果。第二轮冻结分支为 `codex/model-alignment-local-repair`，修复源码已合回开发分支；失败反馈如何进入设计见 [工程经验](docs/workflow-repair-lessons.md)。
+当前持续验收固定20篇：第一轮73b66d4已完成16/20工程通过、20/20离线回放；第二轮aa01d59已完成20/20工程通过、20/20零网络回放、851项测试通过，两轮结果未拼接。最终报告为 research/current-twenty-02-report.json，累计保守费用126.0062429元/授权200元；本轮请求已结束。第二轮冻结分支为 `codex/model-alignment-local-repair`，修复源码已合回开发分支；失败反馈如何进入设计见 [工程经验](docs/workflow-repair-lessons.md)。
 
 先读 [当前流程与运行命令](docs/current-workflow.md)、[最新进度](docs/progress.md) 和 AGENTS.md。
 
