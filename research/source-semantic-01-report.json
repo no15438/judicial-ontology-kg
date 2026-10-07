@@ -1,0 +1,398 @@
+{
+  "status": "completed",
+  "selected_contexts": 10,
+  "selected_documents": 8,
+  "finished_contexts": 10,
+  "accepted_contexts": 7,
+  "offline_replayed_contexts": 10,
+  "historical_seed_contexts": 10,
+  "results": [
+    {
+      "index": 1,
+      "document": "document-12",
+      "codes": [
+        "speaker_misbinding"
+      ],
+      "accepted": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "final_stage": "diagnostic-contract-repair-1",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 2,
+        "mentions": 2,
+        "contexts": 1,
+        "roles": 2,
+        "events": 1,
+        "statements": 7,
+        "objects": 0,
+        "object_mentions": 0,
+        "object_links": 0,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "unresolved_before": 0,
+      "unresolved_after": 0,
+      "original_assertions": 10,
+      "final_assertions": 10,
+      "initial_flagged_items": 1,
+      "initial_context_flagged": true,
+      "initial_direct_conflicts": [
+        "explicit_claimant_speaker_conflict"
+      ],
+      "new_requests": 4,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 2,
+      "document": "document-17",
+      "codes": [
+        "court_scope_lost"
+      ],
+      "accepted": false,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "error_type": "ValueError",
+      "error_code": "contract_recovery_exhausted",
+      "initial_flagged_items": 0,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [],
+      "new_requests": 13,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 3,
+      "document": "document-04",
+      "codes": [
+        "reported_speech_scope"
+      ],
+      "accepted": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "final_stage": "diagnostic",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 5,
+        "mentions": 5,
+        "contexts": 1,
+        "roles": 2,
+        "events": 8,
+        "statements": 6,
+        "objects": 0,
+        "object_mentions": 0,
+        "object_links": 0,
+        "collectives": 1,
+        "collective_mentions": 1,
+        "collective_memberships": 2,
+        "collective_participations": 2
+      },
+      "unresolved_before": 0,
+      "unresolved_after": 0,
+      "original_assertions": 16,
+      "final_assertions": 16,
+      "initial_flagged_items": 0,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [],
+      "new_requests": 4,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 4,
+      "document": "document-11",
+      "codes": [
+        "reported_speech_scope"
+      ],
+      "accepted": false,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "error_type": "ValueError",
+      "error_code": "protocol_recovery_exhausted",
+      "initial_flagged_items": 1,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [],
+      "new_requests": 4,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 5,
+      "document": "document-16",
+      "codes": [
+        "speaker_misbinding"
+      ],
+      "accepted": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "final_stage": "diagnostic",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 4,
+        "mentions": 4,
+        "contexts": 1,
+        "roles": 4,
+        "events": 3,
+        "statements": 0,
+        "objects": 0,
+        "object_mentions": 0,
+        "object_links": 0,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "unresolved_before": 0,
+      "unresolved_after": 0,
+      "original_assertions": 7,
+      "final_assertions": 7,
+      "initial_flagged_items": 0,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [],
+      "new_requests": 2,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 6,
+      "document": "document-17",
+      "codes": [
+        "negation_scope"
+      ],
+      "accepted": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "final_stage": "diagnostic-contract-repair-1",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 3,
+        "mentions": 3,
+        "contexts": 1,
+        "roles": 2,
+        "events": 4,
+        "statements": 2,
+        "objects": 2,
+        "object_mentions": 2,
+        "object_links": 2,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "unresolved_before": 0,
+      "unresolved_after": 0,
+      "original_assertions": 8,
+      "final_assertions": 8,
+      "initial_flagged_items": 1,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [
+        "negated_loan_nature_is_not_negated_transfer"
+      ],
+      "new_requests": 6,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 7,
+      "document": "document-16",
+      "codes": [
+        "temporal_attribute",
+        "predicate_broadening"
+      ],
+      "accepted": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "final_stage": "diagnostic-contract-repair-1",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 2,
+        "mentions": 2,
+        "contexts": 1,
+        "roles": 1,
+        "events": 1,
+        "statements": 6,
+        "objects": 0,
+        "object_mentions": 0,
+        "object_links": 0,
+        "collectives": 1,
+        "collective_mentions": 1,
+        "collective_memberships": 0,
+        "collective_participations": 1
+      },
+      "unresolved_before": 1,
+      "unresolved_after": 1,
+      "original_assertions": 8,
+      "final_assertions": 8,
+      "initial_flagged_items": 2,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [
+        "cost_request_is_not_legal_basis",
+        "interest_period_is_not_repayment_deadline"
+      ],
+      "new_requests": 4,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 8,
+      "document": "document-02",
+      "codes": [
+        "reported_claim_inside_reasoning"
+      ],
+      "accepted": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "final_stage": "diagnostic",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 6,
+        "mentions": 6,
+        "contexts": 1,
+        "roles": 3,
+        "events": 2,
+        "statements": 2,
+        "objects": 5,
+        "object_mentions": 5,
+        "object_links": 1,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "unresolved_before": 1,
+      "unresolved_after": 1,
+      "original_assertions": 11,
+      "final_assertions": 11,
+      "initial_flagged_items": 0,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [],
+      "new_requests": 3,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 9,
+      "document": "document-20",
+      "codes": [
+        "requested_versus_awarded"
+      ],
+      "accepted": false,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "error_type": "ValueError",
+      "error_code": "protocol_recovery_exhausted",
+      "initial_flagged_items": 1,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [],
+      "new_requests": 8,
+      "offline_replay_verified": true
+    },
+    {
+      "index": 10,
+      "document": "document-15",
+      "codes": [
+        "role_support_gap"
+      ],
+      "accepted": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "final_stage": "diagnostic-contract-repair-1",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 4,
+        "mentions": 4,
+        "contexts": 1,
+        "roles": 1,
+        "events": 2,
+        "statements": 4,
+        "objects": 2,
+        "object_mentions": 2,
+        "object_links": 2,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "unresolved_before": 0,
+      "unresolved_after": 0,
+      "original_assertions": 8,
+      "final_assertions": 8,
+      "initial_flagged_items": 1,
+      "initial_context_flagged": false,
+      "initial_direct_conflicts": [],
+      "new_requests": 5,
+      "offline_replay_verified": true
+    }
+  ],
+  "budget": {
+    "prior_committed_cny": "126.0062429",
+    "cap_cny": "131.0062429",
+    "new_committed_cny": "0.5617052",
+    "new_observed_cny": "0.5617052",
+    "cumulative_committed_cny": "126.5679481",
+    "actual_api_requests": 54,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "elapsed_seconds": 383.0999429579824,
+  "semantic_precision_recall_f1": null,
+  "not_fresh_twenty_acceptance": true,
+  "frozen_commit": "16fe287",
+  "engineering_tests": 868,
+  "source_semantic_success_not_established": true,
+  "known_initial_attribution_misses": [
+    {
+      "context_index": 2,
+      "cause": "review accepted type while ignoring speaker/scope or lacked explicit court frame selection"
+    },
+    {
+      "context_index": 3,
+      "cause": "review accepted type while ignoring speaker/scope or lacked explicit court frame selection"
+    },
+    {
+      "context_index": 4,
+      "cause": "review accepted type while ignoring speaker/scope or lacked explicit court frame selection"
+    },
+    {
+      "context_index": 5,
+      "cause": "review accepted type while ignoring speaker/scope or lacked explicit court frame selection"
+    },
+    {
+      "context_index": 8,
+      "cause": "review accepted type while ignoring speaker/scope or lacked explicit court frame selection"
+    },
+    {
+      "context_index": 9,
+      "cause": "review accepted type while ignoring speaker/scope or lacked explicit court frame selection"
+    }
+  ],
+  "initial_any_review_flags": 6,
+  "shared_catalogue_live": {
+    "protocol_pass": true,
+    "tasks": 16,
+    "original_user_characters": 88762,
+    "new_user_characters": 18643,
+    "usage": {
+      "prompt_tokens": 7647,
+      "total_tokens": 7826,
+      "completion_tokens": 179,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "text_tokens": 7647
+      }
+    },
+    "historical_input_tokens": 33308,
+    "not_accuracy_evaluation": true
+  },
+  "next_design": "Separate context kind, explicit speaker selection, and quote scope; structured schema path feedback; keep all historical failures."
+}

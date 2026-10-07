@@ -7,8 +7,16 @@ import pytest
 from test_current import CONTRACT, ROOT, FakeClient, frame, source
 from test_current_recovery import DirectCalls
 
+from judicial_kg.current.recovery import ProtocolError
 from judicial_kg.current.runner import run_document
-from judicial_kg.current.semantics import direct_conflicts, repair, review, source_cues
+from judicial_kg.current.semantics import (
+    CONTEXT_LABELS,
+    check_schema,
+    direct_conflicts,
+    repair,
+    review,
+    source_cues,
+)
 from judicial_kg.current.shared import pack, unpack
 from judicial_kg.current.source import batches
 
@@ -21,10 +29,21 @@ def payload(text="B 42。"):
 
 
 def supported(keys):
-    return {
+    keys = list(keys)
+    for key in list(keys):
+        if key.endswith("_context"):
+            prefix = key.removesuffix("_context")
+            keys.extend([prefix + "_speakers", prefix + "_scope"])
+    result = {
         k: {"decision": "supported", "reason": "metadata simulation", "source_units": [1]}
         for k in keys
     }
+    for k in keys:
+        if k.endswith("_context"):
+            result[k]["selected_kind"] = "quoted_material"
+        elif k.endswith("_speakers"):
+            result[k]["selected_speakers"] = []
+    return result
 
 
 def test_literal_source_leads_retain_prior_court_frame_without_assigning_identity():
@@ -88,7 +107,10 @@ def test_model_supported_cannot_override_a_direct_source_conflict():
     c = frame()
     c.update(kind="party_claim", speakers=[0])
     c["actors"][0]["mention"]["text"] = "被告"
-    calls = DirectCalls([supported(["c0_context", "c0_events_0"])])
+    answer = supported(["c0_context", "c0_events_0"])
+    answer["c0_context"]["selected_kind"] = "party_claim"
+    answer["c0_speakers"]["selected_speakers"] = ["a0"]
+    calls = DirectCalls([answer])
     saved = {}
     wire = {"contexts": [c]}
     before = copy.deepcopy(wire)
@@ -238,3 +260,47 @@ def test_shared_reference_cannot_be_a_cycle_or_override_source_data():
         unpack({"shared": {"s0": {"_shared_ref": "s0"}}, "request": {"_shared_ref": "s0"}})
     with pytest.raises(ValueError, match="reserved_shared_reference"):
         pack({"state": {"_shared_ref": "from_source"}})
+
+
+def test_source_selection_disagreement_cannot_hide_behind_supported_label():
+    c = frame()
+    c.update(kind="party_claim", speakers=[0])
+    answer = supported(["c0_context", "c0_events_0"])
+    answer["c0_context"]["selected_kind"] = "court_reasoning"
+    answer["c0_speakers"]["selected_speakers"] = ["missing_actor"]
+    failures = review({"contexts": [c]}, payload(), DirectCalls([answer]), "w", lambda *a: None)
+    assert any("source_selected_context_kind_differs" in f["direct_conflicts"] for f in failures)
+    assert any("source_selected_speakers_differ" in f["direct_conflicts"] for f in failures)
+
+
+def test_semantic_schema_feedback_identifies_illegal_source_position():
+    with pytest.raises(ProtocolError) as caught:
+        check_schema(
+            {"units": [0]},
+            {"type": "object", "properties": {"units": {"type": "array", "items": {"enum": [1]}}}},
+        )
+    assert caught.value.details == [{"path": ["units", 0], "rule": "enum", "expected": [1]}]
+
+
+def test_review_context_vocabulary_matches_current_contract():
+    assert set(CONTEXT_LABELS) == set(CONTRACT.ontology["context_kinds"])
+
+
+def test_unknown_scope_with_explicit_unresolved_does_not_force_false_speaker():
+    c = frame()
+    c.update(
+        kind="unknown", speakers=[], events=[], unresolved=[{"units": [1], "reason": "unclear"}]
+    )
+    answer = supported(["c0_context"])
+    answer["c0_context"]["selected_kind"] = "unknown"
+    answer["c0_speakers"]["selected_speakers"] = ["unknown"]
+    assert not review({"contexts": [c]}, payload(), DirectCalls([answer]), "w", lambda *a: None)
+
+
+def test_interest_start_date_does_not_become_a_due_date():
+    c = frame()
+    st = statement("repayment_deadline", "2012年1月1日")
+    rows = {1: {"text": "按年利率6%从2012年1月1日计算至2017年5月15日"}}
+    assert "interest_start_is_not_repayment_deadline" in direct_conflicts(c, "statements", st, rows)
+    st["value"]["source"]["text"] = "2017年5月15日"
+    assert not direct_conflicts(c, "statements", st, rows)
