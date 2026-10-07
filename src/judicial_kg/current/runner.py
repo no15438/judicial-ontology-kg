@@ -16,6 +16,9 @@ from judicial_kg.current.decision import AlignmentCalls, FlashAlignmentCalls
 from judicial_kg.current.protocol import PROMPT, array, obj, schema
 from judicial_kg.current.recovery import infer_checked, proposal_check
 from judicial_kg.current.retrieval import index_documents
+from judicial_kg.current.semantics import repair as repair_semantics
+from judicial_kg.current.semantics import review as review_semantics
+from judicial_kg.current.semantics import source_cues
 from judicial_kg.current.source import batches
 from judicial_kg.extraction.run import completion_content
 from judicial_kg.graph.assembly import project_records, restore_records
@@ -220,6 +223,8 @@ def compile_with_recovery(
     stage,
     save,
     repairs=2,
+    *,
+    semantic_review=False,
 ):
     """Validate in a transaction; feed contract failures back before accepting a window."""
     snapshot = copy.deepcopy(compiler.record)
@@ -231,20 +236,38 @@ def compile_with_recovery(
         del compiler.issues[issue_count:]
         del compiler.mappings[mapping_count:]
         if attempt:
-            wire = repair_contexts(
-                wire,
-                history[-1]["issues"],
-                compiler.contract,
-                payload,
-                calls,
-                name,
-                save,
-                align_enabled=aligner is not None,
+            wire = (
+                repair_semantics(
+                    wire,
+                    history[-1]["semantic_failures"],
+                    compiler.contract,
+                    payload,
+                    calls,
+                    name,
+                    save,
+                )
+                if "semantic_failures" in history[-1]
+                else repair_contexts(
+                    wire,
+                    history[-1]["issues"],
+                    compiler.contract,
+                    payload,
+                    calls,
+                    name,
+                    save,
+                    align_enabled=aligner is not None,
+                )
             )
         wire = preflight_predicates(wire, compiler.contract, payload, calls, name, save)
         blocked = []
         if aligner:
             wire, blocked = aligner.align(wire, doc, units, name)
+        if semantic_review:
+            failures = review_semantics(wire, payload, calls, name, save)
+            if failures:
+                history.append({"attempt": attempt, "stage": name, "semantic_failures": failures})
+                save(stage + "-contract-recovery", history)
+                continue
         decisions = verify(wire, payload, calls, name, save)
         adapted = copy.deepcopy(wire)
         for path in blocked:
@@ -293,6 +316,7 @@ def run_document(
     alignment_client=None,
     alignment_mode=None,
     max_split_depth=2,
+    semantic_review=True,
 ):
     validate_source(doc)
     run_id = run_id or str(uuid4())
@@ -341,6 +365,8 @@ def run_document(
             "target_units": [all_units[i] for i in targets],
             "background_units": [u for i, u in enumerate(all_units) if i not in targets],
         }
+        if semantic_review:
+            payload["source_cues"] = source_cues(payload, targets)
         messages = [
             {
                 "role": "system",
@@ -373,6 +399,7 @@ def run_document(
                 messages,
                 stage,
                 save,
+                semantic_review=semantic_review,
             )
             accepted_stages.append(final_stage)
             covered = {i for c in wire["contexts"] for i in c.get("units", [])}
@@ -476,6 +503,13 @@ def run_document(
         "manual_graph_edits": 0,
         "lossless_graph_roundtrip": True,
         "semantic_precision_recall_f1": None,
+        "source_semantic_review_enabled": semantic_review,
+        "source_semantic_review_requests": sum(
+            "-semantic-review-" in r["stage"] for r in calls.rows
+        ),
+        "source_semantic_repair_requests": sum(
+            "-semantic-context-" in r["stage"] for r in calls.rows
+        ),
         "coverage_interpretation": "model_accounting_not_semantic_recall",
     }
     verification_audit = [

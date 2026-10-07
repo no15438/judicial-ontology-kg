@@ -139,6 +139,7 @@ def test_aligned_pipeline_replays_native_calls_without_network(tmp_path, mode):
         ),
         alignment_client=Native() if mode == "decision" else None,
         alignment_mode=mode,
+        semantic_review=False,
     )
     assert result["alignment_requests"] == (2 if mode == "decision" else 1)
     assert result["status"] == "engineering_complete"

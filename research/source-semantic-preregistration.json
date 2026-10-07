@@ -1,0 +1,198 @@
+{
+  "run": "source-semantic-01",
+  "purpose": "historical_source_counterexample_diagnostic_not_fresh_cohort",
+  "model": "qwen3.8-flash",
+  "temperature": 0.2,
+  "seed": 42,
+  "thinking": false,
+  "concurrency": 3,
+  "selected_contexts": 10,
+  "selected_source_documents": 8,
+  "historical_seed_candidates": 10,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "prior_committed_cny": "126.0062429",
+  "diagnostic_cap_cny": "131.0062429",
+  "overall_authorization_cny": "200",
+  "max_semantic_repairs_per_context": 2,
+  "unchanged_old_twenty_result": "aa01d59: 20/20 engineering, not semantic accuracy",
+  "success_boundary": "Detect known source risks, reextract with original candidate outcome ledger or explicit unresolved; strict source/contract/graph roundtrip; exact offline call replay. Accepted review is a model judgment, not expert gold.",
+  "seeds": [
+    {
+      "document": "document-12",
+      "document_id": "spark_qa:07dd3b118cbaf06663e5d8210538a125da876ae52d61aebd2bf465ff681e20e3",
+      "source_sha256": "dfb87f494312a529b5d85dc0349aa7b68d30b5927664eb03c6183c9439231462",
+      "context_id": "r_e54b7f63cd4b50b065733055dcaeb1bd845fdeb9",
+      "historical_wire_path": "artifacts/current/twenty-02/document-12/window-001-aligned.json",
+      "historical_wire_sha256": "39c85ace99751896cda50d554729b18ea702f6dfd929d03275d8c83779b5380a",
+      "historical_context_index": 2,
+      "findings": [
+        {
+          "code": "speaker_misbinding",
+          "original_record_id": "r_e54b7f63cd4b50b065733055dcaeb1bd845fdeb9",
+          "kind": "contexts",
+          "verdict": "confirmed_source_attribution_mismatch"
+        }
+      ]
+    },
+    {
+      "document": "document-17",
+      "document_id": "appealcase:407cc57fdc607ac1d7b8756d9f8fb6fb1a4a3ee2d1f136d79c4a5ebe0ec448ff",
+      "source_sha256": "9eec249e2e2b239cb244e80238146f3a149d201828c1fb96ada6e1cfd52c1dcd",
+      "context_id": "r_3876a626683f800031f4570b2493a5f423733ca6",
+      "historical_wire_path": "artifacts/current/twenty-02/document-17/window-007-contract-repair-1-aligned.json",
+      "historical_wire_sha256": "9d97d970dddcdd6b91774f02a2478aef50f68035560bff32c98d4c1f487a6a1d",
+      "historical_context_index": 1,
+      "findings": [
+        {
+          "code": "court_scope_lost",
+          "original_record_id": "r_3876a626683f800031f4570b2493a5f423733ca6",
+          "kind": "contexts",
+          "verdict": "confirmed_source_context_mismatch"
+        }
+      ]
+    },
+    {
+      "document": "document-04",
+      "document_id": "spark_qa:3be8e84dd069608b9e381c12086d0cdd8d375b7fecf0d662e54b52def4842aed",
+      "source_sha256": "10dbfc024ab49bebff125bf896ea873d2a7a4631f127468398153b215308f40b",
+      "context_id": "r_3e551ff795f4e1769033a350502e8a7f2f10afd2",
+      "historical_wire_path": "artifacts/current/twenty-02/document-04/window-002-aligned.json",
+      "historical_wire_sha256": "b24b2efa0e96b0daf71d2e683fc7fcff89d3f695b9852c39615278e044a1ee35",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "reported_speech_scope",
+          "original_record_id": "r_3e551ff795f4e1769033a350502e8a7f2f10afd2",
+          "kind": "contexts",
+          "verdict": "confirmed_overbroad_speaker_scope"
+        }
+      ]
+    },
+    {
+      "document": "document-11",
+      "document_id": "appealcase:f99ec867b3d1dbbbd9ca046980cf5309bb9c71add2e24a2411897723248a1c49",
+      "source_sha256": "334e1c3c81999265b6938401041f9739b4683007d3c02ddde9374c6e290d9a82",
+      "context_id": "r_98ac5de4794e2ee5326406fd91b1bb0a36ca3752",
+      "historical_wire_path": "artifacts/current/twenty-02/document-11/window-003-aligned.json",
+      "historical_wire_sha256": "fe16f2923812057042af57ab84495afb9de9f4fc6fe794e728704de09fb0f973",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "reported_speech_scope",
+          "original_record_id": "r_98ac5de4794e2ee5326406fd91b1bb0a36ca3752",
+          "kind": "contexts",
+          "verdict": "confirmed_overbroad_speaker_scope"
+        }
+      ]
+    },
+    {
+      "document": "document-16",
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "source_sha256": "b7c3c43270ffcdb4dfa1d2e9ef06fd82435dec08159e0d06b9a8fe1b9a521237",
+      "context_id": "r_03f117dc66cba5582530d7b604be23890217cb34",
+      "historical_wire_path": "artifacts/current/twenty-02/document-16/window-004-aligned.json",
+      "historical_wire_sha256": "35598cdaff5928869b656e74d2bbe2e18399d335eefe7ba5b3da5eea18282edf",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "speaker_misbinding",
+          "original_record_id": "r_03f117dc66cba5582530d7b604be23890217cb34",
+          "kind": "contexts",
+          "verdict": "confirmed_source_attribution_mismatch"
+        }
+      ]
+    },
+    {
+      "document": "document-17",
+      "document_id": "appealcase:407cc57fdc607ac1d7b8756d9f8fb6fb1a4a3ee2d1f136d79c4a5ebe0ec448ff",
+      "source_sha256": "9eec249e2e2b239cb244e80238146f3a149d201828c1fb96ada6e1cfd52c1dcd",
+      "context_id": "r_c9c63806d00ff6898b81ffddcdd2121d948226e4",
+      "historical_wire_path": "artifacts/current/twenty-02/document-17/window-003-aligned.json",
+      "historical_wire_sha256": "ca444ac55f002181d04c62a1835fb540a86b832d580bd304fb32a2a82596f2cd",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "negation_scope",
+          "original_record_id": "r_9acbfcb1f3c2c9c8604725a467ef466e8623b2c6",
+          "kind": "events",
+          "verdict": "confirmed_negation_scope_mismatch"
+        }
+      ]
+    },
+    {
+      "document": "document-16",
+      "document_id": "spark_qa:9765c061754433dd35c91c9372f0faa625db53e63185c5866eda6a7bd7c7ea26",
+      "source_sha256": "b7c3c43270ffcdb4dfa1d2e9ef06fd82435dec08159e0d06b9a8fe1b9a521237",
+      "context_id": "r_19567aaf680425ca671d69580bba6c4dd3fc1792",
+      "historical_wire_path": "artifacts/current/twenty-02/document-16/window-002-contract-repair-2-aligned.json",
+      "historical_wire_sha256": "52f6e5aafa86144769ed1768a727edc941bb2633c72cdc1b9685865718c5da84",
+      "historical_context_index": 1,
+      "findings": [
+        {
+          "code": "temporal_attribute",
+          "original_record_id": "r_464381748be4d0bed3441dd37883c9d99fe99367",
+          "kind": "statements",
+          "verdict": "confirmed_predicate_scope_mismatch"
+        },
+        {
+          "code": "predicate_broadening",
+          "original_record_id": "r_262ee64f5dc1d3ec8a5ccf6543dfbae6e30dec77",
+          "kind": "statements",
+          "verdict": "confirmed_predicate_scope_mismatch"
+        }
+      ]
+    },
+    {
+      "document": "document-02",
+      "document_id": "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998",
+      "source_sha256": "fb4b4a11fbeda3820873d217f23ae3df3adcb6e5fa56b41a7fc14c310f8dc2d5",
+      "context_id": "r_9b025a20ed574aa5d32254c954c3b44891d1d2a8",
+      "historical_wire_path": "artifacts/current/twenty-02/document-02/window-005-aligned.json",
+      "historical_wire_sha256": "af702cd7e44f081a1927ead9ac4efddc431a01ec8210a44a48b9ce32637370a3",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "reported_claim_inside_reasoning",
+          "original_record_id": "r_38f53f3b09b2da75c679718eced6d58e1b53cf38",
+          "kind": "events",
+          "verdict": "source_attribution_risk"
+        }
+      ]
+    },
+    {
+      "document": "document-20",
+      "document_id": "spark_qa:1783d90c5fc63b735e2c5d2e305f2f7efe0dd969c0c1405527fe02220a0a656b",
+      "source_sha256": "1c9cad9c5381aaf79a96d38e46b74edd3de1cf3082b925fbaad0b14c8efcf7c9",
+      "context_id": "r_bb0ee34d155285bb79cd15f055288a857cf2aa7e",
+      "historical_wire_path": "artifacts/current/twenty-02/document-20/window-008-aligned.json",
+      "historical_wire_sha256": "6d1fa6e247d63d5bbf628da5c6c801496e56cbf651e6808c39ba400d52a74644",
+      "historical_context_index": 0,
+      "findings": [
+        {
+          "code": "requested_versus_awarded",
+          "original_record_id": "r_06ad001398040ad37b3ba8f812f576403edb8110",
+          "kind": "statements",
+          "verdict": "source_attribution_risk"
+        }
+      ]
+    },
+    {
+      "document": "document-15",
+      "document_id": "appealcase:7acdf1c794a7ca8b469a6f4900ce29196391ee38d7f1fab70721ee241cea87c3",
+      "source_sha256": "dca13f6be61a4cc138245c31424b198f181ef99a4f26b9ea08b83703c7f7eff0",
+      "context_id": "r_5927a3297defc7f7a446c276b0107143fefeedef",
+      "historical_wire_path": "artifacts/current/twenty-02/document-15/window-007-aligned.json",
+      "historical_wire_sha256": "969d630b0a1d2982e76eff30898bae7eabafe3421d8f84b9af8dcdd73b7c4633",
+      "historical_context_index": 2,
+      "findings": [
+        {
+          "code": "role_support_gap",
+          "original_record_id": "r_d7175c6227c90a1e76b9e956b0a02af6c33188e4",
+          "kind": "roles",
+          "verdict": "requires_role_definition_and_support_review"
+        }
+      ]
+    }
+  ]
+}

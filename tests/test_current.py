@@ -185,7 +185,9 @@ def test_fresh_runner_saves_quarantine_coverage_and_graph(tmp_path):
         for k in ("actors", "collectives", "events")
     }
     before = canonical_hash(doc)
-    report = run_document(ROOT, doc, tmp_path / "run", FakeClient([proposal, verify]))
+    report = run_document(
+        ROOT, doc, tmp_path / "run", FakeClient([proposal, verify]), semantic_review=False
+    )
     assert report["status"] == "engineering_complete"
     assert report["requests"] == 2
     assert report["lossless_graph_roundtrip"]
@@ -213,7 +215,9 @@ def test_verifier_can_quarantine_event_without_changing_other_indices(tmp_path):
         f"c0_{k}_0": {"decision": "uncertain" if k == "events" else "supported", "units": [1]}
         for k in ("actors", "collectives", "events")
     }
-    report = run_document(ROOT, doc, tmp_path / "run", FakeClient([proposal, verify]))
+    report = run_document(
+        ROOT, doc, tmp_path / "run", FakeClient([proposal, verify]), semantic_review=False
+    )
     assert report["status"] == "partial"
     record = json.loads((tmp_path / "run/candidate.json").read_text())
     assert not record["events"] and record["collectives"]
@@ -243,7 +247,7 @@ def test_saved_calls_replay_without_network_and_detect_tampering(tmp_path):
         for k in ("actors", "collectives", "events")
     }
     dest = tmp_path / "original"
-    run_document(ROOT, doc, dest, FakeClient([proposal, decisions]))
+    run_document(ROOT, doc, dest, FakeClient([proposal, decisions]), semantic_review=False)
     write_json(
         dest / "config.json",
         {"window_size": 16, "implementation": implementation_fingerprint(ROOT)},
@@ -283,6 +287,7 @@ def test_unresolved_window_does_not_block_later_window_text_or_compilation(tmp_p
         tmp_path / "run",
         FakeClient([{"malformed": True}] * 3 + [empty]),
         max_split_depth=0,
+        semantic_review=False,
     )
     assert report["status"] == "partial"
     coverage = json.loads((tmp_path / "run/coverage.json").read_text())
@@ -319,7 +324,9 @@ def test_json_mode_is_locally_prepared_and_provider_error_halts_window_calls(tmp
             return Response(400, b"{}", 0)
 
     client = Bad()
-    result = run_document(ROOT, source(), tmp_path / "run", client, window_size=1)
+    result = run_document(
+        ROOT, source(), tmp_path / "run", client, window_size=1, semantic_review=False
+    )
     assert client.count == 1
     assert result["status"] == "service_failed"
     units, _ = batches(source())

@@ -84,6 +84,7 @@ def replay(root, source_run, output):
         run_id=run_id,
         alignment_client=alignment,
         alignment_mode=config.get("alignment"),
+        semantic_review=config.get("semantic_review", False),
     )
     if alignment and alignment.count != len(alignment.rows):
         raise ValueError("Unused alignment responses")
@@ -148,6 +149,7 @@ def run(root, manifest_path, output, credential_root):
             manifest.get("window_size", 16),
             alignment_client=alignment,
             alignment_mode=manifest.get("alignment"),
+            semantic_review=manifest.get("semantic_review", True),
         )
         write_json(
             dest / "config.json",
@@ -155,6 +157,7 @@ def run(root, manifest_path, output, credential_root):
                 "window_size": manifest.get("window_size", 16),
                 "implementation": frozen,
                 "alignment": manifest.get("alignment"),
+                "semantic_review": manifest.get("semantic_review", True),
             },
         )
         write_json(

@@ -159,7 +159,9 @@ def test_failed_parent_splits_into_exact_source_partition(tmp_path):
         }
 
     client = FakeClient([{}] * 3 + [empty(target[:middle]), empty(target[middle:])])
-    report = run_document(ROOT, doc, tmp_path / "run", client, max_split_depth=1)
+    report = run_document(
+        ROOT, doc, tmp_path / "run", client, max_split_depth=1, semantic_review=False
+    )
     coverage = json.loads((tmp_path / "run/coverage.json").read_text())
     assert [r["unit"] for r in coverage] == list(range(len(units)))
     assert report["split_attempts"] == 1 and report["failed_leaf_windows"] == 0
