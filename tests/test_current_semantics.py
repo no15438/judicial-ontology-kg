@@ -11,11 +11,13 @@ from judicial_kg.current.recovery import ProtocolError
 from judicial_kg.current.runner import run_document
 from judicial_kg.current.semantics import (
     CONTEXT_LABELS,
+    CONTEXT_NAMES,
     check_schema,
     direct_conflicts,
     repair,
     review,
     source_cues,
+    speaker_options,
 )
 from judicial_kg.current.shared import pack, unpack
 from judicial_kg.current.source import batches
@@ -40,12 +42,27 @@ def supported(keys):
     }
     for k in keys:
         if k.endswith("_context"):
-            result[k]["selected_kind"] = "quoted_material"
+            result[k]["selected_kind"] = "引用材料"
         elif k.endswith("_speakers"):
             result[k]["selected_speakers"] = []
         elif not k.endswith("_scope"):
             result[k]["source_match"] = "same_context"
     return result
+
+
+class ReviewCalls:
+    """Schema-scoped metadata replies, never judicial sources."""
+
+    halted = False
+
+    def __init__(self, answer):
+        self.answer = answer
+        self.messages = []
+
+    def infer(self, messages, stage):
+        self.messages.append(messages)
+        fmt = json.loads(messages[0]["content"].split("Schema:\n")[-1])
+        return {k: copy.deepcopy(self.answer[k]) for k in fmt["properties"]}
 
 
 def test_literal_source_leads_retain_prior_court_frame_without_assigning_identity():
@@ -110,9 +127,9 @@ def test_model_supported_cannot_override_a_direct_source_conflict():
     c.update(kind="party_claim", speakers=[0])
     c["actors"][0]["mention"]["text"] = "被告"
     answer = supported(["c0_context", "c0_events_0"])
-    answer["c0_context"]["selected_kind"] = "party_claim"
-    answer["c0_speakers"]["selected_speakers"] = ["a0"]
-    calls = DirectCalls([answer])
+    answer["c0_context"]["selected_kind"] = "当事人主张"
+    answer["c0_speakers"]["selected_speakers"] = ["a0:被告"]
+    calls = ReviewCalls(answer)
     saved = {}
     wire = {"contexts": [c]}
     before = copy.deepcopy(wire)
@@ -128,14 +145,14 @@ def test_supported_semantic_review_requires_actual_source_units():
     answer = supported(["c0_context", "c0_events_0"])
     answer["c0_context"]["source_units"] = []
     with pytest.raises(ValueError, match="protocol_recovery_exhausted"):
-        review({"contexts": [frame()]}, payload(), DirectCalls([answer] * 3), "w", lambda *a: None)
+        review({"contexts": [frame()]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
 
 
 def test_supported_review_cannot_cite_only_unrelated_background():
     answer = supported(["c0_context", "c0_events_0"])
     answer["c0_context"]["source_units"] = [0]
     with pytest.raises(ValueError, match="protocol_recovery_exhausted"):
-        review({"contexts": [frame()]}, payload(), DirectCalls([answer] * 3), "w", lambda *a: None)
+        review({"contexts": [frame()]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
 
 
 def test_existing_unresolved_cannot_disappear_during_semantic_repair():
@@ -237,12 +254,12 @@ def test_new_runner_reviews_semantics_by_default_and_replays_exactly(tmp_path):
         f"c0_{k}_0": {"decision": "supported", "units": [1]}
         for k in ("actors", "collectives", "events")
     }
-    responses = [proposal, supported(["c0_context", "c0_events_0"]), verification]
+    responses = [proposal, supported(["c0_context"]), supported(["c0_events_0"]), verification]
     for name in ("first", "replay"):
         report = run_document(ROOT, doc, tmp_path / name, FakeClient(responses), run_id="metadata")
         assert report["source_semantic_review_enabled"]
-        assert report["source_semantic_review_requests"] == 1
-        assert report["requests"] == 3
+        assert report["source_semantic_review_requests"] == 2
+        assert report["requests"] == 4
         assert report["semantic_precision_recall_f1"] is None
     assert (tmp_path / "first/candidate.json").read_bytes() == (
         tmp_path / "replay/candidate.json"
@@ -268,9 +285,9 @@ def test_source_selection_disagreement_cannot_hide_behind_supported_label():
     c = frame()
     c.update(kind="party_claim", speakers=[0])
     answer = supported(["c0_context", "c0_events_0"])
-    answer["c0_context"]["selected_kind"] = "court_reasoning"
+    answer["c0_context"]["selected_kind"] = "法院分析说理"
     answer["c0_speakers"]["selected_speakers"] = ["missing_actor"]
-    failures = review({"contexts": [c]}, payload(), DirectCalls([answer]), "w", lambda *a: None)
+    failures = review({"contexts": [c]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
     assert any("source_selected_context_kind_differs" in f["direct_conflicts"] for f in failures)
     assert any("source_selected_speakers_differ" in f["direct_conflicts"] for f in failures)
 
@@ -294,9 +311,9 @@ def test_unknown_scope_with_explicit_unresolved_does_not_force_false_speaker():
         kind="unknown", speakers=[], events=[], unresolved=[{"units": [1], "reason": "unclear"}]
     )
     answer = supported(["c0_context"])
-    answer["c0_context"]["selected_kind"] = "unknown"
+    answer["c0_context"]["selected_kind"] = "无法确定"
     answer["c0_speakers"]["selected_speakers"] = ["unknown"]
-    assert not review({"contexts": [c]}, payload(), DirectCalls([answer]), "w", lambda *a: None)
+    assert not review({"contexts": [c]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
 
 
 def test_interest_start_date_does_not_become_a_due_date():
@@ -311,7 +328,7 @@ def test_interest_start_date_does_not_become_a_due_date():
 def test_supported_nested_source_cannot_be_promoted_into_outer_assertion():
     answer = supported(["c0_context", "c0_events_0"])
     answer["c0_events_0"]["source_match"] = "nested_source"
-    failed = review({"contexts": [frame()]}, payload(), DirectCalls([answer]), "w", lambda *a: None)
+    failed = review({"contexts": [frame()]}, payload(), ReviewCalls(answer), "w", lambda *a: None)
     assert failed[0]["key"] == "c0_events_0"
     assert failed[0]["direct_conflicts"] == ["assertion_source_does_not_match_context"]
 
@@ -340,3 +357,49 @@ def test_truncated_protocol_retries_have_explicit_reason_and_distinct_attempts()
     assert calls.messages[1] != calls.messages[2]
     assert all(r["code"] == "response_truncated" for r in saved["w-recovery"])
     assert json.loads(calls.messages[2][-1]["content"])["修复轮次"] == 2
+
+
+def test_frame_review_and_assertion_review_use_separate_calls():
+    calls = ReviewCalls(supported(["c0_context", "c0_events_0"]))
+    assert not review({"contexts": [frame()]}, payload(), calls, "w", lambda *a: None)
+    assert len(calls.messages) == 2
+    first = json.loads(calls.messages[0][1]["content"])["tasks"]
+    second = json.loads(calls.messages[1][1]["content"])["tasks"]
+    assert all(t["kind"] == "context" for t in first.values())
+    assert all(t["kind"] != "context" for t in second.values())
+
+
+def test_failed_source_frame_prevents_costly_or_misframed_assertion_review():
+    answer = supported(["c0_context", "c0_events_0"])
+    answer["c0_context"]["selected_kind"] = "法院分析说理"
+    calls = ReviewCalls(answer)
+    saved = {}
+    assert review({"contexts": [frame()]}, payload(), calls, "w", lambda k, v: saved.update({k: v}))
+    assert len(calls.messages) == 1
+    assert saved["w-semantic-review"]["not_reviewed_tasks"] == ["c0_events_0"]
+
+
+def test_speaker_options_expose_exact_names_without_merging_same_name_people():
+    c = frame()
+    c["actors"].append(copy.deepcopy(c["actors"][0]))
+    assert list(speaker_options(c)) == ["a0:B", "a1:B"]
+    assert set(CONTEXT_NAMES) == set(CONTEXT_LABELS)
+
+
+def test_last_semantic_repair_cannot_repeat_rejected_assertion_as_supported():
+    c = frame()
+    answer = {
+        "contexts": [c],
+        "outcomes": {"events_0": {"action": "reextracted", "context": 0, "index": 0}},
+    }
+    with pytest.raises(ValueError, match="protocol_recovery_exhausted"):
+        repair(
+            {"contexts": [c]},
+            [{"context": 0, "kind": "events", "key": "c0_events_0"}],
+            CONTRACT,
+            payload(),
+            DirectCalls([answer] * 3),
+            "w",
+            lambda *a: None,
+            abstain_failed_items=True,
+        )

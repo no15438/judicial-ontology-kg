@@ -6,6 +6,7 @@ import re
 
 from jsonschema import Draft202012Validator
 
+from judicial_kg.current.context_repair import GUIDANCE
 from judicial_kg.current.protocol import PROMPT, array, obj, schema
 from judicial_kg.current.recovery import ProtocolError, infer_checked
 from judicial_kg.current.source import compact
@@ -42,6 +43,22 @@ CONTEXT_LABELS = {
     "procedural_record": "程序经过记录",
     "unknown": "来源或语境不足以确定，保留未决",
 }
+
+CONTEXT_NAMES = {
+    "party_claim": "当事人主张",
+    "party_defense": "当事人答辩",
+    "court_finding": "法院事实认定",
+    "court_reasoning": "法院分析说理",
+    "court_disposition": "法院裁判主文",
+    "court_report": "法院转述材料",
+    "quoted_material": "引用材料",
+    "procedural_record": "程序记录",
+    "unknown": "无法确定",
+}
+
+
+def speaker_options(context):
+    return {f"a{i}:{a['mention']['text']}": a for i, a in enumerate(context["actors"])}
 
 
 def check_schema(value, fmt):
@@ -139,8 +156,8 @@ def review(wire, payload, calls, stage, save):
             "context": ci,
             "kind": "context",
             "aspect": "kind",
-            "proposal": {"kind": context["kind"]},
-            "options": CONTEXT_LABELS,
+            "proposal": {"kind": context["kind"], "当前类型": CONTEXT_NAMES[context["kind"]]},
+            "options": {CONTEXT_NAMES[k]: v for k, v in CONTEXT_LABELS.items()},
             "question": "只核验kind；依据原文来源框架选selected_kind，不能把被讨论主体当陈述者。",
         }
         tasks[f"c{ci}_speakers"] = {
@@ -154,11 +171,13 @@ def review(wire, payload, calls, stage, save):
                     if type(i) is int and 0 <= i < len(context["actors"])
                 ]
             },
-            "options": {f"a{i}": a for i, a in enumerate(context["actors"])},
+            "options": speaker_options(context),
             "question": (
                 "只核验speakers是否实际陈述者。原文描述谁不等于谁说了本段。"
                 "上诉人引用他人自认，外层说话者仍是上诉人；被告提供证据不等于被告在说理。"
                 "按来源选择selected_speakers，不能因为kind正确就支持当前绑定。"
+                "选项名称已包含完整原文称谓，不能只按a0等编号位置选；"
+                "理由中确认的实际说话者不在选项中时，必须选missing_actor，不能指向不同姓名。"
             ),
         }
         tasks[f"c{ci}_scope"] = {
@@ -184,9 +203,16 @@ def review(wire, payload, calls, stage, save):
                     ),
                 }
     decisions, failures = {}, []
-    entries = list(tasks.items())
-    for offset in range(0, len(entries), 12):
-        batch = dict(entries[offset : offset + 12])
+    frames = [(k, t) for k, t in tasks.items() if t["kind"] == "context"]
+    assertions = [(k, t) for k, t in tasks.items() if t["kind"] != "context"]
+    batches = [
+        entries[i : i + 12] for entries in (frames, assertions) for i in range(0, len(entries), 12)
+    ]
+    for offset, entries in enumerate(batches):
+        # Resolve the source frame before judging assertions; never mix both questions in one call.
+        if failures and entries[0][1]["kind"] != "context":
+            break
+        batch = dict(entries)
         indices = sorted({v["context"] for v in batch.values()})
         contexts = {str(i): wire["contexts"][i] for i in indices}
         # Each context/actor/event catalogue and original source appears once per batch.
@@ -229,7 +255,7 @@ def review(wire, payload, calls, stage, save):
         for key, spec in fmt["properties"].items():
             task = batch[key]
             if task.get("aspect") == "kind":
-                spec["properties"]["selected_kind"] = {"enum": list(CONTEXT_LABELS)}
+                spec["properties"]["selected_kind"] = {"enum": list(CONTEXT_NAMES.values())}
                 spec["required"].append("selected_kind")
             elif task.get("aspect") == "speakers":
                 spec["properties"]["selected_speakers"] = {
@@ -278,18 +304,23 @@ def review(wire, payload, calls, stage, save):
                     ),
                 },
             ],
-            f"{stage}-semantic-review-{offset // 12:03}",
+            f"{stage}-semantic-review-{offset:03}",
             lambda value, fmt=fmt: check_schema(value, fmt),
             save,
         )
         decisions.update(answer)
         for key, task in batch.items():
             context = wire["contexts"][task["context"]]
-            if task.get("aspect") == "kind" and answer[key]["selected_kind"] != context["kind"]:
+            if (
+                task.get("aspect") == "kind"
+                and answer[key]["selected_kind"] != CONTEXT_NAMES[context["kind"]]
+            ):
                 task["direct_conflicts"].append("source_selected_context_kind_differs")
             if task.get("aspect") == "speakers":
                 selected = set(answer[key]["selected_speakers"])
-                expected = {f"a{i}" for i in context["speakers"]}
+                expected = {
+                    f"a{i}:{context['actors'][i]['mention']['text']}" for i in context["speakers"]
+                }
                 abstained = (
                     context["kind"] == "unknown" and not expected and selected == {"unknown"}
                 )
@@ -314,12 +345,13 @@ def review(wire, payload, calls, stage, save):
             "decisions": decisions,
             "failures": failures,
             "model_judgments_not_gold": True,
+            "not_reviewed_tasks": sorted(set(tasks) - set(decisions)),
         },
     )
     return failures
 
 
-def repair(wire, failures, contract, payload, calls, stage, save):
+def repair(wire, failures, contract, payload, calls, stage, save, *, abstain_failed_items=False):
     """Split mixed contexts through the model; preserve unaffected contexts and source units."""
     adapted = copy.deepcopy(wire)
     affected = sorted({f["context"] for f in failures}, reverse=True)
@@ -333,6 +365,15 @@ def repair(wire, failures, contract, payload, calls, stage, save):
             for kind in ("roles", "events", "statements", "unresolved")
             for i, item in enumerate(original[kind])
         }
+        last_failed = (
+            {
+                f["key"].removeprefix(f"c{ci}_")
+                for f in failures
+                if f["context"] == ci and f["kind"] != "context"
+            }
+            if abstain_failed_items
+            else set()
+        )
         envelope = obj(
             contexts={**array(fmt), "minItems": 1},
             outcomes=obj(
@@ -340,7 +381,7 @@ def repair(wire, failures, contract, payload, calls, stage, save):
                     key: obj(
                         action={
                             "enum": ["unresolved"]
-                            if originals[key][0] == "unresolved"
+                            if originals[key][0] == "unresolved" or key in last_failed
                             else ["reextracted", "unresolved"]
                         },
                         context={"type": "integer", "minimum": 0},
@@ -377,7 +418,14 @@ def repair(wire, failures, contract, payload, calls, stage, save):
                     ) from None
                 if not set(before["units"]) & set(after["units"]):
                     raise ProtocolError(
-                        [{"path": ["outcomes", key], "rule": "original_evidence_lost"}]
+                        [
+                            {
+                                "path": ["outcomes", key],
+                                "rule": "original_evidence_lost",
+                                "expected_units": before["units"],
+                                "received_units": after["units"],
+                            }
+                        ]
                     )
                 if kind == "statements" and outcome["action"] == "reextracted":
                     if (
@@ -411,6 +459,8 @@ def repair(wire, failures, contract, payload, calls, stage, save):
                     "content": PROMPT
                     + "\n"
                     + REVIEW
+                    + "\n"
+                    + GUIDANCE
                     + (
                         "\n仅重新抽取失败语境，可以按来源拆成多个contexts；保留原unit集合及有据内容。"
                         "被拒绝或无法准确表达的原命题必须放unresolved附units和原因，不能消失。"
@@ -430,6 +480,7 @@ def repair(wire, failures, contract, payload, calls, stage, save):
                         {
                             "original_context": original,
                             "original_item_keys": list(originals),
+                            "must_abstain_original_keys": sorted(last_failed),
                             "failures": [f for f in failures if f["context"] == ci],
                             "target_units": [u for u in rows if u["unit"] in ids],
                             "background_units": [u for u in rows if u["unit"] not in ids],
