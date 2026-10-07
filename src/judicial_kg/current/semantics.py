@@ -151,7 +151,22 @@ def review(wire, payload, calls, stage, save):
     rows = payload["target_units"] + payload["background_units"]
     by_unit = {u["unit"]: u for u in rows}
     tasks = {}
+    abstained_frames = []
     for ci, context in enumerate(wire["contexts"]):
+        if (
+            context["kind"] == "unknown"
+            and not any(
+                context[k]
+                for k in ("actors", "collectives", "objects", "roles", "events", "statements")
+            )
+            and any(
+                u["reason"].startswith("rule:source_frame_abstention:")
+                for u in context["unresolved"]
+            )
+        ):
+            # Empty abstention has no definite claim; record it without claiming model review.
+            abstained_frames.append(ci)
+            continue
         tasks[f"c{ci}_context"] = {
             "context": ci,
             "kind": "context",
@@ -346,6 +361,7 @@ def review(wire, payload, calls, stage, save):
             "failures": failures,
             "model_judgments_not_gold": True,
             "not_reviewed_tasks": sorted(set(tasks) - set(decisions)),
+            "program_abstained_frames_not_model_reviewed": abstained_frames,
         },
     )
     return failures
