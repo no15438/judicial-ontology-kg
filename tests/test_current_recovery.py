@@ -397,3 +397,119 @@ def test_local_repair_rejects_source_growth_and_retries_its_own_interface():
     assert result["contexts"][0]["units"] == [1]
     assert result["coverage"] == original["coverage"]
     assert json.loads(calls.messages[-1]["content"])["任务"] == GUIDANCE
+
+
+def test_absent_deadline_repairs_as_text_without_inventing_date_or_flipping_negation():
+    from judicial_kg.current.runner import compile_with_recovery
+
+    c, fmt = compiler()
+    targets = list(range(len(c.units)))
+    f = frame()
+    f["statements"] = [
+        {
+            "subject_kind": "actor",
+            "subject": 0,
+            "predicate": "repayment_deadline",
+            "polarity": "negated",
+            "units": [1],
+            "value": {"kind": "text", "source": {"unit": 1, "text": "42", "occurrence": 0}},
+        }
+    ]
+    corrected = copy.deepcopy(f)
+    corrected["statements"][0]["predicate"] = "other"
+    wire = {
+        "contexts": [f],
+        "coverage": [{"unit": i, "status": "processed", "reason": "fixture"} for i in targets],
+    }
+    verdict = {
+        f"c0_{k}_0": {"decision": "supported", "units": [1]}
+        for k in ("actors", "collectives", "events", "statements")
+    }
+    calls = DirectCalls(
+        [verdict, {"s0": {"choice": "o1", "reason": "No date, textual candidate"}}, verdict]
+    )
+    compile_with_recovery(
+        wire,
+        c,
+        fmt,
+        targets,
+        {
+            "target_units": [{"unit": i, "text": u["text"]} for i, u in enumerate(c.units)],
+            "background_units": [],
+        },
+        calls,
+        None,
+        c.doc,
+        c.units,
+        [],
+        "w",
+        lambda k, v: None,
+    )
+    statement = c.record["statements"][0]
+    assert statement["value"]["kind"] == "text" and statement["value"]["normalized"] is None
+    assert statement["polarity"] == "negated" and statement["value"]["raw"] == "42"
+    assert not c.issues
+
+
+def test_finite_predicate_repair_preserves_abstained_statement_evidence():
+    from judicial_kg.current.context_repair import repair_predicates
+
+    c, _ = compiler()
+    f = frame()
+    f["statements"] = [
+        {
+            "subject_kind": "actor",
+            "subject": 0,
+            "predicate": "repayment_deadline",
+            "polarity": "negated",
+            "units": [1],
+            "value": {"kind": "text", "source": {"unit": 1, "text": "42", "occurrence": 0}},
+        }
+    ]
+    errors = [{"path": "w/contexts/0/statements/0", "issues": [{"code": "predicate_value_kind"}]}]
+    calls = DirectCalls(
+        [{"s0": {"choice": "unresolved", "reason": "No compatible type established"}}]
+    )
+    saved = {}
+    result = repair_predicates(
+        f,
+        errors,
+        c.contract,
+        [{"unit": 1, "text": "fixture"}],
+        calls,
+        "w",
+        lambda k, v: saved.update({k: v}),
+    )
+    assert not result["statements"] and result["unresolved"][0]["units"] == [1]
+    assert f["statements"][0]["polarity"] == "negated"
+    assert saved["w-predicate-ledger"][0]["before"] == f["statements"][0]
+
+
+def test_finite_predicate_repair_cannot_return_incompatible_original_predicate():
+    from judicial_kg.current.context_repair import repair_predicates
+
+    c, _ = compiler()
+    f = frame()
+    f["statements"] = [
+        {
+            "subject_kind": "actor",
+            "subject": 0,
+            "predicate": "repayment_deadline",
+            "polarity": "negated",
+            "units": [1],
+            "value": {"kind": "text", "source": {"unit": 1, "text": "42", "occurrence": 0}},
+        }
+    ]
+    errors = [{"path": "w/contexts/0/statements/0", "issues": [{"code": "predicate_value_kind"}]}]
+    calls = DirectCalls(
+        [
+            {"s0": {"choice": "repayment_deadline", "reason": "wrong type"}},
+            {"s0": {"choice": "o1", "reason": "textual other"}},
+        ]
+    )
+    result = repair_predicates(
+        f, errors, c.contract, [{"unit": 1, "text": "fixture"}], calls, "w", lambda k, v: None
+    )
+    assert result["statements"][0]["predicate"] == "other"
+    assert result["statements"][0]["value"] == f["statements"][0]["value"]
+    assert len(calls.stages) == 2

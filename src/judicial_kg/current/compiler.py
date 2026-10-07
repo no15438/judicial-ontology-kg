@@ -114,7 +114,17 @@ class Compiler:
             def add_actor(actor=actor, i=i, path=path):
                 self.check(actor, defs["actors"])
                 # Explicit collective nouns are ontology categories, never an unknown person/body.
-                if compact(actor["mention"]["text"])[0] in {"合议庭", "双方当事人", "各方当事人"}:
+                if compact(actor["mention"]["text"])[0] in {
+                    "合议庭",
+                    "双方当事人",
+                    "各方当事人",
+                    "原、被告",
+                    "原被告",
+                    "二被告",
+                    "两被告",
+                    "双方",
+                    "各方",
+                }:
                     raise ValueError("explicit_collective_as_actor")
                 span = self.mention(actor["mention"], set(range(len(self.units))), path)
                 aid, mid = (

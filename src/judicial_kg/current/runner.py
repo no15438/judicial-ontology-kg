@@ -11,7 +11,7 @@ from judicial_kg.current import VERSION
 from judicial_kg.current.acceptance import assess
 from judicial_kg.current.alignment import put
 from judicial_kg.current.compiler import Compiler
-from judicial_kg.current.context_repair import repair_contexts
+from judicial_kg.current.context_repair import preflight_predicates, repair_contexts
 from judicial_kg.current.decision import AlignmentCalls, FlashAlignmentCalls
 from judicial_kg.current.protocol import PROMPT, array, obj, schema
 from judicial_kg.current.recovery import infer_checked, proposal_check
@@ -241,6 +241,7 @@ def compile_with_recovery(
                 save,
                 align_enabled=aligner is not None,
             )
+        wire = preflight_predicates(wire, compiler.contract, payload, calls, name, save)
         blocked = []
         if aligner:
             wire, blocked = aligner.align(wire, doc, units, name)
@@ -459,6 +460,7 @@ def run_document(
             if aligner
             else 0
         ),
+        "predicate_choice_requests": sum("-predicate-choice" in row["stage"] for row in calls.rows),
         "alignment_model": (
             "qwen3.8-flash"
             if alignment_mode == "flash"

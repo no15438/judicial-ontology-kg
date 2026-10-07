@@ -1,0 +1,125 @@
+{
+  "purpose": "Historical failure diagnostics, not fresh twenty-case acceptance",
+  "runs": [
+    {
+      "run": "local-context-probe-01",
+      "new_committed_cny": "0.1565929",
+      "diagnostics": [
+        {
+          "not_fresh_acceptance": true,
+          "recovered": true,
+          "counts": {
+            "actors": 4,
+            "mentions": 4,
+            "contexts": 1,
+            "roles": 0,
+            "events": 9,
+            "statements": 2,
+            "objects": 2,
+            "object_mentions": 2,
+            "object_links": 5,
+            "collectives": 0,
+            "collective_mentions": 0,
+            "collective_memberships": 0,
+            "collective_participations": 0
+          },
+          "requests": 11,
+          "case_slot": "document-03",
+          "issues_count": 7,
+          "offline_replay_verified": true,
+          "network_calls_during_replay": 0
+        },
+        {
+          "not_fresh_acceptance": true,
+          "recovered": true,
+          "counts": {
+            "actors": 3,
+            "mentions": 3,
+            "contexts": 1,
+            "roles": 1,
+            "events": 3,
+            "statements": 4,
+            "objects": 4,
+            "object_mentions": 4,
+            "object_links": 3,
+            "collectives": 0,
+            "collective_mentions": 0,
+            "collective_memberships": 0,
+            "collective_participations": 0
+          },
+          "requests": 3,
+          "case_slot": "document-05",
+          "issues_count": 3,
+          "offline_replay_verified": true,
+          "network_calls_during_replay": 0
+        }
+      ]
+    },
+    {
+      "run": "local-context-probe-02",
+      "new_committed_cny": "0.0643590",
+      "diagnostics": [
+        {
+          "not_fresh_acceptance": true,
+          "recovered": false,
+          "error_type": "ValueError",
+          "requests": 8,
+          "case_slot": "document-04",
+          "issues_count": 0,
+          "offline_replay_verified": false,
+          "network_calls_during_replay": null
+        }
+      ]
+    },
+    {
+      "run": "local-context-probe-03",
+      "new_committed_cny": "0.0654186",
+      "diagnostics": [
+        {
+          "not_fresh_acceptance": true,
+          "recovered": false,
+          "error_type": "ValueError",
+          "requests": 8,
+          "case_slot": "document-04",
+          "issues_count": 0,
+          "offline_replay_verified": false,
+          "network_calls_during_replay": null
+        }
+      ]
+    },
+    {
+      "run": "local-context-probe-04",
+      "new_committed_cny": "0.0408008",
+      "diagnostics": [
+        {
+          "not_fresh_acceptance": true,
+          "recovered": true,
+          "counts": {
+            "actors": 2,
+            "mentions": 2,
+            "contexts": 1,
+            "roles": 0,
+            "events": 2,
+            "statements": 2,
+            "objects": 1,
+            "object_mentions": 1,
+            "object_links": 1,
+            "collectives": 2,
+            "collective_mentions": 2,
+            "collective_memberships": 4,
+            "collective_participations": 1
+          },
+          "requests": 6,
+          "case_slot": "document-04",
+          "issues_count": 0,
+          "offline_replay_verified": true,
+          "network_calls_during_replay": 0
+        }
+      ]
+    }
+  ],
+  "new_committed_cny_total": "0.3271713",
+  "unit_tests": 851,
+  "budget_note": "Concurrent twenty-01 cap was reserved in each probe prior; consolidate only new_committed for actual cumulative estimate.",
+  "representation_note": "Compatible predicate choice preserves original value/polarity/source; other indicates an ontology coverage gap, not precise typed retrieval or semantic gold."
+}
