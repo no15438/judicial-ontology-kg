@@ -255,3 +255,49 @@ def test_wrong_selector_reaches_alignment_but_scope_and_structure_remain_strict(
     f["collectives"][0] = {}
     with pytest.raises(ProtocolError):
         proposal_check(wire, fmt, targets, defer_selectors=True)
+
+
+def test_party_speaker_repair_preserves_claim_without_promoting_to_court_fact():
+    from judicial_kg.current.runner import compile_with_recovery
+
+    c, fmt = compiler()
+    targets = list(range(len(c.units)))
+    f = frame()
+    f.update(kind="party_defense", speakers=[])
+    wire = {
+        "contexts": [f],
+        "coverage": [{"unit": i, "status": "processed", "reason": "fixture"} for i in targets],
+    }
+    repaired = copy.deepcopy(wire)
+    repaired["contexts"][0]["speakers"] = [0]
+    verdict = {
+        f"c0_{k}_0": {"decision": "supported", "units": [1]}
+        for k in ("actors", "collectives", "events")
+    }
+    calls = DirectCalls([verdict, repaired, verdict])
+    saved = {}
+    result, _ = compile_with_recovery(
+        wire,
+        c,
+        fmt,
+        targets,
+        {
+            "target_units": [{"unit": i, "text": u["text"]} for i, u in enumerate(c.units)],
+            "background_units": [],
+        },
+        calls,
+        None,
+        c.doc,
+        c.units,
+        [],
+        "window-000",
+        lambda k, v: saved.update({k: v}),
+    )
+    assert result["contexts"][0]["kind"] == "party_defense"
+    assert c.record["contexts"][0]["kind"] == "party_defense"
+    assert c.record["contexts"][0]["attributed_actor_ids"] == [c.record["actors"][0]["id"]]
+    assert not c.issues
+    assert (
+        saved["window-000-contract-recovery"][0]["issues"][0]["issues"][0]["code"]
+        == "party_attribution_required"
+    )

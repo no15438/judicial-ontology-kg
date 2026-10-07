@@ -1,0 +1,37 @@
+{
+  "purpose": "historical failing window diagnostics, not fresh acceptance",
+  "input_run": "recovery-three-04",
+  "selected_windows": [
+    "window-007-a-b",
+    "window-009-a-a"
+  ],
+  "reports": [
+    {
+      "window": "window-007-a-b",
+      "historical_failure_probe": true,
+      "not_fresh_acceptance": true,
+      "recovered": true,
+      "requests": 8,
+      "issue_count": 1
+    },
+    {
+      "window": "window-009-a-a",
+      "historical_failure_probe": true,
+      "not_fresh_acceptance": true,
+      "recovered": true,
+      "requests": 5,
+      "issue_count": 4
+    }
+  ],
+  "budget": {
+    "prior_committed_cny": "83.4739796",
+    "cap_cny": "85.4739796",
+    "new_committed_cny": "0.0959298",
+    "new_observed_cny": "0.0959298",
+    "cumulative_committed_cny": "83.5699094",
+    "actual_api_requests": 13,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  }
+}

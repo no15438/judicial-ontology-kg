@@ -138,11 +138,21 @@
   "alignment": "flash",
   "concurrency": 6,
   "window_size": 16,
-  "prior_committed_cny": "75.9639524",
-  "cumulative_cap_cny": "100.9639524",
+  "prior_committed_cny": "83.5699094",
+  "cumulative_cap_cny": "113.5699094",
   "authorized_cumulative_cap_cny": "200",
   "acceptance_document": "docs/twenty-acceptance.md",
   "historical_response_reuse": 0,
   "manual_graph_edits": 0,
-  "semantic_precision_recall_f1": null
+  "semantic_precision_recall_f1": null,
+  "protocol_recovery": {
+    "repairs_per_window": 2,
+    "max_split_depth": 2,
+    "selector_scope_checked_after_alignment": true
+  },
+  "contract_recovery": {
+    "repairs_per_window": 2,
+    "transactional_compile": true,
+    "reverify_after_repair": true
+  }
 }
