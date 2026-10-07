@@ -403,3 +403,145 @@ def test_last_semantic_repair_cannot_repeat_rejected_assertion_as_supported():
             lambda *a: None,
             abstain_failed_items=True,
         )
+
+
+def test_out_of_frame_object_anchor_abstains_before_impossible_model_question():
+    from judicial_kg.current.runner import verify
+
+    c = frame()
+    c["objects"] = [
+        {"object_type": "instrument", "mention": {"unit": 0, "text": "A", "occurrence": 0}}
+    ]
+    c["events"][0]["objects"] = [0]
+    calls = DirectCalls(
+        [
+            {
+                f"c0_{k}_0": {
+                    "decision": "supported" if k != "objects" else "uncertain",
+                    "units": [1] if k != "objects" else [],
+                }
+                for k in ("actors", "collectives", "objects")
+            }
+        ]
+    )
+    saved = {}
+    result = verify({"contexts": [c]}, payload(), calls, "w", lambda k, v: saved.update({k: v}))
+    assert result["c0_events_0"] == {"decision": "uncertain", "units": []}
+    assert saved["w-verification-audit"][0]["status"] == "source_scope_abstention"
+    assert saved["w-verification-audit"][0]["required_units"] == [0]
+    assert saved["w-verification-audit"][0]["allowed_units"] == [1]
+    assert len(calls.stages) == 1
+
+
+def test_in_frame_object_anchor_still_allows_supported_event():
+    from judicial_kg.current.runner import verify
+
+    c = frame()
+    c["objects"] = [
+        {"object_type": "instrument", "mention": {"unit": 1, "text": "B", "occurrence": 0}}
+    ]
+    c["events"][0]["objects"] = [0]
+    calls = DirectCalls(
+        [
+            {
+                f"c0_{k}_0": {"decision": "supported", "units": [1]}
+                for k in ("actors", "collectives", "objects", "events")
+            }
+        ]
+    )
+    result = verify({"contexts": [c]}, payload(), calls, "w", lambda *a: None)
+    assert result["c0_events_0"] == {"decision": "supported", "units": [1]}
+
+
+def test_bounded_assertion_rejection_preserves_neighbors_and_original(monkeypatch):
+    from test_current import compiler
+
+    from judicial_kg.current import runner
+
+    cc, fmt = compiler()
+    wire = {
+        "contexts": [frame()],
+        "coverage": [{"unit": 1, "status": "processed", "reason": "metadata"}],
+    }
+    before = copy.deepcopy(wire)
+    failure = {"context": 0, "kind": "events", "key": "c0_events_0", "reason": "nested_source"}
+    monkeypatch.setattr(runner, "review_semantics", lambda *a: [failure])
+    monkeypatch.setattr(runner, "repair_semantics", lambda w, *a, **kw: copy.deepcopy(w))
+    calls = DirectCalls(
+        [{f"c0_{k}_0": {"decision": "supported", "units": [1]} for k in ("actors", "collectives")}]
+    )
+    saved = {}
+    doc = source()
+    units, _ = batches(doc)
+    out, stage = runner.compile_with_recovery(
+        wire,
+        cc,
+        fmt,
+        [1],
+        payload(),
+        calls,
+        None,
+        doc,
+        units,
+        [],
+        "w",
+        lambda k, v: saved.update({k: v}),
+        semantic_review=True,
+    )
+    assert stage == "w-contract-repair-2"
+    assert out == before == wire
+    assert cc.record["actors"] and not cc.record["events"]
+    assert saved[stage + "-verification-audit"][0]["status"] == "source_semantic_abstention"
+    assert saved[stage + "-semantic-assertion-abstentions"]["original_wire_retained"] == before
+
+
+def test_exhausted_source_frame_is_uncertain_and_cannot_fake_full_acceptance(monkeypatch):
+    from test_current import compiler
+
+    from judicial_kg.current import runner
+    from judicial_kg.current.acceptance import assess
+
+    cc, fmt = compiler()
+    wire = {
+        "contexts": [frame()],
+        "coverage": [{"unit": 1, "status": "processed", "reason": "metadata"}],
+    }
+    before = copy.deepcopy(wire)
+    failure = {"context": 0, "kind": "context", "key": "c0_context"}
+    monkeypatch.setattr(
+        runner,
+        "review_semantics",
+        lambda w, *a: [] if w["contexts"][0]["kind"] == "unknown" else [failure],
+    )
+
+    def broken(*a, **kw):
+        raise ValueError("protocol_recovery_exhausted")
+
+    monkeypatch.setattr(runner, "repair_semantics", broken)
+    saved = {}
+    doc = source()
+    units, _ = batches(doc)
+    out, stage = runner.compile_with_recovery(
+        wire,
+        cc,
+        fmt,
+        [1],
+        payload(),
+        DirectCalls([]),
+        None,
+        doc,
+        units,
+        [],
+        "w",
+        lambda k, v: saved.update({k: v}),
+        semantic_review=True,
+    )
+    assert wire == before
+    assert out["contexts"][0]["kind"] == "unknown"
+    assert not out["contexts"][0]["events"] and not out["contexts"][0]["actors"]
+    assert out["coverage"][0]["status"] == "uncertain"
+    assert saved[stage + "-semantic-frame-abstentions"]["semantic_repair_success"] is False
+    coverage = [{"unit": i, "status": "uncertain"} for i in range(len(units))]
+    result = assess(cc.record, cc.issues, coverage, [], len(units))
+    assert not result["engineering_pipeline_passed"]
+    assert "empty_event_or_statement_channel" in result["blocking_reasons"]

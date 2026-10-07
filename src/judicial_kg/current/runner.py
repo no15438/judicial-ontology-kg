@@ -76,7 +76,7 @@ class Calls:
         return strict_json(content)
 
 
-def verify(wire, payload, calls, stage, save):
+def verify(wire, payload, calls, stage, save, *, semantic_rejections=None):
     candidates = {}
     for c, context in enumerate(wire["contexts"]):
         for kind in ("actors", "collectives", "objects", "roles", "events", "statements"):
@@ -90,6 +90,39 @@ def verify(wire, payload, calls, stage, save):
     entries = list(candidates.items())
     for offset in range(0, len(entries), 16):
         selected = dict(entries[offset : offset + 16])
+        for key, candidate in list(selected.items()):
+            context = wire["contexts"][candidate["context"]]
+            item = candidate["proposal"]
+            allowed = set(context["units"]) & set(targets)
+            anchors = []
+            if candidate["kind"] == "events":
+                anchors = [
+                    context["objects"][i]["mention"]["unit"]
+                    for i in item["objects"]
+                    if type(i) is int and 0 <= i < len(context["objects"])
+                ]
+            elif candidate["kind"] == "statements":
+                anchors = [item["value"]["source"]["unit"]]
+            rejected = (semantic_rejections or {}).get(key)
+            if rejected or not set(anchors) <= allowed:
+                # Do not ask the provider to satisfy an impossible scoped evidence requirement.
+                decision[key] = {"decision": "uncertain", "units": []}
+                audit.append(
+                    {
+                        "key": key,
+                        "status": "source_semantic_abstention"
+                        if rejected
+                        else "source_scope_abstention",
+                        "method": "bounded_model_rejection" if rejected else "rule",
+                        "required_units": sorted(set(anchors)),
+                        "allowed_units": sorted(allowed),
+                        "source_failure": rejected,
+                        "not_gold": True,
+                    }
+                )
+                del selected[key]
+        if not selected:
+            continue
         fmt = obj(
             **{
                 key: obj(
@@ -236,19 +269,30 @@ def compile_with_recovery(
         del compiler.issues[issue_count:]
         del compiler.mappings[mapping_count:]
         if attempt:
-            wire = (
-                repair_semantics(
-                    wire,
-                    history[-1]["semantic_failures"],
-                    compiler.contract,
-                    payload,
-                    calls,
-                    name,
-                    save,
-                    abstain_failed_items=attempt == repairs,
-                )
-                if "semantic_failures" in history[-1]
-                else repair_contexts(
+            if "semantic_failures" in history[-1]:
+                try:
+                    wire = repair_semantics(
+                        wire,
+                        history[-1]["semantic_failures"],
+                        compiler.contract,
+                        payload,
+                        calls,
+                        name,
+                        save,
+                        abstain_failed_items=attempt == repairs,
+                    )
+                except ValueError as error:
+                    if str(error) != "protocol_recovery_exhausted" or calls.halted:
+                        raise
+                    wire = abstain_source_frames(
+                        wire,
+                        history[-1]["semantic_failures"],
+                        name,
+                        save,
+                        "bounded_semantic_repair_protocol_exhausted",
+                    )
+            else:
+                wire = repair_contexts(
                     wire,
                     history[-1]["issues"],
                     compiler.contract,
@@ -258,18 +302,41 @@ def compile_with_recovery(
                     save,
                     align_enabled=aligner is not None,
                 )
-            )
         wire = preflight_predicates(wire, compiler.contract, payload, calls, name, save)
         blocked = []
         if aligner:
             wire, blocked = aligner.align(wire, doc, units, name)
+        semantic_rejections = {}
         if semantic_review:
             failures = review_semantics(wire, payload, calls, name, save)
             if failures:
                 history.append({"attempt": attempt, "stage": name, "semantic_failures": failures})
                 save(stage + "-contract-recovery", history)
-                continue
-        decisions = verify(wire, payload, calls, name, save)
+                if attempt < repairs:
+                    continue
+                frame_failures = [f for f in failures if f["kind"] == "context"]
+                if frame_failures:
+                    wire = abstain_source_frames(
+                        wire, frame_failures, name, save, "bounded_source_frame_review_exhausted"
+                    )
+                for failure in failures:
+                    ci = failure["context"]
+                    if failure["kind"] == "context" or any(
+                        f["context"] == ci for f in frame_failures
+                    ):
+                        continue
+                    semantic_rejections[failure["key"]] = failure
+                save(
+                    name + "-semantic-assertion-abstentions",
+                    {
+                        "rejections": semantic_rejections,
+                        "model_judgments_not_gold": True,
+                        "original_wire_retained": wire,
+                    },
+                )
+        decisions = verify(
+            wire, payload, calls, name, save, semantic_rejections=semantic_rejections
+        )
         adapted = copy.deepcopy(wire)
         for path in blocked:
             put(adapted, path, {"quarantined_by_verifier": True})
@@ -304,6 +371,53 @@ def compile_with_recovery(
     del compiler.issues[issue_count:]
     del compiler.mappings[mapping_count:]
     raise ValueError("contract_recovery_exhausted")
+
+
+def abstain_source_frames(wire, failures, stage, save, reason):
+    """Unsafe source attribution yields explicit uncertainty, never retained definite facts."""
+    adapted = copy.deepcopy(wire)
+    affected = {f["context"] for f in failures}
+    uncertain = set()
+    for ci in affected:
+        original = adapted["contexts"][ci]
+        unresolved = copy.deepcopy(original["unresolved"])
+        unresolved.append(
+            {"units": original["units"], "reason": "rule:source_frame_abstention:" + reason}
+        )
+        for kind in ("roles", "events", "statements"):
+            unresolved.extend(
+                {"units": item["units"], "reason": f"rule:source_frame_abstention:{kind}_{i}"}
+                for i, item in enumerate(original[kind])
+            )
+        adapted["contexts"][ci] = {
+            "kind": "unknown",
+            "units": original["units"],
+            "speakers": [],
+            "actors": [],
+            "collectives": [],
+            "objects": [],
+            "roles": [],
+            "events": [],
+            "statements": [],
+            "unresolved": unresolved,
+        }
+        uncertain.update(original["units"])
+    for row in adapted.get("coverage", []):
+        if row["unit"] in uncertain:
+            row.update(status="uncertain", reason="rule:source_frame_abstention:" + reason)
+    save(
+        stage + "-semantic-frame-abstentions",
+        {
+            "before": wire,
+            "after": adapted,
+            "affected_contexts": sorted(affected),
+            "reason": reason,
+            "method": "rule",
+            "semantic_repair_success": False,
+            "not_gold": True,
+        },
+    )
+    return adapted
 
 
 def run_document(
@@ -521,6 +635,19 @@ def run_document(
     ]
     report.update(
         assess(compiler.record, compiler.issues, coverage, verification_audit, len(units))
+    )
+    report["source_scope_abstentions"] = sum(
+        r["status"] == "source_scope_abstention" for r in verification_audit
+    )
+    report["source_semantic_assertion_abstentions"] = sum(
+        r["status"] == "source_semantic_abstention" for r in verification_audit
+    )
+    report["source_semantic_frame_abstentions"] = len(
+        {
+            row["path"].split("/unresolved/")[0]
+            for row in compiler.issues
+            if row.get("proposal", {}).get("reason", "").startswith("rule:source_frame_abstention:")
+        }
     )
     report["protocol_repair_calls"] = sum(
         "protocol-repair" in r["stage"] or "item-repair" in r["stage"] for r in calls.rows
