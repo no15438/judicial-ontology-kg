@@ -245,6 +245,7 @@ def compile_with_recovery(
                     calls,
                     name,
                     save,
+                    abstain_failed_items=attempt == repairs,
                 )
                 if "semantic_failures" in history[-1]
                 else repair_contexts(
