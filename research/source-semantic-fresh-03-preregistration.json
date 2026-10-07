@@ -1,0 +1,26 @@
+{
+  "run": "source-semantic-fresh-03",
+  "purpose": "full_source_fresh_development_regression_not_blind_semantic_accuracy",
+  "input_hashes": {
+    "artifacts/current/source-semantic-fresh-documents.json": "85ee3b7f730b6bb851fe34c56d4aacd39265ab8be1f69d99cf2a3e39e0fd53dc"
+  },
+  "order": [
+    "spark_qa:639b49493e45e6041481bf68de91f090f6746495eb55ae89cee4f4fa664b840c",
+    "spark_qa:07dd3b118cbaf06663e5d8210538a125da876ae52d61aebd2bf465ff681e20e3"
+  ],
+  "concurrency": 2,
+  "window_size": 16,
+  "alignment": "flash",
+  "semantic_review": true,
+  "prior_committed_cny": "136.4666700",
+  "cumulative_cap_cny": "138.4666700",
+  "budget_note": "Conservative reservation of all parallel05/fresh02 and06 caps; final accounting adds each actual incremental committed amount only once. Authorized200 CNY.",
+  "historical_response_reuse": 0,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "development_sources": [
+    "twenty-02/document-10",
+    "twenty-02/document-12"
+  ],
+  "implementation_commit": "recorded_in_batch_report"
+}
