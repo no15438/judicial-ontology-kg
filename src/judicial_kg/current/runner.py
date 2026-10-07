@@ -16,6 +16,7 @@ from judicial_kg.current.decision import AlignmentCalls, FlashAlignmentCalls
 from judicial_kg.current.protocol import PROMPT, array, obj, schema
 from judicial_kg.current.recovery import infer_checked, proposal_check
 from judicial_kg.current.retrieval import index_documents
+from judicial_kg.current.scope import plan as plan_source_intervals
 from judicial_kg.current.semantics import repair as repair_semantics
 from judicial_kg.current.semantics import review as review_semantics
 from judicial_kg.current.semantics import source_cues
@@ -432,6 +433,7 @@ def run_document(
     alignment_mode=None,
     max_split_depth=2,
     semantic_review=True,
+    source_partition=False,
 ):
     validate_source(doc)
     run_id = run_id or str(uuid4())
@@ -467,11 +469,12 @@ def run_document(
     save("source", doc)
     save("text-index", index_documents([doc]))
     all_units = [{"unit": i, "field": u["field"], "text": u["text"]} for i, u in enumerate(units)]
-    pending = deque((wi, targets, 0, f"window-{wi:03}") for wi, targets in enumerate(windows))
+    pending = deque((wi, targets, 0, f"window-{wi:03}", None) for wi, targets in enumerate(windows))
     attempts = []
     accepted_stages = []
+    intervals = []
     while pending:
-        wi, targets, depth, stage = pending.popleft()
+        wi, targets, depth, stage, source_interval = pending.popleft()
         snapshot = copy.deepcopy(compiler.record)
         map_count = len(compiler.mappings)
         coverage_count = len(coverage)
@@ -482,15 +485,29 @@ def run_document(
         }
         if semantic_review:
             payload["source_cues"] = source_cues(payload, targets)
-        messages = [
-            {
-                "role": "system",
-                "content": PROMPT + "\nSchema:\n" + json.dumps(fmt, ensure_ascii=False),
-            },
-            {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
-        ]
         before = len(compiler.issues)
         try:
+            if source_partition and source_interval is None:
+                planned = plan_source_intervals(payload, calls, stage, save)
+                intervals.extend({"stage": stage, **p} for p in planned)
+                save("source-intervals", intervals)
+                if len(planned) > 1:
+                    for index in reversed(range(len(planned))):
+                        part = planned[index]
+                        pending.appendleft(
+                            (wi, part["units"], depth, f"{stage}-source-{index:02}", part)
+                        )
+                    continue
+                source_interval = planned[0]
+            if source_interval is not None:
+                payload["source_interval"] = source_interval
+            messages = [
+                {
+                    "role": "system",
+                    "content": PROMPT + "\nSchema:\n" + json.dumps(fmt, ensure_ascii=False),
+                },
+                {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+            ]
             wire = infer_checked(
                 calls,
                 messages,
@@ -552,8 +569,13 @@ def run_document(
             save("window-attempts", attempts)
             if split:
                 middle = len(targets) // 2
-                pending.appendleft((wi, targets[middle:], depth + 1, stage + "-b"))
-                pending.appendleft((wi, targets[:middle], depth + 1, stage + "-a"))
+                for suffix, part in (("-b", targets[middle:]), ("-a", targets[:middle])):
+                    inherited = (
+                        {**source_interval, "first": part[0], "last": part[-1], "units": part}
+                        if source_interval is not None
+                        else None
+                    )
+                    pending.appendleft((wi, part, depth + 1, stage + suffix, inherited))
                 continue
             compiler.issues.append(
                 {
@@ -619,6 +641,9 @@ def run_document(
         "lossless_graph_roundtrip": True,
         "semantic_precision_recall_f1": None,
         "source_semantic_review_enabled": semantic_review,
+        "source_partition_enabled": source_partition,
+        "source_partition_requests": sum("-source-partition" in r["stage"] for r in calls.rows),
+        "source_intervals_proposed": len(intervals),
         "source_semantic_review_requests": sum(
             "-semantic-review-" in r["stage"] for r in calls.rows
         ),

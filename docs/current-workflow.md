@@ -2,6 +2,8 @@
 
 这是收敛候选版，不是已经证明语义准确或检索增益的生产最终版。唯一开发入口为 `judicial-kg current`（也可 `PYTHONPATH=src .venv/bin/python -m judicial_kg.current.cli`）。旧 v1–v44 命令保留用于复现实验，不再作为新增能力的默认入口。
 
+新来源可靠性实验在manifest中设置`source_partition=true`，先划不可变原文来源区间，再分别抽取和核验；类型/parent_cue是来源假设，仍须复核，见[新文书评测](source-interval-evaluation.md)。旧manifest缺省false，避免改变历史协议。
+
 ```mermaid
 flowchart LR
     S[真实原文与来源哈希] --> T[始终可用的文本索引]

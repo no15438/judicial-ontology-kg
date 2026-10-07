@@ -332,8 +332,12 @@ def review(wire, payload, calls, stage, save):
         cues = source_cues(payload, sorted({u for c in contexts.values() for u in c["units"]}))
         ids.update(u["unit"] for u in cues)
         for i in indices:
-            first = min(wire["contexts"][i]["units"])
-            ids.update(u["unit"] for u in rows if first - 6 <= u["unit"] < first)
+            first, last = min(wire["contexts"][i]["units"]), max(wire["contexts"][i]["units"])
+            # Supply immutable risk evidence, not just an error code.
+            ids.update(u["unit"] for u in rows if first - 6 <= u["unit"] <= last + 6)
+        parent = (payload.get("source_interval") or {}).get("parent_cue")
+        if parent:
+            ids.add(parent["unit"])
         for task in batch.values():
             task["direct_conflicts"] = direct_conflicts(
                 wire["contexts"][task["context"]],
@@ -405,6 +409,7 @@ def review(wire, payload, calls, stage, save):
                             "tasks": batch,
                             "source_units": [by_unit[i] for i in allowed],
                             "source_cues": cues,
+                            "source_interval": payload.get("source_interval"),
                         },
                         ensure_ascii=False,
                     ),
@@ -594,6 +599,7 @@ def repair(wire, failures, contract, payload, calls, stage, save, *, abstain_fai
                             "target_units": [u for u in rows if u["unit"] in ids],
                             "background_units": [u for u in rows if u["unit"] not in ids],
                             "source_cues": cues,
+                            "source_interval": payload.get("source_interval"),
                         },
                         ensure_ascii=False,
                     ),

@@ -43,7 +43,9 @@ class Groups:
         self.parents[max(a, b)] = min(a, b)
 
 
-def build_development(body_path: Path, meta_path: Path, exposure_path: Path) -> tuple[list, dict]:
+def build_development(
+    body_path: Path, meta_path: Path, exposure_path: Path, *, include_unallocated=False
+) -> tuple[list, dict]:
     body = load_verified(body_path, BODY_SHA256)
     meta = load_verified(meta_path, META_SHA256)
     if len(body) != len(meta) or len(body) != 10000:
@@ -201,4 +203,4 @@ def build_development(body_path: Path, meta_path: Path, exposure_path: Path) -> 
         "test_split_frozen": False,
         "group_manifest": group_manifest,
     }
-    return selected, report
+    return docs if include_unallocated else selected, report

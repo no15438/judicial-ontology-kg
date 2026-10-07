@@ -85,12 +85,18 @@ def replay(root, source_run, output):
         alignment_client=alignment,
         alignment_mode=config.get("alignment"),
         semantic_review=config.get("semantic_review", False),
+        source_partition=config.get("source_partition", False),
     )
     if alignment and alignment.count != len(alignment.rows):
         raise ValueError("Unused alignment responses")
     for name in ("candidate", "graph", "coverage", "issues", "source-mappings"):
         if (source_run / (name + ".json")).read_bytes() != (output / (name + ".json")).read_bytes():
             raise ValueError("Replay outputs differ")
+    if config.get("source_partition") and (source_run / "source-intervals.json").exists():
+        if (source_run / "source-intervals.json").read_bytes() != (
+            output / "source-intervals.json"
+        ).read_bytes():
+            raise ValueError("Replay source intervals differ")
     if client.count != len(rows):
         raise ValueError("Unused historical responses")
     return {
@@ -150,6 +156,7 @@ def run(root, manifest_path, output, credential_root):
             alignment_client=alignment,
             alignment_mode=manifest.get("alignment"),
             semantic_review=manifest.get("semantic_review", True),
+            source_partition=manifest.get("source_partition", False),
         )
         write_json(
             dest / "config.json",
@@ -158,6 +165,7 @@ def run(root, manifest_path, output, credential_root):
                 "implementation": frozen,
                 "alignment": manifest.get("alignment"),
                 "semantic_review": manifest.get("semantic_review", True),
+                "source_partition": manifest.get("source_partition", False),
             },
         )
         write_json(
