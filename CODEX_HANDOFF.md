@@ -2,6 +2,8 @@
 
 唯一开发主入口：`judicial-kg current`；实现位于 `src/judicial_kg/current/`。候选版本 `current-rc1`，不是已证明语义质量或GraphRAG收益的生产最终版。
 
+最新源码47c0068、904项测试，新增抽取前来源区间。新20篇一次性未曝光文书已登记，见research/source-intervals-unseen-20-01-preregistration.json及docs/source-interval-evaluation.md；对应artifacts/current/source-intervals-unseen-20-01如存在，以其batch-report/budget为真实运行状态。开始累计134.8362131元，子预算30元。整批结束前禁止按新样本改源码、提示或筛样；读过输出后本批转开发暴露。旧36篇只作回归，不再作泛化证明。
+
 最新开发分支为 `codex/source-semantic-guards`。项目定位见 [定位与工程目标](docs/project-positioning.md)，当前M1计划见 [来源语义修复](docs/source-semantic-repair-plan.md)。实测期间独立工作树修复分别在codex/source-scope-stage与codex/proof-scope-regression，两次源码修复已合回主开发分支。最后源码改动15ea8b3、889项测试；所有本轮调用已结束，累计保守134.8362131元/授权200元。不同冻结版本的完整原文与局部窗口结果独立记录，见最新进度及对应报告。
 
 历史固定20篇已完成：第一轮73b66d4已完成16/20工程通过、20/20离线回放；第二轮aa01d59已完成20/20工程通过、20/20零网络回放、851项测试通过，两轮结果未拼接。最终报告为 research/current-twenty-02-report.json，截至该20篇轮次累计保守费用126.0062429元/授权200元；该轮请求已结束。新来源语义实测费用与状态另见最新进度。第二轮冻结分支为 `codex/model-alignment-local-repair`，修复源码已合回开发分支；失败反馈如何进入设计见 [工程经验](docs/workflow-repair-lessons.md)。
