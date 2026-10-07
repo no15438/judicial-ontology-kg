@@ -586,3 +586,29 @@ def test_contains_feedback_exposes_required_source_units():
     with pytest.raises(ProtocolError) as failure:
         check_schema({"source_units": [0]}, fmt)
     assert failure.value.details[0]["expected"] == {"enum": [1]}
+
+
+def test_proof_purpose_in_court_narrative_is_not_a_confirmed_repayment():
+    c = frame()
+    c.update(kind="court_reasoning", units=[0, 1, 2, 3, 4])
+    e = {**c["events"][0], "event_type": "repayment", "polarity": "affirmed", "units": [2]}
+    units = {
+        i: {"text": t}
+        for i, t in enumerate(
+            ["原告主张，", "欲证明该项内容，", "后已偿还的事实。", "但证据不足，", "本院不予支持。"]
+        )
+    }
+    assert direct_conflicts(c, "events", e, units) == [
+        "court_assertion_overlaps_reported_proof_purpose"
+    ]
+    e["units"] = [4]
+    assert not direct_conflicts(c, "events", e, units)
+    c["kind"] = "party_claim"
+    e["units"] = [2]
+    assert not direct_conflicts(c, "events", e, units)
+
+
+def test_proof_scope_does_not_veto_an_explicit_court_finding_without_purpose_cue():
+    c = frame()
+    c["kind"] = "court_finding"
+    assert not direct_conflicts(c, "events", c["events"][0], {1: {"text": "本院确认该项内容。"}})

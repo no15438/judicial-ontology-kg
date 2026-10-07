@@ -1,0 +1,24 @@
+{
+  "run": "source-semantic-fresh-04",
+  "purpose": "fresh_complete_source_known_proof_scope_regression_not_blind_semantic_accuracy",
+  "input_hashes": {
+    "artifacts/current/source-semantic-proof-document.json": "b40f8901f17faa699914626335b9503da89ef854e7c51c7007f478a588bd03a3"
+  },
+  "order": [
+    "spark_qa:439645deb3d015aa2dd048ed1a4968404905361b10f5b228d9ee78ea779cc998"
+  ],
+  "concurrency": 1,
+  "window_size": 16,
+  "alignment": "flash",
+  "semantic_review": true,
+  "prior_committed_cny": "139.4666700",
+  "cumulative_cap_cny": "142.4666700",
+  "budget_note": "Reserves all overlapping runs through139.4666700; adds actual incremental committed amounts once at completion. Authorized200 CNY.",
+  "historical_response_reuse": 0,
+  "manual_graph_edits": 0,
+  "semantic_precision_recall_f1": null,
+  "development_sources": [
+    "twenty-02/document-02"
+  ],
+  "implementation_commit": "recorded_in_batch_report"
+}
