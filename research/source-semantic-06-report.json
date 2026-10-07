@@ -1,0 +1,92 @@
+{
+  "status": "completed",
+  "selected_contexts": 1,
+  "selected_documents": 1,
+  "finished_contexts": 1,
+  "accepted_contexts": 1,
+  "handled_contexts": 1,
+  "fully_abstained_contexts": 0,
+  "hard_failed_contexts": 0,
+  "offline_replayed_contexts": 1,
+  "historical_seed_contexts": 1,
+  "results": [
+    {
+      "index": 1,
+      "document": "document-04",
+      "codes": [
+        "reported_speech_scope"
+      ],
+      "accepted": true,
+      "handled": true,
+      "historical_candidate_reused": true,
+      "manual_graph_edits": 0,
+      "fully_abstained": false,
+      "retained_assertions": 11,
+      "source_frame_abstentions": 0,
+      "final_stage": "diagnostic-contract-repair-2",
+      "contexts_before": 1,
+      "contexts_after": 1,
+      "source_and_graph_roundtrip": true,
+      "counts": {
+        "actors": 5,
+        "mentions": 5,
+        "contexts": 1,
+        "roles": 2,
+        "events": 6,
+        "statements": 3,
+        "objects": 0,
+        "object_mentions": 0,
+        "object_links": 0,
+        "collectives": 1,
+        "collective_mentions": 1,
+        "collective_memberships": 2,
+        "collective_participations": 0
+      },
+      "unresolved_before": 0,
+      "unresolved_after": 1,
+      "original_assertions": 16,
+      "final_assertions": 13,
+      "initial_flagged_items": 1,
+      "initial_context_flagged": true,
+      "initial_direct_conflicts": [
+        "source_selected_speakers_differ"
+      ],
+      "new_requests": 16,
+      "http_statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "offline_replay_verified": true
+    }
+  ],
+  "budget": {
+    "prior_committed_cny": "134.9666700",
+    "cap_cny": "136.4666700",
+    "new_committed_cny": "0.1412856",
+    "new_observed_cny": "0.1412856",
+    "cumulative_committed_cny": "135.1079556",
+    "actual_api_requests": 16,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "elapsed_seconds": 256.2412317080307,
+  "semantic_precision_recall_f1": null,
+  "not_fresh_twenty_acceptance": true,
+  "test_count": 886,
+  "implementation_commit": "9acd2b69c843d5df8030bf34ea54be5bbde17a42"
+}

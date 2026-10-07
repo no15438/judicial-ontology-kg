@@ -1,0 +1,43 @@
+{
+  "selected_questions": 6,
+  "source_sha256": "980d58fad0708d0d19f6a4297cd7178a19f47747a7e774c34ed3b4f841dd38f8",
+  "questions_sha256": "3462a3a7c132eae956a85f317b23abbbc179222ca112b8c7279a7aebef35932c",
+  "purpose": "Source-first development reference registration before task comparison, not independent blind evaluation or semantic graph gold",
+  "graph_scoring_started": false,
+  "identity_anomaly": "Different literal name and anonymized mention within source; flag and preserve, do not merge without explicit identity evidence",
+  "question_ids": [
+    "direct-loan-1",
+    "due-date-1",
+    "direct-loan-2",
+    "requested-vs-awarded-1",
+    "requested-vs-awarded-2",
+    "source-identity-anomaly"
+  ],
+  "required_source_units": {
+    "direct-loan-1": [
+      33,
+      35
+    ],
+    "due-date-1": [
+      35,
+      36
+    ],
+    "direct-loan-2": [
+      37,
+      38
+    ],
+    "requested-vs-awarded-1": [
+      53,
+      54
+    ],
+    "requested-vs-awarded-2": [
+      55,
+      56
+    ],
+    "source-identity-anomaly": [
+      47,
+      53
+    ]
+  },
+  "raw_questions_and_source": "Ignored local artifacts; upload only to authorized Google project folder"
+}

@@ -1,0 +1,163 @@
+{
+  "code_commit": "15ea8b3",
+  "model": "qwen3.8-flash",
+  "temperature": 0.2,
+  "seed": 42,
+  "test_count": 889,
+  "prior_before_source_semantics_cny": "126.0062429",
+  "new_committed_cny": "8.8299702",
+  "cumulative_committed_cny": "134.8362131",
+  "authorized_cny": "200",
+  "actual_api_requests_in_source_semantics": 1140,
+  "invoice_verified": false,
+  "all_runs_ended": true,
+  "incremental_runs": [
+    {
+      "run": "source-semantic-01",
+      "requests": 54,
+      "incremental_committed_cny": "0.5617052",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-02",
+      "requests": 64,
+      "incremental_committed_cny": "0.6933545",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-03",
+      "requests": 90,
+      "incremental_committed_cny": "0.7656359",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-05",
+      "requests": 75,
+      "incremental_committed_cny": "0.6117241",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-04",
+      "requests": 116,
+      "incremental_committed_cny": "0.8495491",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-06",
+      "requests": 16,
+      "incremental_committed_cny": "0.1412856",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-07",
+      "requests": 10,
+      "incremental_committed_cny": "0.0956717",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-fresh-01",
+      "requests": 154,
+      "incremental_committed_cny": "1.0901824",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-fresh-02",
+      "requests": 223,
+      "incremental_committed_cny": "1.5808576",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-fresh-03",
+      "requests": 222,
+      "incremental_committed_cny": "1.5249241",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-fresh-04",
+      "requests": 104,
+      "incremental_committed_cny": "0.7868246",
+      "budget_blocked_calls": 0
+    },
+    {
+      "run": "source-semantic-window-01",
+      "requests": 12,
+      "incremental_committed_cny": "0.1282554",
+      "budget_blocked_calls": 0
+    }
+  ],
+  "whole_document_results": {
+    "777fc9b/fresh-01": {
+      "engineering": 1,
+      "total": 2,
+      "replay": 2
+    },
+    "649fa7a/fresh-02": {
+      "engineering": 2,
+      "total": 2,
+      "replay": 2
+    },
+    "9acd2b6/fresh-03": {
+      "engineering": 2,
+      "total": 2,
+      "replay": 2
+    },
+    "0136e9e/fresh-04": {
+      "engineering": 1,
+      "total": 1,
+      "replay": 1
+    }
+  },
+  "latest_patch_validation": {
+    "15ea8b3/window-01": {
+      "status": "completed",
+      "source_and_contract_valid": true,
+      "lossless_graph_roundtrip": true,
+      "retained_assertions": 0,
+      "fully_abstained": true,
+      "source_frame_abstentions": 1,
+      "counts": {
+        "actors": 0,
+        "mentions": 0,
+        "contexts": 1,
+        "roles": 0,
+        "events": 0,
+        "statements": 0,
+        "objects": 0,
+        "object_mentions": 0,
+        "object_links": 0,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "new_requests": 12,
+      "final_stage": "window-contract-repair-2",
+      "not_whole_document_acceptance": true,
+      "historical_response_reuse": 0,
+      "manual_graph_edits": 0,
+      "semantic_precision_recall_f1": null,
+      "offline_replay_verified": true,
+      "network_calls_in_replay": 0,
+      "frozen_inputs_unchanged": true,
+      "budget": {
+        "prior_committed_cny": "142.4666700",
+        "cap_cny": "143.4666700",
+        "new_committed_cny": "0.1282554",
+        "new_observed_cny": "0.1282554",
+        "cumulative_committed_cny": "142.5949254",
+        "actual_api_requests": 12,
+        "budget_blocked_calls": 0,
+        "halted": false,
+        "note": "List-price estimate, not invoice; unknown usage retains reservation"
+      },
+      "implementation_commit": "15ea8b3",
+      "test_count": 889
+    }
+  },
+  "combined_new_twenty_score": null,
+  "whole_document_unique_development_sources": 3,
+  "source_semantic_correctness_verified": false,
+  "semantic_precision_recall_f1": null,
+  "graph_retrieval_benefit_verified": false,
+  "counts_note": "Do not merge different frozen versions or repeated development sources. A whole-frame abstention is not a semantic repair success. Earlier failed rounds remain."
+}
