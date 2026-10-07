@@ -1,0 +1,39 @@
+{
+  "code_commit": "aa01d59c973abc6a8670bde9dd75d252d463469d",
+  "historical_proposal_diagnostic": true,
+  "not_fresh_acceptance": true,
+  "network_calls_during_replay": 0,
+  "cases": [
+    {
+      "document_number": 16,
+      "stage": "window-002-a-a",
+      "source_sha256": "b7c3c43270ffcdb4dfa1d2e9ef06fd82435dec08159e0d06b9a8fe1b9a521237",
+      "proposal_sha256": "45babfece4726269a3ffdbf69624e4fea8599e01e97a6f16491623ca8a3fa50e",
+      "recovered": true,
+      "new_requests": 5,
+      "offline_replay_verified": true
+    },
+    {
+      "document_number": 16,
+      "stage": "window-002-a-b",
+      "source_sha256": "b7c3c43270ffcdb4dfa1d2e9ef06fd82435dec08159e0d06b9a8fe1b9a521237",
+      "proposal_sha256": "228743a022109a324453c463e47ca7cbb7e41e92eb83cc656925d4dfa818b18a",
+      "recovered": true,
+      "new_requests": 6,
+      "offline_replay_verified": true
+    }
+  ],
+  "budget": {
+    "prior_committed_cny": "156.5699094",
+    "cap_cny": "158.5699094",
+    "new_committed_cny": "0.0802858",
+    "new_observed_cny": "0.0802858",
+    "cumulative_committed_cny": "156.6501952",
+    "actual_api_requests": 11,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "no_manual_graph_edits": true,
+  "not_counted_in_twenty_document_acceptance": true
+}

@@ -2,7 +2,9 @@
 
 唯一开发主入口：`judicial-kg current`；实现位于 `src/judicial_kg/current/`。候选版本 `current-rc1`，不是已证明语义质量或GraphRAG收益的生产最终版。
 
-最新开发分支为 `codex/model-alignment`，对齐计划见 [模型对齐](docs/model-alignment-plan.md)。新鲜三篇结果以最新进度为准。
+最新开发分支为 `codex/model-alignment`，对齐计划见 [模型对齐](docs/model-alignment-plan.md)。冻结批次结果以最新进度为准。
+
+当前持续验收固定20篇：第一轮73b66d4已完成16/20工程通过、20/20离线回放；第二轮aa01d59在隔离目录运行，尚未完成，不能拼接两轮通过结果。第二轮冻结分支为 `codex/model-alignment-local-repair`，修复源码已合回开发分支；失败反馈如何进入设计见 [工程经验](docs/workflow-repair-lessons.md)。
 
 先读 [当前流程与运行命令](docs/current-workflow.md)、[最新进度](docs/progress.md) 和 AGENTS.md。
 
