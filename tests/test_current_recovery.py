@@ -1,6 +1,7 @@
 """Protocol recovery never invents source coverage or turns quarantine into gold."""
 
 import copy
+import json
 
 import pytest
 from test_current import compiler, frame
@@ -193,7 +194,7 @@ def test_contract_feedback_recompiles_transactionally_without_manual_graph_edit(
         f"c0_{k}_0": {"decision": "supported", "units": [1]}
         for k in ("actors", "collectives", "events")
     }
-    calls = DirectCalls([decisions, repaired, decisions])
+    calls = DirectCalls([decisions, {"context": repaired["contexts"][0]}, decisions])
     saved = {}
     final, name = compile_with_recovery(
         wire,
@@ -274,7 +275,7 @@ def test_party_speaker_repair_preserves_claim_without_promoting_to_court_fact():
         f"c0_{k}_0": {"decision": "supported", "units": [1]}
         for k in ("actors", "collectives", "events")
     }
-    calls = DirectCalls([verdict, repaired, verdict])
+    calls = DirectCalls([verdict, {"context": repaired["contexts"][0]}, verdict])
     saved = {}
     result, _ = compile_with_recovery(
         wire,
@@ -301,3 +302,98 @@ def test_party_speaker_repair_preserves_claim_without_promoting_to_court_fact():
         saved["window-000-contract-recovery"][0]["issues"][0]["issues"][0]["code"]
         == "party_attribution_required"
     )
+
+
+def test_local_contract_repair_cannot_change_unaffected_context_or_coverage():
+    from judicial_kg.current.context_repair import repair_contexts
+
+    c, _ = compiler()
+    f = frame()
+    f.update(kind="party_defense", speakers=[])
+    original = {
+        "contexts": [f, frame()],
+        "coverage": [{"unit": 1, "status": "processed", "reason": "x"}],
+    }
+    corrected = copy.deepcopy(f)
+    corrected["speakers"] = [0]
+    calls = DirectCalls([{"context": corrected}])
+    result = repair_contexts(
+        original,
+        [{"path": "window-000/contexts/0", "code": "party_attribution_required"}],
+        c.contract,
+        {
+            "target_units": [{"unit": 1, "text": c.units[1]["text"]}],
+            "background_units": [{"unit": 0, "text": c.units[0]["text"]}],
+        },
+        calls,
+        "repair",
+        lambda k, v: None,
+        align_enabled=False,
+    )
+    assert result["coverage"] == original["coverage"]
+    assert result["contexts"][1] == original["contexts"][1]
+    assert result["contexts"][0]["speakers"] == [0]
+    assert original["contexts"][0]["speakers"] == []
+    assert calls.stages == ["repair-context-000"]
+
+
+def test_supported_relation_verification_must_include_linked_object_anchor():
+    f = frame()
+    f["units"] = [0, 1]
+    f["objects"] = [
+        {"object_type": "instrument", "mention": {"unit": 0, "text": "x", "occurrence": 0}}
+    ]
+    f["events"][0]["objects"] = [0]
+    raw = {
+        f"c0_{k}_0": {"decision": "supported", "units": [1]}
+        for k in ("actors", "collectives", "objects", "events")
+    }
+    calls = DirectCalls([raw, {"c0_events_0": {"decision": "supported", "units": [0, 1]}}])
+    saved = {}
+    decisions = verify(
+        {"contexts": [f]},
+        {
+            "target_units": [{"unit": 0, "text": "x"}, {"unit": 1, "text": "y"}],
+            "background_units": [],
+        },
+        calls,
+        "w",
+        lambda k, v: saved.update({k: v}),
+    )
+    assert decisions["c0_events_0"]["units"] == [0, 1]
+    assert len(calls.stages) == 2 and not saved["w-verification-audit"]
+
+
+def test_local_repair_rejects_source_growth_and_retries_its_own_interface():
+    from judicial_kg.current.context_repair import GUIDANCE, repair_contexts
+
+    class Capture(DirectCalls):
+        def infer(self, messages, stage):
+            self.messages = messages
+            return super().infer(messages, stage)
+
+    c, _ = compiler()
+    f = frame()
+    f.update(kind="party_defense", speakers=[])
+    original = {"contexts": [f], "coverage": [{"unit": 1, "status": "processed", "reason": "x"}]}
+    wrong = copy.deepcopy(f)
+    wrong.update(units=[0, 1], speakers=[0])
+    corrected = copy.deepcopy(f)
+    corrected["speakers"] = [0]
+    calls = Capture([{"context": wrong}, {"context": corrected}])
+    result = repair_contexts(
+        original,
+        [{"path": "w/contexts/0", "code": "party_attribution_required"}],
+        c.contract,
+        {
+            "target_units": [{"unit": 1, "text": c.units[1]["text"]}],
+            "background_units": [{"unit": 0, "text": c.units[0]["text"]}],
+        },
+        calls,
+        "repair",
+        lambda k, v: None,
+        align_enabled=False,
+    )
+    assert result["contexts"][0]["units"] == [1]
+    assert result["coverage"] == original["coverage"]
+    assert json.loads(calls.messages[-1]["content"])["任务"] == GUIDANCE

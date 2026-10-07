@@ -11,6 +11,7 @@ from judicial_kg.current import VERSION
 from judicial_kg.current.acceptance import assess
 from judicial_kg.current.alignment import put
 from judicial_kg.current.compiler import Compiler
+from judicial_kg.current.context_repair import repair_contexts
 from judicial_kg.current.decision import AlignmentCalls, FlashAlignmentCalls
 from judicial_kg.current.protocol import PROMPT, array, obj, schema
 from judicial_kg.current.recovery import infer_checked, proposal_check
@@ -104,6 +105,29 @@ def verify(wire, payload, calls, stage, save):
                 for key, item in selected.items()
             }
         )
+        for key, candidate in selected.items():
+            if candidate["kind"] not in {"roles", "events", "statements"}:
+                continue
+            item = candidate["proposal"]
+            anchors = []
+            if candidate["kind"] == "events":
+                objects = wire["contexts"][candidate["context"]]["objects"]
+                anchors = [
+                    objects[i]["mention"]["unit"]
+                    for i in item["objects"]
+                    if type(i) is int and 0 <= i < len(objects)
+                ]
+            elif candidate["kind"] == "statements":
+                anchors = [item["value"]["source"]["unit"]]
+            required = {"minItems": 1}
+            if anchors:
+                required["allOf"] = [{"contains": {"const": i}} for i in sorted(set(anchors))]
+            fmt["properties"][key]["allOf"] = [
+                {
+                    "if": {"properties": {"decision": {"const": "supported"}}},
+                    "then": {"properties": {"units": required}},
+                }
+            ]
         messages = [
             {
                 "role": "system",
@@ -207,45 +231,16 @@ def compile_with_recovery(
         del compiler.issues[issue_count:]
         del compiler.mappings[mapping_count:]
         if attempt:
-            correction = messages + [
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        {
-                            "任务": (
-                                "根据原文修复下列入图前契约错误，返回完整Schema实例。"
-                                "保留无错候选，不能为了通过删除难例：无法修复的原命题必须在unresolved登记其目标原文与原因。"
-                                "同一提及不能同时是actor和collective，请按原文选择身份并同步修正引用。"
-                                "明确集合词合议庭、双方当事人、各方当事人只能放collectives；"
-                                "不能降级unknown actor绕过冲突。"
-                                "法院语境speakers是作出认定的法院，不是认定涉及的人；未明确归属可为空。"
-                                "party_claim及party_defense必须有非空speakers：背景中的诉称/辩称引导句可确立持续说话者。"
-                                "可以把背景里明确的说话主体加入actors并用其数组下标填speakers；不能仅列事实涉及的人。"
-                                "若确实无法确定当事人说话者，必须将该语境标为unknown，"
-                                "将全部原命题登记unresolved，events/statements/roles为空，不能升级为法院事实。"
-                                "数值谓词要求对应数值：没有约定利息不是利率0，没有欠款不是金额0。"
-                                "表达否定约定或责任而无数值时，使用有据的文本谓词或unresolved。"
-                                "事件关联对象时，事件证据须同时覆盖对象提及与关系依据；不得补入无关单位。"
-                                "背景只支持actor身份；其他背景事实不属于本窗口，不能放入目标unresolved。"
-                            ),
-                            "契约错误": history[-1]["issues"],
-                            "待修复候选": wire,
-                            "谓词值类型": compiler.contract.ontology["predicate_value_kinds"],
-                        },
-                        ensure_ascii=False,
-                    ),
-                }
-            ]
-            wire = infer_checked(
+            wire = repair_contexts(
+                wire,
+                history[-1]["issues"],
+                compiler.contract,
+                payload,
                 calls,
-                correction,
-                name + "-propose",
-                lambda value: proposal_check(
-                    value, fmt, targets, defer_selectors=aligner is not None
-                ),
+                name,
                 save,
+                align_enabled=aligner is not None,
             )
-            save(name + "-proposal", wire)
         blocked = []
         if aligner:
             wire, blocked = aligner.align(wire, doc, units, name)

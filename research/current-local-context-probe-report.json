@@ -1,0 +1,67 @@
+{
+  "purpose": "Historical failing-window diagnostic, not fresh twenty-case acceptance",
+  "diagnostics": [
+    {
+      "case_slot": "document-03",
+      "not_fresh_acceptance": true,
+      "recovered": true,
+      "counts": {
+        "actors": 4,
+        "mentions": 4,
+        "contexts": 1,
+        "roles": 0,
+        "events": 9,
+        "statements": 2,
+        "objects": 2,
+        "object_mentions": 2,
+        "object_links": 5,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "requests": 11,
+      "issues_by_status": {
+        "model_unresolved": 0,
+        "quarantined": 7
+      }
+    },
+    {
+      "case_slot": "document-05",
+      "not_fresh_acceptance": true,
+      "recovered": true,
+      "counts": {
+        "actors": 3,
+        "mentions": 3,
+        "contexts": 1,
+        "roles": 1,
+        "events": 3,
+        "statements": 4,
+        "objects": 4,
+        "object_mentions": 4,
+        "object_links": 3,
+        "collectives": 0,
+        "collective_mentions": 0,
+        "collective_memberships": 0,
+        "collective_participations": 0
+      },
+      "requests": 3,
+      "issues_by_status": {
+        "model_unresolved": 1,
+        "quarantined": 2
+      }
+    }
+  ],
+  "budget": {
+    "prior_committed_cny": "113.5699094",
+    "cap_cny": "115.5699094",
+    "new_committed_cny": "0.1565929",
+    "new_observed_cny": "0.1565929",
+    "cumulative_committed_cny": "113.7265023",
+    "actual_api_requests": 14,
+    "budget_blocked_calls": 0,
+    "halted": false,
+    "note": "List-price estimate, not invoice; unknown usage retains reservation"
+  },
+  "budget_note": "Prior is the reserved cap of concurrent twenty-01, not observed spend. Consolidate new_committed amounts when both runs finish."
+}
